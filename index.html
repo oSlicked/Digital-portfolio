@@ -35,6 +35,11 @@ h1{font-size:clamp(44px,10vw,108px)}h2{font-size:clamp(32px,5.6vw,60px)}
 .sub{font-size:clamp(20px,3vw,28px);color:var(--mute);margin:10px auto 14px;letter-spacing:-.01em}
 .lead{max-width:640px;margin:0 auto 18px;color:var(--mute)}
 .links{display:flex;gap:26px;justify-content:center;font-size:20px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.sigi{display:block;width:min(560px,82vw);aspect-ratio:1930/982;margin:6px auto 4px;background:var(--ink);-webkit-mask:url(signature.png) center/contain no-repeat;mask:url(signature.png) center/contain no-repeat;clip-path:inset(0 100% 0 0)}
+.sig.in .sigi{animation:ink 2.2s cubic-bezier(.65,0,.35,1) .35s forwards}
+@keyframes ink{to{clip-path:inset(0 0 0 0)}}
+@media (prefers-reduced-motion:reduce){.sigi{clip-path:none}}
 .grad{background:linear-gradient(90deg,#ff9a3c,#ff3d77,#7a5cff,#ff9a3c);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 8s linear infinite}
 @keyframes flow{to{background-position:300% 0}}
 .hero{padding-top:64px;min-height:105vh;overflow:hidden}
@@ -195,7 +200,7 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 <section class="hero c" id="top">
   <div id="ht">
     <p class="eyebrow rv">St. Catharines, ON · Niagara College</p>
-    <h1 class="rv" style="--d:.1s">Jordan <span class="grad">Ioannoni.</span></h1>
+    <h1 class="rv sig" style="--d:.1s"><span class="vh">Jordan Ioannoni</span><span class="sigi" aria-hidden="true"></span></h1>
     <p class="sub rv" style="--d:.25s">Operations. Systems. Photography.</p>
     <p class="lead rv" style="--d:.35s">A Niagara College business student who plans routes, tracks assets in Excel, knows the mechanics of the vehicles that move them, and has shot tournament sports since 2017.</p>
     <a class="avail rv" style="--d:.4s" href="#contact" data-topic="Summer logistics role">Open to summer logistics and dispatch roles</a>
