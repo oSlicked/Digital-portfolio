@@ -8,9 +8,9 @@
 <meta property="og:title" content="Jordan Ioannoni | Portfolio"><meta property="og:description" content="Operations. Systems. Photography."><meta property="og:type" content="website">
 <meta name="theme-color" content="#000000">
 <meta property="og:image" content="https://jordanioannoni.com/gt3.jpg"><meta property="og:url" content="https://jordanioannoni.com/">
-<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="self.jpg">
+<link rel="icon" href="favicon.png" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="canonical" href="https://jordanioannoni.com/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Jordan Ioannoni","url":"https://jordanioannoni.com","jobTitle":"Photographer and business student","alumniOf":"Niagara College","address":{"@type":"PostalAddress","addressLocality":"St. Catharines","addressRegion":"ON","addressCountry":"CA"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Jordan Ioannoni","url":"https://jordanioannoni.com","jobTitle":"Photographer and business student","alumniOf":"Niagara College","address":{"@type":"PostalAddress","addressLocality":"St. Catharines","addressRegion":"ON","addressCountry":"CA"},"sameAs":["https://www.instagram.com/jordanioannoni/","https://www.linkedin.com/in/jordan-ioannoni-227314447/"]}</script>
 <style>
 :root{--bg:#fff;--alt:#f5f5f7;--ink:#1d1d1f;--mute:#6e6e73;--link:#0066cc;--nav:rgba(255,255,255,.72);--dim:rgba(110,110,115,.35);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--alt:#161617;--ink:#f5f5f7;--mute:#a1a1a6;--link:#2997ff;--nav:rgba(22,22,23,.72);color-scheme:dark}}
@@ -25,7 +25,8 @@ nav.sc{box-shadow:0 1px 0 rgba(128,128,128,.25)}
 nav b{font-size:16px;letter-spacing:-.02em}
 nav .l{display:flex;gap:24px}nav .l a{color:var(--ink);opacity:.8}nav .l a:hover{opacity:1}
 nav button{background:none;border:1px solid rgba(128,128,128,.4);color:var(--ink);border-radius:99px;padding:3px 10px;font:inherit;cursor:pointer}
-@media (max-width:640px){nav .l{display:none}}
+nav .r{display:flex;align-items:center;gap:8px}#mb{display:none;padding:5px 9px;line-height:0}
+@media (max-width:640px){#mb{display:inline-block}nav .l{display:none;position:absolute;top:48px;left:0;right:0;flex-direction:column;gap:0;padding:6px 20px 14px;background:var(--bg);box-shadow:0 12px 24px -12px rgba(0,0,0,.35)}nav.open .l{display:flex}nav .l a{padding:13px 2px;font-size:17px;opacity:1;border-bottom:1px solid rgba(128,128,128,.2)}nav .l a:last-child{border-bottom:0}}
 .dk{background:#000;color:#f5f5f7}
 section{position:relative}
 .c{text-align:center;padding:0 20px}
@@ -78,7 +79,7 @@ h1{font-size:clamp(44px,10vw,108px)}h2{font-size:clamp(32px,5.6vw,60px)}
 .svc{position:relative;overflow:hidden;text-align:left;border-radius:28px;padding:30px;background:var(--alt);border:1px solid rgba(128,128,128,.2);transition:transform .6s cubic-bezier(.16,1,.3,1)}
 .svc::before{content:"";position:absolute;inset:0;background:radial-gradient(280px circle at var(--mx,50%) var(--my,0%),rgba(122,92,255,.24),transparent 70%);opacity:0;transition:opacity .4s}
 .svc:hover{transform:translateY(-6px)}.svc:hover::before{opacity:1}
-.svc>*{position:relative}.svc .ic{font-size:34px}.svc h3{margin:10px 0 8px;font-size:24px;letter-spacing:-.02em}
+.svc>*{position:relative}.svc .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;color:#fff}.svc .ic svg{width:24px;height:24px}.ia{background:linear-gradient(150deg,#7a5cff,#0a84ff)}.ib{background:linear-gradient(150deg,#ff9a3c,#ff3d77)}.ic2{background:linear-gradient(150deg,#30d158,#0a84ff)}.svc h3{margin:10px 0 8px;font-size:24px;letter-spacing:-.02em}
 .svc ul{margin:0 0 18px;padding-left:18px;color:var(--mute)}.svc li{margin:5px 0}.svc a{font-weight:600}
 @media (max-width:820px){.svcs{grid-template-columns:1fr}}
 .film{position:absolute;inset:14% 0;display:flex;width:max-content;animation:fs 30s linear infinite}
@@ -193,7 +194,7 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 <a class="skip" href="#build">Skip to content</a>
 <div id="sp"></div>
 <div id="lb" hidden><button id="lx" aria-label="Close">✕</button><button id="lp" aria-label="Previous">‹</button><img id="li" alt=""><button id="ln" aria-label="Next">›</button><div id="lc"></div></div>
-<nav id="nav"><b>Jordan Ioannoni</b><div class="l"><a href="#story">About</a><a href="#experience">Experience</a><a href="#build">Craft</a><a href="#work">Photography</a><a href="#portraits">Portraits</a><a href="#services">Services</a><a href="#contact">Contact</a></div><span><button id="th" aria-label="Toggle theme">◐</button></span></nav>
+<nav id="nav"><b>Jordan Ioannoni</b><div class="l" id="nl"><a href="#story">About</a><a href="#experience">Experience</a><a href="#build">Craft</a><a href="#work">Photography</a><a href="#portraits">Portraits</a><a href="#services">Services</a><a href="#contact">Contact</a></div><span class="r"><button id="mb" aria-label="Open menu" aria-expanded="false" aria-controls="nl"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><button id="th" aria-label="Toggle theme">◐</button></span></nav>
 
 <section class="hero c" id="top">
   <div id="ht">
@@ -212,22 +213,22 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 <section class="kpi">
   <div class="kc k-a rv"><p class="kl">Education</p><b class="kn"><span data-n="5">0</span></b><p class="kt">college credentials</p><div class="dots"><i></i><i></i><i></i><i></i><i class="ip"></i></div><p class="ks">4 complete · Business diploma in progress</p></div>
   <div class="kc k-p rv" style="--d:.1s"><img data-i="b1" alt=""><p class="kl">Photography</p><p class="kt">Shooting since</p><b class="kn"><span data-n="2017" data-f="1990">0</span></b><p class="ks">Tournament hockey, lacrosse, motorsport and portraits</p></div>
-  <div class="kc k-b rv" style="--d:.2s"><p class="kl">Hands-on</p><b class="kn"><span data-n="720">0</span><small>hrs</small></b><p class="kt">motive power shop training</p><div class="meter"><i></i></div><p class="ks">Diagnostics, hydraulics and electrical</p></div>
+  <div class="kc k-b rv" style="--d:.2s"><p class="kl">Hands on</p><b class="kn"><span data-n="720">0</span><small>hrs</small></b><p class="kt">motive power shop training</p><div class="meter"><i></i></div><p class="ks">Diagnostics, hydraulics and electrical</p></div>
 </section>
 
 <section class="about"><div class="ab">
   <div class="ph px rv"><img data-i="jord" alt="Jordan shooting trackside with a telephoto lens"></div>
   <div class="rv" style="--d:.15s"><p class="eyebrow">The person behind it</p><h2>Equal parts shutter and spreadsheet.</h2>
   <p class="b">I split my time between hockey rinks, race tracks, delivery routes and Excel sheets. Every one of them runs on the same thing: getting the right thing to the right place on time. I like work where the details decide the result.</p>
-  <p class="b" style="font-size:16px">Off the clock I stay sharp semi-analog: handwritten notes in an A5 notebook with a rOtring 600, and shooting on film.</p>
+  <p class="b" style="font-size:16px">Off the clock I stay sharp semi analog: handwritten notes in an A5 notebook with a rOtring 600, and shooting on film.</p>
   <div class="sm"><img data-i="self" alt="Jordan with his camera at the rink"><span>Between periods with the 1DX.<br>St. Catharines, ON</span></div></div>
 </div></section>
 
-<section class="xpw c" id="experience"><p class="eyebrow rv">Experience</p><h2 class="rv" style="--d:.1s">Where the work happens.</h2><p class="sub rv" style="--d:.2s">Tournament weekends, multi-stop routes and rush-hour counters.</p>
+<section class="xpw c" id="experience"><p class="eyebrow rv">Experience</p><h2 class="rv" style="--d:.1s">Where the work happens.</h2><p class="sub rv" style="--d:.2s">Tournament weekends, delivery routes and rush hour counters.</p>
   <div class="xps">
-    <div class="xp now rv"><p class="when">Dec 2017 – Present</p><h3>Sports Photographer and On-Site Operations Assistant</h3><p class="org">DS Photography (Digital Sports Photography) · St. Catharines</p><ul><li>Move and set up the mobile photo and print station across regional arenas on tight tournament-weekend schedules.</li><li>Ingest, sort and index high volumes of photos on site so they reach the public catalogue while the event is still running.</li><li>Run point-of-sale and print production directly with parents and venue management.</li></ul></div>
-    <div class="xp rv" style="--d:.1s"><p class="when">2021 – 2026</p><h3>Independent Delivery Driver and Shopper</h3><p class="org">Instacart · Niagara Region</p><ul><li>Planned multi-stop residential routes to land inside customer delivery windows.</li><li>Picked orders accurately at volume and handled substitutions with customers in real time.</li></ul></div>
-    <div class="xp rv" style="--d:.2s"><p class="when">2017 – 2020</p><h3>Frontline Crew Member</h3><p class="org">Tim Hortons · Niagara Falls</p><ul><li>Kept orders moving through peak periods without queue bottlenecks.</li><li>Checked incoming supply deliveries, ran POS, balanced cash floats and verified drawers.</li></ul></div>
+    <div class="xp now rv"><p class="when">Dec 2017 to Present</p><h3>Sports Photographer and Onsite Operations Assistant</h3><p class="org">DS Photography (Digital Sports Photography) · St. Catharines</p><ul><li>Move and set up the mobile photo and print station across regional arenas on tight tournament weekend schedules.</li><li>Ingest, sort and index high volumes of photos on site so they reach the public catalogue while the event is still running.</li><li>Run point of sale and print production directly with parents and venue management.</li></ul></div>
+    <div class="xp rv" style="--d:.1s"><p class="when">2021 to 2026</p><h3>Independent Delivery Driver and Shopper</h3><p class="org">Instacart · Niagara Region</p><ul><li>Planned residential routes with multiple stops to land inside customer delivery windows.</li><li>Picked orders accurately at volume and handled substitutions with customers in real time.</li></ul></div>
+    <div class="xp rv" style="--d:.2s"><p class="when">2017 to 2020</p><h3>Frontline Crew Member</h3><p class="org">Tim Hortons · Niagara Falls</p><ul><li>Kept orders moving through peak periods without queue bottlenecks.</li><li>Checked incoming supply deliveries, ran POS, balanced cash floats and verified drawers.</li></ul></div>
   </div>
   <div class="xpf rv"><a class="btn rsm" href="resume.pdf" download="Jordan-Ioannoni-Resume.pdf" hidden>Download résumé (PDF)</a><a class="btn o" style="background:var(--alt);color:var(--ink)" href="#contact" data-topic="Summer logistics role">Talk about a summer role</a></div></section>
 
@@ -239,14 +240,14 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
   </div>
   <div class="feat on"><p class="eyebrow">Media production</p><h2>Frames at 1/2000.</h2><p>Tournament sports, studio portraits and motorsport since 2017.</p></div>
   <div class="feat"><p class="eyebrow">The archive</p><h2>Frame after frame.</h2><p>Race tracks, hockey rinks and everything between, shot since 2017.</p></div>
-  <div class="feat"><p class="eyebrow">Hands-on</p><h2>720 hours in the shop.</h2><p>OBDII diagnostics, schematics, hydraulics and lab testing, learned with a wrench in hand.</p></div>
+  <div class="feat"><p class="eyebrow">Hands on</p><h2>720 hours in the shop.</h2><p>OBDII diagnostics, schematics, hydraulics and lab testing, learned with a wrench in hand.</p></div>
 </div></section>
 
 <section class="work c" id="work"><h2 class="rv">Through the lens.</h2><p class="sub rv" style="--d:.1s">Pit lane, rinkside, the field and everything between. Tap to enlarge.</p>
   <div class="chips" id="chips"></div><div class="row" id="row"></div></section>
 <div class="mq" aria-hidden="true"><div id="mq"></div></div>
 
-<section class="pfw dk c" id="portraits"><p class="eyebrow rv">Portrait sessions</p><h2 class="rv" style="--d:.1s">Portraits.</h2><p class="sub rv" style="--d:.2s">Autumn on location. Low-key in the studio. Same eye for detail.</p>
+<section class="pfw dk c" id="portraits"><p class="eyebrow rv">Portrait sessions</p><h2 class="rv" style="--d:.1s">Portraits.</h2><p class="sub rv" style="--d:.2s">Autumn on location. Low key in the studio. Same eye for detail.</p>
   <div class="feat-pf"><figure class="pf rv" tabindex="0" data-t="Leading lines" data-s="Autumn session, car as backdrop" style="--d:0s"><img data-i="au5" alt="Leading lines: Autumn session, car as backdrop" loading="lazy"><figcaption>Leading lines<small>Autumn session, car as backdrop</small></figcaption></figure></div>
   <div class="mos"><figure class="pf rv" tabindex="0" data-t="Under the canopy" data-s="Autumn, on location" style="--d:0.0s"><img data-i="au7" alt="Under the canopy: Autumn, on location" loading="lazy"><figcaption>Under the canopy<small>Autumn, on location</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Low key" data-s="Studio, single light" style="--d:0.08s"><img data-i="st2" alt="Low key: Studio, single light" loading="lazy"><figcaption>Low key<small>Studio, single light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Door open" data-s="Natural light, warm grade" style="--d:0.16s"><img data-i="au3" alt="Door open: Natural light, warm grade" loading="lazy"><figcaption>Door open<small>Natural light, warm grade</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Rear quarter" data-s="Autumn session" style="--d:0.0s"><img data-i="au1" alt="Rear quarter: Autumn session" loading="lazy"><figcaption>Rear quarter<small>Autumn session</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Seated" data-s="Studio, side light" style="--d:0.08s"><img data-i="st1" alt="Seated: Studio, side light" loading="lazy"><figcaption>Seated<small>Studio, side light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Low angle" data-s="The star in focus" style="--d:0.16s"><img data-i="au2" alt="Low angle: The star in focus" loading="lazy"><figcaption>Low angle<small>The star in focus</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Golden hour" data-s="Long coat, hard light" style="--d:0.0s"><img data-i="au6" alt="Golden hour: Long coat, hard light" loading="lazy"><figcaption>Golden hour<small>Long coat, hard light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Window seat" data-s="Through the glass" style="--d:0.08s"><img data-i="au4" alt="Window seat: Through the glass" loading="lazy"><figcaption>Window seat<small>Through the glass</small></figcaption></figure></div>
   <div class="pfs rv"><span><b>On location</b>Natural light, styled sets</span><span><b>In studio</b>Strobes, controlled light</span><span><b>Delivered</b>Graded in Lightroom</span></div>
@@ -254,9 +255,9 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 
 <section class="svcw c" id="services"><h2 class="rv">How I can help.</h2><p class="sub rv" style="--d:.1s">Three ways to work together.</p>
   <div class="svcs">
-    <div class="svc rv"><div class="ic">🚚</div><h3>Logistics and dispatch</h3><ul><li>Multi-stop route planning around delivery windows</li><li>Asset and inventory tracking in Excel</li><li>Fleet-side mechanical know-how: brakes, hydraulics, diagnostics</li><li>Clear updates for drivers, vendors and customers</li></ul><a href="#contact" data-topic="Summer logistics role">Let’s talk roles ›</a></div>
-    <div class="svc rv" style="--d:.1s"><div class="ic">📷</div><h3>Ioannoni Visuals</h3><ul><li>Team, tournament and arena coverage</li><li>Motorsport and automotive</li><li>Studio portraits</li><li>RAW grading and delivery in Lightroom</li></ul><a href="#contact" data-topic="Photography inquiry">Book a shoot ›</a></div>
-    <div class="svc rv" style="--d:.2s"><div class="ic">⚙️</div><h3>Systems and automation</h3><ul><li>Excel sheets that track and update themselves</li><li>Custom scripts that sort and migrate files</li><li>Workflow design that saves real time</li></ul><a href="#contact" data-topic="Automation project">Talk automation ›</a></div>
+    <div class="svc rv"><div class="ic ia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><h3>Logistics and dispatch</h3><ul><li>Route planning with multiple stops around delivery windows</li><li>Asset and inventory tracking in Excel</li><li>Fleet mechanical knowledge: brakes, hydraulics, diagnostics</li><li>Clear updates for drivers, vendors and customers</li></ul><a href="#contact" data-topic="Summer logistics role">Let’s talk roles ›</a></div>
+    <div class="svc rv" style="--d:.1s"><div class="ic ib"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><h3>Ioannoni Visuals</h3><ul><li>Team, tournament and arena coverage</li><li>Motorsport and automotive</li><li>Studio portraits</li><li>RAW grading and delivery in Lightroom</li></ul><a href="#contact" data-topic="Photography inquiry">Book a shoot ›</a> <a href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener" style="margin-left:14px">Instagram ›</a></div>
+    <div class="svc rv" style="--d:.2s"><div class="ic ic2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><h3>Systems and automation</h3><ul><li>Excel sheets that track and update themselves</li><li>Custom scripts that sort and migrate files</li><li>Workflow design that saves real time</li></ul><a href="#contact" data-topic="Automation project">Talk automation ›</a></div>
     
   </div></section>
 
@@ -272,17 +273,17 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 <section class="lake"><div class="px"><img data-i="lake" alt="Lake Louise under broken cloud"></div><div class="cap"><p class="eyebrow rv">Off duty</p><h2 class="rv" style="--d:.1s">Always chasing good light.</h2></div></section>
 
 <section class="cta dk" id="contact"><h2 class="rv">Let’s <span class="grad">work together.</span></h2><p class="sub rv" style="--d:.15s">jordan.ioannoni@outlook.com · 403-667-3728</p>
-  <div class="rv" style="--d:.3s"><button class="btn" id="em">Email me</button><button class="btn o" id="cp">Copy email</button><button class="btn o" id="vc">Save contact card</button><a class="btn o" href="https://www.linkedin.com/in/jordan-ioannoni-227314447/" target="_blank" rel="noopener">LinkedIn</a><a class="btn o rsm" href="resume.pdf" download="Jordan-Ioannoni-Resume.pdf" hidden>Résumé (PDF)</a><p id="cn" class="sub" style="font-size:15px;min-height:1.6em;margin:16px auto 0"></p></div></section>
-<footer>© 2026 · Designed and built by Jordan Ioannoni · St. Catharines, ON. <a href="#top">Back to top ↑</a></footer>
+  <div class="rv" style="--d:.3s"><button class="btn" id="em">Email me</button><button class="btn o" id="cp">Copy email</button><button class="btn o" id="vc">Save contact card</button><a class="btn o" href="https://www.linkedin.com/in/jordan-ioannoni-227314447/" target="_blank" rel="noopener">LinkedIn</a><a class="btn o" href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener">Instagram</a><a class="btn o rsm" href="resume.pdf" download="Jordan-Ioannoni-Resume.pdf" hidden>Résumé (PDF)</a><p id="cn" class="sub" style="font-size:15px;min-height:1.6em;margin:16px auto 0"></p></div></section>
+<footer>© 2026 · Designed by Jordan Ioannoni · St. Catharines, ON. <a href="#top">Back to top ↑</a></footer>
 
 <script>const IMG={gt3:"gt3.jpg",jord:"jord.jpg",pagr:"pagr.jpg",trk:"trk.jpg",rk1:"rk1.jpg",b1:"b1.jpg",fal:"fal.jpg",b2:"b2.jpg",rk2:"rk2.jpg",bench:"bench.jpg",talk:"talk.jpg",rail:"rail.jpg",cr:"cr.jpg",mud:"mud.jpg",drink:"drink.jpg",husk:"husk.jpg",self:"self.jpg",pag:"pag.jpg",p935:"p935.jpg",lake:"lake.jpg",lax:"lax.jpg",sls:"sls.jpg",au1:"au1.jpg",au2:"au2.jpg",au3:"au3.jpg",au4:"au4.jpg",au5:"au5.jpg",au6:"au6.jpg",au7:"au7.jpg",st1:"st1.jpg",st2:"st2.jpg"};</script>
 <script>
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const clamp = x => Math.min(1, Math.max(0, x));
 const G=[["moto","Lime green GT3 RS","Track day, Canon 1DX","gt3"],["moto","Hypercar on track","Pagani, trackside","pag"],["moto","Chasing the pack","Pagani and McLarens","pagr"],["moto","Plaid Porsche","Endurance livery","p935"],["moto","Gullwing cockpit","Detail, shallow focus","sls"],
-["hockey","Slap shot","300mm f/2.8 action","b1"],["hockey","Follow-through","High shutter speed","b2"],["hockey","Crease save","Frozen at the post","cr"],["hockey","Falcons goalie","Tight on the net","fal"],
-["people","Bench emotion","Ioannoni Visuals","bench"],["people","Bench talk","Coach, player and ref","talk"],["people","The rail","A quiet moment","rail"],["people","Coach’s call","Huskies bench","husk"],["people","Mudcats bench","Warm color grade","mud"],["people","Water break","Film-style grade","drink"],
-["behind","Trackside","70–200 at the fence","jord"],["behind","Camera view","Over the shoulder, track","trk"],["behind","Rinkside POV","Setup at the boards","rk1"],["behind","Arena POV","Wide, from the glass","rk2"],["behind","Field side","Lacrosse, rain cover on","lax"],["behind","Between periods","1DX on a monopod","self"],["travel","Lake Louise","Panorama","lake"]];
+["hockey","Slap shot","300mm f/2.8 action","b1"],["hockey","Follow through","High shutter speed","b2"],["hockey","Crease save","Frozen at the post","cr"],["hockey","Falcons goalie","Tight on the net","fal"],
+["people","Bench emotion","Ioannoni Visuals","bench"],["people","Bench talk","Coach, player and ref","talk"],["people","The rail","A quiet moment","rail"],["people","Coach’s call","Huskies bench","husk"],["people","Mudcats bench","Warm color grade","mud"],["people","Water break","Film style grade","drink"],
+["behind","Trackside","70 to 200mm at the fence","jord"],["behind","Camera view","Over the shoulder, track","trk"],["behind","Rinkside POV","Setup at the boards","rk1"],["behind","Arena POV","Wide, from the glass","rk2"],["behind","Field side","Lacrosse, rain cover on","lax"],["behind","Between periods","1DX on a monopod","self"],["travel","Lake Louise","Panorama","lake"]];
 $("#row").innerHTML=G.map(([c,t,s,k])=>`<figure class="tile" data-c="${c}" data-t="${t}" data-s="${s}" style="margin:0"><img alt="${t}" loading="lazy" src="${IMG[k]}"><figcaption>${t}<small>${s}</small></figcaption></figure>`).join("");
 $("#chips").innerHTML=[["all","All"],["moto","Motorsport"],["hockey","Hockey action"],["people","Bench and people"],["behind","Behind the lens"],["travel","Travel"]].map(([k,l],i)=>`<button data-k="${k}"${i?"":' class="on"'}>${l}</button>`).join("");
 $("#chips").onclick=e=>{const k=e.target.dataset.k;if(!k)return;$$("#chips button").forEach(b=>b.classList.toggle("on",b===e.target));$$(".tile").forEach(t=>t.classList.toggle("hide",k!=="all"&&t.dataset.c!==k));$("#row").scrollLeft=0;};
@@ -332,6 +333,8 @@ const io = new IntersectionObserver(es => es.forEach(e => {
 $$(".rv").forEach(e => io.observe(e));
 
 $$("a[href^='#']").forEach(a => a.onclick = ev => { const t = document.getElementById(a.getAttribute("href").slice(1)); if (t) { ev.preventDefault(); t.scrollIntoView({ behavior: "smooth" }); } });
+$("#mb").onclick = () => { const o = $("#nav").classList.toggle("open"); $("#mb").setAttribute("aria-expanded", o); $("#mb").setAttribute("aria-label", o ? "Close menu" : "Open menu"); };
+$$("#nl a").forEach(a => a.addEventListener("click", () => { $("#nav").classList.remove("open"); $("#mb").setAttribute("aria-expanded", false); }));
 $("#th").onclick = () => { const d = document.documentElement, dark = (d.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark"; d.dataset.theme = dark ? "light" : "dark"; };
 const EM = "jordan.ioannoni@outlook.com"; let topic = "";
 const note = t => { $("#cn").textContent = t; };
@@ -344,7 +347,7 @@ $("#cp").onclick = async () => {
   note(ok ? EM + " is on your clipboard." : "Couldn’t copy automatically. My email is " + EM + ".");
 };
 $("#vc").onclick = async () => {
-  const data = "BEGIN:VCARD\nVERSION:3.0\nFN:Jordan Ioannoni\nN:Ioannoni;Jordan;;;\nEMAIL:" + EM + "\nTEL;TYPE=CELL:403-667-3728\nURL:https://jordanioannoni.com\nURL:https://www.linkedin.com/in/jordan-ioannoni-227314447/\nEND:VCARD\n";
+  const data = "BEGIN:VCARD\nVERSION:3.0\nFN:Jordan Ioannoni\nN:Ioannoni;Jordan;;;\nEMAIL:" + EM + "\nTEL;TYPE=CELL:403-667-3728\nURL:https://jordanioannoni.com\nURL:https://www.linkedin.com/in/jordan-ioannoni-227314447/\nURL:https://www.instagram.com/jordanioannoni/\nEND:VCARD\n";
   let dl = null; try { dl = window.claude ? await window.claude.use("downloads") : null; } catch (e) {}
   try {
     if (dl) await dl.save({ filename: "Jordan-Ioannoni.vcf", data });
