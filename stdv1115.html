@@ -58,6 +58,12 @@ section.alt{background:var(--alt)}
 .card .ic svg{width:22px;height:22px}
 .i1{background:linear-gradient(150deg,#7a5cff,#0a84ff)}.i2{background:linear-gradient(150deg,#ff9a3c,#ff3d77)}
 .card a{font-weight:600}
+.card .k{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:18px 0 0}
+.card .k + p{margin-top:4px}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px;margin-top:40px}
+.split ul{margin:14px 0 0;padding-left:20px;color:var(--mute);font-size:17px}.split li{margin:8px 0}
+.split .who{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:0 0 6px}
+.card .w1{color:#d9541f}.card .w2{color:#6a4ff0}
 section.alt .card{background:var(--bg)}
 .cw{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px;margin-top:44px}
 .cw .wide{grid-column:1/-1;display:grid;grid-template-columns:1fr 1.15fr;gap:32px;align-items:center}
@@ -94,10 +100,10 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
   <p class="eyebrow rv">STDV 1115 · Niagara College</p>
   <h1 class="rv" style="--d:.1s">Digital <span class="grad">Portfolio.</span></h1>
   <p class="lead rv" style="--d:.25s">The course side of my portfolio: how I learn, the work I did this term, what I built, and how it all connects to the course.</p>
-  <div class="pills rv" style="--d:.4s"><a href="#learner">Digital learner</a><a href="#coursework">Course work</a><a href="#projects">Projects</a><a href="#outcomes">Learning outcomes</a></div>
+  <div class="pills rv" style="--d:.4s"><a href="#learner">Digital learner</a><a href="#coursework">Course work</a><a href="#reflection">Looking back</a><a href="#projects">Projects</a><a href="#howbuilt">How I built it</a><a href="#outcomes">Learning outcomes</a></div>
 </header>
 
-<section class="words" id="statement"><div class="stick"><p id="wp">Reading about something rarely sticks for me. I learn by building it, breaking it and fixing it. So instead of a slideshow, I built a website.</p></div></section>
+<section class="words" id="statement"><div class="stick"><p id="wp">Reading about something rarely sticks for me. I learn by doing it, testing it and fixing it. So instead of a slideshow, I designed a website and built it with AI.</p></div></section>
 
 <section class="blk alt" id="learner"><div class="wrap">
   <p class="eyebrow rv">Reflection</p>
@@ -125,13 +131,40 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
   </div>
 </div></section>
 
-<section class="blk alt" id="projects"><div class="wrap">
+<section class="blk alt" id="reflection"><div class="wrap">
+  <p class="eyebrow rv">Reflection</p>
+  <h2 class="rv" style="--d:.1s">Looking back on the term.</h2>
+  <div class="prose">
+    <p class="rv" style="--d:.15s">At the start of the term, I gave any website my information without a second thought. After reading how companies track our data and sell it to other companies, I think twice now. These days I sign up with Apple’s Hide My Email, so I still get into the site but my real email stays protected behind a private address.</p>
+    <p class="rv" style="--d:.15s">The assignment that changed my mind the most was the one on AI. Tools like Claude, Gemini and ChatGPT make research a lot faster. Instead of spending two hours going through articles, I send an AI agent out to find sources and report back. I still review what it finds and change the search from there, because the judgment has to stay mine.</p>
+    <p class="rv" style="--d:.15s">One of my week 2 readings treated gaming as wasted screen time, and I went along with it at the time. Looking back, I don’t fully agree. Without gaming I wouldn’t be half the computer person I am today. It taught me almost everything I know about computers, from troubleshooting to writing programs.</p>
+    <p class="rv" style="--d:.15s">Building this site with AI changed my view the most. Animations, clean code and quick fixes take developers years of trial and error to get right. With Claude, the code came together in about three days. I brought the ideas, the photos and the direction, and it wrote the code to match.</p>
+  </div>
+</div></section>
+
+<section class="blk" id="projects"><div class="wrap">
   <p class="eyebrow rv">Projects</p>
   <h2 class="rv" style="--d:.1s">What I built.</h2>
   <p class="intro rv" style="--d:.2s">Hands on work that shows how I think and solve problems.</p>
   <div class="grid">
-    <div class="card rv"><div class="ic i1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><h3>This website</h3><p>A one page portfolio coded in HTML, CSS and JavaScript, hosted for free on GitHub Pages. It replaces a flat résumé with work you can actually see.</p></div>
-    <div class="card rv" style="--d:.1s"><div class="ic i2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><h3>Photography workflow</h3><p>Sports, motorsport and portrait work, shot on a Canon 1DX and graded in Lightroom. <a href="/#work">See the gallery ›</a></p></div>
+    <div class="card rv"><div class="ic i1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><h3>This website</h3><p>A portfolio I designed and directed, built with AI as my coding partner and hosted for free on GitHub Pages. <a href="#howbuilt">How I built it ›</a></p><p class="k">What I learned</p><p>My first time using GitHub, and how to connect a custom domain to a site.</p></div>
+    <div class="card rv" style="--d:.1s"><div class="ic i2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><h3>Photography workflow</h3><p>Sports, motorsport and portrait work, shot on a Canon 1DX and graded in Lightroom. <a href="/#work">See the gallery ›</a></p><p class="k">What I learned</p><p>Tournament weekends taught me to stay organized under pressure. Photos have to be sorted and online before the event ends.</p></div>
+  </div>
+</div></section>
+
+<section class="blk alt" id="howbuilt"><div class="wrap">
+  <p class="eyebrow rv">Process</p>
+  <h2 class="rv" style="--d:.1s">How I built this.</h2>
+  <div class="prose">
+    <p class="rv" style="--d:.15s">Apple has one of the best website designs I can think of, so I wanted my site to move like theirs without being a copy. My coding skills are basic, so I brought in Claude and Gemini as development partners. It is like a company hiring a developer: I came up with the idea, the look and everything the site needed to say, and they built it.</p>
+  </div>
+  <div class="split">
+    <div class="card rv"><p class="who w1">What I brought</p><h3>The vision</h3><ul><li>The idea of a website instead of a slideshow</li><li>The Apple inspired design direction</li><li>All my writing, course work and photos</li><li>Feedback on every version, and the final say on what stayed</li></ul></div>
+    <div class="card rv" style="--d:.1s"><p class="who w2">What the AI brought</p><h3>The code</h3><ul><li>The HTML, CSS and JavaScript</li><li>The animations and the layout</li><li>Turning my notes and assignments into page text</li><li>Help getting the site live on GitHub</li></ul></div>
+  </div>
+  <div class="prose">
+    <p class="rv">This was my first time using GitHub. If you are a developer, it is the site everyone uses, the same way most people use Google even though Yahoo and Bing exist. I also learned how to connect my own domain to GitHub Pages. It was a learning curve, but I ended up with a professional, finished site that costs nothing to host.</p>
+    <p class="rv">In The Digital Currency of Grades, I argued that students should learn to use AI ethically instead of hiding it. This site is me doing exactly that.</p>
   </div>
 </div></section>
 
@@ -141,7 +174,7 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
   <p class="intro rv" style="--d:.2s">Where each learning outcome shows up in this portfolio.</p>
   <div class="tbl rv" style="--d:.3s">
     <div class="row"><b><small>Outcome</small>Demonstrate a personal understanding of digital literacy</b><span><small>Where</small><a href="#learner">Me as a digital learner</a> and <a href="#coursework">course work</a></span></div>
-    <div class="row"><b><small>Outcome</small>Compose material in various forms for publication on the web</b><span><small>Where</small>This website itself, with writing, photography and code</span></div>
+    <div class="row"><b><small>Outcome</small>Compose material in various forms for publication on the web</b><span><small>Where</small>This website itself, and <a href="#howbuilt">how I built it</a></span></div>
     <div class="row"><b><small>Outcome</small>Engage in effective critical thinking, problem solving and decision making</b><span><small>Where</small>CRAAP tests and reflections in my <a href="#coursework">course work</a>, and <a href="#projects">what I built</a></span></div>
   </div>
 </div></section>
