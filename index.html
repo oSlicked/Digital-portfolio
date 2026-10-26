@@ -36,10 +36,8 @@ h1{font-size:clamp(44px,10vw,108px)}h2{font-size:clamp(32px,5.6vw,60px)}
 .lead{max-width:640px;margin:0 auto 18px;color:var(--mute)}
 .links{display:flex;gap:26px;justify-content:center;font-size:20px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.sigw{position:relative;width:min(560px,82vw);aspect-ratio:1200/611;margin:6px auto 4px}
+.sigw{position:relative;width:min(620px,86vw);aspect-ratio:1200/643;margin:6px auto 4px}
 .sigc{display:block;width:100%;height:100%}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sigc{filter:invert(1)}}
-:root[data-theme="dark"] .sigc{filter:invert(1)}
 .grad{background:linear-gradient(90deg,#ff9a3c,#ff3d77,#7a5cff,#ff9a3c);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 8s linear infinite}
 @keyframes flow{to{background-position:300% 0}}
 .hero{padding-top:64px;min-height:105vh;overflow:hidden}
@@ -200,7 +198,7 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 <section class="hero c" id="top">
   <div id="ht">
     <p class="eyebrow rv">St. Catharines, ON · Niagara College</p>
-    <h1 class="rv sig" style="--d:.1s"><span class="vh">Jordan Ioannoni</span><span class="sigw" id="sigw" aria-hidden="true" style="display:block"><canvas class="sigc" width="1200" height="611"></canvas></span></h1>
+    <h1 class="rv sig" style="--d:.1s"><span class="vh">Jordan Ioannoni</span><span class="sigw" id="sigw" aria-hidden="true" style="display:block"><canvas class="sigc" width="1200" height="643"></canvas></span></h1>
     <p class="sub rv" style="--d:.25s">Operations. Systems. Photography.</p>
     <p class="lead rv" style="--d:.35s">A Niagara College business student who plans routes, tracks assets in Excel, knows the mechanics of the vehicles that move them, and has shot tournament sports since 2017.</p>
     <a class="avail rv" style="--d:.4s" href="#contact" data-topic="Summer logistics role">Open to summer logistics and dispatch roles</a>
@@ -366,10 +364,24 @@ tick();
   img.onload = () => {
     const W = img.width, H = img.height; cv.width = W; cv.height = H;
     ctx.drawImage(img, 0, 0); const src = ctx.getImageData(0, 0, W, H).data; ctx.clearRect(0, 0, W, H);
-    const ink = [], tm = [];
-    for (let i = 0, n = W * H; i < n; i++) { if (src[i * 4 + 3]) { ink.push(i); tm.push(((src[i * 4] << 8) | src[i * 4 + 1]) / 65535); } }
+    const ink = [], tm = [], reg = []; let x0 = W, x1 = 0;
+    for (let i = 0, n = W * H; i < n; i++) if (src[i * 4 + 3]) {
+      ink.push(i); tm.push(((src[i * 4] << 8) | src[i * 4 + 1]) / 65535);
+      const r = src[i * 4 + 2] > 127; reg.push(r); if (r) { const x = i % W; if (x < x0) x0 = x; if (x > x1) x1 = x; }
+    }
     const ord = ink.map((_, k) => k).sort((a, b) => tm[a] - tm[b]);
     const out = ctx.createImageData(W, H), od = out.data, F = .025;
+    const stops = [[255, 154, 60], [255, 61, 119], [122, 92, 255]];
+    const grad = f => { const s = f < .5 ? 0 : 1, g = f < .5 ? f * 2 : f * 2 - 1, A = stops[s], B = stops[s + 1]; return [A[0] + (B[0] - A[0]) * g, A[1] + (B[1] - A[1]) * g, A[2] + (B[2] - A[2]) * g]; };
+    for (let k = 0; k < ink.length; k++) if (reg[k]) { const i = ink[k], c = grad(((i % W) - x0) / Math.max(1, x1 - x0)); od[i * 4] = c[0]; od[i * 4 + 1] = c[1]; od[i * 4 + 2] = c[2]; }
+    const paintInk = () => {
+      const m = getComputedStyle(document.body).color.match(/\d+/g).map(Number);
+      for (let k = 0; k < ink.length; k++) if (!reg[k]) { const i = ink[k]; od[i * 4] = m[0]; od[i * 4 + 1] = m[1]; od[i * 4 + 2] = m[2]; }
+      ctx.putImageData(out, 0, 0);
+    };
+    paintInk();
+    document.getElementById("th").addEventListener("click", () => setTimeout(paintInk, 0));
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(paintInk, 0));
     let done = 0;
     const reveal = t => {
       while (done < ord.length && tm[ord[done]] <= t - F) { const i = ink[ord[done++]]; od[i * 4 + 3] = src[i * 4 + 3]; }
