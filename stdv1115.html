@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>STDV 1115 Digital Portfolio | Jordan Ioannoni</title>
+<meta name="description" content="Course page for Jordan Ioannoni's STDV 1115 digital portfolio at Niagara College.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--bg:#fff;--alt:#f5f5f7;--ink:#1d1d1f;--mute:#6e6e73;--link:#0066cc;--nav:rgba(255,255,255,.72);--line:rgba(128,128,128,.25);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--alt:#161617;--ink:#f5f5f7;--mute:#a1a1a6;--link:#2997ff;--nav:rgba(22,22,23,.72);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--alt:#161617;--ink:#f5f5f7;--mute:#a1a1a6;--link:#2997ff;--nav:rgba(22,22,23,.72);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 -apple-system,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--link);outline-offset:3px}
+nav{position:sticky;top:0;z-index:40;height:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 max(16px,calc(50% - 480px));background:var(--nav);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);font-size:13px;box-shadow:0 1px 0 var(--line)}
+nav a{color:var(--ink);opacity:.85}nav a:hover{opacity:1;text-decoration:none}
+nav .code{font-weight:700;font-size:14px;letter-spacing:.02em}
+nav button{background:none;border:1px solid rgba(128,128,128,.4);color:var(--ink);border-radius:99px;padding:3px 10px;font:inherit;cursor:pointer}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+.eyebrow{color:#ff6a3d;font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;margin:0 0 8px}
+h1,h2,h3{margin:0;letter-spacing:-.03em;line-height:1.08;font-weight:700}
+h1{font-size:clamp(40px,8vw,84px)}h2{font-size:clamp(30px,4.6vw,46px)}h3{font-size:21px;letter-spacing:-.015em;line-height:1.25}
+.grad{background:linear-gradient(90deg,#ff9a3c,#ff3d77,#7a5cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero{padding:96px 0 72px;text-align:center}
+.hero .lead{max-width:640px;margin:18px auto 0;color:var(--mute);font-size:clamp(18px,2.4vw,21px)}
+.pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.pills a{font-size:14px;border:1px solid var(--line);border-radius:99px;padding:6px 14px;color:var(--ink);background:var(--bg)}
+.pills a:hover{text-decoration:none;border-color:var(--ink)}
+section.blk{padding:84px 0;border-top:1px solid var(--line)}
+section.alt{background:var(--alt)}
+.intro{color:var(--mute);max-width:680px;margin:12px 0 0;font-size:18px}
+.prose{max-width:720px;margin:28px 0 0;font-size:19px}
+.prose p{margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:36px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))}
+.card{position:relative;border-radius:24px;padding:26px;background:var(--bg);border:1px solid var(--line)}
+section.alt .card{background:var(--bg)}
+section:not(.alt) .card{background:var(--alt)}
+.card p{margin:8px 0 0;color:var(--mute);font-size:16px}
+.card .k{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:16px 0 0}
+.card .k + p{margin-top:4px}
+.badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#c9561a;margin:0 0 12px}
+.badge::before{content:"";width:8px;height:8px;border-radius:50%;background:#ff9a3c;box-shadow:0 0 0 4px rgba(255,154,60,.22)}
+.badge.done{color:#1f8a45}.badge.done::before{background:#30d158;box-shadow:0 0 0 4px rgba(48,209,88,.2)}
+.slot{margin-top:16px;border:1.5px dashed rgba(128,128,128,.45);border-radius:16px;padding:22px 16px;text-align:center;color:var(--mute);font-size:14px}
+table{width:100%;border-collapse:collapse;margin-top:32px;font-size:16px}
+th,td{text-align:left;vertical-align:top;padding:16px 14px;border-bottom:1px solid var(--line)}
+th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);font-weight:700}
+td:first-child{font-weight:600;width:46%}
+td{color:var(--ink)}td span{color:var(--mute)}
+.tbl{overflow-x:auto}
+footer{background:var(--alt);color:var(--mute);font-size:13px;padding:28px 20px 44px;text-align:center;border-top:1px solid var(--line)}
+@media (max-width:600px){td:first-child{width:auto}th,td{padding:12px 8px}}
+</style>
+</head>
+<body>
+<nav><a href="index.html">‹ Back to portfolio</a><span class="code">STDV 1115</span><button id="th" aria-label="Toggle theme">◐</button></nav>
+
+<header class="hero wrap">
+  <p class="eyebrow">STDV 1115 · Niagara College</p>
+  <h1>Digital <span class="grad">Portfolio.</span></h1>
+  <p class="lead">This page is the course side of my portfolio. It covers how I learn, the work I did this term and what I took from it. The rest of the site is my professional portfolio, and it is part of this project too.</p>
+  <div class="pills"><a href="#learner">Digital learner</a><a href="#coursework">Course work</a><a href="#projects">Projects</a><a href="#outcomes">Learning outcomes</a></div>
+</header>
+
+<section class="blk" id="learner"><div class="wrap">
+  <p class="eyebrow">Reflection</p>
+  <h2>Me as a digital learner.</h2>
+  <div class="prose">
+    <p>When I think about how I actually learn, it has never come from lecture slides or textbook chapters. Reading about something rarely sticks for me. What works is jumping in, making mistakes and figuring out why something broke.</p>
+    <p>Motive Power made sense to me because I had my hands on the parts instead of just looking at diagrams. Now that I am taking Business General online, I can see that my best work happens when I mix that hands on habit with computers and planning. That is also why I built a website instead of a slideshow. Building it is how I learn it.</p>
+  </div>
+</div></section>
+
+<section class="blk alt" id="coursework"><div class="wrap">
+  <p class="eyebrow">Course work</p>
+  <h2>What I worked on this term.</h2>
+  <p class="intro">Work from STDV 1115 on the issues of the digital era, with a short reflection on each piece.</p>
+  <div class="grid">
+    <div class="card"><p class="badge">In progress</p><h3>Digital privacy</h3><p>My concept maps and reflections on personal experience, accountability and responsibility online.</p><div class="slot">Concept map and reflection will go here</div></div>
+    <div class="card"><p class="badge">In progress</p><h3>Media literacy</h3><p>My breakdowns of how media is made, shared and judged, and how I check what I read.</p><div class="slot">Media literacy work will go here</div></div>
+    <div class="card"><p class="badge">In progress</p><h3>Journal reflections</h3><p>Highlights from my journal entries and how my thinking changed over the term.</p><div class="slot">Journal highlights will go here</div></div>
+  </div>
+</div></section>
+
+<section class="blk" id="projects"><div class="wrap">
+  <p class="eyebrow">Projects</p>
+  <h2>What I built, and what it taught me.</h2>
+  <p class="intro">Hands on work from this course and my other programs. Each project ends with what I learned from it.</p>
+  <div class="grid g2">
+    <div class="card"><p class="badge done">Live</p><h3>This website</h3><p class="k">What I did</p><p>Coded a one page portfolio in HTML, CSS and JavaScript and hosted it for free on GitHub Pages.</p><p class="k">What I learned</p><p>Reflection coming in the second half of the term.</p></div>
+    <div class="card"><p class="badge done">Live</p><h3>Photography workflow</h3><p class="k">What I did</p><p>Sports, motorsport and portrait work, graded in Lightroom. <a href="index.html#work">See the gallery ›</a></p><p class="k">What I learned</p><p>Reflection coming in the second half of the term.</p></div>
+    <div class="card"><p class="badge">In progress</p><h3>File sorting automation</h3><p class="k">What I did</p><p>Scripts that sort and move files automatically.</p><p class="k">What I learned</p><p>Reflection coming in the second half of the term.</p></div>
+    <div class="card"><p class="badge">In progress</p><h3>Forecasting and operations</h3><p class="k">What I did</p><p>Forecasting and operations work from my business courses.</p><p class="k">What I learned</p><p>Reflection coming in the second half of the term.</p></div>
+  </div>
+</div></section>
+
+<section class="blk alt" id="outcomes"><div class="wrap">
+  <p class="eyebrow">Course outline</p>
+  <h2>How this connects to the course.</h2>
+  <p class="intro">Where each STDV 1115 learning outcome shows up in this portfolio.</p>
+  <div class="tbl"><table>
+    <thead><tr><th scope="col">Learning outcome</th><th scope="col">Where it shows up</th></tr></thead>
+    <tbody>
+      <tr><td>Demonstrate a personal understanding of digital literacy</td><td><a href="#learner">Me as a digital learner</a> and <a href="#coursework">course work</a></td></tr>
+      <tr><td>Compose material in various forms for publication on the web</td><td>This website itself <span>(writing, photography and code)</span></td></tr>
+      <tr><td>Develop interpersonal skills based on digital frameworks</td><td>Group assignments <span>(after the Midterm Break)</span></td></tr>
+      <tr><td>Engage in effective critical thinking, problem solving and decision making</td><td><a href="#projects">Project reflections</a></td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<footer>Jordan Ioannoni · STDV 1115 · Niagara College · <a href="index.html">Back to the main portfolio</a></footer>
+
+<script>
+document.getElementById("th").onclick = () => { const d = document.documentElement, dark = (d.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark"; d.dataset.theme = dark ? "light" : "dark"; };
+</script>
+</body>
+</html>
