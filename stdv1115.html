@@ -58,6 +58,17 @@ section.alt{background:var(--alt)}
 .card .ic svg{width:22px;height:22px}
 .i1{background:linear-gradient(150deg,#7a5cff,#0a84ff)}.i2{background:linear-gradient(150deg,#ff9a3c,#ff3d77)}
 .card a{font-weight:600}
+section.alt .card{background:var(--bg)}
+.cw{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px;margin-top:44px}
+.cw .wide{grid-column:1/-1;display:grid;grid-template-columns:1fr 1.15fr;gap:32px;align-items:center}
+@media (max-width:820px){.cw .wide{grid-template-columns:1fr}}
+.tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:99px;margin:0 0 14px}
+.t1{background:rgba(122,92,255,.14);color:#6a4ff0}.t2{background:rgba(255,61,119,.12);color:#d02a5f}.t3{background:rgba(255,154,60,.16);color:#b85a10}.t4{background:rgba(10,132,255,.13);color:#0a6fd6}.t5{background:rgba(48,209,88,.15);color:#1f8a45}
+.card .take{margin:18px 0 0;color:var(--ink);font-size:20px;font-weight:600;letter-spacing:-.015em;line-height:1.35}
+.card .src{font-size:13px;margin-top:10px}
+.map{display:block;border-radius:20px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.45);cursor:zoom-in}
+.map img{display:block;width:100%;height:auto;transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+.map:hover img{transform:scale(1.03)}
 .tbl{margin-top:44px;border-radius:28px;overflow:hidden;border:1px solid rgba(255,255,255,.14)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:22px 26px;border-top:1px solid rgba(255,255,255,.12)}
 .row:first-child{border-top:0}
@@ -82,8 +93,8 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 <header class="hero">
   <p class="eyebrow rv">STDV 1115 · Niagara College</p>
   <h1 class="rv" style="--d:.1s">Digital <span class="grad">Portfolio.</span></h1>
-  <p class="lead rv" style="--d:.25s">The course side of my portfolio: how I learn, what I built, and how it connects to the course.</p>
-  <div class="pills rv" style="--d:.4s"><a href="#learner">Digital learner</a><a href="#projects">Projects</a><a href="#outcomes">Learning outcomes</a></div>
+  <p class="lead rv" style="--d:.25s">The course side of my portfolio: how I learn, the work I did this term, what I built, and how it all connects to the course.</p>
+  <div class="pills rv" style="--d:.4s"><a href="#learner">Digital learner</a><a href="#coursework">Course work</a><a href="#projects">Projects</a><a href="#outcomes">Learning outcomes</a></div>
 </header>
 
 <section class="words" id="statement"><div class="stick"><p id="wp">Reading about something rarely sticks for me. I learn by building it, breaking it and fixing it. So instead of a slideshow, I built a website.</p></div></section>
@@ -94,10 +105,27 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
   <div class="prose">
     <p class="rv" style="--d:.15s">When I think about how I actually learn, it has never come from lecture slides or textbook chapters. What works is jumping in, making mistakes and figuring out why something broke.</p>
     <p class="rv" style="--d:.2s">Motive Power made sense to me because I had my hands on the parts instead of just looking at diagrams. Now that I am taking Business General online, I can see that my best work happens when I mix that hands on habit with computers and planning.</p>
+    <p class="rv" style="--d:.25s">Early in this course I learned the difference between a digital user and a digital learner. A user just goes online. A learner uses those same tools on purpose, to build something or learn something new. This website is my attempt to be the second one.</p>
   </div>
 </div></section>
 
-<section class="blk" id="projects"><div class="wrap">
+<section class="blk" id="coursework"><div class="wrap">
+  <p class="eyebrow rv">Course work</p>
+  <h2 class="rv" style="--d:.1s">What I worked on this term.</h2>
+  <p class="intro rv" style="--d:.2s">My STDV 1115 research and reflections on the issues of the digital era, and the one line from each that I would keep.</p>
+  <div class="cw">
+    <div class="card wide rv">
+      <div><span class="tag t1">Digital privacy</span><h3>Protecting the Footprint</h3><p>How digital privacy shows up in my everyday life, from using Apple’s hide my email to spotting a fake eTransfer phishing link while selling headphones on Kijiji. It ends with how companies like Amazon use our data to change what we pay. My mind map breaks the topic into four parts: scammer manipulation, influencer impersonation, marketplace phishing and price experiments.</p><p class="take">“Digital privacy is not simply a personal choice, but something essential.”</p></div>
+      <a class="map" href="stdv1115-assets/privacy-mind-map.jpg" target="_blank" rel="noopener" aria-label="Open the Value of Digital Privacy mind map full size"><img src="stdv1115-assets/privacy-mind-map.jpg" alt="Mind map titled Value of Digital Privacy with four branches: scammer manipulation, influencer impersonation, online marketplace scams and phishing, and price experiments" loading="lazy"></a>
+    </div>
+    <div class="card rv"><span class="tag t2">Digital learning</span><h3>Users vs Learners</h3><p>I compared two articles on screen time and ran both through the CRAAP test. The difference between passive scrolling and active screen time made me rethink how I actually use my devices.</p><p class="take">“Every digital learner is a user, but not every user is a learner.”</p></div>
+    <div class="card rv" style="--d:.1s"><span class="tag t3">Media literacy</span><h3>Guarding Democracy</h3><p>Research on foreign interference in Canada using two CBC articles, checked with the CRAAP test, plus my breakdown of a political cartoon. It showed me how disinformation is built to manipulate, and why media has to be decoded instead of just consumed.</p><p class="take">“Applying these critical thinking skills ensures citizens are not just tools of the mass media.”</p></div>
+    <div class="card rv"><span class="tag t4">AI and integrity</span><h3>The Digital Currency of Grades</h3><p>A reflection on Simon Lewsen’s idea that grades work like currency, and what that means as an online student with AI tools one click away. I argued that schools should teach students to use AI ethically instead of only trying to catch cheaters.</p><p class="take">“Taking the easy way out doesn’t build any practical or transferable real world skills.”</p></div>
+    <div class="card rv" style="--d:.1s"><span class="tag t5">Digital wellbeing</span><h3>Ctrl, Alt, Disconnect</h3><p>Notes on talks by Naomi Shimada and Peachy Liv about self worth, online toxicity and burnout. In my reflection I explain going semi analog with an A5 notebook and a rOtring 600, and heading to the mountains with only a film camera.</p><p class="take">“The best way to find digital harmony is knowing exactly when to leave it behind.”</p></div>
+  </div>
+</div></section>
+
+<section class="blk alt" id="projects"><div class="wrap">
   <p class="eyebrow rv">Projects</p>
   <h2 class="rv" style="--d:.1s">What I built.</h2>
   <p class="intro rv" style="--d:.2s">Hands on work that shows how I think and solve problems.</p>
@@ -112,9 +140,9 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
   <h2 class="rv" style="--d:.1s">How this connects to the course.</h2>
   <p class="intro rv" style="--d:.2s">Where each learning outcome shows up in this portfolio.</p>
   <div class="tbl rv" style="--d:.3s">
-    <div class="row"><b><small>Outcome</small>Demonstrate a personal understanding of digital literacy</b><span><small>Where</small><a href="#learner">Me as a digital learner</a></span></div>
+    <div class="row"><b><small>Outcome</small>Demonstrate a personal understanding of digital literacy</b><span><small>Where</small><a href="#learner">Me as a digital learner</a> and <a href="#coursework">course work</a></span></div>
     <div class="row"><b><small>Outcome</small>Compose material in various forms for publication on the web</b><span><small>Where</small>This website itself, with writing, photography and code</span></div>
-    <div class="row"><b><small>Outcome</small>Engage in effective critical thinking, problem solving and decision making</b><span><small>Where</small><a href="#projects">What I built</a></span></div>
+    <div class="row"><b><small>Outcome</small>Engage in effective critical thinking, problem solving and decision making</b><span><small>Where</small>CRAAP tests and reflections in my <a href="#coursework">course work</a>, and <a href="#projects">what I built</a></span></div>
   </div>
 </div></section>
 
