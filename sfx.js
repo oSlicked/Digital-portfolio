@@ -8,7 +8,7 @@
   /* recorded sounds: Canon 1DX Mark II shutter and a pen signing paper */
   const RAW = {}, BUF = {};
   const decode = () => { if (!AC) return; for (const n in RAW) { const b = RAW[n]; if (!b) continue; RAW[n] = null; try { AC.decodeAudioData(b, d => { BUF[n] = d; }, () => {}); } catch (e) {} } };
-  ["shutter", "pen"].forEach(n => { fetch("sfx/" + n + ".mp3").then(r => r.ok ? r.arrayBuffer() : null).then(b => { if (b) { RAW[n] = b; decode(); } }).catch(() => {}); });
+  ["shutter", "pen", "focus"].forEach(n => { fetch("sfx/" + n + ".mp3").then(r => r.ok ? r.arrayBuffer() : null).then(b => { if (b) { RAW[n] = b; decode(); } }).catch(() => {}); });
   const play = (n, t, vol = 1, rate = 1) => {
     const s = AC.createBufferSource(), g = AC.createGain();
     s.buffer = BUF[n]; s.playbackRate.value = rate; g.gain.value = vol;
@@ -116,6 +116,8 @@
 .vf{cursor:pointer}
 .vf .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:3}
 .vf .flash.on{animation:fl .5s ease-out}
+.vf .fb.shot{animation:afshot 2.2s ease-in-out 1 forwards}
+@keyframes afshot{0%{left:10%;top:15%;opacity:.5}25%{left:58%;top:52%;opacity:1}50%{left:30%;top:26%}64%{left:38%;top:30%;border-color:#ffd60a;box-shadow:none}70%,100%{left:38%;top:30%;opacity:1;border-color:#30d158;box-shadow:0 0 18px #30d158}}
 @keyframes fl{0%{opacity:.85}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){#sgate .in,#sgate .ic .w{animation:none}.vf .flash.on{animation:none}}`;
   document.head.append(css);
@@ -131,7 +133,8 @@
   }
 
   function gate() {
-    let seen = false; try { seen = sessionStorage.getItem("ji-gate") === "1"; } catch (e) {}
+    /* browsers forget the sound unlock on every page load, so the screen shows each load unless the visitor chose no sound */
+    let seen = false; try { seen = sessionStorage.getItem("ji-gate") === "1" && localStorage.getItem("ji-snd") === "0"; } catch (e) {}
     if (seen) {
       /* already chose this visit: start right away, sound unlocks on the first tap */
       ready = true;
@@ -160,18 +163,33 @@
   }
 
   const wire = () => {
-    gate();
     const b = btn();
     if (b && !b.hasAttribute("data-own")) {
       syncBtn();
       b.addEventListener("click", () => { SFX.on = !on; if (on) SFX.tick(.25); });
     }
-    /* viewfinder in the hero: tap to fire a burst */
+    /* viewfinder in the hero: focus hunts, AF beep, shutter. Plays once after the signature, and on every tap */
     const vf = document.getElementById("vf");
     if (vf) {
       const fl = document.createElement("i"); fl.className = "flash"; fl.style.cssText = "border:0;width:auto;height:auto"; vf.append(fl);
+      const fb = vf.querySelector(".fb");
       vf.setAttribute("title", "Tap to shoot");
-      vf.addEventListener("click", () => { ctx(); SFX.shutter(4); fl.classList.remove("on"); void fl.offsetWidth; fl.classList.add("on"); });
+      let busy = false;
+      const shot = () => {
+        if (busy) return; busy = true;
+        if (fb) { fb.classList.remove("shot"); void fb.offsetWidth; fb.classList.add("shot"); }
+        if (live() && BUF.focus) play("focus", AC.currentTime + .02, 1);
+        else setTimeout(() => SFX.shutter(1), 1850);
+        setTimeout(() => { fl.classList.remove("on"); void fl.offsetWidth; fl.classList.add("on"); }, 1880);
+        setTimeout(() => { busy = false; if (fb) fb.classList.remove("shot"); }, 3200);
+      };
+      vf.addEventListener("click", () => { ctx(); shot(); });
+      SFX.ready(o => {
+        if (!o || !("IntersectionObserver" in window)) return;
+        const t0 = performance.now();
+        const io = new IntersectionObserver(es => { if (!es[0].isIntersecting) return; io.disconnect(); setTimeout(shot, Math.max(400, 7000 - (performance.now() - t0))); }, { threshold: .15 });
+        io.observe(vf);
+      });
     }
     /* clicks around the page */
     document.addEventListener("click", e => {
@@ -185,5 +203,7 @@
       if (lb && !lb.hidden && (e.key === "ArrowLeft" || e.key === "ArrowRight")) SFX.shutter(1);
     });
   };
-  if (document.body) wire(); else document.addEventListener("DOMContentLoaded", wire);
+  /* the sound screen goes up right away; buttons and the viewfinder are wired once the page has loaded */
+  if (document.body) gate(); else document.addEventListener("DOMContentLoaded", gate);
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wire); else wire();
 })();
