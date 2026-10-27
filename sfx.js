@@ -5,9 +5,19 @@
   const waiting = [];
   try { on = localStorage.getItem("ji-snd") !== "0"; } catch (e) {}
 
+  /* recorded sounds: Canon 1DX Mark II shutter and a pencil on paper */
+  const RAW = {}, BUF = {};
+  const decode = () => { if (!AC) return; for (const n in RAW) { const b = RAW[n]; if (!b) continue; RAW[n] = null; try { AC.decodeAudioData(b, d => { BUF[n] = d; }, () => {}); } catch (e) {} } };
+  ["shutter", "pencil"].forEach(n => { fetch("sfx/" + n + ".mp3").then(r => r.ok ? r.arrayBuffer() : null).then(b => { if (b) { RAW[n] = b; decode(); } }).catch(() => {}); });
+  const play = (n, t, vol = 1, rate = 1) => {
+    const s = AC.createBufferSource(), g = AC.createGain();
+    s.buffer = BUF[n]; s.playbackRate.value = rate; g.gain.value = vol;
+    s.connect(g).connect(AC.destination); s.start(t); return { s, g };
+  };
+
   const ctx = () => {
     try {
-      if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; AC = new C(); }
+      if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; AC = new C(); decode(); }
       if (AC.state === "suspended") AC.resume();
     } catch (e) {}
     return AC;
@@ -44,6 +54,7 @@
     /* Canon 1DX style shutter: mirror up, curtain, mirror down. frames > 1 fires a 12 fps burst */
     shutter(frames = 1) {
       if (!live()) return;
+      if (BUF.shutter) { for (let i = 0; i < frames; i++) play("shutter", AC.currentTime + .01 + i * (1 / 12), .9, .97 + Math.random() * .06); return; }
       for (let i = 0; i < frames; i++) {
         const t = AC.currentTime + .01 + i * (1 / 12);
         burst(t, { len: .02, curve: 7, freq: 2200, q: .8, hp: 400, vol: .55 });
@@ -56,6 +67,12 @@
     pen(ms) {
       if (!live()) return;
       const t0 = AC.currentTime, len = ms / 1000;
+      if (BUF.pencil) {
+        const { s: ps, g: pg } = play("pencil", t0, 0, 1), end = Math.min(len, BUF.pencil.duration);
+        pg.gain.setValueAtTime(0, t0); pg.gain.linearRampToValueAtTime(.9, t0 + .25);
+        pg.gain.setValueAtTime(.9, t0 + end - .4); pg.gain.linearRampToValueAtTime(0, t0 + end);
+        ps.stop(t0 + end + .05); return;
+      }
       const s = AC.createBufferSource(), h = AC.createBiquadFilter(), f = AC.createBiquadFilter(), g = AC.createGain();
       s.buffer = noise(2); s.loop = true;
       h.type = "highpass"; h.frequency.value = 1600; f.type = "bandpass"; f.Q.value = .8; f.frequency.value = 3800;

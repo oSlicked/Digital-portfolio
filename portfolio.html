@@ -67,7 +67,7 @@ h1{font-size:clamp(44px,10vw,108px)}h2{font-size:clamp(32px,5.6vw,60px)}
 #lb{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.93);display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 56px) 12px calc(env(safe-area-inset-bottom,0px) + 56px);animation:lbi .35s ease}
 #lb[hidden]{display:none}
 @keyframes lbi{from{opacity:0}}
-#lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;animation:lbz .5s cubic-bezier(.16,1,.3,1)}
+#lb img{width:auto;height:auto;max-width:calc(100vw - 24px);max-height:calc(100vh - 128px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));max-height:calc(100dvh - 128px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));object-fit:contain;border-radius:12px;animation:lbz .5s cubic-bezier(.16,1,.3,1)}
 @keyframes lbz{from{transform:scale(.94);opacity:.4}}
 #lb button{position:absolute;background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:99px;width:44px;height:44px;font-size:22px;cursor:pointer}
 #lx{top:calc(env(safe-area-inset-top,0px) + 10px);right:14px}#lp{left:10px;top:50%}#ln{right:10px;top:50%}
@@ -208,6 +208,12 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 .svc a,.links a{color:var(--g1)}
 .avail{border-color:color-mix(in srgb,var(--g1) 45%,transparent)}
 :root[data-theme="light"] .svc a,:root[data-theme="light"] .links a{color:var(--link)}
+#lb #lp,#lb #ln{width:56px;height:56px;margin-top:-28px;font-size:30px;line-height:1;font-weight:600;color:#05101f;background:linear-gradient(135deg,var(--g1),var(--g2));box-shadow:0 8px 26px -6px rgba(94,231,255,.7);animation:ap 1.4s ease-out .4s 3;transition:transform .25s}
+#lb #lp:hover,#lb #ln:hover{transform:scale(1.1)}
+@keyframes ap{0%{box-shadow:0 0 0 0 rgba(94,231,255,.7)}100%{box-shadow:0 0 0 20px rgba(94,231,255,0)}}
+#lc b{color:#5ee7ff;font-weight:600;margin-left:10px}
+.hint{display:inline-flex;align-items:center;gap:8px;margin:6px auto 0;padding:7px 15px;border-radius:99px;font-size:14px;color:inherit;background:color-mix(in srgb,var(--g1) 12%,transparent);border:1px solid color-mix(in srgb,var(--g1) 42%,transparent)}
+.hint svg{width:16px;height:16px;flex:none;color:var(--g1)}
 </style>
 </head>
 <body>
@@ -264,11 +270,13 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
   <div class="feat"><p class="eyebrow">Hands on</p><h2>720 hours in the shop.</h2><p>OBDII diagnostics, schematics, hydraulics and lab testing, learned with a wrench in hand.</p></div>
 </div></section>
 
-<section class="work c" id="work"><h2 class="rv">Through the lens.</h2><p class="sub rv" style="--d:.1s">Pit lane, rinkside, the field and everything between. Tap to enlarge.</p>
+<section class="work c" id="work"><h2 class="rv">Through the lens.</h2><p class="sub rv" style="--d:.1s">Pit lane, rinkside, the field and everything between.</p>
+  <p class="rv" style="--d:.15s;margin:0"><span class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Tap any photo to see it full size, then use the arrows to flip through</span></p>
   <div class="chips" id="chips"></div><div class="row" id="row"></div></section>
 <div class="mq" aria-hidden="true"><div id="mq"></div></div>
 
 <section class="pfw dk c" id="portraits"><p class="eyebrow rv">Portrait sessions</p><h2 class="rv" style="--d:.1s">Portraits.</h2><p class="sub rv" style="--d:.2s">Autumn on location. Low key in the studio. Same eye for detail.</p>
+  <p class="rv" style="--d:.15s;margin:0"><span class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Tap any photo to see it full size, then use the arrows to flip through</span></p>
   <div class="feat-pf"><figure class="pf rv" tabindex="0" data-t="Leading lines" data-s="Autumn session, car as backdrop" style="--d:0s"><img data-i="au5" alt="Leading lines: Autumn session, car as backdrop" loading="lazy"><figcaption>Leading lines<small>Autumn session, car as backdrop</small></figcaption></figure></div>
   <div class="mos"><figure class="pf rv" tabindex="0" data-t="Under the canopy" data-s="Autumn, on location" style="--d:0.0s"><img data-i="au7" alt="Under the canopy: Autumn, on location" loading="lazy"><figcaption>Under the canopy<small>Autumn, on location</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Low key" data-s="Studio, single light" style="--d:0.08s"><img data-i="st2" alt="Low key: Studio, single light" loading="lazy"><figcaption>Low key<small>Studio, single light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Door open" data-s="Natural light, warm grade" style="--d:0.16s"><img data-i="au3" alt="Door open: Natural light, warm grade" loading="lazy"><figcaption>Door open<small>Natural light, warm grade</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Rear quarter" data-s="Autumn session" style="--d:0.0s"><img data-i="au1" alt="Rear quarter: Autumn session" loading="lazy"><figcaption>Rear quarter<small>Autumn session</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Seated" data-s="Studio, side light" style="--d:0.08s"><img data-i="st1" alt="Seated: Studio, side light" loading="lazy"><figcaption>Seated<small>Studio, side light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Low angle" data-s="The star in focus" style="--d:0.16s"><img data-i="au2" alt="Low angle: The star in focus" loading="lazy"><figcaption>Low angle<small>The star in focus</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Golden hour" data-s="Long coat, hard light" style="--d:0.0s"><img data-i="au6" alt="Golden hour: Long coat, hard light" loading="lazy"><figcaption>Golden hour<small>Long coat, hard light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Window seat" data-s="Through the glass" style="--d:0.08s"><img data-i="au4" alt="Window seat: Through the glass" loading="lazy"><figcaption>Window seat<small>Through the glass</small></figcaption></figure></div>
   <div class="pfs rv"><span><b>On location</b>Natural light, styled sets</span><span><b>In studio</b>Strobes, controlled light</span><span><b>Delivered</b>Graded in Lightroom</span></div>
@@ -313,7 +321,7 @@ $("#row").innerHTML=G.map(([c,t,s,k])=>`<figure class="tile" data-c="${c}" data-
 $("#chips").innerHTML=[["all","All"],["moto","Motorsport"],["hockey","Hockey action"],["people","Bench and people"],["behind","Behind the lens"],["travel","Travel"]].map(([k,l],i)=>`<button data-k="${k}"${i?"":' class="on"'}>${l}</button>`).join("");
 $("#chips").onclick=e=>{const k=e.target.dataset.k;if(!k)return;$$("#chips button").forEach(b=>b.classList.toggle("on",b===e.target));$$(".tile").forEach(t=>t.classList.toggle("hide",k!=="all"&&t.dataset.c!==k));$("#row").scrollLeft=0;};
 const lb=$("#lb");let L=[],ix=0;
-const show=()=>{const t=L[ix];$("#li").src=t.querySelector("img").src;$("#lc").textContent=t.dataset.t+" · "+t.dataset.s;};
+const show=()=>{const t=L[ix];$("#li").src=t.querySelector("img").src;$("#lc").textContent=t.dataset.t+" · "+t.dataset.s;const n=document.createElement("b");n.textContent=(ix+1)+" / "+L.length;$("#lc").append(n);};
 const closeLb=()=>{lb.hidden=true;document.body.style.overflow="";};
 const step=d=>{ix=(ix+d+L.length)%L.length;show();};
 const openLb=t=>{L=t.classList.contains("pf")?$$(".pf"):$$(".tile:not(.hide)");ix=L.indexOf(t);show();lb.hidden=false;document.body.style.overflow="hidden";};
