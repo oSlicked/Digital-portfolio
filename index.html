@@ -155,6 +155,8 @@ h1{font-size:clamp(44px,10vw,108px)}h2{font-size:clamp(32px,5.6vw,60px)}
 @media (hover:none){.pf figcaption{opacity:1;transform:none}}
 .pfs{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-top:34px;color:#a1a1a6;font-size:15px}
 .pfs b{display:block;color:#f5f5f7;font-size:28px;letter-spacing:-.03em}
+.igw{padding:110px 0 100px}
+.igf{max-width:1040px;margin:44px auto 10px;padding:0 16px;min-height:200px}
 .avail{display:inline-flex;align-items:center;gap:9px;margin:4px auto 22px;padding:7px 15px;border-radius:99px;border:1px solid rgba(128,128,128,.35);font-size:14px;color:var(--ink);background:var(--bg)}
 .avail::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:#30d158;animation:av 2s infinite}
 @keyframes av{0%{box-shadow:0 0 0 0 rgba(48,209,88,.55)}70%,100%{box-shadow:0 0 0 9px rgba(48,209,88,0)}}
@@ -252,6 +254,10 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
   <div class="mos"><figure class="pf rv" tabindex="0" data-t="Under the canopy" data-s="Autumn, on location" style="--d:0.0s"><img data-i="au7" alt="Under the canopy: Autumn, on location" loading="lazy"><figcaption>Under the canopy<small>Autumn, on location</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Low key" data-s="Studio, single light" style="--d:0.08s"><img data-i="st2" alt="Low key: Studio, single light" loading="lazy"><figcaption>Low key<small>Studio, single light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Door open" data-s="Natural light, warm grade" style="--d:0.16s"><img data-i="au3" alt="Door open: Natural light, warm grade" loading="lazy"><figcaption>Door open<small>Natural light, warm grade</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Rear quarter" data-s="Autumn session" style="--d:0.0s"><img data-i="au1" alt="Rear quarter: Autumn session" loading="lazy"><figcaption>Rear quarter<small>Autumn session</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Seated" data-s="Studio, side light" style="--d:0.08s"><img data-i="st1" alt="Seated: Studio, side light" loading="lazy"><figcaption>Seated<small>Studio, side light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Low angle" data-s="The star in focus" style="--d:0.16s"><img data-i="au2" alt="Low angle: The star in focus" loading="lazy"><figcaption>Low angle<small>The star in focus</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Golden hour" data-s="Long coat, hard light" style="--d:0.0s"><img data-i="au6" alt="Golden hour: Long coat, hard light" loading="lazy"><figcaption>Golden hour<small>Long coat, hard light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Window seat" data-s="Through the glass" style="--d:0.08s"><img data-i="au4" alt="Window seat: Through the glass" loading="lazy"><figcaption>Window seat<small>Through the glass</small></figcaption></figure></div>
   <div class="pfs rv"><span><b>On location</b>Natural light, styled sets</span><span><b>In studio</b>Strobes, controlled light</span><span><b>Delivered</b>Graded in Lightroom</span></div>
   <div class="rv" style="margin-top:30px"><a class="btn" href="#contact" data-topic="Portrait session">Book a portrait session</a></div></section>
+
+<section class="igw c" id="instagram"><p class="eyebrow rv">Instagram</p><h2 class="rv" style="--d:.1s">Fresh from the feed.</h2><p class="sub rv" style="--d:.2s">My latest posts, straight from @jordanioannoni.</p>
+  <div class="igf rv" style="--d:.25s"><behold-widget feed-id="fHpkd8OHLvEk8Dwz2S52"></behold-widget></div>
+  <div class="rv"><a class="btn" href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener">Follow @jordanioannoni</a></div></section>
 
 <section class="svcw c" id="services"><h2 class="rv">How I can help.</h2><p class="sub rv" style="--d:.1s">Three ways to work together.</p>
   <div class="svcs">
@@ -397,6 +403,13 @@ tick();
     setTimeout(() => requestAnimationFrame(frame), 600);
   };
 })();
+</script>
+<script>
+  (() => {
+    if(window.__bhldScript)return;window.__bhldScript=true;
+    const d=document,s=d.createElement("script");s.type="module";
+    s.src="https://w.behold.so/widget.js";setTimeout(()=>{d.head.append(s);},0);
+  })();
 </script>
 </body>
 </html>
