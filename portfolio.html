@@ -428,8 +428,11 @@ tick();
     };
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) { reveal(1 + F); return; }
     const D = 6000, ease = u => .5 - Math.cos(Math.PI * u) / 2; let t0 = 0;
-    const frame = now => { if (!t0) t0 = now; const u = Math.min(1, (now - t0) / D); reveal(ease(u) * (1 + F)); if (u < 1) requestAnimationFrame(frame); };
-    const go = () => setTimeout(() => { if (window.SFX) SFX.pen(D); requestAnimationFrame(frame); }, 600);
+    let pen = null, last = 0, lt = 0; const peak = ord.length * (Math.PI / 2) / D;
+    const frame = now => { if (!t0) { t0 = now; lt = now; } const u = Math.min(1, (now - t0) / D); reveal(ease(u) * (1 + F));
+      if (pen) { const dt = Math.max(1, now - lt); pen.set((done - last) / dt / peak / 1.6); last = done; lt = now; if (u >= 1) pen.stop(); }
+      if (u < 1) requestAnimationFrame(frame); };
+    const go = () => setTimeout(() => { pen = window.SFX ? SFX.penLive() : null; requestAnimationFrame(frame); }, 600);
     if (window.SFX) SFX.ready(go); else go();
   };
 })();

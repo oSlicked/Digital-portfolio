@@ -5,10 +5,10 @@
   const waiting = [];
   try { on = localStorage.getItem("ji-snd") !== "0"; } catch (e) {}
 
-  /* recorded sounds: Canon 1DX Mark II shutter and a pencil on paper */
+  /* recorded sounds: Canon 1DX Mark II shutter and a pen signing paper */
   const RAW = {}, BUF = {};
   const decode = () => { if (!AC) return; for (const n in RAW) { const b = RAW[n]; if (!b) continue; RAW[n] = null; try { AC.decodeAudioData(b, d => { BUF[n] = d; }, () => {}); } catch (e) {} } };
-  ["shutter", "pencil"].forEach(n => { fetch("sfx/" + n + ".mp3").then(r => r.ok ? r.arrayBuffer() : null).then(b => { if (b) { RAW[n] = b; decode(); } }).catch(() => {}); });
+  ["shutter", "pen"].forEach(n => { fetch("sfx/" + n + ".mp3").then(r => r.ok ? r.arrayBuffer() : null).then(b => { if (b) { RAW[n] = b; decode(); } }).catch(() => {}); });
   const play = (n, t, vol = 1, rate = 1) => {
     const s = AC.createBufferSource(), g = AC.createGain();
     s.buffer = BUF[n]; s.playbackRate.value = rate; g.gain.value = vol;
@@ -63,16 +63,21 @@
         burst(t + .05, { len: .03, curve: 6, freq: 1500, q: .7, hp: 250, vol: .35 });
       }
     },
+    /* pen that follows the signature: call set(level 0 to 1) every frame with how fast ink is appearing, then stop() */
+    penLive() {
+      if (!live() || !BUF.pen) return null;
+      const s = AC.createBufferSource(), g = AC.createGain(); let off = false;
+      s.buffer = BUF.pen; s.loop = true; g.gain.value = 0;
+      s.connect(g).connect(AC.destination); s.start();
+      return {
+        set(v) { if (!off) g.gain.setTargetAtTime(Math.min(1, Math.max(0, v)) * .55, AC.currentTime, .05); },
+        stop() { if (off) return; off = true; g.gain.setTargetAtTime(0, AC.currentTime, .12); s.stop(AC.currentTime + .8); }
+      };
+    },
     /* pen on paper for ms milliseconds, louder in the middle of the stroke like the drawing speed */
     pen(ms) {
       if (!live()) return;
       const t0 = AC.currentTime, len = ms / 1000;
-      if (BUF.pencil) {
-        const { s: ps, g: pg } = play("pencil", t0, 0, 1), end = Math.min(len, BUF.pencil.duration);
-        pg.gain.setValueAtTime(0, t0); pg.gain.linearRampToValueAtTime(.9, t0 + .25);
-        pg.gain.setValueAtTime(.9, t0 + end - .4); pg.gain.linearRampToValueAtTime(0, t0 + end);
-        ps.stop(t0 + end + .05); return;
-      }
       const s = AC.createBufferSource(), h = AC.createBiquadFilter(), f = AC.createBiquadFilter(), g = AC.createGain();
       s.buffer = noise(2); s.loop = true;
       h.type = "highpass"; h.frequency.value = 1600; f.type = "bandpass"; f.Q.value = .8; f.frequency.value = 3800;
