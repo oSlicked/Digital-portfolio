@@ -107,43 +107,80 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 .svc a,.links a{color:var(--g1)}
 .avail{border-color:color-mix(in srgb,var(--g1) 45%,transparent)}
 :root[data-theme="light"] .svc a,:root[data-theme="light"] .links a{color:var(--link)}
+/* typing title */
+.caret{display:inline-block;width:.07em;height:.82em;margin-left:.06em;vertical-align:-.04em;border-radius:2px;background:linear-gradient(var(--g1),var(--g3));animation:blink 1s steps(1) infinite;transition:opacity .6s}
+.caret.off{opacity:0}
+@keyframes blink{50%{opacity:0}}
+h1.typed{cursor:pointer;min-height:1.05em}
+.hero::before{left:var(--hx,50%);top:var(--hy,55%);transition:left 1.2s cubic-bezier(.16,1,.3,1),top 1.2s cubic-bezier(.16,1,.3,1)}
+nav .r{display:flex;gap:8px;align-items:center}
+#snd{padding:3px 9px;line-height:0}#snd svg{width:14px;height:14px}
+#snd[aria-pressed="false"] .wv{display:none}#snd[aria-pressed="true"] .x{display:none}
+/* card tilt */
+@media (hover:hover){.card:hover{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-6px)}}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px}
+.stat{border-radius:28px;padding:26px;color:#fff;position:relative;overflow:hidden}
+.stat:nth-child(1){background:linear-gradient(150deg,var(--g3),var(--link))}.stat:nth-child(2){background:linear-gradient(150deg,var(--g1),var(--g2))}.stat:nth-child(3){background:linear-gradient(150deg,var(--g2),var(--g3))}.stat:nth-child(4){background:linear-gradient(150deg,#1f8a45,#30d158)}
+.stat b{display:block;font-size:clamp(40px,5vw,58px);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.stat span{display:block;margin-top:8px;font-size:15px;font-weight:600;opacity:.92}
+@media (max-width:820px){.stats{grid-template-columns:repeat(2,1fr)}}
+/* code demo */
+.codebox{margin-top:40px;border-radius:24px;overflow:hidden;background:#0b1020;color:#e6ecff;box-shadow:0 30px 70px -30px color-mix(in srgb,var(--g3) 55%,transparent);border:1px solid rgba(255,255,255,.08)}
+.cbar{display:flex;align-items:center;gap:7px;padding:12px 16px;background:rgba(255,255,255,.05);font-size:13px;color:#9aa8c4}
+.cbar i{width:11px;height:11px;border-radius:50%;background:#ff5f57}.cbar i:nth-child(2){background:#febc2e}.cbar i:nth-child(3){background:#28c840}.cbar span{margin-left:8px}
+.cgrid{display:grid;grid-template-columns:1.4fr 1fr}
+#code{margin:0;padding:22px 24px;min-height:230px;font:13px/1.7 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+#code .k{color:#5ee7ff}#code .a{color:#c4a7ff}#code .v{color:#9cf0b5}
+#code::after{content:"";display:inline-block;width:8px;height:15px;background:#5ee7ff;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+.sigdemo{display:grid;place-items:center;padding:20px;border-left:1px solid rgba(255,255,255,.08);background:radial-gradient(circle at 50% 40%,rgba(155,107,255,.18),transparent 70%)}
+.sigdemo svg{width:100%;max-width:340px}
+.sigdemo path{fill:none;stroke:url(#sg);stroke-width:4;stroke-linecap:round;stroke-dasharray:700;stroke-dashoffset:700}
+.sigdemo.go path{transition:stroke-dashoffset 3s ease;stroke-dashoffset:0}
+.sigdemo p{margin:6px 0 0;font-size:13px;color:#9aa8c4;text-align:center}
+@media (max-width:760px){.cgrid{grid-template-columns:1fr}.sigdemo{border-left:0;border-top:1px solid rgba(255,255,255,.08)}#code{min-height:0}}
+/* outcomes stagger */
+.tbl .row{opacity:0;transform:translateX(-28px);transition:opacity .7s,transform .8s cubic-bezier(.16,1,.3,1)}
+.tbl.in .row{opacity:1;transform:none}
+.tbl.in .row:nth-child(2){transition-delay:.15s}.tbl.in .row:nth-child(3){transition-delay:.3s}.tbl.in .row:nth-child(4){transition-delay:.45s}
+@media (prefers-reduced-motion:reduce){.tbl .row{opacity:1;transform:none}.sigdemo path{stroke-dashoffset:0}.caret{display:none}}
 </style>
 </head>
 <body>
 <div id="sp"></div>
-<nav id="nav"><a href="/portfolio">‹ Back to portfolio</a><span class="code">STDV 1115</span><button id="th" aria-label="Toggle theme">◐</button></nav>
+<nav id="nav"><a href="/portfolio">‹ Back to portfolio</a><span class="code">STDV 1115</span><span class="r"><button id="snd" aria-label="Typing sounds" aria-pressed="true" title="Typing sounds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="wv" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/><path class="x" d="m23 9-6 6M17 9l6 6"/></svg></button><button id="th" aria-label="Toggle theme">◐</button></span></nav>
 
 <header class="hero">
   <p class="eyebrow rv">STDV 1115 · Niagara College</p>
-  <h1 class="rv" style="--d:.1s">Digital <span class="grad">Portfolio.</span></h1>
-  <p class="lead rv" style="--d:.25s">The course side of my portfolio: how I learn, the work I did this term, what I built, and how it all connects to the course.</p>
+  <h1 class="rv typed" style="--d:.1s" aria-label="Digital Portfolio." title="Click to type it again"><span id="tw" aria-hidden="true"><span>Digital </span><span class="grad">Portfolio.</span></span><span class="caret" aria-hidden="true"></span></h1>
+  <p class="lead rv" style="--d:.25s">This is the school side of my portfolio: how I learn, what I worked on this term, what I built and how it all ties back to the course.</p>
 </header>
 
-<section class="words" id="statement"><div class="stick"><p id="wp">Reading about something rarely sticks for me. I learn by doing it, testing it and fixing it. So instead of a slideshow, I designed a website.</p></div></section>
+<section class="words" id="statement"><div class="stick"><p id="wp">A book can only describe it. Learning by doing is the best way of learning. So instead of a slideshow, I built a website.</p></div></section>
 
 <section class="blk alt" id="learner"><div class="wrap">
   <p class="eyebrow rv">Reflection</p>
   <h2 class="rv" style="--d:.1s">Me as a digital learner.</h2>
   <div class="prose">
-    <p class="rv" style="--d:.15s">When I think about how I actually learn, it has never come from lecture slides or textbook chapters. What works is jumping in, making mistakes and figuring out why something broke.</p>
-    <p class="rv" style="--d:.2s">Motive Power made sense to me because I had my hands on the parts instead of just looking at diagrams. Now that I am taking Business General online, I can see that my best work happens when I mix that hands on habit with computers and planning.</p>
-    <p class="rv" style="--d:.25s">Early in this course I learned the difference between a digital user and a digital learner. A user just goes online. A learner uses those same tools on purpose, to build something or learn something new. This website is my attempt at being a digital learner.</p>
+    <p class="rv" style="--d:.15s">Learning with my hands in the Motive Power program taught me feeling, and not emotionally. When you work with your hands you find out very quickly how a bolt snaps when wrenching on it, or what a tire feels like when it pops letting the last little bit of air out when mounting.</p>
+    <p class="rv" style="--d:.2s">It even teaches you what getting hurt feels like, smashing your knuckles while taking out a stuck brake caliper bracket bolt, or hitting your head off the bottom of an exhaust pipe. A book can only describe these things, and they honestly probably wouldn’t even do that. Learning by doing is the best way of learning.</p>
+    <p class="rv" style="--d:.25s">Early in this course I learned the difference between a digital user and a digital learner. A user just goes online. A learner uses those same tools on purpose to build something. This website is me being a digital learner.</p>
   </div>
 </div></section>
 
 <section class="blk" id="coursework"><div class="wrap">
   <p class="eyebrow rv">Course work</p>
   <h2 class="rv" style="--d:.1s">What I worked on this term.</h2>
-  <p class="intro rv" style="--d:.2s">My STDV 1115 research and reflections on the issues of the digital era, and the one line from each that I would keep.</p>
+  <p class="intro rv" style="--d:.2s">My STDV 1115 research and reflections this term, plus the one line from each that I would keep.</p>
   <div class="cw">
     <div class="card wide rv">
-      <div><span class="tag t1">Digital privacy</span><h3>Protecting the Footprint</h3><p>How digital privacy shows up in my everyday life, from using Apple’s hide my email to spotting a fake eTransfer phishing link while selling headphones on Kijiji. It ends with how companies like Amazon use our data to change what we pay. My mind map breaks the topic into four parts: scammer manipulation, influencer impersonation, marketplace phishing and price experiments.</p><p class="take">“Digital privacy is not simply a personal choice, but something essential.”</p></div>
+      <div><span class="tag t1">Digital privacy</span><h3>Protecting the Footprint</h3><p>How digital privacy shows up in my everyday life. I use Apple’s Hide My Email, and I caught a fake eTransfer phishing link while selling headphones on Kijiji. It also covers how companies like Amazon use our data to change what we pay. My mind map splits it into four parts: scammer manipulation, influencer impersonation, marketplace phishing and price experiments.</p><p class="take">“Digital privacy is not simply a personal choice, but something essential.”</p></div>
       <a class="map" href="stdv1115-assets/privacy-mind-map.jpg" target="_blank" rel="noopener" aria-label="Open the Value of Digital Privacy mind map full size"><img src="stdv1115-assets/privacy-mind-map.jpg" alt="Mind map titled Value of Digital Privacy with four branches: scammer manipulation, influencer impersonation, online marketplace scams and phishing, and price experiments" loading="lazy"></a>
     </div>
-    <div class="card rv"><span class="tag t2">Digital learning</span><h3>Users vs Learners</h3><p>I compared two articles on screen time and ran both through the CRAAP test. The difference between passive scrolling and active screen time made me rethink how I actually use my devices.</p><p class="take">“Every digital learner is a user, but not every user is a learner.”</p></div>
-    <div class="card rv" style="--d:.1s"><span class="tag t3">Media literacy</span><h3>Guarding Democracy</h3><p>Research on foreign interference in Canada using two CBC articles, checked with the CRAAP test, plus my breakdown of a political cartoon. It showed me how disinformation is built to manipulate, and why media has to be decoded instead of just consumed.</p><p class="take">“Applying these critical thinking skills ensures citizens are not just tools of the mass media.”</p></div>
-    <div class="card rv"><span class="tag t4">AI and integrity</span><h3>The Digital Currency of Grades</h3><p>A reflection on Simon Lewsen’s idea that grades work like currency, and what that means as an online student with AI tools one click away. I argued that schools should teach students to use AI ethically instead of only trying to catch cheaters.</p><p class="take">“Taking the easy way out doesn’t build any practical or transferable real world skills.”</p></div>
-    <div class="card rv" style="--d:.1s"><span class="tag t5">Digital wellbeing</span><h3>Ctrl, Alt, Disconnect</h3><p>Notes on talks by Naomi Shimada and Peachy Liv about self worth, online toxicity and burnout. In my reflection I explain going semi analog with an A5 notebook and a rOtring 600, and heading to the mountains with only a film camera.</p><p class="take">“The best way to find digital harmony is knowing exactly when to leave it behind.”</p></div>
+    <div class="card rv"><span class="tag t2">Digital learning</span><h3>Users vs Learners</h3><p>I compared two articles on screen time and ran both through the CRAAP test. Passive scrolling and active screen time are not the same thing, and it made me rethink how I use my devices.</p><p class="take">“Every digital learner is a user, but not every user is a learner.”</p></div>
+    <div class="card rv" style="--d:.1s"><span class="tag t3">Media literacy</span><h3>Guarding Democracy</h3><p>I researched foreign interference in Canada using two CBC articles, checked them with the CRAAP test and broke down a political cartoon. Disinformation is built to manipulate you, so media has to be decoded, not just consumed.</p><p class="take">“Applying these critical thinking skills ensures citizens are not just tools of the mass media.”</p></div>
+    <div class="card rv"><span class="tag t4">AI and integrity</span><h3>The Digital Currency of Grades</h3><p>Simon Lewsen says grades work like currency. As an online student with AI one click away, I argued that schools should teach students to use AI the right way instead of only trying to catch cheaters.</p><p class="take">“Taking the easy way out doesn’t build any practical or transferable real world skills.”</p></div>
+    <div class="card rv" style="--d:.1s"><span class="tag t5">Digital wellbeing</span><h3>Ctrl, Alt, Disconnect</h3><p>Notes on talks by Naomi Shimada and Peachy Liv about self worth, online toxicity and burnout. I wrote about going semi analog with an A5 notebook and a rOtring 600, and heading to the mountains with only a film camera.</p><p class="take">“The best way to find digital harmony is knowing exactly when to leave it behind.”</p></div>
   </div>
 </div></section>
 
@@ -161,10 +198,10 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 <section class="blk" id="projects"><div class="wrap">
   <p class="eyebrow rv">Projects</p>
   <h2 class="rv" style="--d:.1s">What I built.</h2>
-  <p class="intro rv" style="--d:.2s">Hands on work that shows how I think and solve problems.</p>
+  <p class="intro rv" style="--d:.2s">Hands on work, because learning by doing is the best way of learning.</p>
   <div class="grid">
-    <div class="card rv"><div class="ic i1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><h3>This website</h3><p>A portfolio I designed and directed, coded with the help of a Claude agent and hosted for free on GitHub Pages. <a href="#howbuilt">How I built it ›</a></p><p class="k">What I learned</p><p>My first time using GitHub, and how to connect a custom domain to a site.</p></div>
-    <div class="card rv" style="--d:.1s"><div class="ic i2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><h3>Photography workflow</h3><p>Sports, motorsport and portrait work, shot on a Canon 1DX and graded in Lightroom. <a href="/#work">See the gallery ›</a></p><p class="k">What I learned</p><p>Tournament weekends taught me to stay organized under pressure. Photos have to be sorted and online before the event ends.</p></div>
+    <div class="card rv"><div class="ic i1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><h3>This website</h3><p>A website I came up with and directed. Claude and Gemini wrote the code, and it’s hosted for free on GitHub Pages. <a href="#howbuilt">How I built it ›</a></p><p class="k">What I learned</p><p>My first time using GitHub, and how to connect a custom domain to a site.</p></div>
+    <div class="card rv" style="--d:.1s"><div class="ic i2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><h3>Photography workflow</h3><p>Sports, motorsport and portraits, shot on a Canon 1DX and edited in Lightroom. My proudest shot is Lake Louise, and believe it or not that one was taken on an iPhone. It’s not about the gear, it’s all about the photographer. <a href="/#work">See the gallery ›</a></p><p class="k">What I learned</p><p>Tournament weekends taught me to stay organized under pressure. Photos have to be sorted and online before the event ends.</p></div>
   </div>
 </div></section>
 
@@ -172,12 +209,21 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
   <p class="eyebrow rv">Process</p>
   <h2 class="rv" style="--d:.1s">How I built this.</h2>
   <div class="prose">
-    <p class="rv" style="--d:.15s">Apple has one of the best website designs I can think of, so I wanted my site to move like theirs without being a copy. My coding skills are basic, so I brought in Claude and Gemini as development partners. It is like a company hiring a developer: I came up with the idea, the look and everything the site needed to say, and they built it.</p>
+    <p class="rv" style="--d:.15s">I enlisted the help of AI agents such as Claude and Gemini. They are the physical coding brains behind the site, while I oversee everything they code, approving or denying their changes. I toss them ideas such as a custom signature animation and text effects.</p>
+    <p class="rv" style="--d:.2s">Coding is one of the most difficult things to do in the world of computers. I can build a computer from just a box of parts and diagnose and fix one from just a report file, but when it comes to coding, nothing makes sense. Letting Claude handle that means fewer errors, and I can make the site more complex. I am still the brains behind it all: the ideas, photos, text, how it actually looks, how it feels when scrolling, how the viewer’s eyes track the site. Claude just handles the code.</p>
   </div>
   <div class="split">
-    <div class="card rv"><p class="who w1">What I brought</p><h3>The vision</h3><ul><li>The idea of a website instead of a slideshow</li><li>The Apple inspired design direction</li><li>My course work, reflections and photos</li><li>Feedback on every version, and the final say on what stayed</li></ul></div>
+    <div class="card rv"><p class="who w1">What I brought</p><h3>The vision</h3><ul><li>The ideas, like a website instead of a slideshow</li><li>The photos and the text</li><li>How it looks and how it feels when scrolling</li><li>How the viewer’s eyes track the site</li><li>Approving or denying every change</li></ul></div>
     <div class="card rv" style="--d:.1s"><p class="who w2">What Claude handled</p><h3>The code</h3><ul><li>Writing the HTML, CSS and JavaScript</li><li>Building the animations and layout</li><li>Helping publish the site to GitHub</li></ul></div>
   </div>
+  <div class="stats rv">
+    <div class="stat"><b data-n="3">3</b><span>days to build</span></div>
+    <div class="stat"><b data-n="1000" data-s="+">1,000+</b><span>lines of code</span></div>
+    <div class="stat"><b data-n="120" data-s="K+">120K+</b><span>characters of code</span></div>
+    <div class="stat"><b data-n="0" data-p="$">$0</b><span>to host</span></div>
+  </div>
+  <div class="codebox rv"><div class="cbar"><i></i><i></i><i></i><span>signature.html</span></div><div class="cgrid"><pre id="code" aria-label="Example HTML code that draws a signature animation"></pre><div class="sigdemo" id="sigdemo"><svg viewBox="0 0 400 120" role="img" aria-label="A signature line drawing itself"><defs><linearGradient id="sg"><stop offset="0" stop-color="#5ee7ff"/><stop offset=".5" stop-color="#3d7bff"/><stop offset="1" stop-color="#9b6bff"/></linearGradient></defs><path d="M20 80 C60 10, 90 10, 120 70 S180 120, 220 50 S330 20, 380 70"/></svg><p>What the code draws</p></div></div></div>
+  <div class="prose"><p class="rv">This is what HTML code looks like. It’s very complex, and if I were to do it myself I’d need to have my grandkids submit it to the prof of 2090.</p></div>
   <div class="prose">
     <p class="rv">This was my first time using GitHub. If you are a developer, it is the site everyone uses, the same way most people use Google even though Yahoo and Bing exist. I also learned how to connect my own domain to GitHub Pages. It was a learning curve, but I ended up with a professional, finished site that costs nothing to host.</p>
     <p class="rv">In The Digital Currency of Grades, I argued that students should learn to use AI ethically instead of hiding it. This site is me doing exactly that.</p>
@@ -234,6 +280,57 @@ $$(".rv").forEach(e => io.observe(e));
 $$("a[href^='#']").forEach(a => a.onclick = ev => { const t = document.getElementById(a.getAttribute("href").slice(1)); if (t) { ev.preventDefault(); t.scrollIntoView({ behavior: "smooth" }); } });
 $$(".card").forEach(c => c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(); c.style.setProperty("--mx", e.clientX - r.left + "px"); c.style.setProperty("--my", e.clientY - r.top + "px"); }));
 $("#th").onclick = () => { const d = document.documentElement, dark = (d.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark"; d.dataset.theme = dark ? "light" : "dark"; try { localStorage.setItem("ji-home-theme", d.dataset.theme); } catch (e) {} };
+/* typing sounds */
+let AC = null, snd = true;
+try { snd = localStorage.getItem("ji-snd") !== "0"; } catch (e) {}
+const sb = $("#snd"); sb.setAttribute("aria-pressed", snd);
+const audio = () => { try { if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; AC = new C(); } if (AC.state === "suspended") AC.resume(); } catch (e) {} return AC; };
+const click = (vol = .32) => {
+  if (!snd || !AC || AC.state !== "running") return;
+  const n = Math.floor(AC.sampleRate * .028), b = AC.createBuffer(1, n, AC.sampleRate), d = b.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 5);
+  const src = AC.createBufferSource(), f = AC.createBiquadFilter(), g = AC.createGain();
+  src.buffer = b; f.type = "bandpass"; f.frequency.value = 1700 + Math.random() * 1600; f.Q.value = 1.1; g.gain.value = vol;
+  src.connect(f).connect(g).connect(AC.destination); src.start();
+};
+addEventListener("pointerdown", () => { if (snd) audio(); }, { once: true });
+addEventListener("keydown", () => { if (snd) audio(); }, { once: true });
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* typing title */
+const tw = $("#tw"), caret = $(".caret"), parts = [...tw.children].map(e => [e, e.textContent]);
+let tid = 0;
+function typeTitle(delay = 500) {
+  if (still) return;
+  const id = ++tid; parts.forEach(([e]) => e.textContent = ""); caret.classList.remove("off");
+  let pi = 0, ci = 0;
+  const step = () => {
+    if (id !== tid) return;
+    const [e, t] = parts[pi]; e.textContent = t.slice(0, ++ci);
+    if (t[ci - 1] !== " ") click();
+    if (ci >= t.length) { pi++; ci = 0; }
+    if (pi < parts.length) setTimeout(step, 75 + Math.random() * 95);
+    else setTimeout(() => { if (id === tid) caret.classList.add("off"); }, 2600);
+  };
+  setTimeout(step, delay);
+}
+typeTitle(700);
+$("h1.typed").onclick = () => { audio(); typeTitle(150); };
+sb.onclick = () => { snd = !snd; sb.setAttribute("aria-pressed", snd); try { localStorage.setItem("ji-snd", snd ? "1" : "0"); } catch (e) {} if (snd) { audio(); if (scrollY < innerHeight) typeTitle(150); } };
+/* hero glow follows the pointer */
+const hero = $(".hero");
+if (matchMedia("(hover:hover)").matches) hero.addEventListener("pointermove", e => { const r = hero.getBoundingClientRect(); hero.style.setProperty("--hx", (e.clientX - r.left) / r.width * 100 + "%"); hero.style.setProperty("--hy", (e.clientY - r.top) / r.height * 100 + "%"); });
+/* card tilt */
+$$(".card").forEach(c => { c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(); c.style.setProperty("--ry", ((e.clientX - r.left) / r.width - .5) * 8 + "deg"); c.style.setProperty("--rx", ((e.clientY - r.top) / r.height - .5) * -8 + "deg"); }); c.addEventListener("pointerleave", () => { c.style.setProperty("--rx", "0deg"); c.style.setProperty("--ry", "0deg"); }); });
+/* counters */
+const count = el => { const to = +el.dataset.n, p = el.dataset.p || "", s = el.dataset.s || "", t0 = performance.now(); if (still || !to) return; const f = t => { const u = clamp((t - t0) / 1800), v = Math.round(to * (1 - Math.pow(1 - u, 4))); el.textContent = p + v.toLocaleString("en-CA") + (u < 1 ? "" : s); if (u < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); };
+/* typing code demo */
+const CODE = '<svg class="signature" viewBox="0 0 400 120">\n  <path d="M20 80 C60 10, 90 10, 120 70 S180 120, 220 50 S330 20, 380 70" />\n</svg>\n<style>\n  .signature path { fill: none; stroke-width: 3;\n    stroke-dasharray: 700; animation: draw 3s ease forwards; }\n  @keyframes draw { to { stroke-dashoffset: 0; } }\n</style>';
+const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const paint = t => esc(t).replace(/(&lt;\/?)([a-z]+)|( )([a-zA-Z-]+)(=)|("[^"]*"?)/g, (m, a, b, c, d, e, f) => a ? a + '<span class="k">' + b + '</span>' : c ? c + '<span class="a">' + d + '</span>=' : '<span class="v">' + f + '</span>');
+const code = $("#code"), sig = $("#sigdemo");
+const typeCode = () => { if (still) { code.innerHTML = paint(CODE); sig.classList.add("go"); return; } let i = 0; const st = () => { i += 1 + (Math.random() < .3 ? 1 : 0); code.innerHTML = paint(CODE.slice(0, i)); if (CODE[i - 1] && CODE[i - 1].trim()) click(.12); if (i < CODE.length) setTimeout(st, 18 + Math.random() * 40); else setTimeout(() => sig.classList.add("go"), 300); }; st(); };
+const io2 = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; io2.unobserve(e.target); if (e.target.id === "code") typeCode(); else count(e.target); }), { threshold: .4 });
+io2.observe(code); $$("[data-n]").forEach(el => io2.observe(el));
 </script>
 </body>
 </html>
