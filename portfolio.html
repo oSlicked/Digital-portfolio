@@ -3,412 +3,73 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Jordan Ioannoni | Photographer, Systems and Operations</title>
-<meta name="description" content="Jordan Ioannoni: sports and motorsport photographer, automation builder and business student in St. Catharines, Ontario.">
-<meta property="og:title" content="Jordan Ioannoni | Portfolio"><meta property="og:description" content="Operations. Systems. Photography."><meta property="og:type" content="website">
-<meta name="theme-color" content="#000000">
-<meta property="og:image" content="https://jordanioannoni.com/gt3.jpg"><meta property="og:url" content="https://jordanioannoni.com/portfolio">
-<link rel="icon" href="favicon.png" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="canonical" href="https://jordanioannoni.com/portfolio">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Jordan Ioannoni","url":"https://jordanioannoni.com","jobTitle":"Photographer and business student","alumniOf":"Niagara College","address":{"@type":"PostalAddress","addressLocality":"St. Catharines","addressRegion":"ON","addressCountry":"CA"},"sameAs":["https://www.instagram.com/jordanioannoni/","https://www.linkedin.com/in/jordan-ioannoni-227314447/"]}</script>
-<style>
-:root{--bg:#fff;--alt:#f5f5f7;--ink:#1d1d1f;--mute:#6e6e73;--link:#0066cc;--nav:rgba(255,255,255,.72);--dim:rgba(110,110,115,.35);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--alt:#161617;--ink:#f5f5f7;--mute:#a1a1a6;--link:#2997ff;--nav:rgba(22,22,23,.72);color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#000;--alt:#161617;--ink:#f5f5f7;--mute:#a1a1a6;--link:#2997ff;--nav:rgba(22,22,23,.72);color-scheme:dark}
-html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 48px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 -apple-system,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--nav);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:50}
-a{color:var(--link);text-decoration:none}
-nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;height:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 max(16px,calc(50% - 480px));background:var(--nav);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);font-size:13px}
-nav.sc{box-shadow:0 1px 0 rgba(128,128,128,.25)}
-nav .brand{font-size:16px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
-nav .l{display:flex;gap:24px}nav .l a{color:var(--ink);opacity:.8}nav .l a:hover{opacity:1}
-nav button{background:none;border:1px solid rgba(128,128,128,.4);color:var(--ink);border-radius:99px;padding:3px 10px;font:inherit;cursor:pointer}
-nav .r{display:flex;align-items:center;gap:8px}#mb{display:none;padding:5px 9px;line-height:0}
-@media (max-width:640px){#mb{display:inline-block}nav .l{display:none;position:absolute;top:48px;left:0;right:0;flex-direction:column;gap:0;padding:6px 20px 14px;background:var(--bg);box-shadow:0 12px 24px -12px rgba(0,0,0,.35)}nav.open .l{display:flex}nav .l a{padding:13px 2px;font-size:17px;opacity:1;border-bottom:1px solid rgba(128,128,128,.2)}nav .l a:last-child{border-bottom:0}}
-.dk{background:#000;color:#f5f5f7}
-section{position:relative}
-.c{text-align:center;padding:0 20px}
-.eyebrow{color:#ff6a3d;font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;margin:0 0 8px}
-h1,h2{margin:0;letter-spacing:-.035em;line-height:1.05;font-weight:700}
-h1{font-size:clamp(44px,10vw,108px)}h2{font-size:clamp(32px,5.6vw,60px)}
-.sub{font-size:clamp(20px,3vw,28px);color:var(--mute);margin:10px auto 14px;letter-spacing:-.01em}
-.lead{max-width:640px;margin:0 auto 18px;color:var(--mute)}
-.links{display:flex;gap:26px;justify-content:center;font-size:20px}
-.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.sigw{position:relative;width:min(620px,86vw);aspect-ratio:1200/643;margin:6px auto 4px}
-.sigc{display:block;width:100%;height:100%}
-.grad{background:linear-gradient(90deg,#ff9a3c,#ff3d77,#7a5cff,#ff9a3c);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 8s linear infinite}
-@keyframes flow{to{background-position:300% 0}}
-.hero{padding-top:64px;min-height:105vh;overflow:hidden}
-.vf{position:relative;margin:44px auto 0;width:min(760px,90vw);aspect-ratio:16/10;border-radius:22px;overflow:hidden;background:radial-gradient(circle at 70% 30%,#4a3a6a,#16121f 60%,#08070b);box-shadow:0 50px 100px -30px rgba(0,0,0,.6);color:#fff;will-change:transform}
-.vf img,.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.vf i{position:absolute;width:30px;height:30px;border:0 solid #fff;opacity:.85}
-.vf i:nth-of-type(1){top:6%;left:5%;border-width:2px 0 0 2px}.vf i:nth-of-type(2){top:6%;right:5%;border-width:2px 2px 0 0}.vf i:nth-of-type(3){bottom:12%;left:5%;border-width:0 0 2px 2px}.vf i:nth-of-type(4){bottom:12%;right:5%;border-width:0 2px 2px 0}
-.fb{position:absolute;width:20%;height:26%;border:2px solid #ffd60a;border-radius:4px;animation:af 5s ease-in-out infinite}
-@keyframes af{0%{left:10%;top:15%;opacity:.5}30%{left:55%;top:50%}55%{left:38%;top:30%;border-color:#ffd60a}65%,90%{left:38%;top:30%;border-color:#30d158;box-shadow:0 0 18px #30d158}100%{left:10%;top:15%;opacity:.5}}
-.hud{position:absolute;bottom:3.5%;left:0;right:0;text-align:center;font:600 13px ui-monospace,Menlo,monospace;letter-spacing:.06em;opacity:.9}
-.vis img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.tile{cursor:zoom-in;background:#111}
-#sp{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:3px;background:linear-gradient(90deg,#ff9a3c,#ff3d77,#7a5cff);transform-origin:0 50%;transform:scaleX(0);z-index:45}
-.about{padding:110px 20px}
-.ab{max-width:980px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.ph{border-radius:32px;overflow:hidden;aspect-ratio:4/5;position:relative;box-shadow:0 40px 80px -30px rgba(0,0,0,.45)}
-.ph img,.lake img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform}
-.ab h2{font-size:clamp(30px,4.6vw,52px)}.ab .b{color:var(--mute);font-size:19px;margin:14px 0 0}
-.sm{display:flex;gap:14px;align-items:center;margin-top:22px;color:var(--mute);font-size:14px}.sm img{width:72px;height:72px;border-radius:50%;object-fit:cover}
-@media (max-width:700px){.ab{grid-template-columns:1fr;gap:28px}}
-.lake{height:92vh;min-height:520px;overflow:hidden;color:#fff;background:#000}
-.lake .px{position:absolute;inset:0}
-.lake::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.65))}
-.lake .cap{position:absolute;left:0;right:0;bottom:12%;text-align:center;padding:0 20px;z-index:2}
-#lb{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.93);display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 56px) 12px calc(env(safe-area-inset-bottom,0px) + 56px);animation:lbi .35s ease}
-#lb[hidden]{display:none}
-@keyframes lbi{from{opacity:0}}
-#lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;animation:lbz .5s cubic-bezier(.16,1,.3,1)}
-@keyframes lbz{from{transform:scale(.94);opacity:.4}}
-#lb button{position:absolute;background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:99px;width:44px;height:44px;font-size:22px;cursor:pointer}
-#lx{top:calc(env(safe-area-inset-top,0px) + 10px);right:14px}#lp{left:10px;top:50%}#ln{right:10px;top:50%}
-#lc{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);left:0;right:0;text-align:center;color:#d0d0d5;font-size:14px}
-.ring{stroke-dasharray:515;stroke-dashoffset:515}
-.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:56px;z-index:80;background:var(--link);color:#fff;padding:8px 14px;border-radius:8px}
-:focus-visible{outline:2px solid var(--link);outline-offset:3px}
-.svcw{padding:110px 0}
-.svcs{max-width:1040px;margin:46px auto 0;padding:0 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.svc{position:relative;overflow:hidden;text-align:left;border-radius:28px;padding:30px;background:var(--alt);border:1px solid rgba(128,128,128,.2);transition:transform .6s cubic-bezier(.16,1,.3,1)}
-.svc::before{content:"";position:absolute;inset:0;background:radial-gradient(280px circle at var(--mx,50%) var(--my,0%),rgba(122,92,255,.24),transparent 70%);opacity:0;transition:opacity .4s}
-.svc:hover{transform:translateY(-6px)}.svc:hover::before{opacity:1}
-.svc>*{position:relative}.svc .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;color:#fff}.svc .ic svg{width:24px;height:24px}.ia{background:linear-gradient(150deg,#7a5cff,#0a84ff)}.ib{background:linear-gradient(150deg,#ff9a3c,#ff3d77)}.ic2{background:linear-gradient(150deg,#30d158,#0a84ff)}.svc h3{margin:10px 0 8px;font-size:24px;letter-spacing:-.02em}
-.svc ul{margin:0 0 18px;padding-left:18px;color:var(--mute)}.svc li{margin:5px 0}.svc a{font-weight:600}
-@media (max-width:820px){.svcs{grid-template-columns:1fr}}
-.film{position:absolute;inset:14% 0;display:flex;width:max-content;animation:fs 30s linear infinite}
-.film img{position:static;inset:auto;width:auto;height:100%;aspect-ratio:3/2;object-fit:cover;margin-right:12px;border-radius:6px}
-@keyframes fs{to{transform:translateX(-50%)}}
-.fv::before,.fv::after{content:"";position:absolute;left:0;right:0;height:11%;background:repeating-linear-gradient(90deg,#0a0a0d 0 10px,#2b2b33 10px 18px);z-index:1}
-.fv::before{top:0}.fv::after{bottom:0}
-.kpi{max-width:1040px;margin:0 auto;padding:80px 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.kc{position:relative;overflow:hidden;border-radius:28px;min-height:340px;padding:26px;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;isolation:isolate}
-.kc.in:hover{transform:translateY(-6px)}
-.k-a{background:linear-gradient(150deg,#7a5cff,#0a84ff)}.k-b{background:linear-gradient(150deg,#ff9a3c,#ff3d77)}.k-p{background:#111}
-.k-p img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform:scale(1.15);transition:transform 1.8s cubic-bezier(.16,1,.3,1)}
-.k-p.in img{transform:scale(1)}
-.k-p::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(transparent 15%,rgba(0,0,0,.85))}
-.kc::after{content:"";position:absolute;top:-40%;bottom:-40%;left:-70%;width:45%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:rotate(18deg);transition:left 1.2s ease;pointer-events:none}
-.kc:hover::after{left:140%}
-.kl{position:absolute;top:22px;left:26px;margin:0;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.18);padding:4px 10px;border-radius:99px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.kn{font-size:clamp(76px,9vw,104px);line-height:.95;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
-.kn small{font-size:.32em;letter-spacing:0;margin-left:6px;opacity:.85}
-.kt{margin:4px 0 0;font-size:19px;font-weight:600}.ks{margin:12px 0 0;font-size:14px;opacity:.85}
-.dots{display:flex;gap:8px;margin-top:14px}
-.dots i{width:28px;height:8px;border-radius:99px;background:#fff;transform:scaleX(0);transform-origin:left;transition:transform .6s cubic-bezier(.16,1,.3,1)}
-.dots i:nth-child(2){transition-delay:.15s}.dots i:nth-child(3){transition-delay:.3s}.dots i:nth-child(4){transition-delay:.45s}.dots i:nth-child(5){transition-delay:.6s}
-.kc.in .dots i{transform:none}
-.dots i.ip{background:rgba(255,255,255,.35);animation:pl2 1.6s ease-in-out infinite}
-@keyframes pl2{50%{background:rgba(255,255,255,.95)}}
-.meter{height:8px;border-radius:99px;background:rgba(255,255,255,.25);margin-top:14px;overflow:hidden}
-.meter i{display:block;height:100%;width:0;background:#fff;border-radius:99px;transition:width 1.8s cubic-bezier(.16,1,.3,1) .3s}
-.kc.in .meter i{width:100%}
-@media (max-width:700px){.kpi{grid-template-columns:1fr;padding:56px 16px}.kc{min-height:250px}}
-.words{height:240vh}
-.stick{position:sticky;top:0;height:100vh;display:grid;place-items:center;overflow:hidden}
-.words p{max-width:900px;margin:0;padding:0 24px;font-size:clamp(28px,5.2vw,56px);line-height:1.12;font-weight:700;letter-spacing:-.03em}
-.words span{color:var(--dim);transition:color .5s}.words span.on{color:var(--ink)}
-.pin{height:420vh}
-.stage{position:relative;width:min(560px,88vw);aspect-ratio:16/10;border-radius:26px;overflow:hidden;background:linear-gradient(145deg,#1d1d24,#0a0a0d);box-shadow:0 40px 90px -20px rgba(122,92,255,.35),inset 0 0 0 1px #333;transform:perspective(1300px) rotateY(calc(-26deg + var(--p,0) * 52deg)) rotateX(6deg) scale(calc(.8 + var(--p,0) * .25));will-change:transform}
-.vis{position:absolute;inset:0;opacity:0;transition:opacity .7s}.vis.on{opacity:1}
-.vis svg{width:100%;height:100%}
-.ln{stroke-dasharray:700;stroke-dashoffset:700;transition:stroke-dashoffset 2s ease .2s}.vis.on .ln{stroke-dashoffset:0}
-.feat{position:absolute;left:max(24px,calc(50% - 520px));bottom:9%;max-width:380px;opacity:0;transform:translateY(40px);transition:opacity .8s,transform .9s cubic-bezier(.16,1,.3,1)}
-.feat.on{opacity:1;transform:none}
-.feat h2{font-size:clamp(28px,4.6vw,48px)}.feat p{color:#a1a1a6;font-size:19px;margin:8px 0 0}
-@media (max-width:700px){.feat{left:24px;right:24px;bottom:5%;max-width:none;text-align:center}.stage{margin-top:-150px}}
-.work{padding:110px 0 70px;background:var(--alt)}
-.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:24px}
-.chips button,.tags span{font:inherit;font-size:14px;border:1px solid rgba(128,128,128,.35);background:var(--bg);color:var(--ink);border-radius:99px;padding:5px 14px;cursor:pointer;transition:all .3s}
-.chips button.on{background:var(--ink);color:var(--bg)}
-.row{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:36px max(20px,calc(50% - 520px)) 20px;scrollbar-width:none}
-.row::-webkit-scrollbar{display:none}
-.tile{flex:none;width:min(300px,78vw);height:400px;border-radius:26px;position:relative;overflow:hidden;scroll-snap-align:center;color:#fff;text-align:left;display:flex;align-items:flex-end;transition:transform .6s cubic-bezier(.16,1,.3,1),opacity .4s}
-.tile:hover{transform:scale(1.03)}
-.tile.hide{display:none}
-.tile figcaption{position:relative;width:100%;padding:60px 20px 18px;background:linear-gradient(transparent,rgba(0,0,0,.75));font-weight:600}
-.tile figcaption small{display:block;font-weight:400;opacity:.8}
-.mq{overflow:hidden;padding:26px 0;border-block:1px solid rgba(128,128,128,.25)}
-.mq div{display:flex;gap:12px;width:max-content;animation:mq 40s linear infinite}
-.mq span{white-space:nowrap;font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--mute)}
-@keyframes mq{to{transform:translateX(-50%)}}
-.pfw{padding:110px 0 90px}
-.pfw .sub{color:#a1a1a6}
-.feat-pf{max-width:1080px;margin:44px auto 14px;padding:0 16px}
-.feat-pf .pf{margin:0;aspect-ratio:3/2}
-.feat-pf .pf img{height:100%;object-fit:cover}
-.mos{max-width:1080px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;text-align:left}
-.mos .pf{margin:0;aspect-ratio:2/3}.mos .pf img{height:100%;object-fit:cover}
-@media (max-width:820px){.mos{grid-template-columns:repeat(2,1fr);gap:10px}.pf figcaption{font-size:14px;padding:36px 12px 12px}}
-.pf{position:relative;margin:0 0 14px;break-inside:avoid;border-radius:22px;overflow:hidden;cursor:zoom-in;background:#111;color:#fff}
-.pf img{display:block;width:100%;height:auto;transition:transform 1.4s cubic-bezier(.16,1,.3,1)}
-.pf:hover img{transform:scale(1.04)}
-.pf figcaption{position:absolute;left:0;right:0;bottom:0;padding:48px 18px 16px;font-weight:600;font-size:16px;text-align:left;background:linear-gradient(transparent,rgba(0,0,0,.72));opacity:0;transform:translateY(8px);transition:opacity .4s,transform .5s cubic-bezier(.16,1,.3,1)}
-.pf figcaption small{display:block;font-weight:400;font-size:13px;opacity:.8}
-.pf:hover figcaption,.pf:focus-visible figcaption{opacity:1;transform:none}
-@media (hover:none){.pf figcaption{opacity:1;transform:none}}
-.pfs{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-top:34px;color:#a1a1a6;font-size:15px}
-.pfs b{display:block;color:#f5f5f7;font-size:28px;letter-spacing:-.03em}
-.igw{padding:110px 0 100px}
-.igf{max-width:1040px;margin:44px auto 10px;padding:0 16px;min-height:200px}
-.avail{display:inline-flex;align-items:center;gap:9px;margin:4px auto 22px;padding:7px 15px;border-radius:99px;border:1px solid rgba(128,128,128,.35);font-size:14px;color:var(--ink);background:var(--bg)}
-.avail::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:#30d158;animation:av 2s infinite}
-@keyframes av{0%{box-shadow:0 0 0 0 rgba(48,209,88,.55)}70%,100%{box-shadow:0 0 0 9px rgba(48,209,88,0)}}
-.xpw{padding:110px 0}
-.xps{max-width:1040px;margin:46px auto 0;padding:0 16px;display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:16px;text-align:left}
-.xp{position:relative;border-radius:28px;padding:28px;background:var(--alt);border:1px solid rgba(128,128,128,.2);transition:transform .6s cubic-bezier(.16,1,.3,1)}
-.xp:hover{transform:translateY(-6px)}
-.xp.now{background:linear-gradient(160deg,#22222b,#0b0b0f);color:#f5f5f7;border-color:transparent;box-shadow:0 30px 60px -30px rgba(122,92,255,.45)}
-.xp .when{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#ff6a3d;margin:0}
-.xp.now .when::after{content:"Current";font-size:11px;letter-spacing:.06em;color:#30d158;border:1px solid rgba(48,209,88,.5);border-radius:99px;padding:1px 8px}
-.xp h3{margin:12px 0 4px;font-size:22px;line-height:1.2;letter-spacing:-.02em}
-.xp .org{margin:0 0 14px;font-size:15px;color:var(--mute)}
-.xp ul{margin:0;padding-left:18px;font-size:15px;color:var(--mute)}.xp li{margin:7px 0}
-.xp.now .org,.xp.now li{color:#a1a1a6}
-.xpf{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:30px}
-@media (max-width:820px){.xps{grid-template-columns:1fr}}
-.edu{background:var(--alt);padding:100px 20px}
-.tl{max-width:640px;margin:44px auto 0;border-left:2px solid rgba(128,128,128,.35);padding-left:28px;text-align:left}
-.tl div{position:relative;padding-bottom:30px}
-.tl div::before{content:"";position:absolute;left:-37px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--link)}
-.tl div.ip::before{background:#ff9a3c;box-shadow:0 0 0 6px rgba(255,154,60,.25);animation:pl 2s infinite}
-@keyframes pl{50%{box-shadow:0 0 0 12px rgba(255,154,60,0)}}
-.tl small{color:var(--mute);text-transform:uppercase;letter-spacing:.05em;font-size:12px}.tl h3{margin:0;font-size:22px}.tl p{margin:2px 0 0;color:var(--mute)}
-.cta{padding:140px 20px;text-align:center;overflow:hidden}
-.cta::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:900px;margin:-450px;background:radial-gradient(circle,rgba(122,92,255,.5),rgba(255,61,119,.25) 40%,transparent 68%);animation:pulse 6s ease-in-out infinite}
-@keyframes pulse{50%{transform:scale(1.25);opacity:.7}}
-.cta>*{position:relative}
-.btn{display:inline-block;background:var(--link);color:#fff;padding:12px 24px;border:0;border-radius:99px;font:inherit;font-size:18px;margin:8px 4px 0;cursor:pointer;transition:transform .3s}
-.btn:hover{transform:scale(1.06)}.btn.o{background:rgba(255,255,255,.14)}
-footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 40px;text-align:center}
-.rv{opacity:0;transform:translateY(60px) scale(.97);transition:opacity 1s cubic-bezier(.16,1,.3,1) var(--d,0s),transform 1.1s cubic-bezier(.16,1,.3,1) var(--d,0s)}
-.rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
-</style>
+<title>Jordan Ioannoni | Portfolio</title>
+<meta name="description" content="Jordan Ioannoni: Niagara College business student with experience in logistics, operations, automation and sports photography.">
+<meta property="og:title" content="Jordan Ioannoni | Portfolio"><meta property="og:description" content="Jordan Ioannoni: Niagara College business student with experience in logistics, operations, automation and sports photography."><meta property="og:type" content="website">
+<meta property="og:image" content="https://jordanioannoni.com/gt3.jpg"><meta property="og:url" content="https://jordanioannoni.com/portfolio"><link rel="canonical" href="https://jordanioannoni.com/portfolio">
+<meta name="theme-color" content="#0f0e0c">
+<link rel="icon" href="/favicon.png" type="image/png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Jordan Ioannoni","url":"https://jordanioannoni.com/portfolio","jobTitle":"Photographer and business student","alumniOf":"Niagara College","sameAs":["https://www.instagram.com/jordanioannoni/","https://www.linkedin.com/in/jordan-ioannoni-227314447/"]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+<script>try{const t=localStorage.getItem("ji-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
-<a class="skip" href="#build">Skip to content</a>
-<div id="sp"></div>
-<div id="lb" hidden><button id="lx" aria-label="Close">✕</button><button id="lp" aria-label="Previous">‹</button><img id="li" alt=""><button id="ln" aria-label="Next">›</button><div id="lc"></div></div>
-<nav id="nav"><a class="brand" href="#top" aria-label="Jordan Ioannoni, back to top">Jordan Ioannoni</a><div class="l" id="nl"><a href="#story">About</a><a href="#experience">Experience</a><a href="#build">Craft</a><a href="#work">Photography</a><a href="#portraits">Portraits</a><a href="#services">Services</a><a href="#contact">Contact</a></div><span class="r"><button id="mb" aria-label="Open menu" aria-expanded="false" aria-controls="nl"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><button id="th" aria-label="Toggle theme">◐</button></span></nav>
-
-<section class="hero c" id="top">
-  <div id="ht">
-    <p class="eyebrow rv">St. Catharines, ON · Niagara College</p>
-    <h1 class="rv sig" style="--d:.1s"><span class="vh">Jordan Ioannoni</span><span class="sigw" id="sigw" aria-hidden="true" style="display:block"><canvas class="sigc" width="1200" height="643"></canvas></span></h1>
-    <p class="sub rv" style="--d:.25s">Operations. Systems. Photography.</p>
-    <p class="lead rv" style="--d:.35s">A Niagara College business student who plans routes, tracks assets in Excel, knows the mechanics of the vehicles that move them, and has shot tournament sports since 2017.</p>
-    <a class="avail rv" style="--d:.4s" href="#contact" data-topic="Summer logistics role">Open to summer logistics and dispatch roles</a>
-    <div class="links rv" style="--d:.45s"><a href="#experience">See experience ›</a><a href="#work">See the work ›</a></div>
+<a class="skip" href="#main">Skip to content</a>
+<div id="sp"></div><header class="bar"><div class="in"><a class="brand" href="#top" aria-label="Jordan Ioannoni, back to top">Jordan Ioannoni</a><nav class="tabs" aria-label="Site"><a href="/">Photography</a><a href="/portfolio" aria-current="page">Portfolio</a><a href="/stdv1115">STDV 1115</a></nav><button class="tg" id="th" aria-label="Switch light or dark mode">◐</button></div></header>
+<main id="main">
+<section class="mast" id="top"><div class="wrap">
+  <div class="meta label rv"><span><b>Portfolio</b></span><span>Niagara College · Business General</span><span>St. Catharines, Ontario</span></div>
+  <div class="duo" style="padding:clamp(40px,7vw,100px) 0 clamp(40px,6vw,80px);align-items:end">
+    <h1 class="a rv" style="font-size:clamp(56px,9vw,140px);grid-column:1/8">Operations. Systems. <em>Photography.</em></h1>
+    <div class="b rv" style="--d:.15s;grid-column:9/13"><p>A Niagara College business student who plans routes, tracks assets in Excel, knows the mechanics of the vehicles that move them, and has shot tournament sports since 2017.</p><p class="label" style="color:var(--accent)">Open to summer logistics and dispatch roles</p><p style="margin:22px 0 0"><a class="btn solid" href="#experience">See experience</a></p></div>
   </div>
-  <div class="vf" id="vf"><img data-i="gt3" alt="Lime green Porsche GT3 RS on track"><i></i><i></i><i></i><i></i><div class="fb"></div><span class="hud">1/2000 · f/2.8 · ISO 400 · Canon 1DX</span></div>
-</section>
-
-<section class="words" id="story"><div class="stick"><p id="wp">Most resumes are a flat list of old jobs. I would rather show you how I think, how I organize a workflow, and how I solve problems. So I built this, and the proof is all in one place.</p></div></section>
-
-<section class="kpi">
-  <div class="kc k-a rv"><p class="kl">Education</p><b class="kn"><span data-n="5">0</span></b><p class="kt">college credentials</p><div class="dots"><i></i><i></i><i></i><i></i><i class="ip"></i></div><p class="ks">4 complete · Business diploma in progress</p></div>
-  <div class="kc k-p rv" style="--d:.1s"><img data-i="b1" alt=""><p class="kl">Photography</p><p class="kt">Shooting since</p><b class="kn"><span data-n="2017" data-f="1990">0</span></b><p class="ks">Tournament hockey, lacrosse, motorsport and portraits</p></div>
-  <div class="kc k-b rv" style="--d:.2s"><p class="kl">Hands on</p><b class="kn"><span data-n="720">0</span><small>hrs</small></b><p class="kt">motive power shop training</p><div class="meter"><i></i></div><p class="ks">Diagnostics, hydraulics and electrical</p></div>
-</section>
-
-<section class="about"><div class="ab">
-  <div class="ph px rv"><img data-i="jord" alt="Jordan shooting trackside with a telephoto lens"></div>
-  <div class="rv" style="--d:.15s"><p class="eyebrow">The person behind it</p><h2>Equal parts shutter and spreadsheet.</h2>
-  <p class="b">I split my time between hockey rinks, race tracks, delivery routes and Excel sheets. Every one of them runs on the same thing: getting the right thing to the right place on time. I like work where the details decide the result.</p>
-  <p class="b" style="font-size:16px">Off the clock I stay sharp semi analog: handwritten notes in an A5 notebook with a rOtring 600, and shooting on film.</p>
-  <div class="sm"><img data-i="self" alt="Jordan with his camera at the rink"><span>Between periods with the 1DX.<br>St. Catharines, ON</span></div></div>
+  <div class="figs rv">
+    <div><span class="label">Education</span><b><span data-n="5">5</span></b><span class="mute">college credentials, Business diploma in progress</span></div>
+    <div><span class="label">Photography</span><b><span data-n="2017" data-f="1990">2017</span></b><span class="mute">shooting since, hockey, lacrosse, motorsport and portraits</span></div>
+    <div><span class="label">Hands on</span><b><span data-n="720">720</span><small>hrs</small></b><span class="mute">motive power shop training</span></div>
+  </div>
 </div></section>
 
-<section class="xpw c" id="experience"><p class="eyebrow rv">Experience</p><h2 class="rv" style="--d:.1s">Where the work happens.</h2><p class="sub rv" style="--d:.2s">Tournament weekends, delivery routes and rush hour counters.</p>
-  <div class="xps">
-    <div class="xp now rv"><p class="when">Dec 2017 to Present</p><h3>Sports Photographer and Onsite Operations Assistant</h3><p class="org">DS Photography (Digital Sports Photography) · St. Catharines</p><ul><li>Move and set up the mobile photo and print station across regional arenas on tight tournament weekend schedules.</li><li>Ingest, sort and index high volumes of photos on site so they reach the public catalogue while the event is still running.</li><li>Run point of sale and print production directly with parents and venue management.</li></ul></div>
-    <div class="xp rv" style="--d:.1s"><p class="when">2021 to 2026</p><h3>Independent Delivery Driver and Shopper</h3><p class="org">Instacart · Niagara Region</p><ul><li>Planned residential routes with multiple stops to land inside customer delivery windows.</li><li>Picked orders accurately at volume and handled substitutions with customers in real time.</li></ul></div>
-    <div class="xp rv" style="--d:.2s"><p class="when">2017 to 2020</p><h3>Frontline Crew Member</h3><p class="org">Tim Hortons · Niagara Falls</p><ul><li>Kept orders moving through peak periods without queue bottlenecks.</li><li>Checked incoming supply deliveries, ran POS, balanced cash floats and verified drawers.</li></ul></div>
-  </div>
-  <div class="xpf rv"><a class="btn rsm" href="resume.pdf" download="Jordan-Ioannoni-Resume.pdf" hidden>Download résumé (PDF)</a><a class="btn o" style="background:var(--alt);color:var(--ink)" href="#contact" data-topic="Summer logistics role">Talk about a summer role</a></div></section>
+<section class="words" id="story"><div class="stick"><p id="wp" data-q="Why this site exists">Most resumes are a flat list of old jobs. I would rather show you how I think, how I organize a workflow and how I solve problems.</p></div></section>
 
-<section class="pin dk" id="build"><div class="stick">
-  <div class="stage" id="stage">
-    <div class="vis on"><img data-i="pag" alt="Hypercar on track"><i style="position:absolute;inset:0;background:linear-gradient(transparent 50%,rgba(0,0,0,.75))"></i><div class="fb"></div><span class="hud">Canon EF 300mm f/2.8L IS II · Lightroom Classic</span></div>
-    <div class="vis fv"><div class="film"><img data-i="gt3" alt=""><img data-i="b1" alt=""><img data-i="cr" alt=""><img data-i="bench" alt=""><img data-i="p935" alt=""><img data-i="au5" alt=""><img data-i="husk" alt=""><img data-i="sls" alt=""><img data-i="gt3" alt=""><img data-i="b1" alt=""><img data-i="cr" alt=""><img data-i="bench" alt=""><img data-i="p935" alt=""><img data-i="au5" alt=""><img data-i="husk" alt=""><img data-i="sls" alt=""></div></div>
-    <div class="vis"><svg viewBox="0 0 400 250" role="img" aria-label="720 hours of motive power training"><defs><linearGradient id="rg"><stop offset="0" stop-color="#ff9a3c"/><stop offset="1" stop-color="#ff3d77"/></linearGradient></defs><circle cx="200" cy="125" r="82" fill="none" stroke="#2a2a31" stroke-width="16"/><circle class="ln ring" cx="200" cy="125" r="82" fill="none" stroke="url(#rg)" stroke-width="16" stroke-linecap="round" transform="rotate(-90 200 125)"/><text x="200" y="130" text-anchor="middle" fill="#fff" font-size="46" font-weight="700">720</text><text x="200" y="154" text-anchor="middle" fill="#a1a1a6" font-size="14">hours · motive power</text></svg></div>
+<section class="sec" id="about" style="padding-top:20px"><div class="wrap">
+  <div class="head rv"><span class="num">01</span><h2>The person behind it</h2><p class="aside">Equal parts shutter and spreadsheet.</p></div>
+  <div class="duo">
+    <figure class="plate a wipe" style="margin:0"><div class="im" style="aspect-ratio:4/5"><img src="/self.jpg" alt="Jordan with his camera at the rink" loading="lazy" style="height:100%;object-fit:cover"></div><figcaption><span class="label">Between periods with the 1DX</span></figcaption></figure>
+    <div class="b rv" style="--d:.15s"><p class="big-p">I split my time between hockey rinks, race tracks, delivery routes and Excel sheets.</p><p>Every one of them runs on the same thing: getting the right thing to the right place on time. I like work where the details decide the result.</p><p class="mute">Off the clock I stay sharp semi analog: handwritten notes in an A5 notebook with a rOtring 600, and shooting on film.</p></div>
   </div>
-  <div class="feat on"><p class="eyebrow">Media production</p><h2>Frames at 1/2000.</h2><p>Tournament sports, studio portraits and motorsport since 2017.</p></div>
-  <div class="feat"><p class="eyebrow">The archive</p><h2>Frame after frame.</h2><p>Race tracks, hockey rinks and everything between, shot since 2017.</p></div>
-  <div class="feat"><p class="eyebrow">Hands on</p><h2>720 hours in the shop.</h2><p>OBDII diagnostics, schematics, hydraulics and lab testing, learned with a wrench in hand.</p></div>
 </div></section>
 
-<section class="work c" id="work"><h2 class="rv">Through the lens.</h2><p class="sub rv" style="--d:.1s">Pit lane, rinkside, the field and everything between. Tap to enlarge.</p>
-  <div class="chips" id="chips"></div><div class="row" id="row"></div></section>
-<div class="mq" aria-hidden="true"><div id="mq"></div></div>
+<section class="sec" id="experience" style="padding-top:0"><div class="wrap">
+  <div class="head rv"><span class="num">02</span><h2>Experience</h2><p class="aside">Tournament weekends, delivery routes and rush hour counters.</p></div>
+  <div class="rows"><div class="row rv"><span class="n" style="font-size:15px;font-style:normal;font-family:var(--sans);grid-column:1/3" >Dec 2017 to Present<br><span class="label" style="color:var(--accent)">Current</span></span><div class="t" style="grid-column:3/7"><h3>Sports Photographer and Onsite Operations Assistant</h3><p class="label" style="margin-top:8px">DS Photography (Digital Sports Photography) · St. Catharines</p></div><div class="d" style="grid-column:7/13"><ul><li>Move and set up the mobile photo and print station across regional arenas on tight tournament weekend schedules.</li><li>Ingest, sort and index high volumes of photos on site so they reach the public catalogue while the event is still running.</li><li>Run point of sale and print production directly with parents and venue management.</li></ul></div></div><div class="row rv"><span class="n" style="font-size:15px;font-style:normal;font-family:var(--sans);grid-column:1/3" >2021 to 2026</span><div class="t" style="grid-column:3/7"><h3>Independent Delivery Driver and Shopper</h3><p class="label" style="margin-top:8px">Instacart · Niagara Region</p></div><div class="d" style="grid-column:7/13"><ul><li>Planned residential routes with multiple stops to land inside customer delivery windows.</li><li>Picked orders accurately at volume and handled substitutions with customers in real time.</li></ul></div></div><div class="row rv"><span class="n" style="font-size:15px;font-style:normal;font-family:var(--sans);grid-column:1/3" >2017 to 2020</span><div class="t" style="grid-column:3/7"><h3>Frontline Crew Member</h3><p class="label" style="margin-top:8px">Tim Hortons · Niagara Falls</p></div><div class="d" style="grid-column:7/13"><ul><li>Kept orders moving through peak periods without queue bottlenecks.</li><li>Checked incoming supply deliveries, ran POS, balanced cash floats and verified drawers.</li></ul></div></div></div>
+  <p class="rv" style="margin-top:36px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn solid rsm" href="/resume.pdf" download="Jordan-Ioannoni-Resume.pdf">Download résumé (PDF)</a><a class="btn" href="#contact" data-topic="Summer logistics role">Talk about a summer role</a></p>
+</div></section>
 
-<section class="pfw dk c" id="portraits"><p class="eyebrow rv">Portrait sessions</p><h2 class="rv" style="--d:.1s">Portraits.</h2><p class="sub rv" style="--d:.2s">Autumn on location. Low key in the studio. Same eye for detail.</p>
-  <div class="feat-pf"><figure class="pf rv" tabindex="0" data-t="Leading lines" data-s="Autumn session, car as backdrop" style="--d:0s"><img data-i="au5" alt="Leading lines: Autumn session, car as backdrop" loading="lazy"><figcaption>Leading lines<small>Autumn session, car as backdrop</small></figcaption></figure></div>
-  <div class="mos"><figure class="pf rv" tabindex="0" data-t="Under the canopy" data-s="Autumn, on location" style="--d:0.0s"><img data-i="au7" alt="Under the canopy: Autumn, on location" loading="lazy"><figcaption>Under the canopy<small>Autumn, on location</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Low key" data-s="Studio, single light" style="--d:0.08s"><img data-i="st2" alt="Low key: Studio, single light" loading="lazy"><figcaption>Low key<small>Studio, single light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Door open" data-s="Natural light, warm grade" style="--d:0.16s"><img data-i="au3" alt="Door open: Natural light, warm grade" loading="lazy"><figcaption>Door open<small>Natural light, warm grade</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Rear quarter" data-s="Autumn session" style="--d:0.0s"><img data-i="au1" alt="Rear quarter: Autumn session" loading="lazy"><figcaption>Rear quarter<small>Autumn session</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Seated" data-s="Studio, side light" style="--d:0.08s"><img data-i="st1" alt="Seated: Studio, side light" loading="lazy"><figcaption>Seated<small>Studio, side light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Low angle" data-s="The star in focus" style="--d:0.16s"><img data-i="au2" alt="Low angle: The star in focus" loading="lazy"><figcaption>Low angle<small>The star in focus</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Golden hour" data-s="Long coat, hard light" style="--d:0.0s"><img data-i="au6" alt="Golden hour: Long coat, hard light" loading="lazy"><figcaption>Golden hour<small>Long coat, hard light</small></figcaption></figure><figure class="pf rv" tabindex="0" data-t="Window seat" data-s="Through the glass" style="--d:0.08s"><img data-i="au4" alt="Window seat: Through the glass" loading="lazy"><figcaption>Window seat<small>Through the glass</small></figcaption></figure></div>
-  <div class="pfs rv"><span><b>On location</b>Natural light, styled sets</span><span><b>In studio</b>Strobes, controlled light</span><span><b>Delivered</b>Graded in Lightroom</span></div>
-  <div class="rv" style="margin-top:30px"><a class="btn" href="#contact" data-topic="Portrait session">Book a portrait session</a></div></section>
+<section class="sec" id="services" style="padding-top:0"><div class="wrap">
+  <div class="head rv"><span class="num">03</span><h2>How I can help</h2><p class="aside">Three ways to work together.</p></div>
+  <div class="rows"><div class="row rv"><span class="n">I.</span><div class="t"><h3>Logistics and dispatch</h3></div><div class="d"><ul><li>Route planning with multiple stops around delivery windows</li><li>Asset and inventory tracking in Excel</li><li>Fleet mechanical knowledge: brakes, hydraulics, diagnostics</li><li>Clear updates for drivers, vendors and customers</li></ul></div><a class="go" href="#contact" data-topic="Summer logistics role">Talk roles <span class="arrow">→</span></a></div><div class="row rv"><span class="n">II.</span><div class="t"><h3>Ioannoni Visuals</h3></div><div class="d"><ul><li>Team, tournament and arena coverage</li><li>Motorsport and automotive</li><li>Studio portraits</li><li>RAW grading and delivery in Lightroom</li></ul></div><a class="go" href="#contact" data-topic="Photography inquiry">Book a shoot <span class="arrow">→</span></a></div><div class="row rv"><span class="n">III.</span><div class="t"><h3>Systems and automation</h3></div><div class="d"><ul><li>Excel sheets that track and update themselves</li><li>Custom scripts that sort and migrate files</li><li>Workflow design that saves real time</li></ul></div><a class="go" href="#contact" data-topic="Automation project">Talk automation <span class="arrow">→</span></a></div></div>
+  <p class="label rv" style="margin-top:40px;line-height:2.2">Toolkit · Canon 1DX · Lightroom Classic · Photoshop · Studio strobes · Excel tracking · Route planning · Asset tracking · POS systems · AI automation · OBDII diagnostics · WHMIS · ODP</p>
+</div></section>
 
-<section class="igw c" id="instagram"><p class="eyebrow rv">Instagram</p><h2 class="rv" style="--d:.1s">Fresh from the feed.</h2><p class="sub rv" style="--d:.2s">My latest posts, straight from @jordanioannoni.</p>
-  <div class="igf rv" style="--d:.25s"><behold-widget feed-id="fHpkd8OHLvEk8Dwz2S52"></behold-widget></div>
-  <div class="rv"><a class="btn" href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener">Follow @jordanioannoni</a></div></section>
+<section class="sec" id="education" style="padding-top:0"><div class="wrap">
+  <div class="head rv"><span class="num">04</span><h2>Education</h2><p class="aside">Niagara College · Niagara on the Lake and Welland</p></div>
+  <div class="rows"><div class="row rv"><span class="n" style="font-size:15px;font-style:normal;font-family:var(--sans);grid-column:1/3">In progress · April 2028</span><div class="t" style="grid-column:3/7"><h3>Business General</h3></div><div class="d" style="grid-column:7/13">Supply chain fundamentals, operational data analysis, managerial accounting and strategic planning</div></div><div class="row rv"><span class="n" style="font-size:15px;font-style:normal;font-family:var(--sans);grid-column:1/3">January 2026</span><div class="t" style="grid-column:3/7"><h3>Business Administration</h3></div><div class="d" style="grid-column:7/13">Organizational administration, project scheduling, business communications and advanced spreadsheets</div></div><div class="row rv"><span class="n" style="font-size:15px;font-style:normal;font-family:var(--sans);grid-column:1/3">January 2025</span><div class="t" style="grid-column:3/7"><h3>Motive Power Techniques</h3></div><div class="d" style="grid-column:7/13">720 hours of brakes, hydraulics, engines, gear trains, steering geometry and electrical diagnostics</div></div><div class="row rv"><span class="n" style="font-size:15px;font-style:normal;font-family:var(--sans);grid-column:1/3">January 2021</span><div class="t" style="grid-column:3/7"><h3>Business Sales and Marketing</h3></div><div class="d" style="grid-column:7/13">Buyer relationships, marketing strategy, brand positioning and B2B negotiation</div></div><div class="row rv"><span class="n" style="font-size:15px;font-style:normal;font-family:var(--sans);grid-column:1/3">September 2019</span><div class="t" style="grid-column:3/7"><h3>Academic and Liberal Studies</h3></div><div class="d" style="grid-column:7/13">Critical thinking, business writing and research methods</div></div></div>
+</div></section>
 
-<section class="svcw c" id="services"><h2 class="rv">How I can help.</h2><p class="sub rv" style="--d:.1s">Three ways to work together.</p>
-  <div class="svcs">
-    <div class="svc rv"><div class="ic ia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><h3>Logistics and dispatch</h3><ul><li>Route planning with multiple stops around delivery windows</li><li>Asset and inventory tracking in Excel</li><li>Fleet mechanical knowledge: brakes, hydraulics, diagnostics</li><li>Clear updates for drivers, vendors and customers</li></ul><a href="#contact" data-topic="Summer logistics role">Let’s talk roles ›</a></div>
-    <div class="svc rv" style="--d:.1s"><div class="ic ib"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><h3>Ioannoni Visuals</h3><ul><li>Team, tournament and arena coverage</li><li>Motorsport and automotive</li><li>Studio portraits</li><li>RAW grading and delivery in Lightroom</li></ul><a href="#contact" data-topic="Photography inquiry">Book a shoot ›</a> <a href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener" style="margin-left:14px">Instagram ›</a></div>
-    <div class="svc rv" style="--d:.2s"><div class="ic ic2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><h3>Systems and automation</h3><ul><li>Excel sheets that track and update themselves</li><li>Custom scripts that sort and migrate files</li><li>Workflow design that saves real time</li></ul><a href="#contact" data-topic="Automation project">Talk automation ›</a></div>
-    
-  </div></section>
+<figure class="plate full wipe" style="margin:0"><div class="im"><img src="/pag.jpg" alt="Hypercar on track" loading="lazy"></div><figcaption class="wrap"><span class="label"><b>See the photography</b></span><a class="label link" href="/">Photography tab <span class="arrow">→</span></a></figcaption></figure>
 
-<section class="edu c"><h2 class="rv">Education.</h2><p class="sub rv" style="--d:.1s">Niagara College · Niagara-on-the-Lake and Welland</p>
-  <div class="tl">
-    <div class="ip rv"><small>In progress · Expected April 2028</small><h3>Business General</h3><p>Supply chain fundamentals, operational data analysis, managerial accounting and strategic planning</p></div>
-    <div class="rv"><small>Completed January 2026</small><h3>Business Administration</h3><p>Organizational administration, project scheduling, business communications and advanced spreadsheets</p></div>
-    <div class="rv"><small>Completed January 2025</small><h3>Motive Power Techniques</h3><p>720 hours of brakes, hydraulics, engines, gear trains, steering geometry and electrical diagnostics</p></div>
-    <div class="rv"><small>Completed January 2021</small><h3>Business Sales and Marketing</h3><p>Buyer relationships, marketing strategy, brand positioning and B2B negotiation</p></div>
-    <div class="rv"><small>Completed September 2019</small><h3>Academic and Liberal Studies</h3><p>Critical thinking, business writing and research methods</p></div>
-  </div></section>
-
-<section class="lake"><div class="px"><img data-i="lake" alt="Lake Louise under broken cloud"></div><div class="cap"><p class="eyebrow rv">Off duty</p><h2 class="rv" style="--d:.1s">Always chasing good light.</h2></div></section>
-
-<section class="cta dk" id="contact"><h2 class="rv">Let’s <span class="grad">work together.</span></h2><p class="sub rv" style="--d:.15s">jordan.ioannoni@outlook.com · 403-667-3728</p>
-  <div class="rv" style="--d:.3s"><button class="btn" id="em">Email me</button><button class="btn o" id="cp">Copy email</button><button class="btn o" id="vc">Save contact card</button><a class="btn o" href="https://www.linkedin.com/in/jordan-ioannoni-227314447/" target="_blank" rel="noopener">LinkedIn</a><a class="btn o" href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener">Instagram</a><a class="btn o rsm" href="resume.pdf" download="Jordan-Ioannoni-Resume.pdf" hidden>Résumé (PDF)</a><p id="cn" class="sub" style="font-size:15px;min-height:1.6em;margin:16px auto 0"></p></div></section>
-<footer>© 2026 · Designed by Jordan Ioannoni · St. Catharines, ON. <a href="#top">Back to top ↑</a></footer>
-
-<script>const IMG={gt3:"gt3.jpg",jord:"jord.jpg",pagr:"pagr.jpg",trk:"trk.jpg",rk1:"rk1.jpg",b1:"b1.jpg",fal:"fal.jpg",b2:"b2.jpg",rk2:"rk2.jpg",bench:"bench.jpg",talk:"talk.jpg",rail:"rail.jpg",cr:"cr.jpg",mud:"mud.jpg",drink:"drink.jpg",husk:"husk.jpg",self:"self.jpg",pag:"pag.jpg",p935:"p935.jpg",lake:"lake.jpg",lax:"lax.jpg",sls:"sls.jpg",au1:"au1.jpg",au2:"au2.jpg",au3:"au3.jpg",au4:"au4.jpg",au5:"au5.jpg",au6:"au6.jpg",au7:"au7.jpg",st1:"st1.jpg",st2:"st2.jpg"};</script>
-<script>
-const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
-const clamp = x => Math.min(1, Math.max(0, x));
-const G=[["moto","Lime green GT3 RS","Track day, Canon 1DX","gt3"],["moto","Hypercar on track","Pagani, trackside","pag"],["moto","Chasing the pack","Pagani and McLarens","pagr"],["moto","Plaid Porsche","Endurance livery","p935"],["moto","Gullwing cockpit","Detail, shallow focus","sls"],
-["hockey","Slap shot","300mm f/2.8 action","b1"],["hockey","Follow through","High shutter speed","b2"],["hockey","Crease save","Frozen at the post","cr"],["hockey","Falcons goalie","Tight on the net","fal"],
-["people","Bench emotion","Ioannoni Visuals","bench"],["people","Bench talk","Coach, player and ref","talk"],["people","The rail","A quiet moment","rail"],["people","Coach’s call","Huskies bench","husk"],["people","Mudcats bench","Warm color grade","mud"],["people","Water break","Film style grade","drink"],
-["behind","Trackside","70 to 200mm at the fence","jord"],["behind","Camera view","Over the shoulder, track","trk"],["behind","Rinkside POV","Setup at the boards","rk1"],["behind","Arena POV","Wide, from the glass","rk2"],["behind","Field side","Lacrosse, rain cover on","lax"],["behind","Between periods","1DX on a monopod","self"],["travel","Lake Louise","Panorama","lake"]];
-$("#row").innerHTML=G.map(([c,t,s,k])=>`<figure class="tile" data-c="${c}" data-t="${t}" data-s="${s}" style="margin:0"><img alt="${t}" loading="lazy" src="${IMG[k]}"><figcaption>${t}<small>${s}</small></figcaption></figure>`).join("");
-$("#chips").innerHTML=[["all","All"],["moto","Motorsport"],["hockey","Hockey action"],["people","Bench and people"],["behind","Behind the lens"],["travel","Travel"]].map(([k,l],i)=>`<button data-k="${k}"${i?"":' class="on"'}>${l}</button>`).join("");
-$("#chips").onclick=e=>{const k=e.target.dataset.k;if(!k)return;$$("#chips button").forEach(b=>b.classList.toggle("on",b===e.target));$$(".tile").forEach(t=>t.classList.toggle("hide",k!=="all"&&t.dataset.c!==k));$("#row").scrollLeft=0;};
-const lb=$("#lb");let L=[],ix=0;
-const show=()=>{const t=L[ix];$("#li").src=t.querySelector("img").src;$("#lc").textContent=t.dataset.t+" · "+t.dataset.s;};
-const closeLb=()=>{lb.hidden=true;document.body.style.overflow="";};
-const step=d=>{ix=(ix+d+L.length)%L.length;show();};
-const openLb=t=>{L=t.classList.contains("pf")?$$(".pf"):$$(".tile:not(.hide)");ix=L.indexOf(t);show();lb.hidden=false;document.body.style.overflow="hidden";};
-document.addEventListener("click",e=>{const t=e.target.closest(".tile,.pf");if(t&&!e.target.closest("#lb"))openLb(t);});
-document.addEventListener("keydown",e=>{if(e.key==="Enter"&&lb.hidden&&e.target.classList&&e.target.classList.contains("pf"))openLb(e.target);});
-$("#lx").onclick=closeLb;$("#lp").onclick=()=>step(-1);$("#ln").onclick=()=>step(1);
-lb.onclick=e=>{if(e.target===lb)closeLb();};
-addEventListener("keydown",e=>{if(lb.hidden)return;if(e.key==="Escape")closeLb();if(e.key==="ArrowLeft")step(-1);if(e.key==="ArrowRight")step(1);});
-let sx=0;lb.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;},{passive:true});lb.addEventListener("touchend",e=>{const d=e.changedTouches[0].clientX-sx;if(Math.abs(d)>50)step(d<0?1:-1);});
-const tools = ["Canon 1DX","Lightroom Classic","Photoshop","Studio strobes","Excel tracking","Route planning","Asset tracking","POS systems","AI automation","OBDII diagnostics","WHMIS","ODP"];
-$("#mq").innerHTML = [...tools, ...tools].map(t => "<span>" + t + " ·</span>").join(" ");
-
-const wp = $("#wp"); if (wp) wp.replaceChildren(...wp.textContent.split(" ").map(w => { const s = document.createElement("span"); s.textContent = w + " "; return s; }));
-const spans = wp ? [...wp.children] : [], feats = $$(".feat"), vis = $$(".vis");
-let tk = false, fi = -1;
-const prog = el => { const r = el.getBoundingClientRect(); return clamp(-r.top / (r.height - innerHeight)); };
-function tick() {
-  tk = false; const y = scrollY;
-  $("#nav").classList.toggle("sc", y > 8);
-  $("#sp").style.transform = "scaleX(" + clamp(y / (document.documentElement.scrollHeight - innerHeight)) + ")";
-  $$(".px").forEach(p => { const r = p.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return; const t = (r.top + r.height / 2 - innerHeight / 2) / innerHeight; p.firstElementChild.style.transform = "translateY(" + (t * -8) + "%) scale(1.15)"; });
-  $("#vf").style.transform = "translateY(" + (-y * .08) + "px) scale(" + (1 + clamp(y / 800) * .12) + ")";
-  $("#ht").style.opacity = 1 - clamp(y / 500);
-  if (wp) { const n = Math.round(prog($("#story")) * 1.25 * spans.length); spans.forEach((s, i) => s.classList.toggle("on", i < n)); }
-  const pin = $("#build");
-  if (pin) { const p = prog(pin), i = Math.min(2, Math.floor(p * 3)); pin.style.setProperty("--p", p);
-    if (i !== fi) { fi = i; feats.forEach((f, j) => f.classList.toggle("on", j === i)); vis.forEach((v, j) => v.classList.toggle("on", j === i)); } }
-}
-addEventListener("scroll", () => { if (!tk) { tk = true; requestAnimationFrame(tick); } }, { passive: true });
-addEventListener("resize", tick); tick();
-
-const io = new IntersectionObserver(es => es.forEach(e => {
-  if (!e.isIntersecting) return;
-  e.target.classList.add("in"); io.unobserve(e.target);
-  e.target.querySelectorAll("[data-n]").forEach(c => {
-    const to = +c.dataset.n, f = +(c.dataset.f || 0), d = +(c.dataset.d || 0), t0 = performance.now();
-    const step = t => { const u = clamp((t - t0) / 1600); c.textContent = (f + (to - f) * (1 - Math.pow(1 - u, 4))).toFixed(d).replace(/\.0+$/, ""); if (u < 1) requestAnimationFrame(step); };
-    requestAnimationFrame(step);
-  });
-}), { threshold: .25 });
-$$(".rv").forEach(e => io.observe(e));
-
-$$("a[href^='#']").forEach(a => a.onclick = ev => { const t = document.getElementById(a.getAttribute("href").slice(1)); if (t) { ev.preventDefault(); t.scrollIntoView({ behavior: "smooth" }); } });
-$("#mb").onclick = () => { const o = $("#nav").classList.toggle("open"); $("#mb").setAttribute("aria-expanded", o); $("#mb").setAttribute("aria-label", o ? "Close menu" : "Open menu"); };
-$$("#nl a").forEach(a => a.addEventListener("click", () => { $("#nav").classList.remove("open"); $("#mb").setAttribute("aria-expanded", false); }));
-$("#th").onclick = () => { const d = document.documentElement, dark = (d.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark"; d.dataset.theme = dark ? "light" : "dark"; };
-const EM = "jordan.ioannoni@outlook.com"; let topic = "";
-const note = t => { $("#cn").textContent = t; };
-$$("[data-topic]").forEach(a => a.addEventListener("click", () => { topic = a.dataset.topic; note("Topic: " + topic + ". Tap Email me when you’re ready."); }));
-$("#em").onclick = () => { location.href = "mailto:" + EM + (topic ? "?subject=" + encodeURIComponent(topic) : ""); note("Opening your mail app. If nothing opens, tap Copy email and paste it anywhere."); };
-$("#cp").onclick = async () => {
-  let ok = false;
-  try { await navigator.clipboard.writeText(EM); ok = true; } catch (e) { try { const a = document.createElement("textarea"); a.value = EM; a.style.cssText = "position:fixed;opacity:0"; document.body.append(a); a.select(); ok = document.execCommand("copy"); a.remove(); } catch (e2) {} }
-  $("#cp").textContent = ok ? "Copied ✓" : "Copy email";
-  note(ok ? EM + " is on your clipboard." : "Couldn’t copy automatically. My email is " + EM + ".");
-};
-$("#vc").onclick = async () => {
-  const data = "BEGIN:VCARD\nVERSION:3.0\nFN:Jordan Ioannoni\nN:Ioannoni;Jordan;;;\nEMAIL:" + EM + "\nTEL;TYPE=CELL:403-667-3728\nURL:https://jordanioannoni.com\nURL:https://www.linkedin.com/in/jordan-ioannoni-227314447/\nURL:https://www.instagram.com/jordanioannoni/\nEND:VCARD\n";
-  let dl = null; try { dl = window.claude ? await window.claude.use("downloads") : null; } catch (e) {}
-  try {
-    if (dl) await dl.save({ filename: "Jordan-Ioannoni.vcf", data });
-    else { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([data], { type: "text/vcard" })); a.download = "Jordan-Ioannoni.vcf"; a.click(); }
-    note("Contact card saved. If you don’t see it, use Copy email instead.");
-  } catch (e) { note("Couldn’t save the card here. Use Copy email instead."); }
-};
-$$(".svc").forEach(c => c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(); c.style.setProperty("--mx", e.clientX - r.left + "px"); c.style.setProperty("--my", e.clientY - r.top + "px"); }));
-$$("img[data-i]").forEach(i => { i.src = IMG[i.dataset.i]; });
-fetch("resume.pdf", { method: "HEAD" }).then(r => { if (r.ok) $$(".rsm").forEach(a => a.hidden = false); }).catch(() => {});
-tick();
-
-(() => {
-  const w = document.getElementById("sigw"); if (!w) return;
-  const cv = w.querySelector("canvas"), ctx = cv.getContext("2d", { willReadFrequently: true });
-  const img = new Image(); img.src = "sigmap.png";
-  img.onload = () => {
-    const W = img.width, H = img.height; cv.width = W; cv.height = H;
-    ctx.drawImage(img, 0, 0); const src = ctx.getImageData(0, 0, W, H).data; ctx.clearRect(0, 0, W, H);
-    const ink = [], tm = [], reg = []; let x0 = W, x1 = 0;
-    for (let i = 0, n = W * H; i < n; i++) if (src[i * 4 + 3]) {
-      ink.push(i); tm.push(((src[i * 4] << 8) | src[i * 4 + 1]) / 65535);
-      const r = src[i * 4 + 2] > 127; reg.push(r); if (r) { const x = i % W; if (x < x0) x0 = x; if (x > x1) x1 = x; }
-    }
-    const ord = ink.map((_, k) => k).sort((a, b) => tm[a] - tm[b]);
-    const out = ctx.createImageData(W, H), od = out.data, F = .025;
-    const stops = [[255, 154, 60], [255, 61, 119], [122, 92, 255]];
-    const grad = f => { const s = f < .5 ? 0 : 1, g = f < .5 ? f * 2 : f * 2 - 1, A = stops[s], B = stops[s + 1]; return [A[0] + (B[0] - A[0]) * g, A[1] + (B[1] - A[1]) * g, A[2] + (B[2] - A[2]) * g]; };
-    for (let k = 0; k < ink.length; k++) if (reg[k]) { const i = ink[k], c = grad(((i % W) - x0) / Math.max(1, x1 - x0)); od[i * 4] = c[0]; od[i * 4 + 1] = c[1]; od[i * 4 + 2] = c[2]; }
-    const paintInk = () => {
-      const m = getComputedStyle(document.body).color.match(/\d+/g).map(Number);
-      for (let k = 0; k < ink.length; k++) if (!reg[k]) { const i = ink[k]; od[i * 4] = m[0]; od[i * 4 + 1] = m[1]; od[i * 4 + 2] = m[2]; }
-      ctx.putImageData(out, 0, 0);
-    };
-    paintInk();
-    document.getElementById("th").addEventListener("click", () => setTimeout(paintInk, 0));
-    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(paintInk, 0));
-    let done = 0;
-    const reveal = t => {
-      while (done < ord.length && tm[ord[done]] <= t - F) { const i = ink[ord[done++]]; od[i * 4 + 3] = src[i * 4 + 3]; }
-      for (let k = done; k < ord.length && tm[ord[k]] <= t; k++) { const j = ord[k], i = ink[j]; od[i * 4 + 3] = src[i * 4 + 3] * (t - tm[j]) / F; }
-      ctx.putImageData(out, 0, 0);
-    };
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { reveal(1 + F); return; }
-    const D = 6000, ease = u => .5 - Math.cos(Math.PI * u) / 2; let t0 = 0;
-    const frame = now => { if (!t0) t0 = now; const u = Math.min(1, (now - t0) / D); reveal(ease(u) * (1 + F)); if (u < 1) requestAnimationFrame(frame); };
-    setTimeout(() => requestAnimationFrame(frame), 600);
-  };
-})();
-</script>
-<script>
-  (() => {
-    if(window.__bhldScript)return;window.__bhldScript=true;
-    const d=document,s=d.createElement("script");s.type="module";
-    s.src="https://w.behold.so/widget.js";setTimeout(()=>{d.head.append(s);},0);
-  })();
-</script>
+<section class="sec contact" id="contact"><div class="wrap">
+  <p class="label rv">Get in touch</p>
+  <h2 class="rv" style="--d:.1s">Let’s work <em>together.</em></h2>
+  <a class="mail rv" style="--d:.2s" href="mailto:jordan.ioannoni@outlook.com">jordan.ioannoni@outlook.com</a>
+  <p class="label rv" style="margin-top:16px">403-667-3728</p>
+  <div class="btns rv" style="--d:.3s"><button class="btn solid" id="em">Email me</button><button class="btn" id="cp">Copy email</button><button class="btn" id="vc">Save contact card</button><a class="btn" href="https://www.linkedin.com/in/jordan-ioannoni-227314447/" target="_blank" rel="noopener">LinkedIn</a><a class="btn" href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener">Instagram</a></div>
+  <p id="cn" aria-live="polite"></p>
+</div></section>
+</main>
+<footer><div class="wrap in"><div class="f1">Jordan Ioannoni</div><div class="f2 label"><a href="/">Photography</a><a href="/portfolio">Portfolio</a><a href="/stdv1115">STDV 1115</a></div><div class="f3 label">© 2026 · St. Catharines, Ontario<br><a href="#top" class="link">Back to top</a></div></div></footer><script>window.JI_CONTACT={email:"jordan.ioannoni@outlook.com",tel:"403-667-3728",urls:["https://jordanioannoni.com/portfolio","https://www.linkedin.com/in/jordan-ioannoni-227314447/","https://www.instagram.com/jordanioannoni/"]};</script>
+<script src="/site.js"></script>
 </body>
 </html>
