@@ -6,15 +6,16 @@
 <title>Jordan Ioannoni | Sports, Motorsport and Portrait Photographer</title>
 <meta name="description" content="Jordan Ioannoni: sports, motorsport and portrait photographer in St. Catharines and the Niagara Region.">
 <meta property="og:title" content="Jordan Ioannoni | Portfolio"><meta property="og:description" content="Sports. Motorsport. Portraits."><meta property="og:type" content="website">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#0e0f11">
 <meta property="og:image" content="https://jordanioannoni.com/gt3.jpg"><meta property="og:url" content="https://jordanioannoni.com/">
 <link rel="icon" href="favicon.png" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="canonical" href="https://jordanioannoni.com/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Jordan Ioannoni","url":"https://jordanioannoni.com","jobTitle":"Photographer","alumniOf":"Niagara College","address":{"@type":"PostalAddress","addressLocality":"St. Catharines","addressRegion":"ON","addressCountry":"CA"},"sameAs":["https://www.instagram.com/jordanioannoni/"]}</script>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("ji-home-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
 <style>
-:root{--bg:#fff;--alt:#f5f5f7;--ink:#1d1d1f;--mute:#6e6e73;--link:#0066cc;--nav:rgba(255,255,255,.72);--dim:rgba(110,110,115,.35);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--alt:#161617;--ink:#f5f5f7;--mute:#a1a1a6;--link:#2997ff;--nav:rgba(22,22,23,.72);color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#000;--alt:#161617;--ink:#f5f5f7;--mute:#a1a1a6;--link:#2997ff;--nav:rgba(22,22,23,.72);color-scheme:dark}
+:root{--dk:#0e0f11;--bg:#fff;--alt:#f5f5f7;--ink:#1d1d1f;--mute:#6e6e73;--link:#0066cc;--nav:rgba(255,255,255,.72);--dim:rgba(110,110,115,.35);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0f11;--alt:#17191c;--ink:#f2f2f0;--mute:#a3a5aa;--link:#3d9dff;--nav:rgba(14,15,17,.78);--dk:#08090b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e0f11;--alt:#17191c;--ink:#f2f2f0;--mute:#a3a5aa;--link:#3d9dff;--nav:rgba(14,15,17,.78);--dk:#08090b;color-scheme:dark}
 html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 48px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 -apple-system,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -27,7 +28,7 @@ nav .l{display:flex;gap:24px}nav .l a{color:var(--ink);opacity:.8}nav .l a:hover
 nav button{background:none;border:1px solid rgba(128,128,128,.4);color:var(--ink);border-radius:99px;padding:3px 10px;font:inherit;cursor:pointer}
 nav .r{display:flex;align-items:center;gap:8px}#mb{display:none;padding:5px 9px;line-height:0}
 @media (max-width:640px){#mb{display:inline-block}nav .l{display:none;position:absolute;top:48px;left:0;right:0;flex-direction:column;gap:0;padding:6px 20px 14px;background:var(--bg);box-shadow:0 12px 24px -12px rgba(0,0,0,.35)}nav.open .l{display:flex}nav .l a{padding:13px 2px;font-size:17px;opacity:1;border-bottom:1px solid rgba(128,128,128,.2)}nav .l a:last-child{border-bottom:0}}
-.dk{background:#000;color:#f5f5f7}
+.dk{background:var(--dk);color:#f2f2f0}
 section{position:relative}
 .c{text-align:center;padding:0 20px}
 .eyebrow{color:#ff6a3d;font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;margin:0 0 8px}
@@ -59,7 +60,7 @@ h1{font-size:clamp(44px,10vw,108px)}h2{font-size:clamp(32px,5.6vw,60px)}
 .ab h2{font-size:clamp(30px,4.6vw,52px)}.ab .b{color:var(--mute);font-size:19px;margin:14px 0 0}
 .sm{display:flex;gap:14px;align-items:center;margin-top:22px;color:var(--mute);font-size:14px}.sm img{width:72px;height:72px;border-radius:50%;object-fit:cover}
 @media (max-width:700px){.ab{grid-template-columns:1fr;gap:28px}}
-.lake{height:92vh;min-height:520px;overflow:hidden;color:#fff;background:#000}
+.lake{height:92vh;min-height:520px;overflow:hidden;color:#fff;background:var(--dk)}
 .lake .px{position:absolute;inset:0}
 .lake::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.65))}
 .lake .cap{position:absolute;left:0;right:0;bottom:12%;text-align:center;padding:0 20px;z-index:2}
@@ -311,7 +312,7 @@ $$(".rv").forEach(e => io.observe(e));
 $$("a[href^='#']").forEach(a => a.onclick = ev => { const t = document.getElementById(a.getAttribute("href").slice(1)); if (t) { ev.preventDefault(); t.scrollIntoView({ behavior: "smooth" }); } });
 $("#mb").onclick = () => { const o = $("#nav").classList.toggle("open"); $("#mb").setAttribute("aria-expanded", o); $("#mb").setAttribute("aria-label", o ? "Close menu" : "Open menu"); };
 $$("#nl a").forEach(a => a.addEventListener("click", () => { $("#nav").classList.remove("open"); $("#mb").setAttribute("aria-expanded", false); }));
-$("#th").onclick = () => { const d = document.documentElement, dark = (d.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark"; d.dataset.theme = dark ? "light" : "dark"; };
+$("#th").onclick = () => { const d = document.documentElement, dark = (d.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark"; d.dataset.theme = dark ? "light" : "dark"; try { localStorage.setItem("ji-home-theme", d.dataset.theme); } catch (e) {} };
 const EM = "jordan.ioannoni@outlook.com"; let topic = "";
 const note = t => { $("#cn").textContent = t; };
 $$("[data-topic]").forEach(a => a.addEventListener("click", () => { topic = a.dataset.topic; note("Topic: " + topic + ". Tap Email me when you’re ready."); }));
