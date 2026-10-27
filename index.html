@@ -183,7 +183,7 @@ h1{font-size:clamp(44px,10vw,108px)}h2{font-size:clamp(32px,5.6vw,60px)}
 .tl div{position:relative;padding-bottom:30px}
 .tl div::before{content:"";position:absolute;left:-37px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--link)}
 .tl div.ip::before{background:#ff9a3c;box-shadow:0 0 0 6px rgba(255,154,60,.25);animation:pl 2s infinite}
-@keyframes pl{50%{box-shadow:0 0 0 12px rgba(255,154,60,0)}}
+@keyframes pl{50%{box-shadow:0 0 0 13px rgba(255,154,60,0);opacity:.35}}
 .tl small{color:var(--mute);text-transform:uppercase;letter-spacing:.05em;font-size:12px}.tl h3{margin:0;font-size:22px}.tl p{margin:2px 0 0;color:var(--mute)}
 .cta{padding:140px 20px;text-align:center;overflow:hidden}
 .cta::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:900px;margin:-450px;background:radial-gradient(circle,color-mix(in srgb,var(--g3) 50%,transparent),color-mix(in srgb,var(--g2) 25%,transparent) 40%,transparent 68%);animation:pulse 6s ease-in-out infinite}
@@ -206,10 +206,11 @@ footer{background:var(--alt);color:var(--mute);font-size:12px;padding:24px 20px 
 </style>
 </head>
 <body>
+<script src="sfx.js"></script>
 <a class="skip" href="#work">Skip to content</a>
 <div id="sp"></div>
 <div id="lb" hidden><button id="lx" aria-label="Close">✕</button><button id="lp" aria-label="Previous">‹</button><img id="li" alt=""><button id="ln" aria-label="Next">›</button><div id="lc"></div></div>
-<nav id="nav"><a class="brand" href="#top" aria-label="Jordan Ioannoni, back to top">Jordan Ioannoni</a><div class="l" id="nl"><a href="#work">Work</a><a href="#portraits">Portraits</a><a href="#instagram">Instagram</a><a href="#about">About</a><a href="#services">Book</a><a href="#contact">Contact</a></div><span class="r"><button id="mb" aria-label="Open menu" aria-expanded="false" aria-controls="nl"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><button id="th" aria-label="Toggle theme">◐</button></span></nav>
+<nav id="nav"><a class="brand" href="#top" aria-label="Jordan Ioannoni, back to top">Jordan Ioannoni</a><div class="l" id="nl"><a href="#work">Work</a><a href="#portraits">Portraits</a><a href="#instagram">Instagram</a><a href="#about">About</a><a href="#services">Book</a><a href="#contact">Contact</a></div><span class="r"><button id="mb" aria-label="Open menu" aria-expanded="false" aria-controls="nl"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><button id="snd" aria-label="Sound effects" aria-pressed="true" title="Sound effects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="wv" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/><path class="x" d="m23 9-6 6M17 9l6 6"/></svg></button><button id="th" aria-label="Toggle theme">◐</button></span></nav>
 
 <section class="hero c" id="top">
   <div id="ht">
@@ -385,7 +386,8 @@ tick();
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) { reveal(1 + F); return; }
     const D = 6000, ease = u => .5 - Math.cos(Math.PI * u) / 2; let t0 = 0;
     const frame = now => { if (!t0) t0 = now; const u = Math.min(1, (now - t0) / D); reveal(ease(u) * (1 + F)); if (u < 1) requestAnimationFrame(frame); };
-    setTimeout(() => requestAnimationFrame(frame), 600);
+    const go = () => setTimeout(() => { if (window.SFX) SFX.pen(D); requestAnimationFrame(frame); }, 600);
+    if (window.SFX) SFX.ready(go); else go();
   };
 })();
 </script>

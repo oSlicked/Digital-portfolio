@@ -148,8 +148,9 @@ nav .r{display:flex;gap:8px;align-items:center}
 </style>
 </head>
 <body>
+<script src="sfx.js"></script>
 <div id="sp"></div>
-<nav id="nav"><a href="/portfolio">‹ Back to portfolio</a><span class="code">STDV 1115</span><span class="r"><button id="snd" aria-label="Typing sounds" aria-pressed="true" title="Typing sounds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="wv" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/><path class="x" d="m23 9-6 6M17 9l6 6"/></svg></button><button id="th" aria-label="Toggle theme">◐</button></span></nav>
+<nav id="nav"><a href="/portfolio">‹ Back to portfolio</a><span class="code">STDV 1115</span><span class="r"><button id="snd" data-own aria-label="Typing sounds" aria-pressed="true" title="Typing sounds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="wv" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/><path class="x" d="m23 9-6 6M17 9l6 6"/></svg></button><button id="th" aria-label="Toggle theme">◐</button></span></nav>
 
 <header class="hero">
   <p class="eyebrow rv">STDV 1115 · Niagara College</p>
@@ -315,9 +316,9 @@ function typeTitle(delay = 500) {
   };
   setTimeout(step, delay);
 }
-typeTitle(700);
+if (window.SFX) SFX.ready(o => { snd = o; sb.setAttribute("aria-pressed", o); if (o) audio(); typeTitle(400); }); else typeTitle(700);
 $("h1.typed").onclick = () => { audio(); typeTitle(150); };
-sb.onclick = () => { snd = !snd; sb.setAttribute("aria-pressed", snd); try { localStorage.setItem("ji-snd", snd ? "1" : "0"); } catch (e) {} if (snd) { audio(); if (scrollY < innerHeight) typeTitle(150); } };
+sb.onclick = () => { snd = !snd; if (window.SFX) SFX.on = snd; sb.setAttribute("aria-pressed", snd); try { localStorage.setItem("ji-snd", snd ? "1" : "0"); } catch (e) {} if (snd) { audio(); if (scrollY < innerHeight) typeTitle(150); } };
 /* hero glow follows the pointer */
 const hero = $(".hero");
 if (matchMedia("(hover:hover)").matches) hero.addEventListener("pointermove", e => { const r = hero.getBoundingClientRect(); hero.style.setProperty("--hx", (e.clientX - r.left) / r.width * 100 + "%"); hero.style.setProperty("--hy", (e.clientY - r.top) / r.height * 100 + "%"); });
