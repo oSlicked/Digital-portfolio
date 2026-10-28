@@ -356,6 +356,77 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
 .slide.live .deck img:hover{z-index:5;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y) - 16px)) rotate(0deg) scale(1.06);transition-delay:0s}
 @media (max-width:640px){.deck img{width:96px}.deck img:nth-child(1){--x:-130px!important}.deck img:nth-child(2){--x:-66px!important}.deck img:nth-child(4){--x:66px!important}.deck img:nth-child(5){--x:130px!important}}
 @media (prefers-reduced-motion:reduce){.chap h2 .lt,.wideshot b,.wideshot span{opacity:1!important;transform:none!important;filter:none!important}.mos button{clip-path:none!important}.mos button img{transform:none!important}.strips{display:none}#glow{display:none}.deck img{opacity:1!important}}
+/* ===== paragraph slides ===== */
+.story{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+.story.rev{grid-template-columns:1.25fr .75fr}
+.story>*{min-width:0}
+@media (max-width:860px){.story,.story.rev{grid-template-columns:1fr;gap:32px}.story.rev .collage{order:-1}}
+.sfig{position:relative;margin:0;border-radius:28px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 40px 80px -40px rgba(0,0,0,.6)}
+.sfig img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.12);transition:transform 6s ease-out}
+.slide.live .sfig img{transform:scale(1)}
+.sfig figcaption{position:absolute;left:14px;right:14px;bottom:14px;padding:12px 16px;border-radius:16px;background:rgba(8,12,24,.55);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;font-size:13px}
+.sfig figcaption b{display:block;font-size:15px}
+.sfig::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chips span{font-size:13px;font-weight:600;padding:6px 13px;border-radius:99px;background:color-mix(in srgb,var(--g2) 12%,transparent);border:1px solid color-mix(in srgb,var(--g2) 30%,transparent);color:var(--ink)}
+.sp{margin-top:24px;font-size:18px;line-height:1.65;max-width:62ch}
+.sp.wide-p{max-width:78ch}
+.sp p{margin:0 0 16px;color:color-mix(in srgb,var(--ink) 82%,var(--mute))}
+.sp .dc::first-letter{float:left;font-size:3.6em;line-height:.82;font-weight:800;margin:.08em .12em 0 0;background:linear-gradient(160deg,var(--g1),var(--g2) 50%,var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sp mark{color:var(--ink);font-weight:600;background:linear-gradient(90deg,color-mix(in srgb,var(--g1) 38%,transparent),color-mix(in srgb,var(--g3) 38%,transparent)) no-repeat 0 88%/0% 42%;border-radius:3px;padding:0 2px;transition:background-size 1.1s cubic-bezier(.16,1,.3,1) calc(var(--d,0s) + .7s)}
+.sp .rv.in mark{background-size:100% 42%}
+.pull{position:relative;margin:26px 0 0;padding:22px 26px 22px 64px;border-radius:22px;font-size:22px;line-height:1.35;font-weight:650;letter-spacing:-.015em;color:var(--ink);background:linear-gradient(120deg,color-mix(in srgb,var(--g2) 14%,transparent),color-mix(in srgb,var(--g3) 8%,transparent));border:1px solid color-mix(in srgb,var(--g2) 25%,transparent)}
+.pull::before{content:"\201C";position:absolute;left:18px;top:6px;font-size:72px;line-height:1;font-weight:800;background:linear-gradient(160deg,var(--g1),var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:22px}
+.flow span{padding:8px 15px;border-radius:12px;font-size:14px;font-weight:600;background:var(--alt);border:1px solid var(--line)}
+section.alt .flow span{background:var(--bg)}
+.flow span.on{color:#05101f;border-color:transparent;background:linear-gradient(135deg,var(--g1),var(--g2))}
+.flow svg{width:18px;height:18px;color:var(--mute);opacity:0;transform:translateX(-6px);transition:opacity .5s,transform .6s}
+.flow.in svg{opacity:1;transform:none}
+.flow.in svg:nth-of-type(1){transition-delay:.5s}.flow.in svg:nth-of-type(2){transition-delay:.8s}.flow.in svg:nth-of-type(3){transition-delay:1.1s}
+.collage{position:relative;height:min(520px,60vh)}
+.collage img{position:absolute;width:62%;aspect-ratio:4/5;object-fit:cover;border-radius:16px;border:6px solid #f4f6fb;box-shadow:0 30px 60px -24px rgba(0,0,0,.6);transition:transform 1.2s cubic-bezier(.16,1,.3,1),opacity .8s}
+.collage img:nth-child(1){left:0;top:4%;transform:rotate(-8deg) translateY(30px);opacity:0}
+.collage img:nth-child(2){right:0;top:0;transform:rotate(6deg) translateY(30px);opacity:0;transition-delay:.15s}
+.collage img:nth-child(3){left:20%;bottom:0;transform:rotate(-2deg) translateY(30px);opacity:0;transition-delay:.3s}
+.slide.live .collage img:nth-child(1){transform:rotate(-8deg);opacity:1}
+.slide.live .collage img:nth-child(2){transform:rotate(6deg);opacity:1}
+.slide.live .collage img:nth-child(3){transform:rotate(-2deg);opacity:1}
+.collage img:hover{z-index:3;transform:rotate(0) scale(1.05)!important}
+/* ===== light theme ===== */
+:root{--bg:#f3f6fc;--alt:#ffffff;--ink:#0b1020;--mute:#56607a;--link:#2457e6;--nav:rgba(243,246,252,.78);--dim:rgba(86,96,122,.28);--line:rgba(11,16,32,.1)}
+:root[data-theme="light"] body{background:radial-gradient(1100px 760px at 8% -8%,rgba(94,231,255,.22),transparent 60%),radial-gradient(1000px 700px at 108% 18%,rgba(155,107,255,.16),transparent 60%),radial-gradient(900px 700px at 40% 120%,rgba(61,123,255,.12),transparent 60%),var(--bg);background-attachment:fixed}
+:root[data-theme="light"] section.alt{background:rgba(255,255,255,.55)}
+:root[data-theme="light"] .card{box-shadow:0 1px 2px rgba(11,16,32,.04),0 18px 40px -24px rgba(36,87,230,.28)}
+:root[data-theme="light"] .card:hover{box-shadow:0 30px 60px -28px rgba(36,87,230,.4)}
+:root[data-theme="light"] .chap .bg{opacity:.95;filter:none}
+:root[data-theme="light"] .chap{background:#0a1020}
+:root[data-theme="light"] .chap::before{background:linear-gradient(0deg,rgba(6,10,21,.78),rgba(6,10,21,.2) 70%),radial-gradient(70% 60% at 50% 55%,color-mix(in srgb,var(--c) 30%,transparent),transparent 70%);opacity:1}
+:root[data-theme="light"] .chap .vig{background:radial-gradient(120% 90% at 50% 50%,transparent 55%,rgba(0,0,0,.35))}
+:root[data-theme="light"] .dk{background:linear-gradient(135deg,#e8f1ff,#f1eaff);color:var(--ink)}
+:root[data-theme="light"] .dk .intro,:root[data-theme="light"] .row span{color:var(--mute)}
+:root[data-theme="light"] .tbl{border-color:var(--line);background:rgba(255,255,255,.7)}
+:root[data-theme="light"] .row{border-top-color:var(--line)}
+:root[data-theme="light"] .row a{color:var(--link)}
+:root[data-theme="light"] .row small,:root[data-theme="light"] .tl .ip small{color:#d9700a}
+:root[data-theme="light"] .row small{color:var(--g2)}
+:root[data-theme="light"] .strips{opacity:.28}
+:root[data-theme="light"] .hero .lead{color:var(--mute)}
+:root[data-theme="light"] .quote::before{background:radial-gradient(circle,rgba(94,231,255,.28),rgba(155,107,255,.14) 45%,transparent 68%)}
+:root[data-theme="light"] .grad,:root[data-theme="light"] .quote .hl .w,:root[data-theme="light"] .sp .dc::first-letter{background-image:linear-gradient(90deg,#11a8d6,#2457e6,#7b4dff,#11a8d6)}
+:root[data-theme="light"] .quote .hl .w,:root[data-theme="light"] .sp .dc::first-letter{background-image:linear-gradient(90deg,#11a8d6,#2457e6,#7b4dff)}
+:root[data-theme="light"] .chips span{color:#1a2a66}
+:root[data-theme="light"] .sp mark{background-image:linear-gradient(90deg,rgba(94,231,255,.5),rgba(155,107,255,.38))}
+:root[data-theme="light"] .ring .tr{stroke:rgba(11,16,32,.08)}
+:root[data-theme="light"] .ring b{background-image:linear-gradient(180deg,#0b1020,#2457e6)}
+:root[data-theme="light"] .tl .ip{background:linear-gradient(120deg,rgba(255,154,60,.14),#fff 60%)}
+:root[data-theme="light"] #rail i{background:rgba(11,16,32,.22)}
+:root[data-theme="light"] .avail{border-color:rgba(36,87,230,.35)}
+:root[data-theme="light"] .now{border-color:rgba(36,87,230,.35)}
+.close{margin:30px 0 0!important;font-size:clamp(30px,4.6vw,48px);font-weight:700;letter-spacing:-.03em;line-height:1.1;background:linear-gradient(90deg,var(--g1),var(--g2),var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent!important}
+:root[data-theme="light"] .close{background:linear-gradient(90deg,#11a8d6,#2457e6,#7b4dff);-webkit-background-clip:text;background-clip:text}
+:root[data-theme="light"] .chap .vig{background:linear-gradient(0deg,rgba(6,10,21,.86),rgba(6,10,21,.5) 55%,rgba(6,10,21,.3))}
+:root[data-theme="light"] nav .ch a b{color:var(--g2)}
 </style>
 </head>
 <body>
@@ -501,14 +572,19 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
 </div></section>
 
 <section class="slide blk"><div class="fit"><div class="wrap">
-  <p class="eyebrow rv">Reflection</p>
-  <h2 class="rv" style="--d:.1s">Me as a digital learner.</h2>
-  <div class="prose">
-    <p class="rv">When I first got into computers I had no idea what I was doing. I bought a PC from some guy on Kijiji, went home and plugged it in. It worked fine until I discovered what overclocking was. Let’s just say it resulted in me needing to take the computer parts out and replace the motherboard. But in doing so, it taught me how to disassemble a computer and reassemble it all on my own with a screwdriver and a YouTube video.</p>
-    <p class="rv">It reminds me of when I first started working on cars. Trial and error, haha. Sitting on the garage floor with a flashlight in one hand and my phone in the other, watching a ChrisFix video on how to fix what I had just messed up.</p>
-    <p class="rv">At the end of the day, you gotta mess around a little bit to see what works and what doesn’t. If you don’t, you will never truly figure out what it means to be a learner.</p>
+  <div class="story">
+    <figure class="sfig rv"><img src="rk1.jpg" alt="Jordan's camera set up rinkside at the boards"><figcaption><b>Rinkside POV</b>Setup at the boards</figcaption></figure>
+    <div class="sbody">
+      <p class="eyebrow rv">Reflection</p>
+      <h2 class="rv" style="--d:.1s">Me as a digital learner.</h2>
+      <div class="chips rv" style="--d:.15s"><span>Kijiji PC</span><span>Overclocking</span><span>New motherboard</span><span>ChrisFix videos</span></div>
+      <div class="sp">
+        <p class="rv dc" style="--d:.2s">When I first got into computers I had no idea what I was doing. I bought a PC from some guy on Kijiji, went home and plugged it in. It worked fine until I discovered what overclocking was. Let’s just say it resulted in me needing to take the computer parts out and replace the motherboard. But in doing so, it taught me how to disassemble a computer and reassemble it all on my own with <mark>a screwdriver and a YouTube video.</mark></p>
+        <p class="rv" style="--d:.3s">It reminds me of when I first started working on cars. <mark>Trial and error, haha.</mark> Sitting on the garage floor with a flashlight in one hand and my phone in the other, watching a ChrisFix video on how to fix what I had just messed up.</p>
+        <blockquote class="pull rv" style="--d:.4s">At the end of the day, you gotta mess around a little bit to see what works and what doesn’t. If you don’t, you will never truly figure out what it means to be a learner.</blockquote>
+      </div>
+    </div>
   </div>
-
 </div></div></section>
 
 <section class="slide blk"><div class="fit"><div class="wrap">
@@ -535,8 +611,9 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
 <section class="slide blk"><div class="fit"><div class="wrap">
   <p class="eyebrow rv">Process</p>
   <h2 class="rv" style="--d:.1s">How I built this.</h2>
-  <div class="prose">
-    <p class="rv">It took a very long time before the site got to looking this good. It started with Gemini. At first I thought it looked good, until I sent it to friends and family to review and got their honest feedback... let’s just say their feedback was <em>honest</em>. I scrapped the whole idea and started over with Claude. I had one thing in mind: I wanted it to look like a version of Apple’s website. And in the end, this is where we are at.</p>
+  <div class="flow rv" style="--d:.15s"><span>Gemini</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>Friends and family review</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>Started over with Claude</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="on">This site</span></div>
+  <div class="sp wide-p">
+    <p class="rv dc" style="--d:.2s">It took a very long time before the site got to looking this good. It started with Gemini. At first I thought it looked good, until I sent it to friends and family to review and got their honest feedback... let’s just say their feedback was <mark><em>honest</em></mark>. I scrapped the whole idea and started over with Claude. I had one thing in mind: <mark>I wanted it to look like a version of Apple’s website.</mark> And in the end, this is where we are at.</p>
   </div>
   <div class="grid two">
     <div class="card rv"><p class="who w1">What I brought</p><h3>The vision</h3><ul><li>The ideas, like a website instead of a slideshow</li><li>The photos and the text</li><li>How it looks and how it feels when scrolling</li><li>How the viewer’s eyes track the site</li><li>Approving or denying every change</li></ul></div>
@@ -618,11 +695,18 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
 </div></section>
 
 <section class="slide blk"><div class="fit"><div class="wrap">
-  <div class="prose" style="margin-top:0">
-    <p class="rv">The assignment that changed my mind the most was the one on AI. Tools like Claude, Gemini and ChatGPT make research a lot faster. Instead of spending two hours going through articles, I send an AI agent out to find sources and report back. I still review what it finds and change the search from there, because the judgment has to stay mine.</p>
-    <p class="rv">Building this site changed my view the most. Animations, clean code and quick fixes take developers years of trial and error to get right. With the help of a Claude agent, the code came together in about three days. I brought the ideas, the photos and the direction, and Claude wrote the code to match.</p>
-    <p class="rv">Looking back, there isn’t a single thing I would change about the site. The journey was the fun part. The final product represents everything that had gone into building this site: all of the ideas, all of the late nights, all of the binging YouTube videos for ideas to make it better.</p>
-    <p class="rv close">You can’t force perfection.</p>
+  <div class="story rev">
+    <div class="sbody">
+      <p class="eyebrow rv">Reflection</p>
+      <h2 class="rv" style="--d:.1s">What changed for me.</h2>
+      <div class="sp">
+        <p class="rv dc" style="--d:.2s">The assignment that changed my mind the most was the one on AI. Tools like Claude, Gemini and ChatGPT make research a lot faster. Instead of spending two hours going through articles, I send an AI agent out to find sources and report back. I still review what it finds and change the search from there, because <mark>the judgment has to stay mine.</mark></p>
+        <p class="rv" style="--d:.3s">Building this site changed my view the most. Animations, clean code and quick fixes take developers years of trial and error to get right. With the help of a Claude agent, the code came together in <mark>about three days.</mark> I brought the ideas, the photos and the direction, and Claude wrote the code to match.</p>
+        <p class="rv" style="--d:.4s">Looking back, there isn’t a single thing I would change about the site. <mark>The journey was the fun part.</mark> The final product represents everything that had gone into building this site: all of the ideas, all of the late nights, all of the binging YouTube videos for ideas to make it better.</p>
+        <p class="rv close" style="--d:.5s">You can’t force perfection.</p>
+      </div>
+    </div>
+    <div class="collage rv" aria-hidden="true"><img src="jord.jpg" alt=""><img src="lake.jpg" alt=""><img src="self.jpg" alt=""></div>
   </div>
 </div></div></section>
 
