@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#e6ecf7">
 <link rel="icon" href="/favicon.png" type="image/png">
-<script>try{document.documentElement.dataset.theme=localStorage.getItem("ji-asg-theme")||"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+<script>document.documentElement.dataset.theme="light"</script>
 <style>
 :root{--g1:#5ee7ff;--g2:#3d7bff;--g3:#9b6bff;--dk:#0a1020;--bg:#fff;--alt:#f5f5f7;--ink:#1d1d1f;--mute:#6e6e73;--link:#0066cc;--nav:rgba(255,255,255,.72);--dim:rgba(110,110,115,.35);--line:rgba(128,128,128,.25);color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1020;--alt:#111a2e;--ink:#eef3ff;--mute:#9aa8c4;--link:#5ab4ff;--nav:rgba(10,16,32,.78);--dk:#060a15;--dim:rgba(154,168,196,.22);color-scheme:dark}}
@@ -595,7 +595,7 @@ html.rec,html.rec *{cursor:none!important}
 
 <nav id="nav"><a class="brand" href="#top">Jordan Ioannoni</a>
   <div class="ch" id="ch"><a href="#individual"><b>01</b><span>Individual</span></a><a href="#applicant"><b>02</b><span>Job applicant</span></a><a href="#learner"><b>03</b><span>Digital learner</span></a><a href="#citizen"><b>04</b><span>Digital citizen</span></a><a href="#wrap"><b>05</b><span>Looking back</span></a></div>
-  <span class="r"><button id="snd" aria-label="Sound" aria-pressed="true" title="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="wv" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/><path class="x" d="m23 9-6 6M17 9l6 6"/></svg></button><button id="th" aria-label="Toggle theme">◐</button></span></nav>
+  <span class="r"><button id="snd" aria-label="Sound" aria-pressed="true" title="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="wv" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/><path class="x" d="m23 9-6 6M17 9l6 6"/></svg></button></span></nav>
 
 <div id="glow" aria-hidden="true"></div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -1041,7 +1041,6 @@ $("h1.typed").onclick = () => { S() && S().unlock(); typeTitle(150); };
 })();
 
 /* theme */
-$("#th").onclick = () => { const d = document.documentElement, dark = (d.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark"; d.dataset.theme = dark ? "light" : "dark"; try { localStorage.setItem("ji-asg-theme", d.dataset.theme); } catch (e) {} };
 
 /* hero glow follows pointer, cards tilt */
 const hero = $(".hero");
