@@ -265,6 +265,97 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
 .rv{opacity:0;transform:translateY(60px) scale(.97);transition:opacity 1s cubic-bezier(.16,1,.3,1) var(--d,0s),transform 1.1s cubic-bezier(.16,1,.3,1) var(--d,0s)}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.tl>div,.quote small{opacity:1!important;transform:none!important}.tl::before{transform:none}.rv,.row{opacity:1;transform:none}.quote .w{opacity:1;filter:none;transform:none}.sigdemo path{stroke-dashoffset:0}}
+/* ===== wow layer ===== */
+@property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
+#glow{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,color-mix(in srgb,var(--g2) 18%,transparent),transparent 62%);mix-blend-mode:screen;opacity:0;transition:opacity .6s}
+#glow.on{opacity:1}
+:root[data-theme="light"] #glow{display:none}
+.slide>.fit{z-index:2}
+#rail{position:fixed;right:max(30px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);z-index:43;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+#rail button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;height:10px}
+#rail i{display:block;width:6px;height:6px;border-radius:99px;background:color-mix(in srgb,var(--ink) 28%,transparent);transition:width .45s cubic-bezier(.16,1,.3,1),background .3s}
+#rail .big i{width:10px;height:3px}
+#rail button.on i{width:24px;height:4px;background:linear-gradient(90deg,var(--g1),var(--g3))}
+#rail em{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--mute);opacity:0;transform:translateX(6px);transition:opacity .3s,transform .3s;white-space:nowrap}
+#rail button:hover em{opacity:1;transform:none}
+#rail button:focus-visible{outline:2px solid var(--link);outline-offset:3px;border-radius:4px}
+@media (max-width:1100px){#rail{display:none}}
+#dn{position:relative}
+#dn .pr{position:absolute;inset:-5px;width:58px;height:58px;transform:rotate(-90deg);pointer-events:none;overflow:visible}
+#dn .pr circle{fill:none;stroke:url(#prg);stroke-width:2.5;stroke-linecap:round;stroke-dasharray:163.4;stroke-dashoffset:var(--po,163.4);transition:stroke-dashoffset .4s}
+@media (max-width:759px){#dn .pr{display:none}}
+.strips{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:5vh 0;pointer-events:none;-webkit-mask:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent);mask:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent);opacity:.2}
+.strips div{display:flex;gap:14px;width:max-content;animation:drift 80s linear infinite}
+.strips div:nth-child(2){animation-direction:reverse;animation-duration:95s}
+.strips img{height:16vh;width:auto;border-radius:10px;filter:saturate(.75)}
+@keyframes drift{to{transform:translateX(-50%)}}
+.hero>.fit{z-index:3}
+.ring2{position:relative;width:150px;height:150px;margin:0 auto 22px;display:grid;place-items:center}
+.ring2::before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from var(--ang),var(--g1),var(--g2),var(--g3),transparent 72%,var(--g1));animation:spin 4s linear infinite;-webkit-mask:radial-gradient(circle,transparent 69px,#000 70px);mask:radial-gradient(circle,transparent 69px,#000 70px)}
+.ring2 .me{margin:0;border:0;width:128px;height:128px}
+@keyframes spin{to{--ang:360deg}}
+.cue{margin:32px auto 0;display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.cue kbd{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;border:1px solid var(--line);font:inherit;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(5px)}}
+.toc a{position:relative;overflow:hidden}
+.toc a::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,color-mix(in srgb,var(--g1) 22%,transparent) 50%,transparent 70%);transform:translateX(-120%);transition:transform .9s cubic-bezier(.16,1,.3,1)}
+.toc a:hover::after{transform:translateX(120%)}
+.chap .bg{animation:kb 26s ease-in-out infinite alternate}
+@keyframes kb{from{transform:scale(1.06) translate(0,0)}to{transform:scale(1.18) translate(-2%,-1.5%)}}
+.chap::after{content:"";position:absolute;inset:-50%;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1s steps(4) infinite}
+@keyframes grain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-2%)}}
+.chap .vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 50%,transparent 45%,rgba(0,0,0,.55))}
+.chap .num{position:relative;display:inline-block}
+.chap .num .sh{position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.75) 50%,transparent 60%) no-repeat;background-size:250% 100%;background-position:150% 0;-webkit-background-clip:text;background-clip:text;color:transparent}
+.chap.live .num .sh{animation:sheen 1.6s cubic-bezier(.16,1,.3,1) .5s both}
+@keyframes sheen{to{background-position:-60% 0}}
+.chap h2 .wd{display:inline-block;white-space:nowrap}
+.chap h2 .lt{display:inline-block;opacity:0;transform:translateY(.6em) rotate(6deg);filter:blur(6px);transition:opacity .6s ease,transform .8s cubic-bezier(.16,1,.3,1),filter .7s ease}
+.chap.live h2 .lt{opacity:1;transform:none;filter:blur(0)}
+.cprog{display:flex;gap:8px;justify-content:center;margin:30px auto 0}
+.cprog i{width:46px;height:4px;border-radius:9px;background:rgba(255,255,255,.16);position:relative;overflow:hidden}
+.cprog i.on::after{content:"";position:absolute;inset:0;background:var(--c);transform:scaleX(0);transform-origin:left;transition:transform .9s cubic-bezier(.16,1,.3,1) var(--dd,0s)}
+.chap.live .cprog i.on::after{transform:none}
+.glowb{position:relative;isolation:isolate}
+.glowb::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--ang),transparent 0 55%,var(--g1),var(--g2),var(--g3),transparent 95%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:spin 5s linear infinite;pointer-events:none}
+.tl .ip.glowb::after{background:conic-gradient(from var(--ang),transparent 0 55%,#ffb357,#ff7a1a,transparent 95%)}
+.card{transition:transform .6s cubic-bezier(.16,1,.3,1),border-color .4s,box-shadow .5s}
+.card:hover{border-color:color-mix(in srgb,var(--g1) 40%,transparent);box-shadow:0 30px 60px -30px color-mix(in srgb,var(--g3) 45%,transparent)}
+.card .ic{transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.card:hover .ic{transform:rotate(-8deg) scale(1.1)}
+.stat::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);transform:translateX(-130%)}
+.slide.live .stat::after{animation:shine 1.4s cubic-bezier(.16,1,.3,1) .3s both}
+.slide.live .stat:nth-child(2)::after{animation-delay:.45s}.slide.live .stat:nth-child(3)::after{animation-delay:.6s}.slide.live .stat:nth-child(4)::after{animation-delay:.75s}
+@keyframes shine{to{transform:translateX(130%)}}
+.mos button.rv{opacity:1;transform:none}
+.mos button{clip-path:inset(100% 0 0 0 round 18px);transition:clip-path 1.1s cubic-bezier(.77,0,.18,1) var(--d,0s)}
+.mos button img{transform:scale(1.25);transition:transform 1.6s cubic-bezier(.16,1,.3,1) var(--d,0s),opacity .4s}
+.slide.live .mos button{clip-path:inset(0 0 0 0 round 18px)}
+.slide.live .mos button img{transform:scale(1)}
+.slide.live .mos button:hover img{transform:scale(1.07);transition-delay:0s}
+.wideshot img{transition:transform 9s ease-out}
+.slide.live .wideshot img{transform:scale(1.08)}
+.wideshot b,.wideshot span{display:block;opacity:0;transform:translateY(20px);transition:opacity .9s ease .5s,transform 1s cubic-bezier(.16,1,.3,1) .5s}
+.wideshot span{transition-delay:.8s}
+.slide.live .wideshot b,.slide.live .wideshot span{opacity:1;transform:none}
+.about .ph{position:relative}
+.about .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.22) 50%,transparent 60%);transform:translateX(-120%)}
+.slide.live .about .ph::after{animation:shine 1.8s cubic-bezier(.16,1,.3,1) .5s both}
+.quote::before{content:"";position:absolute;left:50%;top:50%;width:1000px;height:1000px;margin:-500px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--g2) 24%,transparent),color-mix(in srgb,var(--g3) 10%,transparent) 45%,transparent 68%);transform:scale(.4);opacity:0;transition:transform 3s cubic-bezier(.16,1,.3,1),opacity 2s}
+.quote.in::before{transform:scale(1);opacity:1}
+.igfb{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.igfb a{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;display:block}
+.igfb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.16,1,.3,1)}
+.igfb a:hover img{transform:scale(1.08)}
+.ighandle{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:10px 18px;border-radius:99px;font-weight:600;color:#fff;background:linear-gradient(90deg,#f58529,#dd2a7b,#8134af,#515bd4)}
+.ighandle svg{width:18px;height:18px}
+@media (max-width:760px){.igfb{grid-template-columns:repeat(3,1fr)}}
+.deck{position:relative;height:clamp(150px,24vh,230px);margin:0 auto 34px;width:min(620px,100%)}
+.deck img{position:absolute;left:50%;top:50%;width:clamp(120px,14vw,180px);aspect-ratio:4/5;object-fit:cover;border-radius:12px;border:5px solid #f4f6fb;box-shadow:0 24px 50px -18px rgba(0,0,0,.7);transform:translate(-50%,-50%) scale(.85);opacity:0;transition:transform 1.1s cubic-bezier(.16,1,.3,1) var(--dl),opacity .6s ease var(--dl)}
+.slide.live .deck img{opacity:1;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) rotate(var(--r))}
+.slide.live .deck img:hover{z-index:5;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y) - 16px)) rotate(0deg) scale(1.06);transition-delay:0s}
+@media (max-width:640px){.deck img{width:96px}.deck img:nth-child(1){--x:-130px!important}.deck img:nth-child(2){--x:-66px!important}.deck img:nth-child(4){--x:66px!important}.deck img:nth-child(5){--x:130px!important}}
+@media (prefers-reduced-motion:reduce){.chap h2 .lt,.wideshot b,.wideshot span{opacity:1!important;transform:none!important;filter:none!important}.mos button{clip-path:none!important}.mos button img{transform:none!important}.strips{display:none}#glow{display:none}.deck img{opacity:1!important}}
 </style>
 </head>
 <body>
@@ -276,11 +367,13 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
   <div class="ch" id="ch"><a href="#individual"><b>01</b><span>Individual</span></a><a href="#applicant"><b>02</b><span>Job applicant</span></a><a href="#learner"><b>03</b><span>Digital learner</span></a><a href="#citizen"><b>04</b><span>Digital citizen</span></a><a href="#wrap"><b>05</b><span>Looking back</span></a></div>
   <span class="r"><button id="snd" aria-label="Sound" aria-pressed="true" title="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="wv" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/><path class="x" d="m23 9-6 6M17 9l6 6"/></svg></button><button id="th" aria-label="Toggle theme">◐</button></span></nav>
 
-<div id="arw"><button id="up" aria-label="Previous section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button><span id="cnt">1 / 1</span><button id="dn" aria-label="Next section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
+<div id="glow" aria-hidden="true"></div>
+<div id="rail" role="navigation" aria-label="Sections"></div>
+<div id="arw"><button id="up" aria-label="Previous section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button><span id="cnt">1 / 1</span><button id="dn" aria-label="Next section"><svg class="pr" viewBox="0 0 56 56" aria-hidden="true"><defs><linearGradient id="prg"><stop offset="0" stop-color="#5ee7ff"/><stop offset="1" stop-color="#9b6bff"/></linearGradient></defs><circle cx="28" cy="28" r="26"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
 
 <!-- INTRO -->
-<header class="hero slide" id="top"><div class="fit">
-  <img class="me rv" src="self.jpg" alt="Jordan with his camera at the rink">
+<header class="hero slide" id="top"><div class="strips" aria-hidden="true"><div id="st1"></div><div id="st2"></div></div><div class="fit">
+  <div class="ring2 rv"><img class="me" src="self.jpg" alt="Jordan with his camera at the rink"></div>
   <p class="eyebrow rv" style="--d:.05s">STDV 1115 · Niagara College · Digital Portfolio</p>
   <h1 class="rv typed" style="--d:.1s" aria-label="Jordan Ioannoni." title="Click to type it again"><span id="tw" aria-hidden="true"><span>Jordan </span><span class="grad">Ioannoni.</span></span><span class="caret" aria-hidden="true"></span></h1>
   <p class="lead rv" style="--d:.2s">Operations. Systems. Photography. A Niagara College business student who plans routes, tracks assets in Excel, knows the mechanics of the vehicles that move them, and has shot tournament sports since 2017.</p>
@@ -290,10 +383,11 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
     <a href="#learner"><b>03</b><span>You the digital learner</span></a>
     <a href="#citizen"><b>04</b><span>You the digital citizen</span></a>
   </div>
+  <p class="cue rv" style="--d:.45s"><kbd>↓</kbd>Press the down arrow to begin</p>
 </div></header>
 
 <!-- 01 INDIVIDUAL -->
-<section class="chap slide c1" id="individual"><div class="bg" style="background-image:url(jord.jpg)"></div><div class="fit">
+<section class="chap slide c1" id="individual"><div class="bg" style="background-image:url(jord.jpg)"></div><div class="vig"></div><div class="fit">
   <div class="num rv">01</div>
   <p class="of rv" style="--d:.1s">Chapter one of four</p>
   <h2 class="rv" style="--d:.15s">You the individual.</h2>
@@ -332,11 +426,12 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
   <p class="eyebrow rv">Instagram</p>
   <h2 class="rv" style="--d:.1s">Fresh from the feed.</h2>
   <p class="intro rv" style="--d:.2s">My latest posts, straight from @jordanioannoni.</p>
-  <div class="igf rv" style="--d:.25s"><behold-widget feed-id="fHpkd8OHLvEk8Dwz2S52"></behold-widget></div>
+  <div class="igf rv" style="--d:.25s" id="igf"><behold-widget feed-id="fHpkd8OHLvEk8Dwz2S52"></behold-widget></div>
+  <a class="ighandle rv" style="--d:.3s" href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@jordanioannoni</a>
 </div></div></section>
 
 <!-- 02 JOB APPLICANT -->
-<section class="chap slide c2" id="applicant"><div class="bg" style="background-image:url(rk2.jpg)"></div><div class="fit">
+<section class="chap slide c2" id="applicant"><div class="bg" style="background-image:url(rk2.jpg)"></div><div class="vig"></div><div class="fit">
   <div class="num rv">02</div>
   <p class="of rv" style="--d:.1s">Chapter two of four</p>
   <h2 class="rv" style="--d:.15s">You the job applicant.</h2>
@@ -351,7 +446,7 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
   <p class="intro rv" style="--d:.2s">Tournament weekends, delivery routes and rush hour counters.</p>
   <span class="avail rv" style="--d:.25s">Open to summer logistics and dispatch roles</span>
   <div class="grid">
-    <div class="card xp now rv"><p class="when">Dec 2017 to Present</p><h3>Sports Photographer and Onsite Operations Assistant</h3><p class="org">DS Photography (Digital Sports Photography) · St. Catharines</p><ul><li>Move and set up the mobile photo and print station across regional arenas on tight tournament weekend schedules.</li><li>Ingest, sort and index high volumes of photos on site so they reach the public catalogue while the event is still running.</li><li>Run point of sale and print production directly with parents and venue management.</li></ul></div>
+    <div class="card xp now glowb rv"><p class="when">Dec 2017 to Present</p><h3>Sports Photographer and Onsite Operations Assistant</h3><p class="org">DS Photography (Digital Sports Photography) · St. Catharines</p><ul><li>Move and set up the mobile photo and print station across regional arenas on tight tournament weekend schedules.</li><li>Ingest, sort and index high volumes of photos on site so they reach the public catalogue while the event is still running.</li><li>Run point of sale and print production directly with parents and venue management.</li></ul></div>
     <div class="card xp rv" style="--d:.1s"><p class="when">2021 to 2026</p><h3>Independent Delivery Driver and Shopper</h3><p class="org">Instacart · Niagara Region</p><ul><li>Planned residential routes with multiple stops to land inside customer delivery windows.</li><li>Picked orders accurately at volume and handled substitutions with customers in real time.</li></ul></div>
     <div class="card xp rv" style="--d:.2s"><p class="when">2017 to 2020</p><h3>Frontline Crew Member</h3><p class="org">Tim Hortons · Niagara Falls</p><ul><li>Kept orders moving through peak periods without queue bottlenecks.</li><li>Checked incoming supply deliveries, ran POS, balanced cash floats and verified drawers.</li></ul></div>
   </div>
@@ -388,7 +483,7 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
     <div class="legend rv" style="--d:.3s"><span><i></i>4 complete</span><span><i class="o"></i>1 in progress</span></div>
   </div>
   <div class="tl" id="tl">
-    <div class="ip"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><small>In progress · Expected April 2028</small><h3>Business General</h3><p>Supply chain fundamentals, operational data analysis, managerial accounting and strategic planning</p></div>
+    <div class="ip glowb"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><small>In progress · Expected April 2028</small><h3>Business General</h3><p>Supply chain fundamentals, operational data analysis, managerial accounting and strategic planning</p></div>
     <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg></span><small>Completed January 2026</small><h3>Business Administration</h3><p>Organizational administration, project scheduling, business communications and advanced spreadsheets</p></div>
     <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span><small>Completed January 2025</small><h3>Motive Power Techniques</h3><p>720 hours of brakes, hydraulics, engines, gear trains, steering geometry and electrical diagnostics</p></div>
     <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span><small>Completed January 2021</small><h3>Business Sales and Marketing</h3><p>Buyer relationships, marketing strategy, brand positioning and B2B negotiation</p></div>
@@ -398,7 +493,7 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
 </div></div></section>
 
 <!-- 03 DIGITAL LEARNER -->
-<section class="chap slide c3" id="learner"><div class="bg" style="background-image:url(trk.jpg)"></div><div class="fit">
+<section class="chap slide c3" id="learner"><div class="bg" style="background-image:url(trk.jpg)"></div><div class="vig"></div><div class="fit">
   <div class="num rv">03</div>
   <p class="of rv" style="--d:.1s">Chapter three of four</p>
   <h2 class="rv" style="--d:.15s">You the digital learner.</h2>
@@ -467,7 +562,7 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
 </div></div></section>
 
 <!-- 04 DIGITAL CITIZEN -->
-<section class="chap slide c4" id="citizen"><div class="bg" style="background-image:url(talk.jpg)"></div><div class="fit">
+<section class="chap slide c4" id="citizen"><div class="bg" style="background-image:url(talk.jpg)"></div><div class="vig"></div><div class="fit">
   <div class="num rv">04</div>
   <p class="of rv" style="--d:.1s">Chapter four of four</p>
   <h2 class="rv" style="--d:.15s">You the digital citizen.</h2>
@@ -516,7 +611,7 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
 </div></div></section>
 
 <!-- 05 LOOKING BACK -->
-<section class="chap slide c5" id="wrap"><div class="bg" style="background-image:url(lake.jpg)"></div><div class="fit">
+<section class="chap slide c5" id="wrap"><div class="bg" style="background-image:url(lake.jpg)"></div><div class="vig"></div><div class="fit">
   <div class="num rv">05</div>
   <p class="of rv" style="--d:.1s">Wrapping up</p>
   <h2 class="rv" style="--d:.15s">Looking back on the term.</h2>
@@ -544,6 +639,7 @@ footer kbd{font:inherit;border:1px solid var(--line);border-radius:5px;padding:0
 </div></div></section>
 
 <section class="end slide"><div class="fit">
+  <div class="deck" aria-hidden="true"><img src="gt3.jpg" alt="" style="--x:-210px;--y:14px;--r:-14deg;--dl:.05s"><img src="cr.jpg" alt="" style="--x:-105px;--y:-6px;--r:-7deg;--dl:.15s"><img src="au5.jpg" alt="" style="--x:0px;--y:-14px;--r:0deg;--dl:.25s"><img src="bench.jpg" alt="" style="--x:105px;--y:-6px;--r:7deg;--dl:.35s"><img src="lake.jpg" alt="" style="--x:210px;--y:14px;--r:14deg;--dl:.45s"></div>
   <p class="eyebrow rv">Thanks for watching</p>
   <h2 class="rv" style="--d:.1s">Let’s <span class="grad">work together.</span></h2>
   <p class="site rv" style="--d:.2s">jordanioannoni.com</p>
@@ -566,6 +662,13 @@ $("#mos").innerHTML = P.map(([k, t, s, c], i) => `<button class="rv ${c}" style=
 /* reveal on scroll */
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .2 });
 $$(".rv,.chap,.tbl").forEach(e => io.observe(e));
+/* each slide replays its entrance whenever it comes back on screen, so every take looks the same */
+const lio = new IntersectionObserver(es => es.forEach(e => {
+  const sl = e.target;
+  if (e.intersectionRatio >= .5) { sl.classList.add("live"); sl.querySelectorAll(".rv,.tbl").forEach(x => x.classList.add("in")); sl.querySelectorAll("[data-n]").forEach(n => count(n)); }
+  else if (!e.isIntersecting) { sl.classList.remove("live"); if (!still) sl.querySelectorAll(".rv,.tbl").forEach(x => x.classList.remove("in")); }
+}), { threshold: [0, .5] });
+setTimeout(() => document.querySelectorAll(".slide").forEach(sl => lio.observe(sl)), 0);
 
 /* statement slides: words drift in one after another, gradient words included */
 $$(".quote p").forEach(p => {
@@ -711,6 +814,47 @@ io2.observe(code); $$("[data-n]").forEach(el => io2.observe(el));
 
 /* Instagram feed */
 (d => { const s = d.createElement("script"); s.type = "module"; s.src = "https://w.behold.so/widget.js"; setTimeout(() => d.head.append(s), 0); })(document);
+
+/* ===== wow layer ===== */
+/* hero film strips from real photos */
+(() => {
+  const a = ["gt3","b1","au5","pag","cr","bench","lax","p935"], b = ["husk","rk1","st2","talk","fal","sls","au3","mud"];
+  const fill = (el, l) => { const h = l.map(k => `<img src="${k}.jpg" alt="">`).join(""); el.innerHTML = h + h; };
+  fill($("#st1"), a); fill($("#st2"), b);
+})();
+/* chapter titles: letters rise one by one; progress bars under the question */
+$$(".chap").forEach(ch => {
+  const h = ch.querySelector("h2"); let i = 0;
+  h.setAttribute("aria-label", h.textContent);
+  h.innerHTML = h.textContent.split(" ").map(w => `<span class="wd" aria-hidden="true">${[...w].map(c => `<span class="lt" style="transition-delay:${(.25 + (i++) * .035).toFixed(3)}s">${c}</span>`).join("")}</span>`).join(" ");
+  const n = ch.querySelector(".num"); n.insertAdjacentHTML("beforeend", `<span class="sh" aria-hidden="true">${n.textContent}</span>`);
+  const k = +(ch.className.match(/\bc(\d)\b/) || [0, 0])[1], pr = document.createElement("div"); pr.className = "cprog"; pr.setAttribute("aria-hidden", "true");
+  pr.innerHTML = [1, 2, 3, 4].map(j => `<i class="${j <= k ? "on" : ""}" style="--dd:${(.6 + j * .12).toFixed(2)}s"></i>`).join("");
+  ch.querySelector(".fit").append(pr);
+});
+fit();
+/* side rail: one mark per slide, chapter marks are labelled */
+(() => {
+  const rail = $("#rail"), names = { individual: "01 Individual", applicant: "02 Job applicant", learner: "03 Digital learner", citizen: "04 Digital citizen", wrap: "05 Looking back", top: "Intro" };
+  slides.forEach((sl, i) => { const b = document.createElement("button"), big = sl.id in names; b.className = big ? "big" : ""; b.setAttribute("aria-label", big ? names[sl.id] : "Section " + (i + 1)); b.innerHTML = (big ? `<em>${names[sl.id]}</em>` : "") + "<i></i>"; b.onclick = () => { scrollTo({ top: i ? sl.offsetTop - 52 : 0, behavior: still ? "auto" : "smooth" }); S() && S().tick(); }; rail.append(b); });
+  const marks = [...rail.children], ring = $("#dn .pr circle");
+  const upd = () => { const c = curIdx(); marks.forEach((m, i) => m.classList.toggle("on", i === c)); ring.style.setProperty("--po", (163.4 * (1 - clamp(scrollY / (document.documentElement.scrollHeight - innerHeight)))).toFixed(1)); };
+  addEventListener("scroll", () => requestAnimationFrame(upd), { passive: true }); upd();
+})();
+/* soft glow that follows the cursor */
+(() => {
+  if (still || !matchMedia("(hover:hover)").matches) return;
+  const g = $("#glow"); let x = innerWidth / 2, y = innerHeight / 2, tx = x, ty = y, run = false;
+  const loop = () => { x += (tx - x) * .12; y += (ty - y) * .12; g.style.transform = `translate(${x}px,${y}px)`; if (Math.abs(tx - x) + Math.abs(ty - y) > .5) requestAnimationFrame(loop); else run = false; };
+  addEventListener("pointermove", e => { tx = e.clientX; ty = e.clientY; g.classList.add("on"); if (!run) { run = true; requestAnimationFrame(loop); } }, { passive: true });
+  document.addEventListener("pointerleave", () => g.classList.remove("on"));
+})();
+/* Instagram: if the live feed cannot load, show recent shots that link to the profile */
+setTimeout(() => {
+  const w = $("#igf behold-widget"); if (w && w.offsetHeight > 60) return;
+  $("#igf").innerHTML = '<div class="igfb">' + ["gt3","cr","au5","bench","pag","lake"].map(k => `<a href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener" aria-label="Open @jordanioannoni on Instagram"><img src="${k}.jpg" alt=""></a>`).join("") + "</div>";
+  fit();
+}, 4500);
 </script>
 </body>
 </html>
