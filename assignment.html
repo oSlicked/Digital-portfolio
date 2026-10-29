@@ -586,6 +586,55 @@ html.rec #arw,html.rec #rail,html.rec #glow{display:none!important}
 html.rec,html.rec *{cursor:none!important}
 #toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);z-index:70;padding:10px 18px;border-radius:99px;background:rgba(8,12,24,.86);color:#fff;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .4s,transform .5s cubic-bezier(.16,1,.3,1)}
 #toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ===== phones and tablets ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+*{-webkit-tap-highlight-color:transparent}
+.chap .bg{background-image:var(--bgf)}
+.ct{display:none}
+@media (hover:none){.ck{display:none}.ct{display:inline}}
+@supports (height:100svh){.slide{min-height:calc(100svh - 52px)}html.fitmode .slide{height:calc(100svh - 52px)}}
+nav{padding-left:max(16px,calc(50% - 520px),env(safe-area-inset-left,0px));padding-right:max(16px,calc(50% - 520px),env(safe-area-inset-right,0px))}
+.wrap{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.hero,.chap,.quote,.end{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+#arw{right:calc(22px + env(safe-area-inset-right,0px));bottom:calc(22px + env(safe-area-inset-bottom,0px))}
+#toast{bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+#lb{padding-top:calc(56px + env(safe-area-inset-top,0px));padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+#lb .x{top:calc(16px + env(safe-area-inset-top,0px))}
+@media (hover:none),(max-width:900px){:root[data-theme="light"] body,:root[data-theme="dark"] body{background-attachment:scroll}}
+@media (hover:none){.card:hover,.vcard:hover,.toc a:hover,.deck img:hover,.collage img:hover{transform:none!important}.slide.live .deck img:hover{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) rotate(var(--r))!important}.slide.live .collage img:nth-child(1):hover{transform:rotate(-8deg)!important}.slide.live .collage img:nth-child(2):hover{transform:rotate(6deg)!important}.slide.live .collage img:nth-child(3):hover{transform:rotate(-2deg)!important}}
+@media (max-width:759px){
+  .chap .bg{background-image:var(--bgm)}
+  #arw{display:none}
+  .slide{padding-top:56px;padding-bottom:56px}
+  .hero h1{font-size:clamp(34px,10.4vw,56px)}
+  .chap h2{font-size:clamp(32px,9.6vw,48px)}
+  .chap .num{font-size:clamp(84px,30vw,140px)}
+  h2{font-size:clamp(30px,8.4vw,40px)}
+  .sp{font-size:17px}.pull{font-size:19px;padding:18px 18px 18px 52px}.pull::before{font-size:56px;left:14px}
+  .vsq{font-size:21px}
+  .strips img{height:11vh}
+  .ring2{width:124px;height:124px}.ring2::before{-webkit-mask:radial-gradient(circle,transparent 56px,#000 57px);mask:radial-gradient(circle,transparent 56px,#000 57px)}.ring2 .me{width:104px;height:104px}
+  .toc{gap:8px}.toc a{padding:14px}
+  .stats{gap:10px}.stat{padding:18px;border-radius:22px}
+  .mos{gap:8px}
+  .collage{height:min(420px,95vw)}
+  .deck{margin-bottom:26px}
+  .q{font-size:15px;padding:10px 16px}
+  .tl{padding-left:52px}.tl .ic{left:-52px;width:38px;height:38px;margin-top:-19px}.tl::before{left:18px}
+  .craap{gap:4px}.craap span{font-size:9.5px}.craap b{font-size:18px}
+  .keys kbd{font-size:13px;padding:8px 11px}
+  .flow span{font-size:13px;padding:7px 12px}
+  #lb .p,#lb .n{bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+}
+@media (max-height:500px) and (orientation:landscape){
+  .slide{min-height:auto;padding-top:40px;padding-bottom:40px}
+  .chap.slide,.hero.slide,.quote.slide,.end.slide{min-height:calc(100svh - 52px)}
+  .strips{display:none}
+  .sfig,.sfig.tall{aspect-ratio:16/10}
+  .collage{height:300px}
+  #arw{display:none}
+}
 </style>
 </head>
 <body>
@@ -604,7 +653,7 @@ html.rec,html.rec *{cursor:none!important}
 
 <!-- INTRO -->
 <header class="hero slide" id="top"><div class="strips" aria-hidden="true"><div id="st1"></div><div id="st2"></div></div><div class="fit">
-  <div class="ring2 rv"><img class="me" src="self.jpg" alt="Jordan with his camera at the rink"></div>
+  <div class="ring2 rv"><img class="me" src="t/self.jpg" alt="Jordan with his camera at the rink"></div>
   <p class="eyebrow rv" style="--d:.05s">STDV 1115 · Niagara College · Digital Portfolio</p>
   <h1 class="rv typed" style="--d:.1s" aria-label="Jordan Ioannoni." title="Click to type it again"><span id="tw" aria-hidden="true"><span>Jordan </span><span class="grad">Ioannoni.</span></span><span class="caret" aria-hidden="true"></span></h1>
   <p class="lead rv" style="--d:.2s">Operations. Systems. Photography. A Niagara College business student who plans routes, tracks assets in Excel, knows the mechanics of the vehicles that move them, and has shot tournament sports since 2017.</p>
@@ -614,11 +663,11 @@ html.rec,html.rec *{cursor:none!important}
     <a href="#learner"><b>03</b><span>You the digital learner</span></a>
     <a href="#citizen"><b>04</b><span>You the digital citizen</span></a>
   </div>
-  <p class="cue rv" style="--d:.45s"><kbd>↓</kbd>Press the down arrow to begin</p>
+  <p class="cue rv" style="--d:.45s"><kbd>↓</kbd><span class="ck">Press the down arrow to begin</span><span class="ct">Scroll down to begin</span></p>
 </div></header>
 
 <!-- 01 INDIVIDUAL -->
-<section class="chap slide c1" id="individual"><div class="bg" style="background-image:url(jord.jpg)"></div><div class="vig"></div><div class="fit">
+<section class="chap slide c1" id="individual"><div class="bg" style="--bgf:url(jord.jpg);--bgm:url(t/jord.jpg)"></div><div class="vig"></div><div class="fit">
   <div class="num rv">01</div>
   <p class="of rv" style="--d:.1s">Chapter one of four</p>
   <h2 class="rv" style="--d:.15s">You the individual.</h2>
@@ -627,11 +676,11 @@ html.rec,html.rec *{cursor:none!important}
 
 <section class="slide blk"><div class="fit"><div class="wrap">
   <div class="about">
-    <div class="ph rv"><img id="pximg" src="jord.jpg" alt="Jordan shooting trackside with a telephoto lens"></div>
+    <div class="ph rv"><img id="pximg" src="t/jord.jpg" srcset="t/jord.jpg 720w, jord.jpg 1600w" sizes="(max-width:820px) 100vw, 480px" loading="lazy" decoding="async" alt="Jordan shooting trackside with a telephoto lens"></div>
     <div class="rv" style="--d:.15s"><p class="eyebrow">The person behind it</p><h2>Equal parts shutter and spreadsheet.</h2>
       <p class="b">I split my time between hockey rinks, race tracks, delivery routes and Excel sheets. Every one of them runs on the same thing: getting the right thing to the right place on time. I like work where the details decide the result.</p>
       <p class="b" style="font-size:17px">Off the clock I stay sharp semi analog: handwritten notes in an A5 notebook with a rOtring 600, and shooting on film.</p>
-      <div class="sm"><img src="self.jpg" alt=""><span>Between periods with the 1DX.<br>St. Catharines, ON</span></div>
+      <div class="sm"><img src="t/self.jpg" alt="" loading="lazy" decoding="async"><span>Between periods with the 1DX.<br>St. Catharines, ON</span></div>
     </div>
   </div>
   <div class="stats rv">
@@ -650,7 +699,7 @@ html.rec,html.rec *{cursor:none!important}
 </div></div></section>
 
 <section class="slide blk alt"><div class="fit"><div class="wrap">
-  <button class="wideshot rv" data-lb="lake.jpg" data-cap="Lake Louise · Panorama"><img src="lake.jpg" alt="Lake Louise under broken cloud" loading="lazy"><div><b>Always chasing good light.</b><span>My proudest shot, Lake Louise, was taken on an iPhone.</span></div></button>
+  <button class="wideshot rv" data-lb="lake.jpg" data-cap="Lake Louise · Panorama"><img src="t/lake.jpg" srcset="t/lake.jpg 720w, lake.jpg 1600w" sizes="(max-width:1080px) 100vw, 1040px" alt="Lake Louise under broken cloud" loading="lazy" decoding="async"><div><b>Always chasing good light.</b><span>My proudest shot, Lake Louise, was taken on an iPhone.</span></div></button>
 </div></div></section>
 
 <section class="slide blk"><div class="fit"><div class="wrap">
@@ -662,7 +711,7 @@ html.rec,html.rec *{cursor:none!important}
 </div></div></section>
 
 <!-- 02 JOB APPLICANT -->
-<section class="chap slide c2" id="applicant"><div class="bg" style="background-image:url(rk2.jpg)"></div><div class="vig"></div><div class="fit">
+<section class="chap slide c2" id="applicant"><div class="bg" style="--bgf:url(rk2.jpg);--bgm:url(t/rk2.jpg)"></div><div class="vig"></div><div class="fit">
   <div class="num rv">02</div>
   <p class="of rv" style="--d:.1s">Chapter two of four</p>
   <h2 class="rv" style="--d:.15s">You the job applicant.</h2>
@@ -690,7 +739,7 @@ html.rec,html.rec *{cursor:none!important}
   <div class="svc3">
     <div class="vcard rv"><div class="art route" aria-hidden="true"><svg viewBox="0 0 320 150"><path id="rp" class="rpath" d="M24 120 C70 120 70 40 120 40 S170 110 210 96 S260 30 296 34"/><circle class="stop" cx="24" cy="120" r="6"/><circle class="stop" cx="120" cy="40" r="6"/><circle class="stop" cx="210" cy="96" r="6"/><circle class="stop end" cx="296" cy="34" r="7"/><circle class="truck" r="8"><animateMotion dur="5s" repeatCount="indefinite" rotate="auto"><mpath href="#rp"/></animateMotion></circle></svg><span class="win">Delivery window 2:00 to 4:00</span></div>
       <div class="vb"><h3>Logistics and dispatch</h3><ul><li>Route planning with multiple stops around delivery windows</li><li>Asset and inventory tracking in Excel</li><li>Fleet mechanical knowledge: brakes, hydraulics, diagnostics</li><li>Clear updates for drivers, vendors and customers</li></ul></div></div>
-    <div class="vcard rv" style="--d:.1s"><div class="art vf2" aria-hidden="true"><img src="gt3.jpg" alt=""><i></i><i></i><i></i><i></i><b class="af"></b><span class="hud">1/2000 · f/2.8 · ISO 400</span></div>
+    <div class="vcard rv" style="--d:.1s"><div class="art vf2" aria-hidden="true"><img src="t/gt3.jpg" srcset="t/gt3.jpg 720w, gt3.jpg 1600w" sizes="(max-width:900px) 100vw, 340px" alt="" loading="lazy" decoding="async"><i></i><i></i><i></i><i></i><b class="af"></b><span class="hud">1/2000 · f/2.8 · ISO 400</span></div>
       <div class="vb"><h3>Ioannoni Visuals</h3><ul><li>Team, tournament and arena coverage</li><li>Motorsport and automotive</li><li>Studio portraits</li><li>RAW grading and delivery in Lightroom</li></ul></div></div>
     <div class="vcard rv" style="--d:.2s"><div class="art sheet" aria-hidden="true"><div class="sh"><span>A</span><span>B</span><span>C</span><span>D</span></div><div class="sg2"></div><div class="fx"><b>fx</b>=SUM(D2:D6)</div></div>
       <div class="vb"><h3>Systems and automation</h3><ul><li>Excel sheets that track and update themselves</li><li>Custom scripts that sort and migrate files</li><li>Workflow design that saves real time</li></ul></div></div>
@@ -699,7 +748,7 @@ html.rec,html.rec *{cursor:none!important}
 
 <section class="slide blk"><div class="fit"><div class="wrap">
   <div class="story">
-    <figure class="sfig tall rv"><img src="rk2.jpg" alt="Wide view of the arena from the glass"><figcaption><b>Arena POV</b>Wide, from the glass</figcaption><span class="live-chip"><i></i>Tournament weekend</span></figure>
+    <figure class="sfig tall rv"><img src="t/rk2.jpg" srcset="t/rk2.jpg 720w, rk2.jpg 1600w" sizes="(max-width:860px) 100vw, 400px" loading="lazy" decoding="async" alt="Wide view of the arena from the glass"><figcaption><b>Arena POV</b>Wide, from the glass</figcaption><span class="live-chip"><i></i>Tournament weekend</span></figure>
     <div class="sbody">
       <p class="eyebrow rv">Under pressure</p>
       <h2 class="rv" style="--d:.1s">Built on tournament weekends.</h2>
@@ -732,7 +781,7 @@ html.rec,html.rec *{cursor:none!important}
 </div></div></section>
 
 <!-- 03 DIGITAL LEARNER -->
-<section class="chap slide c3" id="learner"><div class="bg" style="background-image:url(trk.jpg)"></div><div class="vig"></div><div class="fit">
+<section class="chap slide c3" id="learner"><div class="bg" style="--bgf:url(trk.jpg);--bgm:url(t/trk.jpg)"></div><div class="vig"></div><div class="fit">
   <div class="num rv">03</div>
   <p class="of rv" style="--d:.1s">Chapter three of four</p>
   <h2 class="rv" style="--d:.15s">You the digital learner.</h2>
@@ -741,7 +790,7 @@ html.rec,html.rec *{cursor:none!important}
 
 <section class="slide blk"><div class="fit"><div class="wrap">
   <div class="story">
-    <figure class="sfig rv"><img src="rk1.jpg" alt="Jordan's camera set up rinkside at the boards"><figcaption><b>Rinkside POV</b>Setup at the boards</figcaption></figure>
+    <figure class="sfig rv"><img src="t/rk1.jpg" srcset="t/rk1.jpg 720w, rk1.jpg 1600w" sizes="(max-width:860px) 100vw, 400px" loading="lazy" decoding="async" alt="Jordan's camera set up rinkside at the boards"><figcaption><b>Rinkside POV</b>Setup at the boards</figcaption></figure>
     <div class="sbody">
       <p class="eyebrow rv">Reflection</p>
       <h2 class="rv" style="--d:.1s">Me as a digital learner.</h2>
@@ -773,7 +822,7 @@ html.rec,html.rec *{cursor:none!important}
   <div class="grid">
     <div class="card wide rv">
       <div><span class="tag t2">Proposal</span><h3>Digital Portfolio Proposal</h3><p>What the site would show, how I would build it and how I would work with AI to code it. Written October 24, 2026, the day this all started.</p></div>
-      <button class="zoom" data-lb="stdv1115-assets/concept-map.jpg" data-cap="Concept map: what the site shows, how I will build it, working with AI"><img src="stdv1115-assets/concept-map.jpg" alt="Concept map titled Digital Portfolio with three branches: what the site shows, how I will build it, and working with AI" loading="lazy"></button>
+      <button class="zoom" data-lb="stdv1115-assets/concept-map.jpg" data-cap="Concept map: what the site shows, how I will build it, working with AI"><img src="stdv1115-assets/concept-map.jpg" alt="Concept map titled Digital Portfolio with three branches: what the site shows, how I will build it, and working with AI" loading="lazy" decoding="async"></button>
     </div>
   </div>
 </div></div></section>
@@ -809,7 +858,7 @@ html.rec,html.rec *{cursor:none!important}
 </div></div></section>
 
 <!-- 04 DIGITAL CITIZEN -->
-<section class="chap slide c4" id="citizen"><div class="bg" style="background-image:url(talk.jpg)"></div><div class="vig"></div><div class="fit">
+<section class="chap slide c4" id="citizen"><div class="bg" style="--bgf:url(talk.jpg);--bgm:url(t/talk.jpg)"></div><div class="vig"></div><div class="fit">
   <div class="num rv">04</div>
   <p class="of rv" style="--d:.1s">Chapter four of four</p>
   <h2 class="rv" style="--d:.15s">You the digital citizen.</h2>
@@ -825,7 +874,7 @@ html.rec,html.rec *{cursor:none!important}
   <div class="grid two">
     <div class="card wide rv">
       <div><span class="tag t1">Digital privacy</span><h3>Protecting the Footprint</h3><p>How digital privacy shows up in my everyday life. I use Apple’s Hide My Email, and I caught a fake eTransfer phishing link while selling headphones on Kijiji. It also covers how companies like Amazon use our data to change what we pay. My mind map splits it into four parts: scammer manipulation, influencer impersonation, marketplace phishing and price experiments.</p></div>
-      <button class="zoom" data-lb="stdv1115-assets/privacy-mind-map.jpg" data-cap="Mind map: Value of Digital Privacy"><img src="stdv1115-assets/privacy-mind-map.jpg" alt="Mind map titled Value of Digital Privacy with four branches" loading="lazy"></button>
+      <button class="zoom" data-lb="stdv1115-assets/privacy-mind-map.jpg" data-cap="Mind map: Value of Digital Privacy"><img src="stdv1115-assets/privacy-mind-map.jpg" alt="Mind map titled Value of Digital Privacy with four branches" loading="lazy" decoding="async"></button>
     </div>
   </div>
 </div></div></section>
@@ -861,13 +910,13 @@ html.rec,html.rec *{cursor:none!important}
   <div class="grid two">
     <div class="card mock rv"><div class="chat" aria-hidden="true"><div class="bub in">How would I feel if I were the one getting this comment?</div><div class="bub me"><span class="dots"><i></i><i></i><i></i></span></div><div class="flow3"><span>Draft</span><span>Read it over</span><span>Send</span></div></div>
       <h3>Think before you send</h3><p>From Peachy Liv’s talk, I use one question before I reply online: how would I feel if I were the one getting this comment? On Reddit or Facebook Marketplace, I draft my reply, read it over once or twice, and only then send it.</p><p class="k">Framework</p><p>Empathy first, and personal accountability for the culture I help create online.</p></div>
-    <div class="card mock rv" style="--d:.1s"><div class="keys" aria-hidden="true"><img src="lake.jpg" alt=""><div><kbd>Ctrl</kbd><kbd>Alt</kbd><kbd class="wk">Disconnect</kbd></div></div>
+    <div class="card mock rv" style="--d:.1s"><div class="keys" aria-hidden="true"><img src="t/lake.jpg" srcset="t/lake.jpg 720w, lake.jpg 1600w" sizes="(max-width:860px) 100vw, 480px" alt="" loading="lazy" decoding="async"><div><kbd>Ctrl</kbd><kbd>Alt</kbd><kbd class="wk">Disconnect</kbd></div></div>
       <h3>Ctrl, Alt, Disconnect</h3><p>Notes on talks by Naomi Shimada and Peachy Liv about self worth, online toxicity and burnout. I wrote about going semi analog with an A5 notebook and a rOtring 600, and heading to the mountains with only a film camera.</p><p class="take">“The best way to find digital harmony is knowing exactly when to leave it behind.”</p></div>
   </div>
 </div></div></section>
 
 <!-- 05 LOOKING BACK -->
-<section class="chap slide c5" id="wrap"><div class="bg" style="background-image:url(lake.jpg)"></div><div class="vig"></div><div class="fit">
+<section class="chap slide c5" id="wrap"><div class="bg" style="--bgf:url(lake.jpg);--bgm:url(t/lake.jpg)"></div><div class="vig"></div><div class="fit">
   <div class="num rv">05</div>
   <p class="of rv" style="--d:.1s">Wrapping up</p>
   <h2 class="rv" style="--d:.15s">Looking back on the term.</h2>
@@ -885,7 +934,7 @@ html.rec,html.rec *{cursor:none!important}
         <p class="rv close" style="--d:.5s">You can’t force perfection.</p>
       </div>
     </div>
-    <div class="collage rv" aria-hidden="true"><img src="jord.jpg" alt=""><img src="lake.jpg" alt=""><img src="self.jpg" alt=""></div>
+    <div class="collage rv" aria-hidden="true"><img src="t/jord.jpg" alt="" loading="lazy" decoding="async"><img src="t/lake.jpg" alt="" loading="lazy" decoding="async"><img src="t/self.jpg" alt="" loading="lazy" decoding="async"></div>
   </div>
 </div></div></section>
 
@@ -902,7 +951,7 @@ html.rec,html.rec *{cursor:none!important}
 </div></div></section>
 
 <section class="end slide"><div class="fit">
-  <div class="deck" aria-hidden="true"><img src="gt3.jpg" alt="" style="--x:-210px;--y:14px;--r:-14deg;--dl:.05s"><img src="cr.jpg" alt="" style="--x:-105px;--y:-6px;--r:-7deg;--dl:.15s"><img src="au5.jpg" alt="" style="--x:0px;--y:-14px;--r:0deg;--dl:.25s"><img src="bench.jpg" alt="" style="--x:105px;--y:-6px;--r:7deg;--dl:.35s"><img src="lake.jpg" alt="" style="--x:210px;--y:14px;--r:14deg;--dl:.45s"></div>
+  <div class="deck" aria-hidden="true"><img src="t/gt3.jpg" loading="lazy" decoding="async" alt="" style="--x:-210px;--y:14px;--r:-14deg;--dl:.05s"><img src="t/cr.jpg" loading="lazy" decoding="async" alt="" style="--x:-105px;--y:-6px;--r:-7deg;--dl:.15s"><img src="t/au5.jpg" loading="lazy" decoding="async" alt="" style="--x:0px;--y:-14px;--r:0deg;--dl:.25s"><img src="t/bench.jpg" loading="lazy" decoding="async" alt="" style="--x:105px;--y:-6px;--r:7deg;--dl:.35s"><img src="t/lake.jpg" loading="lazy" decoding="async" alt="" style="--x:210px;--y:14px;--r:14deg;--dl:.45s"></div>
   <p class="eyebrow rv">Thanks for watching</p>
   <h2 class="rv" style="--d:.1s">Let’s <span class="grad">work together.</span></h2>
   <p class="site rv" style="--d:.2s">jordanioannoni.com</p>
@@ -920,7 +969,7 @@ let navReady = false;
 
 /* photo mosaic */
 const P = [["gt3","Lime green GT3 RS","Track day, Canon 1DX","w2x"],["rk1","Rinkside POV","Setup at the boards","h2x"],["b1","Slap shot","300mm f/2.8 action",""],["cr","Crease save","Frozen at the post",""],["pag","Hypercar on track","Pagani, trackside",""],["bench","Bench emotion","Ioannoni Visuals","h2x"],["au5","Leading lines","Autumn portrait session","w2x"],["husk","Coach’s call","Huskies bench",""],["lax","Field side","Lacrosse, rain cover on",""],["st2","Low key","Studio, single light","h2x"],["talk","Bench talk","Coach, player and ref",""],["p935","Plaid Porsche","Endurance livery",""]];
-$("#mos").innerHTML = P.map(([k, t, s, c], i) => `<button class="rv ${c}" style="--d:${(i % 4) * .06}s" data-lb="${k}.jpg" data-cap="${t} · ${s}"><img src="${k}.jpg" alt="${t}" loading="lazy"><figcaption>${t}<small>${s}</small></figcaption></button>`).join("");
+$("#mos").innerHTML = P.map(([k, t, s, c], i) => `<button class="rv ${c}" style="--d:${(i % 4) * .06}s" data-lb="${k}.jpg" data-cap="${t} · ${s}"><img src="t/${k}.jpg" srcset="t/${k}.jpg 720w, ${k}.jpg 1600w" sizes="(max-width:760px) 50vw, ${c === "w2x" ? 520 : 260}px" alt="${t}" loading="lazy" decoding="async"><figcaption>${t}<small>${s}</small></figcaption></button>`).join("");
 
 /* reveal on scroll */
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .2 });
@@ -928,9 +977,9 @@ $$(".rv,.chap,.tbl").forEach(e => io.observe(e));
 /* each slide replays its entrance whenever it comes back on screen, so every take looks the same */
 const lio = new IntersectionObserver(es => es.forEach(e => {
   const sl = e.target;
-  if (e.intersectionRatio >= .5) { sl.classList.add("live"); sl.querySelectorAll(".rv,.tbl").forEach(x => x.classList.add("in")); sl.querySelectorAll("[data-n]").forEach(n => count(n)); }
+  if (e.intersectionRatio >= .5 || e.intersectionRect.height >= innerHeight * .5) { sl.classList.add("live"); sl.querySelectorAll(".rv,.tbl").forEach(x => x.classList.add("in")); sl.querySelectorAll("[data-n]").forEach(n => count(n)); }
   else if (!e.isIntersecting) { sl.classList.remove("live"); if (!still) sl.querySelectorAll(".rv,.tbl").forEach(x => x.classList.remove("in")); }
-}), { threshold: [0, .5] });
+}), { threshold: [0, .05, .1, .15, .2, .25, .3, .35, .4, .45, .5] });
 setTimeout(() => document.querySelectorAll(".slide").forEach(sl => lio.observe(sl)), 0);
 
 /* statement slides: words drift in one after another, gradient words included */
@@ -1081,7 +1130,7 @@ io2.observe(code); $$("[data-n]").forEach(el => io2.observe(el));
 /* hero film strips from real photos */
 (() => {
   const a = ["gt3","b1","au5","pag","cr","bench","lax","p935"], b = ["husk","rk1","st2","talk","fal","sls","au3","mud"];
-  const fill = (el, l) => { const h = l.map(k => `<img src="${k}.jpg" alt="">`).join(""); el.innerHTML = h + h; };
+  const fill = (el, l) => { const h = l.map(k => `<img src="t/${k}.jpg" alt="" decoding="async">`).join(""); el.innerHTML = h + h; };
   fill($("#st1"), a); fill($("#st2"), b);
 })();
 /* chapter titles: letters rise one by one; progress bars under the question */
@@ -1114,7 +1163,7 @@ fit();
 /* Instagram: if the live feed cannot load, show recent shots that link to the profile */
 setTimeout(() => {
   const w = $("#igf behold-widget"); if (w && w.offsetHeight > 60) return;
-  $("#igf").innerHTML = '<div class="igfb">' + ["gt3","cr","au5","bench","pag","lake"].map(k => `<a href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener" aria-label="Open @jordanioannoni on Instagram"><img src="${k}.jpg" alt=""></a>`).join("") + "</div>";
+  $("#igf").innerHTML = '<div class="igfb">' + ["gt3","cr","au5","bench","pag","lake"].map(k => `<a href="https://www.instagram.com/jordanioannoni/" target="_blank" rel="noopener" aria-label="Open @jordanioannoni on Instagram"><img src="t/${k}.jpg" alt="" loading="lazy" decoding="async"></a>`).join("") + "</div>";
   fit();
 }, 4500);
 
