@@ -1222,6 +1222,49 @@ setTimeout(() => {
   try { if (sessionStorage.getItem("ji-rec") === "1") set(true); } catch (e) {}
   addEventListener("keydown", e => { if (e.metaKey || e.ctrlKey || e.altKey || e.key.toLowerCase() !== "r" || /input|textarea/i.test(e.target.tagName)) return; const on = !root.classList.contains("rec"); set(on); say(on ? "Recording mode on. Press R to show controls" : "Controls back on"); });
 })();
+
+/* TEMPORARY auto play for recording the narrated video (remove after the video is made).
+   Press A: 3 second countdown, a magenta sync flash, then the page steps through every slide,
+   holding each one for the length of its narration clip. Press Escape to stop. */
+(() => {
+  const DUR = [29.867,4.459,36.288,42.091,48.939,8.811,3.947,9.472,33.024,11.2,14.699,108.523,3.029,31.573,23.936,7.68,29.248,13.397,31.872,8.853,15.68,17.493,30.187,21.675,2.965,25.877,6.251,53.845];
+  const LEAD = 0.9, TAIL = 0.6, HOLD_END = 4;
+  const ov = document.createElement("div");
+  ov.style.cssText = "position:fixed;inset:0;z-index:99;display:none;place-items:center;font:800 22vh -apple-system,Helvetica,Arial,sans-serif;color:#fff;background:#0a1020";
+  document.body.append(ov);
+  let timer = 0, running = false;
+  const stop = () => { running = false; clearTimeout(timer); ov.style.display = "none"; };
+  const showSlide = i => { const sl = slides[i]; scrollTo({ top: i ? sl.offsetTop - 52 : 0, behavior: i ? "smooth" : "auto" }); if (i === 0) typeTitle(200); };
+  const start = () => {
+    if (running) return; running = true;
+    root.classList.add("rec"); scrollTo(0, 0);
+    const marks = []; let t = 0;
+    DUR.forEach((d, i) => { marks.push(t); t += LEAD + d + TAIL; });
+    const t0 = performance.now();
+    const seq = [["3", 0], ["2", 1000], ["1", 2000], ["flash", 3000], ["go", 3400]];
+    seq.forEach(([k, at]) => setTimeout(() => {
+      if (!running) return;
+      if (k === "flash") { ov.textContent = ""; ov.style.background = "#ff00ff"; }
+      else if (k === "go") {
+        ov.style.display = "none"; ov.style.background = "#0a1020";
+        const base = performance.now(); let i = 0;
+        const step = () => {
+          if (!running) return;
+          const now = (performance.now() - base) / 1000;
+          while (i < marks.length && now >= marks[i]) { showSlide(i); i++; }
+          if (i < marks.length) timer = setTimeout(step, 20);
+          else timer = setTimeout(() => { running = false; }, (t - marks[marks.length - 1] + HOLD_END) * 1000);
+        };
+        step();
+      } else { ov.style.display = "grid"; ov.textContent = k; }
+    }, at));
+  };
+  addEventListener("keydown", e => {
+    if (e.metaKey || e.ctrlKey || e.altKey || /input|textarea/i.test(e.target.tagName)) return;
+    if (e.key === "Escape" && running) { stop(); return; }
+    if (e.key.toLowerCase() === "a") start();
+  });
+})();
 </script>
 </body>
 </html>
