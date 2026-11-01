@@ -192,7 +192,7 @@ tr.checked td:not(:first-child){color:var(--muted);text-decoration:line-through}
     <li><b>Book of Heroes x2:</b> Royal Champion upgrades normally while you sit out CWL days 1–2, so both books are free. Use one on the Grand Warden once you have the Elixir, and keep the other for a hero upgrade after the Jam, when hero upgrades take about 3.5 days.</li>
     <li><b>Rune of Dark Elixir:</b> after RC empties your Dark Elixir, use it to fill up for the Archer Queen and King.</li>
     <li><b>Book of Everything:</b> save it for after the Jam, on an upgrade that would take 11+ days at full price.</li>
-    <li><b>Builder Potions x3 left:</b> each one adds about 9 hours to every busy builder. Only drink one when all builders are busy and you'll be awake when the next one frees up. Save at least two for Nov 11–14 to pull the final round earlier and squeeze in extra starts (Tesla #5, Mortar #2).</li>
+    <li><b>Builder Potions:</b> all used on Nov 1, which pulled every builder about a day earlier. That leaves roughly a day of slack before most final starts: if Gold allows, slot in a short upgrade there (Logger, a trap, or a supercharge stage) so no builder sits idle.</li>
     <li><b>Research Potions x2:</b> use them while both lab slots are busy and you already have Elixir for the next research; a lab that finishes early with no Elixir gains nothing.</li>
     <li><b>Pet Potions x5:</b> only if you are spending Dark Elixir on pets.</li>
     <li><b>Wall Rings x4:</b> spend any time; they don't need a free builder.</li>
@@ -236,18 +236,18 @@ const H = 3600e3;
 // res: g=gold, e=elixir, d=dark elixir ; cost in raw units
 const BUILDERS = [
   {id:'gob', name:'Goblin Builder', cur:'Dragon Duke', free:'2026-11-01T17:10:00-05:00', steps:[
-    ['Royal Champion 55',43,'d',202.5e3],['Giga Bomb 4',70,'g',9e6],['Inferno Tower #1',145,'g',11.93e6],['Archer Queen 101',43,'d',180e3,'cwl'],['Spell Tower #2',108,'g',12.15e6]]},
-  {id:'b1', name:'Builder 1', cur:'Smasher', free:'2026-11-03T12:00:00-05:00', steps:[
+    ['Royal Champion 55',16,'d',202.5e3],['Giga Bomb 4',70,'g',9e6],['Inferno Tower #1',145,'g',11.93e6],['Archer Queen 101',43,'d',180e3,'cwl'],['Spell Tower #2',108,'g',12.15e6]]},
+  {id:'b1', name:'Builder 1', cur:'Smasher', free:'2026-11-02T09:00:00-05:00', steps:[
     ['Hidden Tesla #4',140,'g',11.25e6],['Mortar #1',135,'g',9.45e6],['X-Bow #2',145,'g',11.7e6]]},
-  {id:'b2', name:'Builder 2', cur:'Longshot', free:'2026-11-04T00:00:00-05:00', steps:[
+  {id:'b2', name:'Builder 2', cur:'Longshot', free:'2026-11-02T21:00:00-05:00', steps:[
     ['Inferno Tower #2',145,'g',11.93e6],['Spell Tower #1',108,'g',12.15e6],['X-Bow #3',145,'g',11.7e6]]},
-  {id:'b3', name:'Builder 3', cur:'Workshop', free:'2026-11-03T22:00:00-05:00', steps:[
+  {id:'b3', name:'Builder 3', cur:'Workshop', free:'2026-11-02T19:00:00-05:00', steps:[
     ['Scattershot #1',162,'g',11.93e6],['Army Camp #1',81,'e',11.7e6],['Hidden Tesla #1',140,'g',11.25e6]]},
-  {id:'b4', name:'Builder 4', cur:'Air Defense', free:'2026-11-04T01:00:00-05:00', steps:[
+  {id:'b4', name:'Builder 4', cur:'Air Defense', free:'2026-11-02T22:00:00-05:00', steps:[
     ['X-Bow #1',145,'g',11.7e6],['Army Camp #2',81,'e',11.7e6],['Grand Warden 78',0,'e',12.15e6,'book'],['Hidden Tesla #2',140,'g',11.25e6]]},
-  {id:'b5', name:'Builder 5', cur:'Firespitter', free:'2026-11-04T12:00:00-05:00', steps:[
+  {id:'b5', name:'Builder 5', cur:'Firespitter', free:'2026-11-03T09:00:00-05:00', steps:[
     ['Scattershot #2',162,'g',11.93e6],['Hidden Tesla #3',140,'g',11.25e6]]},
-  {id:'b6', name:'Builder 6', cur:'Firespitter', free:'2026-11-04T12:00:00-05:00', steps:[
+  {id:'b6', name:'Builder 6', cur:'Firespitter', free:'2026-11-03T09:00:00-05:00', steps:[
     ['Inferno Tower #3',145,'g',11.93e6],['Barbarian King 102',43,'d',184.5e3],['Dark Barracks 13',54,'e',10.35e6],['X-Bow #4',145,'g',11.7e6]]},
   {id:'lab', name:'Laboratory', cur:'Balloon 13', free:'2026-11-04T06:20:00-05:00', steps:[
     ['Rage Spell 7',76,'e',11.7e6],['Baby Dragon 12',82,'e',13.05e6],['Siege Barracks 6',81,'e',12.15e6],['Battle Blimp 6',73,'e',11.7e6]]},
