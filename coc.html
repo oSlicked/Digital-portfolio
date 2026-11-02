@@ -433,8 +433,8 @@ const BUILDERS = [
   {id:'lab', name:'Laboratory', cur:'Rage Spell 7', free:'2026-11-01T22:05:00-05:00', steps:[
     ['Electro Titan 5',52,'e',13.5e6],['Root Rider 4',86,'e',13.5e6],['Revive Spell 5',86,'e',13.28e6],['Headhunter 4',84,'d',166.5e3],['Siege Barracks 6',81,'e',12.15e6]]},
   {id:'glab', name:'Goblin Lab', cur:'Meteor Golem 3', free:'2026-11-02T01:00:00-05:00', steps:[]},
-  {id:'pet', name:'Pet House', cur:'Greedy Raven 2', free:'2026-11-01T21:54:00-05:00', steps:[
-    ['Greedy Raven 3',1.8,'d',126e3,'opt'],['Greedy Raven 4',14,'d',135e3,'opt'],['Greedy Raven 5',43,'d',144e3,'opt'],['Greedy Raven 6',43,'d',153e3,'opt'],['Greedy Raven 7',43,'d',162e3,'opt'],['Greedy Raven 8',43,'d',171e3,'opt'],['Greedy Raven 9',43,'d',180e3,'opt'],['Greedy Raven 10',43,'d',189e3,'opt']]},
+  {id:'pet', name:'Pet House', cur:'Greedy Raven 2', free:'2026-11-01T21:50:00-05:00', steps:[
+    ['Greedy Raven 3',0,'d',126e3,'opt'],['Greedy Raven 4',1.6,'d',135e3,'opt'],['Greedy Raven 5',7,'d',144e3,'opt'],['Greedy Raven 6',38,'d',153e3,'opt'],['Greedy Raven 7',38,'d',162e3,'opt'],['Greedy Raven 8',38,'d',171e3,'opt'],['Greedy Raven 9',38,'d',180e3,'opt'],['Greedy Raven 10',38,'d',189e3,'opt']]},
 ];
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
 const AFTER=[
@@ -520,7 +520,7 @@ let state={};
 try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 /* SYNC: updated by the daily Clash Ninja check. started = step keys seen as started or done. */
-const SYNC = {"updated":null,"completion":null,"started":["lab-0","pet-0"]};
+const SYNC = {"updated":null,"completion":null,"started":["lab-0","pet-0","pet-1"]};
 SYNC.started.forEach(k=>{if(state[k]===undefined)state[k]=true});
 
 const $=id=>document.getElementById(id);
