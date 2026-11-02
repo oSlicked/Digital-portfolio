@@ -453,7 +453,7 @@ const TIERS = [
   ['Lab','B','Siege Barracks','5 → 6','12.2M Elixir','~Nov 11'],
   ['Lab','B','Baby Dragon','11 → 12','13.1M Elixir','Last lab start, ~Nov 15. In your dragon army'],
   ['Pets','B','Greedy Raven','5 → 10','153–189K DE per level','Raven 6 boosted, done ~2 AM Nov 3. Pet Potions on 7 and 8'],
-  ['Buildings','S','Scattershot x2','6 → 7','11.9M Gold each','#1 started Nov 2, #2 at 7:52 AM Nov 2'],
+  ['Buildings','S','Scattershot x2','6 → 7','11.9M Gold each','Both started Nov 2'],
   ['Buildings','S','Army Camp x4','13 → 14','11.7M Elixir each','#1 started, #2 to #4 start tonight'],
   ['Buildings','S','Inferno Tower x3','11 → 12','11.9M Gold each','#3 done, #1 and #2 next'],
   ['Buildings','S','X-Bow x4','12 → 13','11.7M Gold each','Nov 5–6'],
@@ -472,7 +472,7 @@ let state={};
 try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 /* SYNC: updated by the daily Clash Ninja check. started = step keys seen as started or done. */
-const SYNC = {"updated":"2026-11-02","completion":null,"started":["b1-0","lab-0","pet-0"],"reset":["pet-1"]};
+const SYNC = {"updated":"2026-11-02","completion":null,"started":["gob-0","b1-0","lab-0","pet-0"],"reset":["pet-1"]};
 SYNC.started.forEach(k=>{if(state[k]===undefined)state[k]=true});
 (SYNC.reset||[]).forEach(k=>{if(!state["_r"+k]){delete state[k];state["_r"+k]=1}});save();
 
@@ -593,7 +593,7 @@ function drawTimeline(el,rows,t0,t1,stepDays){
   h+='</div></div>';el.innerHTML=h;
 }
 function renderPlan(){
-  drawTimeline($('tl'),BUILDERS.map(b=>({name:b.name,sub:b.cur,cur:{name:b.cur,start:T0,end:new Date(b.free)},segs:b.plan})),T0,T1,2);
+  drawTimeline($('tl'),BUILDERS.map(b=>({name:b.name,sub:(laneStatus(b,Date.now()).run||{}).name||(nextOf(b)?'Idle':'Done'),cur:{name:b.cur,start:T0,end:new Date(b.free)},segs:b.plan})),T0,T1,2);
   const dt=$('detail'),p=ALL.find(x=>x.key===selected);
   if(p){dt.hidden=false;dt.innerHTML=`<b>${p.name}${tags(p)}</b><span>${p.lane.name}</span>${costHTML(p)}<span>Start ${fmtDate(p.start)}</span><span>Done ${fmtDate(p.end)}</span><button class="btn sm out ${state[p.key]?'grey':''}" data-toggle="${p.key}">${state[p.key]?'Mark not started':'Mark started'}</button>`}else dt.hidden=true;
   $('legend').innerHTML=`<span>${IC.g}Gold</span><span>${IC.e}Elixir</span><span>${IC.d}Dark Elixir</span>`;
@@ -729,7 +729,7 @@ $('reset').addEventListener('click',()=>{const m=$('reset-msg');if(!armed){armed
 document.querySelectorAll('[data-ic]').forEach(n=>n.innerHTML=IC[n.dataset.ic]);
 $('jamico').innerHTML=IC.hammer;
 window.addEventListener('hashchange',route);
-renderItems();renderProfile();renderAll();route();tick();setInterval(()=>{tick();renderNow();renderProfile()},30e3);
+renderItems();renderProfile();renderAll();route();tick();setInterval(()=>{tick();renderNow();renderPlan();renderProfile()},60e3);
 </script>
 </body>
 </html>
