@@ -428,8 +428,8 @@ const BUILDERS = [
     ["Army Camp #4",79,'e',1.17e+07],["Hidden Tesla #1",68,'g',1.125e+07],["Builder's Hut #2",68,'g',1.08e+07],["Mortar #3",66,'g',9.45e+06],["Elixir Storage #3",66,'g',8.1e+06]]},
   {id:'b5', name:'Builder 5', cur:"Firespitter", free:'2026-11-03T08:44:00-05:00', steps:[
     ["Inferno Tower #1",71,'g',1.1925e+07],["Hidden Tesla #2",68,'g',1.125e+07],["Builder's Hut #4",68,'g',1.08e+07],["Spell Tower #1",52,'g',1.215e+07],["Dark Barracks 13",52,'e',1.035e+07]]},
-  {id:'b6', name:'Builder 6', cur:"Free (walls tonight)", free:'2026-11-02T00:00:00-05:00', steps:[
-    ["Scattershot #1",79,'g',1.1925e+07],["Inferno Tower #2",71,'g',1.1925e+07],["Hidden Tesla #3",68,'g',1.125e+07],["Builder's Hut #5",68,'g',1.08e+07],["Spell Tower #2",52,'g',1.215e+07],["Gold Storage #2",66,'e',8.1e+06]]},
+  {id:'b6', name:'Builder 6', cur:"Scattershot #1", free:'2026-11-05T07:34:00-05:00', steps:[
+    ["Inferno Tower #2",71,'g',1.1925e+07],["Hidden Tesla #3",68,'g',1.125e+07],["Builder's Hut #5",68,'g',1.08e+07],["Spell Tower #2",52,'g',1.215e+07],["Gold Storage #2",66,'e',8.1e+06]]},
   {id:'lab', name:'Laboratory', cur:'Electro Titan 5', free:'2026-11-04T13:45:00-05:00', steps:[
     ['Root Rider 4',84,'e',13.5e6],['Revive Spell 5',86,'e',13.28e6],['Headhunter 4',81,'d',166.5e3],['Siege Barracks 6',81,'e',12.15e6]]},
   {id:'glab', name:'Goblin Lab', cur:'Meteor Golem 3', free:'2026-11-02T00:10:00-05:00', steps:[]},
@@ -690,7 +690,7 @@ const PROFILE={asof:'as of Nov 1, 2026',
   weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 77/85 trails your other attack heroes.'],
   career:[['War stars','2,075'],['Best trophies','5,867'],['XP level','245'],['Builder Base best','3,310']],
   left:[['Jam builder plan','284M Gold + 82M Elixir','Every defense, Army Camp and Builder\'s Hut starts before Nov 16'],['After the Jam','≈1.1B Gold + 250M Elixir + 12M DE','Traps, storages, Logger and the rest of your hero levels'],['Lab','≈200 days of research','After the Jam, one research at a time'],['Pets','1.89M Dark Elixir','Greedy Raven maxes in the Jam, then Diggy'],['Optional','Supercharges, crafted defenses','Not counted as max here']],
-  walls:{left:296,cost:4.5e6,rate:50e6,dump:150e6,need:[['2026-11-01','2026-11-16',366e6],['2026-11-16','2027-01-29',1350e6]]},
+  walls:{left:259,cost:4.5e6,rate:50e6,dump:150e6,need:[['2026-11-01','2026-11-16',366e6],['2026-11-16','2027-01-29',1350e6]]},
   max:{start:'2026-11-01',end:'2027-07-01',th19:'2026-11-23',rows:[['Army research','2026-11-07'],['Pets','2026-12-03'],['Buildings & heroes','2027-01-29'],['Lab (everything)','2027-06-07']]},
 };
 function ringSVG(pct){const r=46,c=2*Math.PI*r,o=c*(1-pct/100);return `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="#120b05" stroke-width="18"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="#2a1f14" stroke-width="12"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#gg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${o.toFixed(1)}" transform="rotate(-90 60 60)"/><defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe36b"/><stop offset="1" stop-color="#f2a900"/></linearGradient></defs><text x="60" y="68" text-anchor="middle" class="big">${pct.toFixed(0)}%</text></svg>`}
