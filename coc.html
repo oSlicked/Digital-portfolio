@@ -363,7 +363,7 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
 <section id="v-profile" hidden>
   <div class="g profg">
     <div><div class="title out">Account report <small id="p-asof"></small></div><div class="panel" id="p-rings"></div>
-      <div class="title out">Progress by area <small>by upgrade cost</small></div><div class="panel area" id="p-areas"></div></div>
+      <div class="title out">Progress by area <small>by upgrade cost · walls live, rest as of Nov 1</small></div><div class="panel area" id="p-areas"></div></div>
     <div><div class="title out">Walls <small>this Jam</small></div><div class="panel mx" id="p-max"></div></div>
     <div><div class="title out">Heroes</div><div class="panel hrows" id="p-heroes"></div></div>
     <div><div class="title out">Strengths &amp; gaps</div><div class="panel pros" id="p-pros"></div></div>
@@ -620,14 +620,14 @@ function renderTiers(){
 
 
 /* ---------- PROFILE ---------- */
-const PROFILE={asof:'as of Nov 1, 2026',
+const PROFILE={asof:'live · last synced Nov 2, 10 AM',
   offense:[['Heroes',439,480],['Troops',462,509],['Spells',122,132]],
   areas:[['Pets',82],['Structures',76],['Heroes',75],['Lab',73],['Walls',71.7],['Equipment',58]],
-  heroes:[['Minion Prince',95,95,'Maxed'],['Royal Champion',54,55,'55 finishes ~8 AM Nov 2, then maxed'],['Barbarian King',101,110,'102 is in the Jam plan'],['Archer Queen',101,110,'Next level after the Jam'],['Grand Warden',78,85,'79 is a bonus start if a Builder Potion frees a builder before Nov 16'],['Dragon Duke',10,25,'Not in your army']],
+  heroes:[['Minion Prince',95,95,'Maxed'],['Royal Champion',54,55,'Maxed Nov 2'],['Barbarian King',101,110,'102 is in the Jam plan'],['Archer Queen',101,110,'Next level after the Jam'],['Grand Warden',78,85,'79 is a bonus start if a Builder Potion frees a builder before Nov 16'],['Dragon Duke',10,25,'Not in your army']],
   strong:['Your RC walk kit is maxed: Electro Boots 27, Rocket Spear 27, Spirit Fox 10.','Every equipment piece in your main army is maxed.','Minion Prince, Dragon, Electro Dragon and Dragon Rider are maxed.','10 of 12 pets are maxed.'],
-  weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 77/85 trails your other attack heroes.'],
+  weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 78/85 trails your other attack heroes.'],
   career:[['War stars','2,075'],['Best trophies','5,867'],['XP level','245'],['Builder Base best','3,310']],
-  left:[['Builders','≈280M Gold + 80M Elixir','Defenses, Army Camps, Builder\'s Huts and storages, final starts Nov 14–16'],['Lab','Root Rider 4, Revive 5, Siege Barracks 6','Plus one more start Nov 15 before the Jam ends'],['Pets','Greedy Raven 6–10','≈830K Dark Elixir, done ~Nov 10'],['Walls','259 left','≈1.17B Gold or Elixir, on pace for ~Nov 12']],
+  left:[['Builders','≈280M Gold + 80M Elixir','Defenses, Army Camps, Builder\'s Huts and storages, final starts Nov 14–16'],['Lab','Root Rider 4, Revive 5, Siege Barracks 6','Plus one more start Nov 15 before the Jam ends'],['Pets','Greedy Raven 6–10','≈830K Dark Elixir, done ~Nov 10'],['Walls','WALLS_LEFT','WALLS_LOOT']],
   walls:{start:317,left:249,cost:4.5e6,rate:50e6,dump:150e6,need:[['2026-11-01','2026-11-16',366e6]]},
   max:{start:'2026-11-01',end:'2026-11-17'},
 };
@@ -664,8 +664,32 @@ function wallsHTML(P,pc,fd){
     <div class="mxrow"><span>Walls</span><div class="mxtrack"><i class="wall" style="width:${pc(done)}%"></i><b class="out">${fd(done).replace(/, \d{4}/,'')}</b></div></div>
     <p class="mxnote">Based on ${W.rate/1e6}M loot an hour and ${(W.cost/1e6)}M per wall (Gold or Elixir), the price in-game right now. You wall each time a builder finishes (about 2–3 times a day) with full storages, so walls top out around ${W.dump/1e6}M a day. Upgrades take their loot first. If walls are part of the Jam discount they'll cost more after Nov 16, so wall hard during the Jam.</p></div>`;
 }
+/* Upgrades finished since the Nov 1 account snapshot that aren't in the Jam plan. [finish time, area, name] */
+const SNAP_EVENTS=[
+  ['2026-11-01T23:00:00-05:00','Spells','Rage Spell 7'],
+  ['2026-11-01T23:00:00-05:00','Spells','Freeze Spell 8'],
+  ['2026-11-02T01:00:00-05:00','Troops','Meteor Golem 3'],
+  ['2026-11-02T07:52:00-05:00','Heroes','Royal Champion 55'],
+  [BUILDERS.find(b=>b.id==='lab').free,'Troops','Electro Titan 5'],
+  [BUILDERS.find(b=>b.id==='glab').free,'Troops','Headhunter 4'],
+];
+const SPELL_RE=/Spell/;
+function liveProfile(){
+  const now=Date.now(),P=JSON.parse(JSON.stringify(PROFILE)),bump={Heroes:0,Troops:0,Spells:0},heroUp={};
+  SNAP_EVENTS.forEach(([t,a,n])=>{if(new Date(t).getTime()<=now){bump[a]++;if(a==='Heroes')heroUp[n.replace(/ \d+$/,'')]=(heroUp[n.replace(/ \d+$/,'')]||0)+1}});
+  ALL.forEach(p=>{if(!state[p.key]||p.end.getTime()>now)return;
+    if(p.lane.id==='lab'||p.lane.id==='glab')bump[SPELL_RE.test(p.name)?'Spells':'Troops']++;
+    const hero=['Barbarian King','Archer Queen','Grand Warden','Royal Champion'].find(h=>p.name.startsWith(h));
+    if(hero){bump.Heroes++;heroUp[hero]=(heroUp[hero]||0)+1}});
+  P.offense.forEach(o=>o[1]=Math.min(o[2],o[1]+bump[o[0]]));
+  P.heroes.forEach(h=>{if(heroUp[h[0]])h[1]=Math.min(h[2],h[1]+heroUp[h[0]])});
+  const W=PROFILE.walls,left=Math.max(0,W.left-wtaps.log.length);
+  const wa=P.areas.find(a=>a[0]==='Walls');wa[1]=Math.round((100-28.3*left/W.start)*10)/10;
+  P.left.forEach(r=>{if(r[1]==='WALLS_LEFT'){r[1]=left+' left';r[2]='≈'+(left*W.cost/1e9).toFixed(2)+'B Gold or Elixir'}});
+  return P;
+}
 function renderProfile(){
-  const P=PROFILE;$('p-asof').textContent=P.asof;
+  const P=liveProfile();$('p-asof').textContent=PROFILE.asof;
   const lv=P.offense.reduce((a,x)=>a+x[1],0),mx=P.offense.reduce((a,x)=>a+x[2],0),off=lv/mx*100;
   const ar=P.areas,base=(ar.find(a=>a[0]==='Structures')[1]);
   $('p-rings').innerHTML=`<div class="rings"><div class="ring">${ringSVG(off)}<b>Offense</b><small>${lv.toLocaleString()} of ${mx.toLocaleString()} levels<br>${P.offense.map(x=>`${x[0]} ${Math.round(x[1]/x[2]*100)}%`).join(' · ')}</small></div><div class="ring">${ringSVG(base)}<b>Defense</b><small>Structures by upgrade cost<br>Walls ${ar.find(a=>a[0]==='Walls')[1]}%</small></div></div>`;
@@ -705,7 +729,7 @@ $('reset').addEventListener('click',()=>{const m=$('reset-msg');if(!armed){armed
 document.querySelectorAll('[data-ic]').forEach(n=>n.innerHTML=IC[n.dataset.ic]);
 $('jamico').innerHTML=IC.hammer;
 window.addEventListener('hashchange',route);
-renderItems();renderProfile();renderAll();route();tick();setInterval(()=>{tick();renderNow()},30e3);
+renderItems();renderProfile();renderAll();route();tick();setInterval(()=>{tick();renderNow();renderProfile()},30e3);
 </script>
 </body>
 </html>
