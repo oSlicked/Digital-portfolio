@@ -433,7 +433,7 @@ const BUILDERS = [
   {id:'b6', name:'Builder 6', cur:"Scattershot #1", free:'2026-11-05T07:34:00-05:00', steps:[
     ["Inferno Tower #2",71,'g',1.1925e+07],["Hidden Tesla #3",68,'g',1.125e+07],["Builder's Hut #5",68,'g',1.08e+07],["Spell Tower #2",52,'g',1.215e+07],["Gold Storage #2",66,'e',8.1e+06]]},
   {id:'lab', name:'Laboratory', cur:'Electro Titan 5', free:'2026-11-02T10:00:00-05:00', steps:[
-    ['Root Rider 4',12,'e',13.5e6],['Revive Spell 5',86,'e',13.28e6],['Siege Barracks 6',81,'e',12.15e6],['Baby Dragon 12',82,'e',13.05e6]]},
+    ['Root Rider 4',61,'e',13.5e6],['Revive Spell 5',86,'e',13.28e6],['Siege Barracks 6',81,'e',12.15e6],['Baby Dragon 12',82,'e',13.05e6]]},
   {id:'glab', name:'Goblin Lab', cur:'Headhunter 4', free:'2026-11-02T13:11:00-05:00', steps:[]},
   {id:'pet', name:'Pet House', cur:'Greedy Raven 5', free:'2026-11-02T10:11:00-05:00', steps:[
     ['Greedy Raven 6',16,'d',153e3,'opt'],['Greedy Raven 7',38,'d',162e3,'opt'],['Greedy Raven 8',38,'d',171e3,'opt'],['Greedy Raven 9',38,'d',180e3,'opt'],['Greedy Raven 10',38,'d',189e3,'opt']]},
@@ -448,7 +448,7 @@ const TIERS = [
   ['Lab','S','Meteor Golem','2 → 3 (max)','15M Elixir','Done (Goblin Lab)'],
   ['Lab','S','Electro Titan','4 → 5','15M Elixir','Done'],
   ['Lab','S','Headhunter','3 → 4','166.5K DE','Researching (Goblin Lab), done ~1 PM Nov 2'],
-  ['Lab','A','Root Rider','3 → 4','13.5M Elixir','Researching, finishing today with potions'],
+  ['Lab','A','Root Rider','3 → 4','13.5M Elixir','Researching, done ~11 PM Nov 4'],
   ['Lab','A','Revive Spell','4 → 5','13.3M Elixir','~Nov 8'],
   ['Lab','B','Siege Barracks','5 → 6','12.2M Elixir','~Nov 11'],
   ['Lab','B','Baby Dragon','11 → 12','13.1M Elixir','Last lab start, ~Nov 15. In your dragon army'],
@@ -512,7 +512,7 @@ const kindTile=id=>id==='lab'||id==='glab'?['lab',IC.flask]:id==='pet'?['pet',IC
 const costHTML=(p)=>`<span class="cost">${IC[p.res]}${money(p.cost,p.res)}</span>`;
 const ITEMS=[
   ['potion','#f39c12','Builder Potions x5','Use one when <strong>all 7 builders have 10+ hours left</strong>. First one <strong>tonight ~10:20 PM</strong>, right after Army Camp #4. Then about one a day. Each saves ~9 hours on every builder, which pulls your final starts safely before the Jam ends Nov 16. If one frees a builder early, start Grand Warden 79 at Jam price.'],
-  ['potion','#d63fbf','Research Potions','Going into <strong>Root Rider 4 today</strong> so it finishes tonight. That pulls every lab start earlier, so Baby Dragon 12 lands well before the Jam ends.'],
+  ['potion','#d63fbf','Research Potions','All used on Root Rider 4. The lab plan still fits: Baby Dragon 12 starts around Nov 11, well before the Jam ends.'],
   ['potion','#cfd6dc','Pet Potions x2','Raven 6 is boosted. Use one at the start of <strong>Greedy Raven 7 and 8</strong> (38 hours each). Each saves 23 hours.'],
   ['potion','#9b59b6','Rune of Elixir','<strong>Tonight between Army Camps</strong>: start a camp, then pop the rune when Elixir is low. It can\'t be used while storage is full.'],
   ['ring','','Wall Rings x4','Hold. A level 19 wall takes more than 8 rings, so 4 can\'t finish one.'],
