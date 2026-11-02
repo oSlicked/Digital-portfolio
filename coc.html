@@ -4,309 +4,298 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#f2efe6" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#14161d" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#16212d">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Hammer Jam Planner</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap">
 <style>
-/* Layout: "Now" dashboard first (what to do, builder lanes with live progress), then plan timeline, after-Jam queue, tier list.
-   Palette: stone-and-slate village ground, Gold / Elixir / Dark Elixir as the only strong colours, one blue for actions. */
+/* Village HUD: dark stone ground, parchment panels with wood edges, chunky outlined buttons,
+   Gold / Elixir / Dark Elixir as the colour system. One deliberate look in every theme. */
 :root{
-  --bg:#f2efe6; --surface:#fffdf8; --raise:#f7f4ec; --fg:#1c1f29; --muted:#646a7c; --line:#e1dccf;
-  --accent:#2a5bd7; --accent-ink:#ffffff; --accent-soft:#e3eafc;
-  --gold:#b98a0c; --gold-bar:#f2c230; --gold-soft:#fbf0cc;
-  --elixir:#b02f96; --elixir-bar:#e563c8; --elixir-soft:#f8e1f2;
-  --dark:#4a3b62; --dark-bar:#6d5a8e; --dark-soft:#e9e4f1;
-  --ok:#1d8a57; --ok-soft:#dcf2e6; --warn:#c2570c; --warn-soft:#fde8d6;
-  --track:#e8e3d6; --hatch:#d2ccbd;
-  --f-display:"Lilita One","Arial Rounded MT Bold",ui-rounded,system-ui,sans-serif;
-  --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
-  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --r:14px;
+  color-scheme:dark;
+  --ground:#203142; --ground-2:#162330; --hud:#131d28; --hud-edge:#0a1118;
+  --panel:#f7ecd1; --panel-2:#ecdcb4; --panel-3:#e2cd9b; --edge:#5c4022; --edge-dark:#3a2812;
+  --ink:#2c2015; --ink-2:#6e5838; --ink-3:#9a8460;
+  --gold:#ffd23a; --gold-2:#f2a900; --gold-edge:#7a4f00;
+  --elixir:#f070e6; --elixir-2:#c535b8; --elixir-edge:#5e1258;
+  --dark:#8467b0; --dark-2:#4c3570; --dark-edge:#1f1430;
+  --green:#9be64a; --green-2:#55aa16; --green-edge:#235208;
+  --blue:#5bbcff; --blue-2:#1f7fd0; --blue-edge:#0d3d6b;
+  --orange:#ffb23a; --orange-2:#e8740c; --orange-edge:#6b3200;
+  --track:#2a1f14; --track-edge:#120b05;
+  --f-game:"Lilita One","Arial Rounded MT Bold",ui-rounded,system-ui,sans-serif;
+  --f-body:"Nunito",ui-rounded,system-ui,-apple-system,"Segoe UI",sans-serif;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#14161d; --surface:#1c1f29; --raise:#232736; --fg:#eceef5; --muted:#9aa0b6; --line:#2d3243;
-  --accent:#7c9cf7; --accent-ink:#0f1320; --accent-soft:#232c4a;
-  --gold:#f0c341; --gold-bar:#e6b52a; --gold-soft:#3a3117;
-  --elixir:#ec80d3; --elixir-bar:#d454b6; --elixir-soft:#3c2138;
-  --dark:#c9b8e6; --dark-bar:#8b74b3; --dark-soft:#2d2740;
-  --ok:#52c98f; --ok-soft:#163327; --warn:#f29a52; --warn-soft:#3b2715;
-  --track:#2a2f3f; --hatch:#3a4054; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#14161d; --surface:#1c1f29; --raise:#232736; --fg:#eceef5; --muted:#9aa0b6; --line:#2d3243;
-  --accent:#7c9cf7; --accent-ink:#0f1320; --accent-soft:#232c4a;
-  --gold:#f0c341; --gold-bar:#e6b52a; --gold-soft:#3a3117;
-  --elixir:#ec80d3; --elixir-bar:#d454b6; --elixir-soft:#3c2138;
-  --dark:#c9b8e6; --dark-bar:#8b74b3; --dark-soft:#2d2740;
-  --ok:#52c98f; --ok-soft:#163327; --warn:#f29a52; --warn-soft:#3b2715;
-  --track:#2a2f3f; --hatch:#3a4054; color-scheme:dark}
-:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
-html{font-size:112%}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:1rem;line-height:1.5}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+html{font-size:100%;-webkit-text-size-adjust:100%}
+body{margin:0;color:var(--ink);font-family:var(--f-body);font-weight:700;font-size:1rem;line-height:1.45;
+  background-color:var(--ground);
+  background-image:linear-gradient(45deg,rgba(255,255,255,.035) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.035) 75%),linear-gradient(45deg,rgba(255,255,255,.035) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.035) 75%);
+  background-size:56px 56px;background-position:0 0,28px 28px;min-height:100vh}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--hud)}
 [hidden]{display:none!important}
-button{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.wrap{max-width:1100px;margin:0 auto;padding-block:18px 56px}
+button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.out{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.55),1px 1px 0 #000,-1px 1px 0 #000,1px -1px 0 #000,-1px -1px 0 #000}
+.gut{padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px))}
+svg.i{width:1em;height:1em;flex:none;vertical-align:-.15em}
 
-/* header */
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
-header.top .inner{max-width:1100px;margin:0 auto;padding-block:10px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;justify-content:space-between}
-.brand{display:flex;align-items:center;gap:12px;min-width:0}
-.brand h1{font-family:var(--f-display);font-weight:400;font-size:1.55rem;line-height:1;margin:0;letter-spacing:.01em}
-.brand .sync{font-size:.78rem;color:var(--muted)}
-.jam{display:flex;align-items:center;gap:10px}
-.ring{width:44px;height:44px;flex:none}
-.ring circle{fill:none;stroke-width:6}
-.ring .bgc{stroke:var(--track)} .ring .fgc{stroke:var(--warn);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%}
-.jam b{display:block;font-family:var(--f-mono);font-size:1.05rem;color:var(--warn);font-variant-numeric:tabular-nums}
-.jam span{font-size:.74rem;color:var(--muted)}
-nav.tabs{display:flex;gap:4px;background:var(--raise);border:1px solid var(--line);border-radius:999px;padding:4px}
-nav.tabs a{padding:7px 14px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:600;font-size:.88rem;white-space:nowrap}
-nav.tabs a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+/* HUD */
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:linear-gradient(var(--hud),#0f1821);border-bottom:3px solid var(--hud-edge);box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.hud .in{max-width:860px;margin:0 auto;padding-block:10px 12px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center}
+.badge{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(#5bbcff,#1f7fd0);border:3px solid #0a2a48;box-shadow:inset 0 -4px 0 rgba(0,0,0,.25);font-family:var(--f-game);font-size:1.25rem;grid-row:1/3}
+.hud h1{margin:0;font-family:var(--f-game);font-weight:400;font-size:1.45rem;line-height:1.05;letter-spacing:.01em}
+.hud .sync{font-size:.74rem;color:#9fb3c8;font-weight:700;line-height:1.2}
+.jambar{grid-column:1/3;margin-top:8px;display:flex;align-items:center}
+.jambar .ico{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(var(--orange),var(--orange-2));border:3px solid var(--orange-edge);z-index:2;font-size:1.05rem;color:#fff;margin-right:-14px}
+.jambar .bar{flex:1;height:26px;border-radius:13px;background:var(--track);border:3px solid var(--track-edge);position:relative;overflow:hidden}
+.jambar .bar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#ffe36b,#f5a700);border-radius:10px}
+.jambar .bar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--f-game);font-size:.92rem;letter-spacing:.02em;white-space:nowrap;padding-left:10px}
 
-h2{font-family:var(--f-display);font-weight:400;font-size:1.3rem;letter-spacing:.01em;margin:30px 0 10px}
-h2 small{font-family:var(--f-body);font-size:.8rem;color:var(--muted);margin-left:8px;letter-spacing:0}
-.note{color:var(--muted);font-size:.88rem;max-width:70ch;margin:10px 0 0}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+/* layout */
+main{max-width:860px;margin:0 auto;padding-block:16px calc(108px + env(safe-area-inset-bottom,0px))}
+.title{display:flex;align-items:baseline;gap:8px;margin:26px 2px 10px;font-family:var(--f-game);font-weight:400;font-size:1.3rem;letter-spacing:.01em}
+.title small{font-family:var(--f-body);font-size:.78rem;color:#b8c7d6;font-weight:700;letter-spacing:0;text-shadow:none}
+.panel{color-scheme:light;background:var(--panel);border:3px solid var(--edge-dark);border-radius:18px;box-shadow:inset 0 -5px 0 var(--panel-2),0 5px 0 rgba(0,0,0,.35)}
+.note{color:#c4d2df;font-size:.86rem;font-weight:600;margin:10px 4px 0;max-width:70ch}
 
-/* hero: do now */
-.now{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;align-items:start}
-.donow{padding:18px;position:relative;overflow:hidden}
-.donow .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.donow .big{font-family:var(--f-display);font-size:1.9rem;line-height:1.1;margin:6px 0 2px;text-wrap:balance}
-.donow .sub{color:var(--muted);font-size:.92rem}
-.donow.ready{border-color:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
-.donow .ready-tag{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--ok);font-size:.82rem;text-transform:uppercase;letter-spacing:.06em}
-.dot{width:9px;height:9px;border-radius:50%;background:currentColor;display:inline-block}
-.ready-tag .dot{animation:pulse 1.6s ease-in-out infinite}
-@keyframes pulse{50%{opacity:.25}}
-.donow .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.btn{border:0;cursor:pointer;border-radius:10px;padding:10px 16px;font-weight:700;min-height:44px;background:var(--accent);color:var(--accent-ink)}
-.btn.ghost{background:var(--raise);color:var(--fg);border:1px solid var(--line)}
-.btn.sm{min-height:36px;padding:6px 12px;font-size:.85rem;border-radius:8px}
-.morelist{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:6px}
-.morelist li{display:flex;justify-content:space-between;gap:10px;align-items:center;background:var(--raise);border-radius:10px;padding:8px 10px}
-.morelist .nm{font-weight:600;font-size:.92rem}
-.morelist .who{font-size:.78rem;color:var(--muted)}
-.soon{padding:16px}
-.soon h3{margin:0 0 6px;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.soon ol{list-style:none;margin:0;padding:0}
-.soon li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:3px solid var(--green-edge);border-radius:14px;background:linear-gradient(var(--green),var(--green-2));box-shadow:inset 0 -5px 0 rgba(0,0,0,.18),0 4px 0 rgba(0,0,0,.35);min-height:52px;padding:0 20px;font-family:var(--f-game);font-size:1.15rem;letter-spacing:.02em;cursor:pointer;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18),0 1px 0 rgba(0,0,0,.35)}
+.btn.sm{min-height:40px;padding:0 14px;font-size:.95rem;border-radius:11px}
+.btn.blue{background:linear-gradient(var(--blue),var(--blue-2));border-color:var(--blue-edge)}
+.btn.grey{background:linear-gradient(#d9d2c2,#a99f8a);border-color:#4d4535}
+
+/* resource bits */
+.cost{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-game);font-size:1rem;letter-spacing:.01em;white-space:nowrap}
+.cost .i{font-size:1.15em}
+.timer{display:inline-flex;align-items:center;gap:5px;background:var(--track);border:2px solid var(--track-edge);border-radius:9px;padding:3px 9px;font-family:var(--f-game);font-size:.9rem;white-space:nowrap}
+
+/* hero */
+.hero{overflow:hidden}
+.ribbon{padding:8px 16px;font-family:var(--f-game);font-size:1.05rem;letter-spacing:.03em;display:flex;align-items:center;gap:8px;border-bottom:3px solid var(--edge-dark)}
+.ribbon.go{background:linear-gradient(var(--green),var(--green-2))}
+.ribbon.wait{background:linear-gradient(var(--blue),var(--blue-2))}
+.ribbon .pulse{width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #000;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(.6);opacity:.6}}
+.hero .body{padding:16px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
+.tile{width:62px;height:62px;border-radius:16px;display:grid;place-items:center;font-size:2rem;color:#fff;background:linear-gradient(#a57a46,#6e4b25);border:3px solid var(--edge-dark);box-shadow:inset 0 -5px 0 rgba(0,0,0,.25);grid-row:1/3}
+.tile.lab{background:linear-gradient(#c77ee0,#7c3aa0)} .tile.pet{background:linear-gradient(#9fd0ff,#4b86c0)} .tile.gob{background:linear-gradient(#8fd463,#3f8a1d)}
+.hero .name{font-family:var(--f-game);font-size:1.75rem;line-height:1.05;letter-spacing:.01em;text-wrap:balance}
+.hero .meta{color:var(--ink-2);font-size:.9rem}
+.hero .act{padding:0 16px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.hero .cost{font-size:1.3rem}
+.also{margin:0 16px 16px;padding:0;list-style:none;display:grid;gap:8px}
+.also li{display:flex;align-items:center;gap:10px;background:var(--panel-2);border:2px solid var(--panel-3);border-radius:12px;padding:8px 10px}
+.also .nm{flex:1;min-width:0;font-weight:800;line-height:1.2}
+.also .nm small{display:block;font-weight:700;color:var(--ink-2);font-size:.78rem}
+
+/* coming up */
+.soon{list-style:none;margin:0;padding:6px 14px}
+.soon li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:2px dashed var(--panel-3)}
 .soon li:first-child{border-top:0}
-.soon .nm{font-weight:600;font-size:.92rem;line-height:1.25}
-.soon .who{font-size:.76rem;color:var(--muted)}
-.soon .when{font-family:var(--f-mono);font-size:.8rem;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-.soon .when b{display:block;color:var(--accent);font-size:.86rem}
-.res{width:10px;height:10px;border-radius:3px;display:inline-block}
-.res.g{background:var(--gold-bar)} .res.e{background:var(--elixir-bar)} .res.d{background:var(--dark-bar)}
+.soon .r{font-size:1.5rem;display:grid}
+.soon .nm{font-weight:900;line-height:1.2}
+.soon .nm small{display:block;font-weight:700;color:var(--ink-2);font-size:.78rem}
+.soon .when{text-align:right}
+.soon .when small{display:block;color:var(--ink-2);font-size:.72rem;margin-top:3px;font-weight:700}
 
-/* budget strip */
-.budget{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
-.bud{padding:12px 14px}
-.bud .k{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.bud .v{font-family:var(--f-mono);font-size:1.15rem;font-variant-numeric:tabular-nums;margin-top:2px}
-.bud .bar{height:6px;border-radius:99px;background:var(--track);margin-top:8px;overflow:hidden}
-.bud .bar i{display:block;height:100%;border-radius:99px}
+/* resources */
+.res{display:grid;gap:12px;padding:14px}
+.rrow{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
+.rrow .lbl{font-weight:800;font-size:.86rem;color:var(--ink-2)}
+.rrow .amt{font-family:var(--f-game);font-size:1.05rem}
+.rbar{grid-column:1/3;display:flex;align-items:center}
+.rbar .ic{font-size:1.9rem;z-index:2;margin-right:-12px;display:grid;filter:drop-shadow(0 2px 0 rgba(0,0,0,.35))}
+.rbar .bar{flex:1;height:20px;border-radius:10px;background:var(--track);border:3px solid var(--track-edge);overflow:hidden}
+.rbar .bar i{display:block;height:100%;border-radius:7px}
+.started{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:2px dashed var(--panel-3)}
+.started b{font-family:var(--f-game);font-size:1.3rem;font-weight:400}
 
 /* lanes */
-.lanes{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:12px}
-.lane{padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
-.lane header{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.lane h3{margin:0;font-size:1rem}
-.lane .kind{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.cur .lbl{font-size:.72rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
-.cur .row{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-.cur .nm{font-weight:700}
-.cur .left{font-family:var(--f-mono);font-size:.85rem;color:var(--muted);white-space:nowrap}
-.pbar{height:10px;border-radius:99px;background:var(--track);overflow:hidden;margin-top:6px;position:relative}
-.pbar i{display:block;height:100%;border-radius:99px;transition:width .6s ease}
-.pbar.unknown i{width:100%!important;background:repeating-linear-gradient(45deg,var(--hatch) 0 6px,transparent 6px 12px)!important}
-.nextup{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--raise);border-radius:10px;padding:10px 12px}
-.nextup.ready{background:var(--ok-soft)}
-.nextup .lbl{font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-.nextup.ready .lbl{color:var(--ok)}
-.nextup .nm{font-weight:600;font-size:.94rem}
-.nextup .when{font-family:var(--f-mono);font-size:.78rem;color:var(--muted)}
+.lanes{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:14px}
+.lane{padding:12px 12px 10px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.lane .head{display:flex;align-items:center;gap:10px}
+.lane .head .tile{width:42px;height:42px;font-size:1.3rem;border-radius:12px;grid-row:auto}
+.lane .head h3{margin:0;font-family:var(--f-game);font-weight:400;font-size:1.15rem;line-height:1.1;flex:1}
+.lane .head h3 small{display:block;font-family:var(--f-body);font-size:.74rem;color:var(--ink-2);font-weight:800}
+.busy .lbl{font-size:.78rem;font-weight:800;color:var(--ink-2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.busy .lbl b{color:var(--ink);font-weight:900}
+.gbar{position:relative;height:28px;border-radius:14px;background:var(--track);border:3px solid var(--track-edge);overflow:hidden}
+.gbar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(var(--green),var(--green-2));border-radius:10px;transition:width .6s ease}
+.gbar.unknown i{width:100%!important;background:repeating-linear-gradient(-45deg,#5a4630 0 8px,#4a3826 8px 16px)}
+.gbar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--f-game);font-size:.92rem;letter-spacing:.02em;white-space:nowrap}
+.gbar.idle i{width:0!important}
+.next{display:flex;align-items:center;gap:10px;background:var(--panel-2);border:2px solid var(--panel-3);border-radius:12px;padding:9px 10px}
+.next.go{background:#dff3c4;border-color:#9ccd62}
+.next .r{font-size:1.4rem;display:grid}
+.next .nm{flex:1;min-width:0;font-weight:900;line-height:1.2}
+.next .nm small{display:block;color:var(--ink-2);font-weight:700;font-size:.76rem}
 .queue{display:flex;flex-wrap:wrap;gap:6px}
-.chip{display:inline-flex;align-items:center;gap:6px;font-size:.76rem;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--raise);border:1px solid var(--line);color:var(--muted)}
-.chip.done{background:var(--ok-soft);color:var(--ok);border-color:transparent;text-decoration:line-through}
-.chip.final{border-color:var(--warn);color:var(--warn)}
-.tag{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:5px;margin-left:6px;vertical-align:2px;background:var(--accent-soft);color:var(--accent)}
-.tag.fin{background:var(--warn-soft);color:var(--warn)}
-details.more summary{cursor:pointer;font-size:.84rem;color:var(--accent);font-weight:600;list-style:none;min-height:32px;display:flex;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;font-weight:800;padding:3px 9px 3px 6px;border-radius:999px;background:var(--panel-2);border:2px solid var(--panel-3);color:var(--ink-2)}
+.chip.done{background:#dff3c4;border-color:#9ccd62;color:#2f6a0c}
+.chip.done span{text-decoration:line-through}
+.chip.fin{border-color:var(--orange-2)}
+.tag{display:inline-block;font-family:var(--f-body);font-size:.66rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:2px;background:#d6e9fb;color:#16538a}
+.tag.fin{background:#ffe2c2;color:#9a4100}
+details.more summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;font-weight:900;font-size:.86rem;color:var(--blue-2);border-radius:10px}
 details.more summary::-webkit-details-marker{display:none}
-.steps{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
-.step label{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:center;padding:8px 10px;border-radius:10px;border:1px solid var(--line);cursor:pointer}
-.step input{width:22px;height:22px;accent-color:var(--ok);margin:0}
-.step .nm{font-weight:600;font-size:.9rem}
-.step .meta{grid-column:2/4;font-family:var(--f-mono);font-size:.76rem;color:var(--muted)}
-.step.on .nm{text-decoration:line-through;color:var(--muted)}
-.cost{font-family:var(--f-mono);font-size:.76rem;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
-.cost.g{background:var(--gold-soft);color:var(--gold)} .cost.e{background:var(--elixir-soft);color:var(--elixir)} .cost.d{background:var(--dark-soft);color:var(--dark)}
+details.more[open] summary .chev{transform:rotate(180deg)}
+.chev{transition:transform .2s}
+.steps{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:6px}
+.step label{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:center;padding:9px 10px;border-radius:12px;background:var(--panel-2);border:2px solid var(--panel-3);cursor:pointer}
+.step input{width:24px;height:24px;accent-color:var(--green-2);margin:0}
+.step .nm{font-weight:900;line-height:1.2}
+.step .meta{grid-column:2/4;font-size:.76rem;color:var(--ink-2)}
+.step.on .nm{text-decoration:line-through;color:var(--ink-3)}
+
+/* magic items */
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
+.mi{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:start;padding:12px}
+.mi .pic{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;background:radial-gradient(circle at 50% 30%,#d6463a,#9b1e18);border:3px solid #4a0d09;box-shadow:inset 0 -4px 0 rgba(0,0,0,.25);grid-row:1/3;font-size:1.7rem}
+.mi b{font-family:var(--f-game);font-weight:400;font-size:1.05rem;letter-spacing:.01em;line-height:1.15}
+.mi p{margin:2px 0 0;font-size:.86rem;color:var(--ink-2);font-weight:700}
+.mi p strong{color:var(--ink);font-weight:900}
 
 /* timeline */
-.tl-card{padding:12px 0 8px}
-.tl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tl{position:relative;min-width:980px;padding:0 14px}
-.tl-axis{position:relative;height:26px;margin-left:132px;font-family:var(--f-mono);font-size:.7rem;color:var(--muted)}
+.tlp{padding:10px 0 8px;overflow:hidden}
+.tl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.tl{position:relative;min-width:1000px;padding:0 12px}
+.tl-axis{position:relative;height:26px;margin-left:124px;font-family:var(--f-game);font-size:.78rem;color:var(--ink-2)}
 .tl-axis span{position:absolute;transform:translateX(-50%);white-space:nowrap}
-.tl-row{display:flex;align-items:center;height:42px}
-.tl-label{width:132px;flex:none;font-size:.8rem;font-weight:700;line-height:1.15;position:sticky;left:0;background:var(--surface);z-index:2;padding-right:8px}
-.tl-label small{display:block;font-weight:400;color:var(--muted);font-size:.7rem}
-.tl-track{position:relative;flex:1;height:30px;background:linear-gradient(to right,var(--line) 1px,transparent 1px) 0 0/calc(100%/21) 100%}
-.seg{position:absolute;top:2px;height:26px;border-radius:6px;font-size:.72rem;line-height:26px;padding:0 6px;overflow:hidden;white-space:nowrap;border:0;cursor:pointer;text-align:left;color:#1c1f29;font-weight:600}
-.seg.g{background:var(--gold-bar)} .seg.e{background:var(--elixir-bar);color:#fff} .seg.d{background:var(--dark-bar);color:#fff}
-.seg.cur{background:repeating-linear-gradient(45deg,var(--hatch) 0 5px,transparent 5px 10px);color:var(--muted);cursor:default}
-.seg.done{opacity:.4}
-.seg[aria-pressed="true"]{outline:2px solid var(--fg);outline-offset:1px}
-.vline{position:absolute;top:0;bottom:0;border-left:2px dashed var(--warn);pointer-events:none;z-index:3}
-.vline.now{border-left:2px solid var(--accent)}
-.vline em{position:absolute;top:0;left:4px;font-style:normal;font-size:.68rem;font-weight:700;white-space:nowrap;background:var(--surface);padding:0 4px;border-radius:4px}
-.vline.jam em{color:var(--warn)} .vline.now em{color:var(--accent)}
-.detail{margin:10px 14px 4px;padding:12px 14px;border-radius:10px;background:var(--raise);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;font-size:.9rem}
-.detail b{font-size:1rem}
-.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted);margin:8px 14px 0}
-.legend span{display:inline-flex;align-items:center;gap:6px}
+.tl-row{display:flex;align-items:center;height:44px}
+.tl-label{width:124px;flex:none;font-family:var(--f-game);font-size:.88rem;line-height:1.1;position:sticky;left:0;background:var(--panel);z-index:3;padding-right:8px}
+.tl-label small{display:block;font-family:var(--f-body);font-weight:700;color:var(--ink-2);font-size:.7rem}
+.tl-track{position:relative;flex:1;height:32px;background:var(--panel-2);border-radius:8px;background-image:linear-gradient(to right,rgba(0,0,0,.08) 1px,transparent 1px);background-size:calc(100%/21) 100%}
+.seg{position:absolute;top:1px;height:30px;border-radius:8px;font-family:var(--f-game);font-size:.78rem;letter-spacing:.01em;line-height:24px;padding:0 6px;overflow:hidden;white-space:nowrap;border:3px solid;cursor:pointer;text-align:left}
+.seg.g{background:linear-gradient(#ffe36b,#f2b000);border-color:var(--gold-edge);color:#3b2600}
+.seg.e{background:linear-gradient(var(--elixir),var(--elixir-2));border-color:var(--elixir-edge)}
+.seg.d{background:linear-gradient(var(--dark),var(--dark-2));border-color:var(--dark-edge)}
+.seg.e,.seg.d{color:#fff;text-shadow:1px 1px 0 #000,-1px 1px 0 #000,1px -1px 0 #000,-1px -1px 0 #000}
+.seg.cur{background:repeating-linear-gradient(-45deg,rgba(0,0,0,.14) 0 6px,rgba(0,0,0,.04) 6px 12px);border-color:rgba(0,0,0,.2);color:var(--ink-2);cursor:default;font-family:var(--f-body);font-weight:800}
+.seg.done{opacity:.45}
+.seg[aria-pressed="true"]{box-shadow:0 0 0 3px var(--blue)}
+.vline{position:absolute;top:0;bottom:0;pointer-events:none;z-index:4}
+.vline.jam{border-left:3px dashed var(--orange-2)} .vline.now{border-left:3px solid var(--blue-2)}
+.vline em{position:absolute;top:0;left:5px;font-style:normal;font-family:var(--f-game);font-size:.72rem;white-space:nowrap;padding:1px 6px;border-radius:6px;color:#fff}
+.vline.jam em{background:var(--orange-2)} .vline.now em{background:var(--blue-2)}
+.detail{margin:10px 12px 4px;padding:12px;border-radius:12px;background:var(--panel-2);border:2px solid var(--panel-3);display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:.9rem}
+.detail b{font-family:var(--f-game);font-weight:400;font-size:1.15rem;width:100%}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--ink-2);margin:8px 12px 0;font-weight:800}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.chartp{padding:12px 12px 8px}
+.chartp .scroll{overflow-x:auto}
+.chartp svg{width:100%;min-width:600px;height:auto;display:block}
+.chartp text{font-family:var(--f-game);font-size:11px;fill:var(--ink-2)}
+.chartp .gl{stroke:rgba(0,0,0,.1)}
 
-/* chart */
-.chart-card{padding:14px 14px 8px}
-.chart-card .scroll{overflow-x:auto}
-.chart-card svg{width:100%;min-width:620px;height:auto;display:block}
-.chart-card text{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
-.chart-card .gl{stroke:var(--line)}
-
-/* items */
-.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
-.item{padding:12px 14px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start}
-.item .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-family:var(--f-display);font-size:1.05rem;grid-row:1/3}
-.item .ic.b{background:var(--gold-soft);color:var(--gold)} .item .ic.r{background:var(--elixir-soft);color:var(--elixir)} .item .ic.h{background:var(--accent-soft);color:var(--accent)} .item .ic.d{background:var(--dark-soft);color:var(--dark)}
-.item b{font-size:.95rem}
-.item .when{font-size:.84rem;color:var(--muted)}
-.item .when strong{color:var(--fg)}
-
-/* tiers */
-.filters{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
-.filters button{font-size:.85rem;font-weight:600;padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;min-height:38px}
-.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+/* lists */
+.filters{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px 6px}
+.filters button{flex:none;border:3px solid var(--edge-dark);border-radius:12px;background:var(--panel);color:var(--ink);min-height:42px;padding:0 14px;font-family:var(--f-game);font-size:.95rem;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.filters button[aria-pressed="true"]{background:linear-gradient(var(--gold),var(--gold-2));border-color:var(--gold-edge)}
 .tlist{display:grid;gap:8px}
-.trow{display:grid;grid-template-columns:auto 1fr auto auto;gap:4px 14px;align-items:center;padding:10px 14px}
-.trow .tier{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-family:var(--f-display);font-size:1.05rem}
-.tier.S{background:var(--warn);color:#fff} .tier.A{background:var(--accent);color:var(--accent-ink)} .tier.B{background:var(--accent-soft);color:var(--accent)} .tier.C,.tier.x{background:var(--track);color:var(--muted)} .tier.done{background:var(--ok-soft);color:var(--ok)}
-.trow .nm{font-weight:700}
-.trow .cat{font-size:.76rem;color:var(--muted)}
-.trow .lv{font-family:var(--f-mono);font-size:.84rem;white-space:nowrap}
-.trow .cst{font-family:var(--f-mono);font-size:.82rem;color:var(--muted);text-align:right}
-.trow .nt{grid-column:2/5;font-size:.82rem;color:var(--muted)}
-.trow input{width:22px;height:22px;accent-color:var(--ok)}
-.trow.on .nm{text-decoration:line-through;color:var(--muted)}
+.trow{display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;align-items:center;padding:10px 12px}
+.shield{width:36px;height:40px;display:grid;place-items:center;font-family:var(--f-game);font-size:1.2rem;color:#fff;clip-path:polygon(50% 0,100% 14%,100% 60%,50% 100%,0 60%,0 14%);grid-row:1/4;padding-bottom:4px;text-shadow:1px 1px 0 #000,-1px 1px 0 #000,1px -1px 0 #000,-1px -1px 0 #000}
+.shield.S{background:linear-gradient(var(--orange),var(--orange-2))} .shield.A{background:linear-gradient(var(--blue),var(--blue-2))} .shield.B{background:linear-gradient(#5fd3b4,#1f9677)} .shield.C,.shield.x{background:linear-gradient(#b9ae98,#857a64)} .shield.done{background:linear-gradient(var(--green),var(--green-2))}
+.trow .nm{font-weight:900;line-height:1.2}
+.trow .nm small{font-weight:700;color:var(--ink-2);font-size:.76rem;margin-left:4px}
+.trow .sub{grid-column:2;font-size:.82rem;color:var(--ink-2)}
+.trow .sub b{color:var(--ink);font-weight:900}
+.trow input{width:26px;height:26px;accent-color:var(--green-2);grid-row:1/4;grid-column:3}
+.trow.on .nm{text-decoration:line-through;color:var(--ink-3)}
 .fill{display:grid;gap:8px}
-.fill .card{padding:10px 14px}
-.fill .card b{display:block}
-.fill .card span{font-size:.84rem;color:var(--muted)}
-.reset{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:.82rem}
+.fill .panel{padding:10px 14px}
+.fill b{display:block;font-weight:900}
+.fill span{font-size:.84rem;color:var(--ink-2)}
+.reset{background:none;border:2px solid #4b6075;color:#c4d2df;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:800}
+.afterres{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:12px}
+.afterres div{display:flex;align-items:center;gap:8px;font-family:var(--f-game);font-size:1.05rem}
+.afterres div .i{font-size:1.5rem}
 
-/* phone */
-@media (max-width:760px){
-  html{font-size:106%}
-  .brand h1{font-size:1.3rem}
-  .jam span{display:none}
-  nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:25;border-radius:0;border-width:1px 0 0;background:var(--surface);padding:0 max(6px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(6px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:repeat(4,1fr);gap:0}
-  nav.tabs a{border-radius:0;min-height:58px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.8rem;padding:4px 2px;white-space:normal;line-height:1.15}
-  nav.tabs a[aria-current="page"]{background:transparent;color:var(--accent);box-shadow:inset 0 3px 0 var(--accent)}
-  .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
-  .now{grid-template-columns:1fr}
-  .donow .big{font-size:1.6rem}
-  .budget{grid-template-columns:1fr 1fr}
-  .trow{grid-template-columns:auto 1fr auto}
-  .trow .cst{grid-column:2/4;text-align:left}
-  .trow .lv{grid-column:2}
-  .trow input{grid-row:1;grid-column:3}
-  .trow .nt{grid-column:2/4}
+/* bottom nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:linear-gradient(#6a4a28,#45301a);border-top:3px solid var(--edge-dark);box-shadow:0 -4px 0 rgba(0,0,0,.25);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+nav.tabs .in{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+nav.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;font-family:var(--f-game);font-size:.8rem;letter-spacing:.02em;padding:4px 2px;border-radius:12px;min-height:60px;justify-content:center}
+nav.tabs a .ni{width:40px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:1.25rem;background:rgba(0,0,0,.22);border:2px solid rgba(0,0,0,.35)}
+nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(--gold-2));border-color:var(--gold-edge);color:#3b2600;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+
+@media (min-width:700px){
+  .now{display:grid;grid-template-columns:1.1fr 1fr;gap:14px;align-items:start}
+  .now .title{grid-column:1/-1}
+  .hud .in{grid-template-columns:auto 1fr minmax(260px,340px)}
+  .jambar{grid-column:3;grid-row:1/3;margin-top:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<header class="top"><div class="inner gut">
-  <div class="brand">
-    <div><h1>Hammer Jam Planner</h1><div class="sync" id="sync"></div></div>
+<header class="hud"><div class="in gut">
+  <div class="badge out" aria-hidden="true">18</div>
+  <h1 class="out">Hammer Jam</h1>
+  <div class="sync" id="sync"></div>
+  <div class="jambar" title="Hammer Jam ends Sun Nov 16, about 2:45 AM">
+    <div class="ico" id="jamico"></div>
+    <div class="bar"><i id="jamfill"></i><span class="out" id="cd">–</span></div>
   </div>
-  <div class="jam" title="Hammer Jam ends Sun Nov 16, about 2:45 AM">
-    <svg class="ring" viewBox="0 0 44 44" aria-hidden="true"><circle class="bgc" cx="22" cy="22" r="18"/><circle class="fgc" id="ring" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="0"/></svg>
-    <div><b id="cd">–</b><span>left in the Jam · ends Sun Nov 16, ~2:45 AM</span></div>
-  </div>
-  <nav class="tabs" aria-label="Views">
-    <a href="#now" id="t-now">Now</a><a href="#plan" id="t-plan">Jam plan</a><a href="#after" id="t-after">After Jam</a><a href="#tiers" id="t-tiers">All upgrades</a>
-  </nav>
 </div></header>
 
-<main class="wrap gut">
-
+<main class="gut">
 <section id="v-now">
   <div class="now">
-    <div class="card donow" id="donow"></div>
-    <div class="card soon"><h3>Coming up</h3><ol id="soon"></ol></div>
+    <div><div class="title out" style="margin-top:4px">Do this now</div><div class="panel hero" id="donow"></div></div>
+    <div><div class="title out" style="margin-top:4px">Coming up</div><div class="panel"><ol class="soon" id="soon"></ol></div></div>
   </div>
-  <div class="budget" id="budget"></div>
-
-  <h2>Builders, lab and pets <small>tap a card's list to tick things off</small></h2>
+  <div class="title out">Loot to spend <small>this Jam's plan</small></div>
+  <div class="panel" id="budget"></div>
+  <div class="title out">Builders &amp; labs <small>tap a card to tick things off</small></div>
   <div class="lanes" id="lanes"></div>
-
-  <h2>Magic items <small>when to use each one</small></h2>
-  <div class="items">
-    <div class="card item"><div class="ic h">H</div><b>Book of Heroes x2</b><div class="when">One on <strong>Grand Warden 78</strong>, one on <strong>Archer Queen 101</strong>, so neither is ever down. Start the upgrade, then finish it with the book.</div></div>
-    <div class="card item"><div class="ic b">B</div><b>Book of Building</b><div class="when">Used Nov 1 on a Firespitter to start Inferno #3. If you get another, save it for an upgrade with 5+ days left.</div></div>
-    <div class="card item"><div class="ic b">P</div><b>Builder Potions</b><div class="when">None left after Nov 1 (boost ends ~8:25 PM). Claim the Gold Pass ones and save them for <strong>Nov 12–14</strong> to push the final starts in before the Jam ends.</div></div>
-    <div class="card item"><div class="ic r">R</div><b>Research Potions</b><div class="when">All used. The boost runs to <strong>~11:30 PM Nov 1</strong>: Rage done ~10 PM, Meteor Golem (Goblin Lab) ~1 AM. Start Siege Barracks right after Rage to catch the last of it.</div></div>
-    <div class="card item"><div class="ic r">F</div><b>Books of Fighting</b><div class="when">You have <strong>0</strong> and can only hold 1 at a time. Claim one from the Gold Pass when you can and use it on the longest troop or siege research running.</div></div>
-    <div class="card item"><div class="ic d">D</div><b>Rune of Dark Elixir</b><div class="when">Fill up when a Dark Elixir hero (Royal Champion, Queen, King) is next and you're short.</div></div>
-    <div class="card item"><div class="ic b">E</div><b>Book of Everything</b><div class="when">Save for <strong>after the Jam</strong>, on an upgrade that takes 11+ days.</div></div>
-    <div class="card item"><div class="ic b">W</div><b>Wall Rings x4</b><div class="when">Any time. They don't need a free builder.</div></div>
-    <div class="card item"><div class="ic d">P</div><b>Pet Potions x4</b><div class="when">Your Dark Elixir is piling up and the Pet House doesn't need a builder, so use them on Greedy Raven and keep it busy.</div></div>
-  </div>
+  <div class="title out">Magic items</div>
+  <div class="items" id="items"></div>
 </section>
 
 <section id="v-plan" hidden>
-  <h2 style="margin-top:6px">Every start before the Jam ends <small>tap a bar for details</small></h2>
-  <div class="card tl-card">
+  <div class="title out" style="margin-top:4px">Jam schedule <small>tap a bar for details</small></div>
+  <div class="panel tlp">
     <div class="tl-scroll" id="tl-scroll"><div class="tl" id="tl"></div></div>
     <div class="detail" id="detail" hidden></div>
-    <div class="legend"><span><i class="res g"></i>Gold</span><span><i class="res e"></i>Elixir</span><span><i class="res d"></i>Dark Elixir</span><span><i class="res" style="background:repeating-linear-gradient(45deg,var(--hatch) 0 3px,transparent 3px 6px)"></i>Running now</span></div>
+    <div class="legend" id="legend"></div>
   </div>
   <p class="note">Anything that starts left of the orange line gets the Jam price, even if it finishes after. Times are Toronto time and assume you start each upgrade as soon as its builder frees up.</p>
-
-  <h2>Resources you need each day</h2>
-  <div class="card chart-card"><div id="chart"></div></div>
-  <p class="note">Bars show the Gold and Elixir needed for upgrades that are due to start that day and aren't ticked off yet. Farm ahead of the tall days.</p>
+  <div class="title out">Loot needed each day</div>
+  <div class="panel chartp"><div id="chart"></div></div>
+  <p class="note">Gold and Elixir for upgrades due to start that day and not ticked off yet. Farm ahead of the tall days.</p>
 </section>
 
 <section id="v-after" hidden>
-  <h2 style="margin-top:6px">After the Jam <small>regular price minus your 10% Gold Pass</small></h2>
-  <div class="budget" id="a-budget" style="margin-top:0"></div>
-  <div class="card tl-card" style="margin-top:14px"><div class="tl-scroll"><div class="tl" id="tl-after"></div></div></div>
+  <div class="title out" style="margin-top:4px">After the Jam <small>regular price minus your 10% Gold Pass</small></div>
+  <div class="panel" id="a-budget"></div>
+  <div class="panel tlp" style="margin-top:14px"><div class="tl-scroll"><div class="tl" id="tl-after"></div></div></div>
   <p class="note">Your 6 builders pick up this queue as each one finishes its final Jam upgrade. The Goblin Builder is left out.</p>
-  <h2>Queue, in priority order</h2>
-  <div class="card" style="padding:12px"><ul class="steps" id="after-list"></ul></div>
-  <h2>Fill-ins when a builder would sit idle</h2>
+  <div class="title out">Queue</div>
+  <div class="panel" style="padding:10px"><ul class="steps" id="after-list"></ul></div>
+  <div class="title out">When a builder would sit idle</div>
   <div class="fill" id="fill"></div>
 </section>
 
 <section id="v-tiers" hidden>
-  <h2 style="margin-top:6px">Every upgrade, by tier</h2>
-  <p class="note" style="margin-top:0">S = do next · A = high value · B = fill gaps · C = last. Costs are Jam prices before the Gold Pass 10%.</p>
+  <div class="title out" style="margin-top:4px">Every upgrade</div>
+  <p class="note" style="margin-top:0;margin-bottom:10px">S do next · A high value · B fill gaps · C last. Costs are Jam prices before the Gold Pass 10%.</p>
   <div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
   <div class="tlist" id="tlist"></div>
-  <p style="margin-top:16px"><button class="reset" id="reset" type="button">Clear all checkmarks</button> <span class="note" id="reset-msg"></span></p>
+  <p style="margin:18px 4px 0"><button class="reset" id="reset" type="button">Clear all checkmarks</button> <span class="note" id="reset-msg"></span></p>
 </section>
-
 </main>
+
+<nav class="tabs" aria-label="Views"><div class="in">
+  <a href="#now" id="t-now"><span class="ni" data-ic="hammer"></span><span class="out">Now</span></a>
+  <a href="#plan" id="t-plan"><span class="ni" data-ic="cal"></span><span class="out">Jam plan</span></a>
+  <a href="#after" id="t-after"><span class="ni" data-ic="clock"></span><span class="out">After Jam</span></a>
+  <a href="#tiers" id="t-tiers"><span class="ni" data-ic="list"></span><span class="out">All</span></a>
+</div></nav>
 
 <script>
 const JAM_START = new Date('2026-11-01T00:00:00-05:00');
@@ -412,50 +401,89 @@ BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>
 const ALL=BUILDERS.flatMap(b=>b.plan);
 function tags(p){return (p.cwl?'<span class="tag">after CWL</span>':'')+(p.opt?'<span class="tag">spare DE only</span>':'')+(p.book?'<span class="tag">Book of Heroes</span>':'')+(p.bof?'<span class="tag">Book of Fighting</span>':'')+(p.final?'<span class="tag fin">final round</span>':'')}
 
+
+/* ---------- icons (original, generic shapes) ---------- */
+const IC={
+  g:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffd23a" stroke="#7a4f00" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="none" stroke="#f2a900" stroke-width="2"/><path d="M8 8.5a5 5 0 0 1 4-2" stroke="#fff6c8" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
+  e:'<svg class="i" viewBox="0 0 24 24"><path d="M12 1.8S4 10.8 4 15.3a8 8 0 0 0 16 0C20 10.8 12 1.8 12 1.8Z" fill="#f070e6" stroke="#5e1258" stroke-width="2"/><ellipse cx="9" cy="14.5" rx="1.8" ry="2.8" fill="#fff" opacity=".65"/></svg>',
+  d:'<svg class="i" viewBox="0 0 24 24"><path d="M12 1.8S4 10.8 4 15.3a8 8 0 0 0 16 0C20 10.8 12 1.8 12 1.8Z" fill="#5a4080" stroke="#1f1430" stroke-width="2"/><ellipse cx="9" cy="14.5" rx="1.8" ry="2.8" fill="#c9b6ea" opacity=".6"/></svg>',
+  hammer:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 3.2 20.8 10.4 18.4 12.8 16.6 11 6.4 21.2a1.8 1.8 0 0 1-2.6 0l-1-1a1.8 1.8 0 0 1 0-2.6L13 7.4 11.2 5.6Z"/></svg>',
+  flask:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M9 2h6v2h-1v5.2l5.6 9.4A2.2 2.2 0 0 1 17.7 22H6.3a2.2 2.2 0 0 1-1.9-3.4L10 9.2V4H9Z"/></svg>',
+  paw:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><ellipse cx="6" cy="10" rx="2.2" ry="2.8"/><ellipse cx="10" cy="6" rx="2.2" ry="2.8"/><ellipse cx="14.5" cy="6" rx="2.2" ry="2.8"/><ellipse cx="18.5" cy="10" rx="2.2" ry="2.8"/><path d="M12 11c3 0 6 4.5 6 7a3 3 0 0 1-3 3c-1.2 0-2-.6-3-.6s-1.8.6-3 .6a3 3 0 0 1-3-3c0-2.5 3-7 6-7Z"/></svg>',
+  cal:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2Zm-2 8v9h14v-9Zm2 2h4v3H7Z"/></svg>',
+  clock:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-1 4v7l5 3 1-1.7-4-2.4V6Z"/></svg>',
+  list:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h3v3H3Zm5 0h13v3H8ZM3 10.5h3v3H3Zm5 0h13v3H8ZM3 16h3v3H3Zm5 0h13v3H8Z"/></svg>',
+  chev:'<svg class="i chev" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6-1.6-1.6L12 11.8 7.6 7.4Z"/></svg>',
+  check:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.6 1.6L9 19.4 21 7.4l-1.6-1.6Z"/></svg>',
+  book:c=>`<svg class="i" viewBox="0 0 24 24"><path d="M5 3h12a2 2 0 0 1 2 2v14H7a2 2 0 0 0-2 2Z" fill="${c}" stroke="#2a1508" stroke-width="1.6"/><path d="M5 21a2 2 0 0 1 2-2h12v2Z" fill="#f4e6c4" stroke="#2a1508" stroke-width="1.6"/></svg>`,
+  potion:c=>`<svg class="i" viewBox="0 0 24 24"><path d="M9.5 2h5v4l4.2 6.6A6 6 0 1 1 5.3 12.6L9.5 6Z" fill="${c}" stroke="#2a1508" stroke-width="1.6"/><rect x="9" y="1.5" width="6" height="2.4" rx="1" fill="#c99a5b" stroke="#2a1508" stroke-width="1.2"/></svg>`,
+  ring:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5" fill="none" stroke="#2a1508" stroke-width="5"/><circle cx="12" cy="13" r="7.5" fill="none" stroke="#ffd23a" stroke-width="3"/><path d="M9 4h6l-3 3Z" fill="#7cd3ff" stroke="#2a1508" stroke-width="1.2"/></svg>',
+};
+const RESNAME={g:'Gold',e:'Elixir',d:'Dark Elixir'};
+const kindTile=id=>id==='lab'||id==='glab'?['lab',IC.flask]:id==='pet'?['pet',IC.paw]:id==='gob'?['gob',IC.hammer]:['',IC.hammer];
+const costHTML=(p)=>`<span class="cost">${IC[p.res]}${money(p.cost,p.res)}</span>`;
+const ITEMS=[
+  ['book','#c0392b','Book of Heroes x2','One on <strong>Grand Warden 78</strong>, one on <strong>Archer Queen 101</strong>, so neither is ever down. Start the upgrade, then finish it with the book.'],
+  ['potion','#f39c12','Builder Potions','None left. Claim the Gold Pass ones and save them for <strong>Nov 12–14</strong> to push the final starts in before the Jam ends.'],
+  ['potion','#d63fbf','Research Potions','All used. The boost runs to <strong>~11:30 PM Nov 1</strong>: Rage ~10 PM, Meteor Golem (Goblin Lab) ~1 AM. Start Siege Barracks right after Rage.'],
+  ['book','#7d3fa8','Books of Fighting','You have <strong>0</strong> and can only hold 1. Claim one from the Gold Pass and use it on the longest troop or siege research.'],
+  ['potion','#4b3566','Rune of Dark Elixir','Fill up when a Dark Elixir hero is next and you\'re short.'],
+  ['book','#2c7be5','Book of Everything','Save it for <strong>after the Jam</strong>, on an upgrade that takes 11+ days.'],
+  ['ring','','Wall Rings x4','Any time. They don\'t need a free builder.'],
+  ['potion','#cfd6dc','Pet Potions x4','Dark Elixir is piling up and the Pet House needs no builder, so use them on Greedy Raven.'],
+  ['book','#d35400','Book of Building','Used Nov 1 on a Firespitter to start Inferno #3. Save the next one for an upgrade with 5+ days left.'],
+];
+
 /* ---------- NOW ---------- */
 function laneStatus(b,now){
   const fr=new Date(b.free).getTime();
   if(now<fr)return{run:{name:b.cur,end:fr,start:null}};
-  let run=null;for(const p of b.plan){if(state[p.key]&&now<p.end.getTime()&&now>=p.start.getTime()){run={name:p.name,start:p.start.getTime(),end:p.end.getTime(),res:p.res}}}
+  let run=null;for(const p of b.plan){if(state[p.key]&&now<p.end.getTime()&&now>=p.start.getTime())run={name:p.name,start:p.start.getTime(),end:p.end.getTime()}}
   return{run};
 }
-function nextOf(b){return b.plan.find(p=>!state[p.key])}
+const nextOf=b=>b.plan.find(p=>!state[p.key]);
 function renderNow(){
   const now=Date.now();
   const nexts=BUILDERS.map(b=>({b,p:nextOf(b)})).filter(x=>x.p).sort((x,y)=>x.p.start-y.p.start);
-  const ready=nexts.filter(x=>x.p.start<=now), later=nexts.filter(x=>x.p.start>now);
+  const ready=nexts.filter(x=>x.p.start<=now),later=nexts.filter(x=>x.p.start>now);
   const dn=$('donow');
   if(ready.length){
-    const f=ready[0];dn.className='card donow ready';
-    dn.innerHTML=`<div class="ready-tag"><span class="dot"></span>Ready now</div><div class="big">${f.p.name}</div><div class="sub">${f.b.name} · <span class="cost ${f.p.res}">${money(f.p.cost,f.p.res)} ${RES[f.p.res]}</span> · ${dur(f.p.h)}${tags(f.p)}</div>
-      <div class="actions"><button class="btn" data-start="${f.p.key}">I started it</button></div>
-      ${ready.length>1?`<ul class="morelist">${ready.slice(1).map(x=>`<li><div><div class="nm">${x.p.name}</div><div class="who">${x.b.name} · ${money(x.p.cost,x.p.res)} ${RES[x.p.res]}</div></div><button class="btn sm" data-start="${x.p.key}">Started</button></li>`).join('')}</ul>`:''}`;
+    const f=ready[0],[tc,ti]=kindTile(f.b.id);
+    dn.innerHTML=`<div class="ribbon go out"><span class="pulse"></span>Ready to upgrade${ready.length>1?` · ${ready.length}`:''}</div>
+      <div class="body"><div class="tile ${tc}">${ti}</div><div class="name">${f.p.name}</div><div class="meta">${f.b.name} · ${dur(f.p.h)}${tags(f.p)}</div></div>
+      <div class="act">${costHTML(f.p)}<button class="btn out" data-start="${f.p.key}">${IC.check} Started</button></div>
+      ${ready.length>1?`<ul class="also">${ready.slice(1).map(x=>`<li><span style="font-size:1.4rem;display:grid">${IC[x.p.res]}</span><span class="nm">${x.p.name}<small>${x.b.name} · ${money(x.p.cost,x.p.res)}</small></span><button class="btn sm out" data-start="${x.p.key}">${IC.check}</button></li>`).join('')}</ul>`:''}`;
   }else if(later.length){
-    const f=later[0];dn.className='card donow';
-    dn.innerHTML=`<div class="eyebrow">Next up in ${rel(f.p.start-now)}</div><div class="big">${f.p.name}</div><div class="sub">${f.b.name} · ${fmtDate(f.p.start)} · <span class="cost ${f.p.res}">${money(f.p.cost,f.p.res)} ${RES[f.p.res]}</span>${tags(f.p)}</div><div class="sub" style="margin-top:8px">Nothing to start right now. Farm ${RES[f.p.res]} for this one.</div>`;
-  }else{dn.className='card donow';dn.innerHTML='<div class="big">Every planned upgrade is started</div><div class="sub">Check the After Jam tab for what comes next.</div>'}
-  $('soon').innerHTML=later.slice(ready.length?0:1,ready.length?6:7).map(({b,p})=>`<li><i class="res ${p.res}"></i><div><div class="nm">${p.name}</div><div class="who">${b.name}</div></div><div class="when"><b>in ${rel(p.start-now)}</b>${fmtDate(p.start)}</div></li>`).join('')||'<li><div></div><div class="who">Nothing else scheduled.</div><div></div></li>';
-  // budget
-  let tot=0,done=0,g=0,e=0,d=0,G=0,E=0,D=0;ALL.forEach(p=>{tot++;const c=p.cost;if(p.res==='g')G+=c;else if(p.res==='e')E+=c;else D+=c;if(state[p.key]){done++;return}if(p.res==='g')g+=c;else if(p.res==='e')e+=c;else d+=c});
-  $('budget').innerHTML=[['Upgrades started',`${done} / ${tot}`,done/tot,'var(--ok)'],['Gold still to spend',money(g,'g'),1-g/G,'var(--gold-bar)'],['Elixir still to spend',money(e,'e'),1-e/E,'var(--elixir-bar)'],['Dark Elixir still to spend',money(d,'d'),1-d/D,'var(--dark-bar)']].map(([k,v,f,c])=>`<div class="card bud"><div class="k">${k}</div><div class="v">${v}</div><div class="bar"><i style="width:${Math.round(f*100)}%;background:${c}"></i></div></div>`).join('');
-  // lanes (keep any opened lists open across re-renders)
-  const openIds=new Set([...document.querySelectorAll('.lane details.more[open]')].map(d=>d.closest('.lane').dataset.id));
+    const f=later[0],[tc,ti]=kindTile(f.b.id);
+    dn.innerHTML=`<div class="ribbon wait out">${IC.clock} Next up in ${rel(f.p.start-now)}</div>
+      <div class="body"><div class="tile ${tc}">${ti}</div><div class="name">${f.p.name}</div><div class="meta">${f.b.name} · ${fmtDate(f.p.start)}${tags(f.p)}</div></div>
+      <div class="act">${costHTML(f.p)}<span class="meta" style="color:var(--ink-2)">Have ${money(f.p.cost,f.p.res)} ${RESNAME[f.p.res]} ready</span></div>`;
+  }else dn.innerHTML='<div class="ribbon go out">All done</div><div class="body"><div class="name" style="grid-column:1/3">Every planned upgrade is started</div></div>';
+  const list=later.slice(ready.length?0:1,ready.length?6:7);
+  $('soon').innerHTML=list.map(({b,p})=>`<li><span class="r">${IC[p.res]}</span><span class="nm">${p.name}<small>${b.name}</small></span><span class="when"><span class="timer out">${rel(p.start-now)}</span><small>${fmtDate(p.start)}</small></span></li>`).join('')||'<li><span></span><span class="nm"><small>Nothing else scheduled.</small></span><span></span></li>';
+  let tot=0,done=0,g=0,e=0,d=0,G=0,E=0,D=0;
+  ALL.forEach(p=>{tot++;const c=p.cost;if(p.res==='g')G+=c;else if(p.res==='e')E+=c;else D+=c;if(state[p.key]){done++;return}if(p.res==='g')g+=c;else if(p.res==='e')e+=c;else d+=c});
+  const row=(r,left,all,grad)=>`<div class="rrow"><span class="lbl">${RESNAME[r]} still to spend</span><span class="amt">${money(left,r)}</span><div class="rbar"><span class="ic">${IC[r]}</span><div class="bar"><i style="width:${all?Math.max(3,Math.round(left/all*100)):0}%;background:${grad}"></i></div></div></div>`;
+  $('budget').innerHTML=`<div class="res">${row('g',g,G,'linear-gradient(#ffe36b,#f2b000)')}${row('e',e,E,'linear-gradient(#f070e6,#c535b8)')}${row('d',d,D,'linear-gradient(#8467b0,#4c3570)')}</div><div class="started"><span style="font-weight:900">Upgrades started</span><b>${done} / ${tot}</b></div>`;
+  const openIds=new Set([...document.querySelectorAll('.lane details.more[open]')].map(x=>x.closest('.lane').dataset.id));
   $('lanes').innerHTML=BUILDERS.map(b=>{
-    const st=laneStatus(b,now),n=nextOf(b);let cur='';
-    if(st.run){const left=st.run.end-now;const pct=st.run.start?Math.min(100,Math.max(0,(now-st.run.start)/(st.run.end-st.run.start)*100)):0;
-      cur=`<div class="cur"><div class="lbl">Upgrading</div><div class="row"><span class="nm">${st.run.name}</span><span class="left">${rel(left)} left</span></div><div class="pbar ${st.run.start?'':'unknown'}"><i style="width:${pct}%;background:${st.run.res?`var(--${({g:'gold',e:'elixir',d:'dark'})[st.run.res]}-bar)`:'var(--accent)'}"></i></div></div>`}
-    else cur=`<div class="cur"><div class="lbl">Upgrading</div><div class="row"><span class="nm" style="color:var(--muted)">${n?'Free':'Done with the plan'}</span></div><div class="pbar"><i style="width:0"></i></div></div>`;
-    const nx=n?`<div class="nextup ${n.start<=now?'ready':''}"><div><div class="lbl">${n.start<=now?'Start now':'Next · in '+rel(n.start-now)}</div><div class="nm">${n.name}${tags(n)}</div><div class="when">${fmtDate(n.start)} · ${money(n.cost,n.res)} ${RES[n.res]}</div></div>${n.start<=now?`<button class="btn sm" data-start="${n.key}">Started</button>`:''}</div>`:'';
-    const q=b.plan.length?`<div class="queue">${b.plan.map(p=>`<span class="chip ${state[p.key]?'done':''} ${p.final?'final':''}"><i class="res ${p.res}"></i>${p.name}</span>`).join('')}</div>
-      <details class="more"><summary>Show times and tick off</summary><ul class="steps">${b.plan.map(p=>`<li class="step ${state[p.key]?'on':''}"><label><input type="checkbox" data-k="${p.key}" ${state[p.key]?'checked':''}><span class="nm">${p.name}${tags(p)}</span><span class="cost ${p.res}">${money(p.cost,p.res)}</span><span class="meta">${fmtDate(p.start)} → ${fmtDate(p.end)} · ${dur(p.h)}</span></label></li>`).join('')}</ul></details>`:'<div class="note" style="margin:0">Nothing queued here during the Jam.</div>';
-    return `<article class="card lane" data-id="${b.id}"><header><h3>${b.name}</h3><span class="kind">${KIND[b.id]||'Builder'}</span></header>${cur}${nx}${q}</article>`;
+    const st=laneStatus(b,now),n=nextOf(b),[tc,ti]=kindTile(b.id);
+    let busy;
+    if(st.run){const left=st.run.end-now,pct=st.run.start?Math.min(100,Math.max(0,(now-st.run.start)/(st.run.end-st.run.start)*100)):0;
+      busy=`<div class="busy"><div class="lbl"><b>${st.run.name}</b><span>done ${fmtDate(new Date(st.run.end))}</span></div><div class="gbar ${st.run.start?'':'unknown'}"><i style="width:${pct}%"></i><span class="out">${rel(left)}</span></div></div>`}
+    else busy=`<div class="busy"><div class="lbl"><b>${n?'Free':'Plan complete'}</b></div><div class="gbar idle"><i></i><span class="out">${n?'Idle':'Done'}</span></div></div>`;
+    const nx=n?`<div class="next ${n.start<=now?'go':''}"><span class="r">${IC[n.res]}</span><span class="nm">${n.name}${tags(n)}<small>${n.start<=now?'Start now':'Next · in '+rel(n.start-now)} · ${money(n.cost,n.res)}</small></span>${n.start<=now?`<button class="btn sm out" data-start="${n.key}">${IC.check}</button>`:''}</div>`:'';
+    const q=b.plan.length?`<div class="queue">${b.plan.map(p=>`<span class="chip ${state[p.key]?'done':''} ${p.final?'fin':''}">${IC[p.res]}<span>${p.name}</span></span>`).join('')}</div>
+      <details class="more"><summary>Times &amp; checklist ${IC.chev}</summary><ul class="steps">${b.plan.map(p=>`<li class="step ${state[p.key]?'on':''}"><label><input type="checkbox" data-k="${p.key}" ${state[p.key]?'checked':''}><span class="nm">${p.name}${tags(p)}</span>${costHTML(p)}<span class="meta">${fmtDate(p.start)} → ${fmtDate(p.end)} · ${dur(p.h)}</span></label></li>`).join('')}</ul></details>`:'<p class="meta" style="margin:0;color:var(--ink-2);font-size:.84rem">Nothing queued here during the Jam.</p>';
+    return `<article class="panel lane" data-id="${b.id}"><div class="head"><div class="tile ${tc}">${ti}</div><h3>${b.name}<small>${({gob:'Goblin · costs gems',lab:'Research',glab:'Research · costs gems',pet:'Pets'})[b.id]||'Builder'}</small></h3></div>${busy}${nx}${q}</article>`;
   }).join('');
-  openIds.forEach(id=>{const d=document.querySelector(`.lane[data-id="${id}"] details.more`);if(d)d.open=true});
+  openIds.forEach(id=>{const x=document.querySelector(`.lane[data-id="${id}"] details.more`);if(x)x.open=true});
 }
+function renderItems(){$('items').innerHTML=ITEMS.map(([k,c,t,w])=>`<div class="panel mi"><div class="pic">${k==='ring'?IC.ring:IC[k](c)}</div><b>${t}</b><p>${w}</p></div>`).join('')}
 
 /* ---------- TIMELINE ---------- */
 let selected=null;
-function drawTimeline(el,rows,t0,t1,stepDays,interactive){
+function drawTimeline(el,rows,t0,t1,stepDays){
   const pc=d=>Math.max(0,Math.min(100,(d-t0)/(t1-t0)*100));
   let h='<div class="tl-axis">';
   for(let d=new Date(t0);d<=t1;d=new Date(d.getTime()+stepDays*24*H))h+=`<span style="left:${pc(d)}%">${fmtDay(d)}</span>`;
@@ -463,29 +491,30 @@ function drawTimeline(el,rows,t0,t1,stepDays,interactive){
   rows.forEach(r=>{
     h+=`<div class="tl-row"><div class="tl-label">${r.name}<small>${r.sub}</small></div><div class="tl-track">`;
     if(r.cur){const l=pc(r.cur.start),w=pc(r.cur.end)-l;if(w>0)h+=`<div class="seg cur" style="left:${l}%;width:${w}%">${r.cur.name}</div>`}
-    r.segs.forEach(p=>{const l=pc(p.start),w=Math.max(.6,pc(p.end)-l);h+=`<button type="button" class="seg ${p.res} ${state[p.key]?'done':''}" data-seg="${p.key}" aria-pressed="${selected===p.key}" style="left:${l}%;width:${w}%" title="${p.name}">${p.name}</button>`});
+    r.segs.forEach(p=>{const l=pc(p.start),w=Math.max(.7,pc(p.end)-l);h+=`<button type="button" class="seg ${p.res} ${state[p.key]?'done':''}" data-seg="${p.key}" aria-pressed="${selected===p.key}" style="left:${l}%;width:${w}%" title="${p.name}">${p.name}</button>`});
     h+='</div></div>';
   });
-  h+=`<div style="position:absolute;inset:0 0 0 132px;pointer-events:none">`;
+  h+='<div style="position:absolute;inset:0 0 0 124px;pointer-events:none">';
   if(JAM_END>t0&&JAM_END<t1)h+=`<div class="vline jam" style="left:${pc(JAM_END)}%"><em>Jam ends</em></div>`;
   const now=Date.now();if(now>t0&&now<t1)h+=`<div class="vline now" style="left:${pc(now)}%"><em>Now</em></div>`;
   h+='</div></div>';el.innerHTML=h;
 }
 function renderPlan(){
-  drawTimeline($('tl'),BUILDERS.map(b=>({name:b.name,sub:b.cur,cur:{name:b.cur,start:T0,end:new Date(b.free)},segs:b.plan})),T0,T1,2,true);
-  const dt=$('detail');const p=ALL.find(x=>x.key===selected);
-  if(p){dt.hidden=false;dt.innerHTML=`<b>${p.name}</b><span>${p.lane.name}</span><span class="cost ${p.res}">${money(p.cost,p.res)} ${RES[p.res]}</span><span>Start ${fmtDate(p.start)}</span><span>Done ${fmtDate(p.end)}</span>${tags(p)}<button class="btn sm ${state[p.key]?'ghost':''}" data-toggle="${p.key}">${state[p.key]?'Mark not started':'Mark started'}</button>`}else dt.hidden=true;
+  drawTimeline($('tl'),BUILDERS.map(b=>({name:b.name,sub:b.cur,cur:{name:b.cur,start:T0,end:new Date(b.free)},segs:b.plan})),T0,T1,2);
+  const dt=$('detail'),p=ALL.find(x=>x.key===selected);
+  if(p){dt.hidden=false;dt.innerHTML=`<b>${p.name}${tags(p)}</b><span>${p.lane.name}</span>${costHTML(p)}<span>Start ${fmtDate(p.start)}</span><span>Done ${fmtDate(p.end)}</span><button class="btn sm out ${state[p.key]?'grey':''}" data-toggle="${p.key}">${state[p.key]?'Mark not started':'Mark started'}</button>`}else dt.hidden=true;
+  $('legend').innerHTML=`<span>${IC.g}Gold</span><span>${IC.e}Elixir</span><span>${IC.d}Dark Elixir</span>`;
   renderChart();
 }
 function renderChart(){
   const days=[];for(let d=new Date(JAM_START);d<JAM_END;d=new Date(d.getTime()+24*H))days.push(d);
   const data=days.map(d=>{const a=d.getTime(),z=a+24*H;let g=0,e=0;ALL.forEach(p=>{if(state[p.key])return;const s=p.start.getTime();if(s>=a&&s<z){if(p.res==='g')g+=p.cost;if(p.res==='e')e+=p.cost}});return{d,g:g/1e6,e:e/1e6}});
-  const max=Math.max(10,...data.map(x=>Math.max(x.g,x.e)));const top=Math.ceil(max/10)*10;
-  const W=760,Hh=220,L=36,B=26,T=10,bw=(W-L-8)/data.length;
+  const max=Math.max(10,...data.map(x=>Math.max(x.g,x.e))),top=Math.ceil(max/10)*10;
+  const W=760,Hh=220,L=38,B=26,T=10,bw=(W-L-8)/data.length;
   let s=`<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Gold and Elixir needed per day">`;
   for(let v=0;v<=top;v+=top/4){const y=T+(Hh-T-B)*(1-v/top);s+=`<line class="gl" x1="${L}" x2="${W-4}" y1="${y}" y2="${y}"/><text x="${L-6}" y="${y+4}" text-anchor="end">${v}M</text>`}
-  data.forEach((x,i)=>{const x0=L+i*bw+bw*.14,w=bw*.34;[[x.g,'var(--gold-bar)',0],[x.e,'var(--elixir-bar)',1]].forEach(([v,c,k])=>{if(!v)return;const hgt=(Hh-T-B)*(v/top);s+=`<rect x="${x0+k*w}" y="${Hh-B-hgt}" width="${w-1}" height="${hgt}" rx="2" fill="${c}"><title>${fmtDay(x.d)}: ${v.toFixed(1)}M ${k?'Elixir':'Gold'}</title></rect>`});if(i%2===0)s+=`<text x="${L+i*bw+bw/2}" y="${Hh-8}" text-anchor="middle">${fmtDay(x.d)}</text>`});
-  s+='</svg>';$('chart').innerHTML='<div class="scroll">'+s+'</div>'+`<div class="legend" style="margin:6px 0 0"><span><i class="res g"></i>Gold (M)</span><span><i class="res e"></i>Elixir (M)</span></div>`;
+  data.forEach((x,i)=>{const x0=L+i*bw+bw*.14,w=bw*.34;[[x.g,'#f5b800','#7a4f00',0],[x.e,'#e04fd6','#5e1258',1]].forEach(([v,c,st,k])=>{if(!v)return;const hg=(Hh-T-B)*(v/top);s+=`<rect x="${x0+k*w}" y="${Hh-B-hg}" width="${w-1}" height="${hg}" rx="3" fill="${c}" stroke="${st}" stroke-width="1.5"><title>${fmtDay(x.d)}: ${v.toFixed(1)}M ${k?'Elixir':'Gold'}</title></rect>`});if(i%2===0)s+=`<text x="${L+i*bw+bw/2}" y="${Hh-8}" text-anchor="middle">${fmtDay(x.d)}</text>`});
+  $('chart').innerHTML='<div class="scroll">'+s+'</svg></div>'+`<div class="legend" style="margin:6px 0 0"><span>${IC.g}Gold (M)</span><span>${IC.e}Elixir (M)</span></div>`;
 }
 
 /* ---------- AFTER ---------- */
@@ -493,42 +522,46 @@ const AFTER_T0=new Date('2026-11-13T00:00:00-05:00'),AFTER_T1=new Date('2026-12-
 const AFTER_ROWS=BUILDERS.filter(b=>/^b\d/.test(b.id)).map(b=>{const f=b.plan[b.plan.length-1];return{name:b.name,sub:'after '+f.name,cur:{name:f.name,start:f.start,end:f.end},free:f.end.getTime(),segs:[]}});
 const AFTER_PLAN=AFTER.map((a,i)=>{const r=AFTER_ROWS.reduce((x,y)=>y.free<x.free?y:x);const st=r.free;r.free+=a[1]*H;const p={key:'a-'+i,name:a[0],h:a[1],res:a[2],cost:a[3],note:a[4],start:new Date(st),end:new Date(r.free),builder:r.name};r.segs.push(p);return p});
 function renderAfter(){
-  drawTimeline($('tl-after'),AFTER_ROWS,AFTER_T0,AFTER_T1,4,false);
-  $('after-list').innerHTML=AFTER_PLAN.map(p=>`<li class="step ${state[p.key]?'on':''}"><label><input type="checkbox" data-k="${p.key}" ${state[p.key]?'checked':''}><span class="nm">${p.name}</span><span class="cost ${p.res}">${money(p.cost,p.res)}</span><span class="meta">${p.builder} · ${fmtDate(p.start)} · ${dur(p.h)}${p.note?' · '+p.note:''}</span></label></li>`).join('');
+  drawTimeline($('tl-after'),AFTER_ROWS,AFTER_T0,AFTER_T1,4);
+  $('after-list').innerHTML=AFTER_PLAN.map(p=>`<li class="step ${state[p.key]?'on':''}"><label><input type="checkbox" data-k="${p.key}" ${state[p.key]?'checked':''}><span class="nm">${p.name}</span>${costHTML(p)}<span class="meta">${p.builder} · ${fmtDate(p.start)} · ${dur(p.h)}${p.note?' · '+p.note:''}</span></label></li>`).join('');
   let done=0,g=0,e=0,d=0;AFTER_PLAN.forEach(p=>{if(state[p.key]){done++;return}if(p.res==='g')g+=p.cost;else if(p.res==='e')e+=p.cost;else d+=p.cost});
-  $('a-budget').innerHTML=[['Started',`${done} / ${AFTER_PLAN.length}`],['Gold',money(g,'g')],['Elixir',money(e,'e')],['Dark Elixir',money(d,'d')]].map(([k,v])=>`<div class="card bud"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
-  $('fill').innerHTML=FILL.map(f=>`<div class="card"><b>${f[0]}</b><span>${f[1]}</span></div>`).join('');
+  $('a-budget').innerHTML=`<div class="afterres"><div>${IC.g}${money(g,'g')}</div><div>${IC.e}${money(e,'e')}</div><div>${IC.d}${money(d,'d')}</div><div>${IC.check}${done} / ${AFTER_PLAN.length}</div></div>`;
+  $('fill').innerHTML=FILL.map(f=>`<div class="panel"><b>${f[0]}</b><span>${f[1]}</span></div>`).join('');
 }
 
 /* ---------- TIERS ---------- */
 let filter='All';
 function renderTiers(){
-  const cats=['All','Heroes','Lab','Pets','Buildings','Equipment'];
-  $('filters').innerHTML=cats.map(c=>`<button type="button" aria-pressed="${c===filter}" data-c="${c}">${c}</button>`).join('');
-  $('tlist').innerHTML=TIERS.map((r,i)=>({r,i})).filter(x=>filter==='All'||x.r[0]===filter).map(({r,i})=>{const k='t-'+i,c=!!state[k],t=r[1]==='—'?'x':r[1];return `<div class="card trow ${c?'on':''}"><span class="tier ${c?'done':t}">${c?'✓':r[1]}</span><div><div class="nm">${r[2]}</div><div class="cat">${r[0]}</div></div><span class="lv">${r[3]}</span><input type="checkbox" data-k="${k}" ${c?'checked':''} aria-label="Started ${r[2]}"><span class="cst">${r[4]}</span>${r[5]?`<span class="nt">${r[5]}</span>`:''}</div>`}).join('');
+  $('filters').innerHTML=['All','Heroes','Lab','Pets','Buildings','Equipment'].map(c=>`<button type="button" aria-pressed="${c===filter}" data-c="${c}">${c}</button>`).join('');
+  $('tlist').innerHTML=TIERS.map((r,i)=>({r,i})).filter(x=>filter==='All'||x.r[0]===filter).map(({r,i})=>{const k='t-'+i,c=!!state[k],t=r[1]==='—'?'x':r[1];
+    return `<div class="panel trow ${c?'on':''}"><span class="shield ${c?'done':t}">${c?'✓':r[1]==='—'?'·':r[1]}</span><span class="nm">${r[2]}<small>${r[3]}</small></span><input type="checkbox" data-k="${k}" ${c?'checked':''} aria-label="Started ${r[2]}"><span class="sub"><b>${r[4]}</b>${r[5]?' · '+r[5]:''}</span><span class="sub">${r[0]}</span></div>`}).join('');
 }
 
 /* ---------- shell ---------- */
 function tick(){
-  const now=Date.now(),ms=JAM_END-now;$('cd').textContent=ms<=0?'Ended':`${Math.floor(ms/864e5)}d ${Math.floor(ms%864e5/H)}h ${String(Math.floor(ms%H/6e4)).padStart(2,'0')}m`;
-  const f=Math.max(0,Math.min(1,(now-JAM_START)/(JAM_END-JAM_START)));$('ring').setAttribute('stroke-dashoffset',(113.1*f).toFixed(1));
+  const now=Date.now(),ms=JAM_END-now;
+  $('cd').textContent=ms<=0?'Jam over':`${Math.floor(ms/864e5)}d ${Math.floor(ms%864e5/H)}h ${String(Math.floor(ms%H/6e4)).padStart(2,'0')}m left`;
+  $('jamfill').style.width=Math.max(0,Math.min(100,ms/(JAM_END-JAM_START)*100))+'%';
 }
 const VIEWS=['now','plan','after','tiers'];
-function route(){const h=location.hash.slice(1);const v=VIEWS.includes(h)?h:'now';VIEWS.forEach(n=>{$('v-'+n).hidden=v!==n;$('t-'+n).setAttribute('aria-current',v===n?'page':'false')});if(v==='plan'){requestAnimationFrame(()=>{const sc=$('tl-scroll');const f=(Date.now()-T0)/(T1-T0);sc.scrollLeft=Math.max(0,sc.scrollWidth*f-140)})}}
+function route(){const h=location.hash.slice(1),v=VIEWS.includes(h)?h:'now';VIEWS.forEach(n=>{$('v-'+n).hidden=v!==n;$('t-'+n).setAttribute('aria-current',v===n?'page':'false')});window.scrollTo(0,0);
+  if(v==='plan')requestAnimationFrame(()=>{const sc=$('tl-scroll');sc.scrollLeft=Math.max(0,sc.scrollWidth*((Date.now()-T0)/(T1-T0))-150)})}
 function renderAll(){renderNow();renderPlan();renderAfter();renderTiers();
-  $('sync').textContent=SYNC.updated?`Synced from Clash Ninja ${SYNC.updated}${SYNC.completion?' · '+SYNC.completion:''}`:'P•K Jordan · TH18 · not synced from Clash Ninja yet'}
+  $('sync').textContent=SYNC.updated?`Synced ${SYNC.updated}${SYNC.completion?' · '+SYNC.completion:''}`:'P•K Jordan · TH18 · Gold Pass on'}
 function setK(k,v){state[k]=v;save();renderAll()}
 document.addEventListener('click',e=>{
   const s=e.target.closest('[data-start]');if(s){setK(s.dataset.start,true);return}
   const t=e.target.closest('[data-toggle]');if(t){setK(t.dataset.toggle,!state[t.dataset.toggle]);return}
   const g=e.target.closest('[data-seg]');if(g){selected=selected===g.dataset.seg?null:g.dataset.seg;renderPlan();return}
-  const f=e.target.closest('[data-c]');if(f){filter=f.dataset.c;renderTiers();return}
+  const f=e.target.closest('[data-c]');if(f){filter=f.dataset.c;renderTiers()}
 });
 document.addEventListener('change',e=>{const i=e.target.closest('input[data-k]');if(i)setK(i.dataset.k,i.checked)});
 let armed=false;
-$('reset').addEventListener('click',()=>{const m=$('reset-msg');if(!armed){armed=true;m.textContent='Click again to clear every checkmark.';setTimeout(()=>{armed=false;m.textContent=''},4000);return}state={};save();armed=false;m.textContent='Cleared.';renderAll()});
+$('reset').addEventListener('click',()=>{const m=$('reset-msg');if(!armed){armed=true;m.textContent='Tap again to clear every checkmark.';setTimeout(()=>{armed=false;m.textContent=''},4000);return}state={};save();armed=false;m.textContent='Cleared.';renderAll()});
+document.querySelectorAll('[data-ic]').forEach(n=>n.innerHTML=IC[n.dataset.ic]);
+$('jamico').innerHTML=IC.hammer;
 window.addEventListener('hashchange',route);
-renderAll();route();tick();setInterval(()=>{tick();renderNow()},30e3);
+renderItems();renderAll();route();tick();setInterval(()=>{tick();renderNow()},30e3);
 </script>
 </body>
 </html>
