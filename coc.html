@@ -263,8 +263,8 @@ details.more summary::-webkit-details-marker{display:none}
   <div class="items">
     <div class="card item"><div class="ic h">H</div><b>Book of Heroes x2</b><div class="when">Use one to finish <strong>Grand Warden 78</strong> instantly so he never misses a CWL attack. Keep the other for a hero after the Jam.</div></div>
     <div class="card item"><div class="ic b">B</div><b>Book of Building</b><div class="when">Use it <strong>now</strong> on a Firespitter while your Gold is full, then start Inferno #3 on the freed builder.</div></div>
-    <div class="card item"><div class="ic b">P</div><b>Builder Potions</b><div class="when">Next one <strong>Nov 3, ~9 AM</strong>, once all builders are on long upgrades. Hold the rest, including Gold Pass ones, for <strong>Nov 12–14</strong>.</div></div>
-    <div class="card item"><div class="ic r">R</div><b>Research Potions</b><div class="when">Three stacked on <strong>Rage, Nov 1 ~7 PM</strong>, which finish it around 9:45 PM. Keep any others for spells; troops get Books of Fighting.</div></div>
+    <div class="card item"><div class="ic b">P</div><b>Builder Potions</b><div class="when">None left after Nov 1 (boost ends ~8:25 PM). Claim the Gold Pass ones and save them for <strong>Nov 12–14</strong> to push the final starts in before the Jam ends.</div></div>
+    <div class="card item"><div class="ic r">R</div><b>Research Potion x1</b><div class="when">Current boost runs to <strong>~10:25 PM Nov 1</strong> (Freeze done ~7:50 PM, Rage ~10 PM). Keep the last one; every remaining troop gets a Book of Fighting.</div></div>
     <div class="card item"><div class="ic r">F</div><b>Books of Fighting</b><div class="when">Start a troop or siege research, then finish it instantly with a book: <strong>Baby Dragon, Siege Barracks, Battle Blimp, Stone Slammer, Archer</strong>. Elixir is the only limit.</div></div>
     <div class="card item"><div class="ic d">D</div><b>Rune of Dark Elixir</b><div class="when">Fill up when a Dark Elixir hero (Royal Champion, Queen, King) is next and you're short.</div></div>
     <div class="card item"><div class="ic b">E</div><b>Book of Everything</b><div class="when">Save for <strong>after the Jam</strong>, on an upgrade that takes 11+ days.</div></div>
@@ -315,7 +315,7 @@ const T0 = new Date('2026-11-01T00:00:00-05:00'), T1 = new Date('2026-11-22T00:0
 const H = 3600e3;
 const BUILDERS = [
   {id:'gob', name:'Goblin Builder', cur:'Dragon Duke', free:'2026-11-01T17:10:00-05:00', steps:[
-    ['Royal Champion 55',16,'d',202.5e3],['Giga Bomb 4',70,'g',9e6],['Inferno Tower #1',145,'g',11.93e6],['Archer Queen 101',43,'d',180e3,'cwl'],['Spell Tower #2',108,'g',12.15e6]]},
+    ['Royal Champion 55',15,'d',202.5e3],['Giga Bomb 4',70,'g',9e6],['Inferno Tower #1',145,'g',11.93e6],['Archer Queen 101',43,'d',180e3,'cwl'],['Spell Tower #2',108,'g',12.15e6]]},
   {id:'b1', name:'Builder 1', cur:'Smasher', free:'2026-11-02T09:00:00-05:00', steps:[
     ['Hidden Tesla #4',140,'g',11.25e6],['Mortar #1',135,'g',9.45e6],['X-Bow #2',145,'g',11.7e6]]},
   {id:'b2', name:'Builder 2', cur:'Longshot', free:'2026-11-02T21:00:00-05:00', steps:[
@@ -326,11 +326,11 @@ const BUILDERS = [
     ['X-Bow #1',145,'g',11.7e6],['Army Camp #2',81,'e',11.7e6],['Grand Warden 78',0,'e',12.15e6,'book'],['Hidden Tesla #2',140,'g',11.25e6]]},
   {id:'b5', name:'Builder 5', cur:'Firespitter', free:'2026-11-03T09:00:00-05:00', steps:[
     ['Scattershot #2',162,'g',11.93e6],['Hidden Tesla #3',140,'g',11.25e6]]},
-  {id:'b6', name:'Builder 6', cur:'Firespitter', free:'2026-11-03T09:00:00-05:00', steps:[
+  {id:'b6', name:'Builder 6', cur:'Firespitter', free:'2026-11-01T19:20:00-05:00', steps:[
     ['Inferno Tower #3',145,'g',11.93e6],['Barbarian King 102',43,'d',184.5e3],['Dark Barracks 13',54,'e',10.35e6],['X-Bow #4',145,'g',11.7e6]]},
   {id:'lab', name:'Laboratory', cur:'Balloon 13', free:'2026-11-01T19:00:00-05:00', steps:[
-    ['Rage Spell 7',2.75,'e',11.7e6],['Baby Dragon 12',0,'e',13.05e6,'bof'],['Siege Barracks 6',0,'e',12.15e6,'bof'],['Battle Blimp 6',0,'e',11.7e6,'bof'],['Stone Slammer 6',0,'e',11.7e6,'bof'],['Archer 14',0,'e',11.25e6,'bof']]},
-  {id:'glab', name:'Goblin Lab', cur:'Freeze Spell 8', free:'2026-11-01T21:00:00-05:00', steps:[]},
+    ['Rage Spell 7',3,'e',11.7e6],['Baby Dragon 12',0,'e',13.05e6,'bof'],['Siege Barracks 6',0,'e',12.15e6,'bof'],['Battle Blimp 6',0,'e',11.7e6,'bof'],['Stone Slammer 6',0,'e',11.7e6,'bof'],['Archer 14',0,'e',11.25e6,'bof']]},
+  {id:'glab', name:'Goblin Lab', cur:'Freeze Spell 8', free:'2026-11-01T19:50:00-05:00', steps:[]},
   {id:'pet', name:'Pet House', cur:'Greedy Raven 2', free:'2026-11-01T23:00:00-05:00', steps:[
     ['Greedy Raven 3',86,'d',126e3,'opt'],['Greedy Raven 4',86,'d',135e3,'opt'],['Greedy Raven 5',86,'d',144e3,'opt'],['Greedy Raven 6',86,'d',153e3,'opt']]},
 ];
@@ -394,7 +394,7 @@ let state={};
 try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 /* SYNC: updated by the daily Clash Ninja check. started = step keys seen as started or done. */
-const SYNC = {"updated":null,"completion":null,"started":[]};
+const SYNC = {"updated":null,"completion":null,"started":["gob-0","lab-0"]};
 SYNC.started.forEach(k=>{if(state[k]===undefined)state[k]=true});
 
 const $=id=>document.getElementById(id);
