@@ -261,7 +261,7 @@ details.more summary::-webkit-details-marker{display:none}
 
   <h2>Magic items <small>when to use each one</small></h2>
   <div class="items">
-    <div class="card item"><div class="ic h">H</div><b>Book of Heroes x2</b><div class="when">Use one to finish <strong>Grand Warden 78</strong> instantly so he never misses a CWL attack. Keep the other for a hero after the Jam.</div></div>
+    <div class="card item"><div class="ic h">H</div><b>Book of Heroes x2</b><div class="when">One on <strong>Grand Warden 78</strong>, one on <strong>Archer Queen 101</strong>, so neither is ever down. Start the upgrade, then finish it with the book.</div></div>
     <div class="card item"><div class="ic b">B</div><b>Book of Building</b><div class="when">Used Nov 1 on a Firespitter to start Inferno #3. If you get another, save it for an upgrade with 5+ days left.</div></div>
     <div class="card item"><div class="ic b">P</div><b>Builder Potions</b><div class="when">None left after Nov 1 (boost ends ~8:25 PM). Claim the Gold Pass ones and save them for <strong>Nov 12–14</strong> to push the final starts in before the Jam ends.</div></div>
     <div class="card item"><div class="ic r">R</div><b>Research Potions</b><div class="when">All used. The boost runs to <strong>~11:30 PM Nov 1</strong>: Rage done ~10 PM, Meteor Golem (Goblin Lab) ~1 AM. Start Siege Barracks right after Rage to catch the last of it.</div></div>
@@ -314,20 +314,20 @@ const JAM_END = new Date('2026-11-16T02:45:00-05:00');
 const T0 = new Date('2026-11-01T00:00:00-05:00'), T1 = new Date('2026-11-22T00:00:00-05:00');
 const H = 3600e3;
 const BUILDERS = [
-  {id:'gob', name:'Goblin Builder', cur:'Dragon Duke', free:'2026-11-01T17:10:00-05:00', steps:[
-    ['Royal Champion 55',15,'d',202.5e3],['Giga Bomb 4',70,'g',9e6],['Inferno Tower #1',145,'g',11.93e6],['Archer Queen 101',43,'d',180e3,'cwl'],['Spell Tower #2',108,'g',12.15e6]]},
-  {id:'b1', name:'Builder 1', cur:'Smasher', free:'2026-11-02T09:00:00-05:00', steps:[
-    ['Hidden Tesla #4',140,'g',11.25e6],['Mortar #1',135,'g',9.45e6],['X-Bow #2',145,'g',11.7e6]]},
+  {id:'gob', name:'Goblin Builder', cur:'Royal Champion 55', free:'2026-11-02T08:00:00-05:00', steps:[
+    ['Scattershot #1',162,'g',11.93e6],['Hidden Tesla #2',140,'g',11.25e6],["Builder's Hut #4",140,'g',10.8e6]]},
+  {id:'b1', name:'Builder 1', cur:'Smasher', free:'2026-11-02T09:30:00-05:00', steps:[
+    ['Scattershot #2',162,'g',11.93e6],['Hidden Tesla #3',140,'g',11.25e6],["Builder's Hut #5",140,'g',10.8e6]]},
   {id:'b2', name:'Builder 2', cur:'Longshot', free:'2026-11-02T21:00:00-05:00', steps:[
-    ['Inferno Tower #2',145,'g',11.93e6],['Spell Tower #1',108,'g',12.15e6],['X-Bow #3',145,'g',11.7e6]]},
+    ['Inferno Tower #2',145,'g',11.93e6],['Hidden Tesla #5',140,'g',11.25e6],["Builder's Hut #1",140,'g',10.8e6]]},
   {id:'b3', name:'Builder 3', cur:'Workshop', free:'2026-11-02T19:00:00-05:00', steps:[
-    ['Scattershot #1',162,'g',11.93e6],['Army Camp #1',81,'e',11.7e6],['Hidden Tesla #1',140,'g',11.25e6]]},
+    ['Archer Queen 101',0,'d',180e3,'book'],['Inferno Tower #1',145,'g',11.93e6],['X-Bow #4',145,'g',11.7e6],["Builder's Hut #3",140,'g',10.8e6]]},
   {id:'b4', name:'Builder 4', cur:'Air Defense', free:'2026-11-02T22:00:00-05:00', steps:[
-    ['X-Bow #1',145,'g',11.7e6],['Army Camp #2',81,'e',11.7e6],['Grand Warden 78',0,'e',12.15e6,'book'],['Hidden Tesla #2',140,'g',11.25e6]]},
+    ['Grand Warden 78',0,'e',12.15e6,'book'],['X-Bow #1',145,'g',11.7e6],['Hidden Tesla #1',140,'g',11.25e6],["Builder's Hut #2",140,'g',10.8e6]]},
   {id:'b5', name:'Builder 5', cur:'Firespitter', free:'2026-11-03T09:00:00-05:00', steps:[
-    ['Scattershot #2',162,'g',11.93e6],['Hidden Tesla #3',140,'g',11.25e6]]},
-  {id:'b6', name:'Builder 6', cur:'Firespitter', free:'2026-11-01T19:20:00-05:00', steps:[
-    ['Inferno Tower #3',145,'g',11.93e6],['Barbarian King 102',43,'d',184.5e3],['Dark Barracks 13',54,'e',10.35e6],['X-Bow #4',145,'g',11.7e6]]},
+    ['X-Bow #2',145,'g',11.7e6],['Hidden Tesla #4',140,'g',11.25e6],['Mortar #1',135,'g',9.45e6]]},
+  {id:'b6', name:'Builder 6', cur:'Inferno Tower #3', free:'2026-11-07T20:20:00-05:00', steps:[
+    ['X-Bow #3',145,'g',11.7e6],['Barbarian King 102',43,'d',184.5e3],['Mortar #2',135,'g',9.45e6]]},
   {id:'lab', name:'Laboratory', cur:'Rage Spell 7', free:'2026-11-01T22:05:00-05:00', steps:[
     ['Siege Barracks 6',47,'e',12.15e6],['Headhunter 4',84,'d',166.5e3],['Electro Titan 5',86,'e',13.5e6],['Root Rider 4',86,'e',13.5e6]]},
   {id:'glab', name:'Goblin Lab', cur:'Meteor Golem 3', free:'2026-11-02T01:00:00-05:00', steps:[]},
@@ -336,23 +336,24 @@ const BUILDERS = [
 ];
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
 const AFTER=[
-  ['Hidden Tesla #5',280,'g',22.5e6,''],['Army Camp #3',162,'e',23.4e6,'More dragon space'],['Army Camp #4',162,'e',23.4e6,'More dragon space'],
+  ['Spell Tower #1',216,'g',24.3e6,'Biggest after-Jam build'],['Spell Tower #2',216,'g',24.3e6,''],
+  ['Mortar #3',270,'g',18.9e6,''],['Mortar #4',270,'g',18.9e6,''],
   ['Grand Warden 79',86,'e',24.3e6,'Repeat each level up to 85'],['Archer Queen 102',86,'d',360e3,'Repeat each level up to 110'],
-  ['Mortar #2',270,'g',18.9e6,''],['Mortar #3',270,'g',18.9e6,''],['Mortar #4',270,'g',18.9e6,''],['Logger 2',76,'e',16.2e6,'Guardian'],
-  ["Builder's Hut #1",280,'g',21.6e6,''],["Builder's Hut #2",280,'g',21.6e6,''],["Builder's Hut #3",280,'g',21.6e6,''],["Builder's Hut #4",280,'g',21.6e6,''],["Builder's Hut #5",280,'g',21.6e6,''],
+  ['Army Camp #1',162,'e',23.4e6,'More dragon space'],['Army Camp #2',162,'e',23.4e6,''],['Army Camp #3',162,'e',23.4e6,''],['Army Camp #4',162,'e',23.4e6,''],
+  ['Giga Bomb 4',140,'g',18e6,''],['Dark Barracks 13',108,'e',20.7e6,'Unlocks Ruin Witch'],['Logger 2',76,'e',16.2e6,'Guardian'],
 ];
 const FILL=[
   ['Traps: Seeking Air Mine x9, Giant Bomb x8, Skeleton Trap x4, Spring Trap x9, Air Bomb x7, Bomb x8','12.6–17.1M Gold each · short and cheap'],
   ['Gold Storage x4, Elixir Storage x4','16.2M each · only if costs outgrow storage'],
   ['Supercharges (Multi-Archer, Ricochet, Multi-Gear, Air Defense, Bomb Tower, Super Wizard)','2.25–10.8M Gold per stage · same price during the Jam'],
   ['Monolith and Revenge Tower supercharges','198K Dark Elixir each · after heroes'],
-  ['Walls x317','5M+ Gold each · Gold dump when you are near cap'],
+  ['Walls x317','Gold or Elixir · only with excess, and use Elixir since Gold is the limit'],
   ['Barbarian King, Dragon Duke','about 370K Dark Elixir per King level · never in your attacks'],
 ];
 const TIERS = [
-  ['Heroes','S','Royal Champion','54 → 55','225K DE','Goblin Builder, during CWL days 1–2'],
+  ['Heroes','S','Royal Champion','54 → 55','225K DE','Upgrading on the Goblin Builder'],
   ['Heroes','S','Grand Warden','77 → 85','13.5M Elixir','Finish 78 with a Book of Heroes'],
-  ['Heroes','A','Archer Queen','100 → 110','200K DE','After CWL'],
+  ['Heroes','A','Archer Queen','100 → 110','200K DE','Finish 101 with your 2nd Book of Heroes'],
   ['Heroes','B','Barbarian King','101 → 110','205K DE','Any time, not in your army'],
   ['Heroes','B','Dragon Duke','9 → 25','Upgrading','Any time, not in your army'],
   ['Lab','S','Rage Spell','6 → 7','13M Elixir','Researching'],
@@ -369,21 +370,21 @@ const TIERS = [
   ['Lab','C','Sky Wagon, Ruin Witch','unlock','9.9M Elixir / 99K DE','After Workshop 9 and Dark Barracks 13'],
   ['Pets','B','Greedy Raven','2 → 10','126–189K DE per level','Only with spare Dark Elixir'],
   ['Pets','C','Diggy','10 → 15','99–157.5K DE per level','Only with spare Dark Elixir'],
-  ['Buildings','S','Army Camp x4','→ 14','13M Elixir each','More dragon space'],
-  ['Buildings','S','Giga Bomb','→ 4','10M Gold','Town Hall weapon'],
-  ['Buildings','A','Inferno Tower x3','→ 12','13.25M Gold each','Core defense'],
-  ['Buildings','A','Scattershot x2','→ 7','13.25M Gold each','Core defense'],
-  ['Buildings','A','X-Bow x4','→ 13','13M Gold each','Core defense'],
-  ['Buildings','A','Spell Tower x2','→ 4','13.5M Gold each',''],
-  ['Buildings','A','Dark Barracks','→ 13','11.5M Elixir','Unlocks Ruin Witch'],
-  ['Buildings','A','Hidden Tesla x5','→ 17','12.5M Gold each',''],
-  ['Buildings','B','Mortar x4','→ 18','10.5M Gold each',''],
-  ['Buildings','B','Logger','→ 2','9M Elixir',''],
-  ['Buildings','B','Traps (all)','—','7–9.5M Gold each','Fast, cheap'],
-  ['Buildings','B','Supercharges','—','2.5–12M Gold, 220K DE','No Jam discount'],
-  ['Buildings','C',"Builder's Hut x5",'→ 8','12M Gold each',''],
-  ['Buildings','C','Storages x8','→ 19','9M each',''],
-  ['Buildings','C','Walls x317','→ 19','5M Gold each','Gold dump'],
+  ['Buildings','S','Scattershot x2','6 → 7','13.25M Gold each','Longest build (7.5 days), so first in the Jam'],
+  ['Buildings','S','Inferno Tower x3','11 → 12','13.25M Gold each','#3 started'],
+  ['Buildings','S','X-Bow x4','12 → 13','13M Gold each',''],
+  ['Buildings','A','Hidden Tesla x5','16 → 17','12.5M Gold each',''],
+  ['Buildings','A',"Builder's Hut x5",'7 → 8','12M Gold each','Long build, so good Jam value'],
+  ['Buildings','A','Mortar x4','17 → 18','10.5M Gold each','2 in the Jam, 2 after'],
+  ['Buildings','B','Spell Tower x2','3 → 4','13.5M Gold each','After the Jam'],
+  ['Buildings','B','Army Camp x4','13 → 14','13M Elixir each','After the Jam, or swap in if Gold runs short'],
+  ['Buildings','B','Giga Bomb','3 → 4','10M Gold','After the Jam'],
+  ['Buildings','B','Dark Barracks','12 → 13','11.5M Elixir','After the Jam; unlocks Ruin Witch'],
+  ['Buildings','C','Logger','1 → 2','9M Elixir',''],
+  ['Buildings','C','Traps (all)','—','7–9.5M Gold each','Short builds, small saving'],
+  ['Buildings','C','Supercharges','—','2.5–12M Gold, 220K DE','No Jam discount'],
+  ['Buildings','C','Storages x8','18 → 19','9M each',''],
+  ['Buildings','—','Walls x317','18 → 19','Gold or Elixir','Only with excess. Use Elixir, since Gold is the limit'],
   ['Equipment','A','Dragon Duke 2nd piece','14 → 18','Shiny + Glowy',''],
   ['Equipment','B','Dragon Duke level-1 pieces','1 → 18','Shiny + Glowy',''],
   ['Equipment','B','Rocket Backpack','→ 27','Starry','Save Starry Ore for this'],
@@ -396,7 +397,7 @@ let state={};
 try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 /* SYNC: updated by the daily Clash Ninja check. started = step keys seen as started or done. */
-const SYNC = {"updated":null,"completion":null,"started":["gob-0","b6-0"]};
+const SYNC = {"updated":null,"completion":null,"started":[]};
 SYNC.started.forEach(k=>{if(state[k]===undefined)state[k]=true});
 
 const $=id=>document.getElementById(id);
