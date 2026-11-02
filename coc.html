@@ -216,9 +216,42 @@ details.more[open] summary .chev{transform:rotate(180deg)}
 .afterres div{display:flex;align-items:center;gap:8px;font-family:var(--f-game);font-size:1.05rem}
 .afterres div .i{font-size:1.5rem}
 
+
+/* profile */
+.rings{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+.ring{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.ring svg{width:118px;height:118px}
+.ring .big{font-family:var(--f-game);font-size:1.7rem;fill:var(--ink)}
+.ring b{font-family:var(--f-game);font-weight:400;font-size:1.05rem;line-height:1.1}
+.ring small{color:var(--ink-2);font-size:.76rem;line-height:1.25}
+.area{display:grid;gap:10px;padding:14px}
+.arow{display:grid;grid-template-columns:96px 1fr 50px;gap:10px;align-items:center}
+.arow span{font-weight:900;font-size:.9rem}
+.arow em{font-style:normal;font-family:var(--f-game);text-align:right}
+.abar{height:18px;border-radius:9px;background:var(--track);border:3px solid var(--track-edge);overflow:hidden}
+.abar i{display:block;height:100%;border-radius:6px;background:linear-gradient(var(--blue),var(--blue-2))}
+.abar i.hi{background:linear-gradient(var(--green),var(--green-2))} .abar i.lo{background:linear-gradient(var(--orange),var(--orange-2))}
+.hrows{display:grid;gap:12px;padding:14px}
+.hrow{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:baseline}
+.hrow b{font-weight:900}
+.hrow em{font-style:normal;font-family:var(--f-game);font-size:1.05rem}
+.hrow .abar{grid-column:1/3;height:16px}
+.hrow small{grid-column:1/3;color:var(--ink-2);font-size:.78rem}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+.kv div{background:var(--panel-2);border:2px solid var(--panel-3);border-radius:12px;padding:10px 12px}
+.kv small{display:block;color:var(--ink-2);font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.kv b{font-family:var(--f-game);font-weight:400;font-size:1.35rem}
+.pros{display:grid;gap:10px;padding:14px}
+.pros h4{margin:0;font-family:var(--f-game);font-weight:400;font-size:1rem;display:flex;align-items:center;gap:6px}
+.pros ul{margin:0;padding-left:1.1em;display:grid;gap:4px;font-size:.88rem;color:var(--ink)}
+.left{display:grid;gap:8px;padding:14px}
+.left div{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 12px;background:var(--panel-2);border:2px solid var(--panel-3);border-radius:12px}
+.left b{font-weight:900} .left em{font-style:normal;font-family:var(--f-game);text-align:right}
+.left small{grid-column:1/3;color:var(--ink-2);font-size:.78rem}
+
 /* bottom nav */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:linear-gradient(#6a4a28,#45301a);border-top:3px solid var(--edge-dark);box-shadow:0 -4px 0 rgba(0,0,0,.25);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
-nav.tabs .in{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+nav.tabs .in{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
 nav.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;font-family:var(--f-game);font-size:.8rem;letter-spacing:.02em;padding:4px 2px;border-radius:12px;min-height:60px;justify-content:center}
 nav.tabs a .ni{width:40px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:1.25rem;background:rgba(0,0,0,.22);border:2px solid rgba(0,0,0,.35)}
 nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(--gold-2));border-color:var(--gold-edge);color:#3b2600;box-shadow:0 3px 0 rgba(0,0,0,.35)}
@@ -244,6 +277,22 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
 </div></header>
 
 <main class="gut">
+<section id="v-profile" hidden>
+  <div class="title out" style="margin-top:4px">Account report <small id="p-asof"></small></div>
+  <div class="panel" id="p-rings"></div>
+  <div class="title out">Progress by area <small>by upgrade cost</small></div>
+  <div class="panel area" id="p-areas"></div>
+  <div class="title out">Heroes</div>
+  <div class="panel hrows" id="p-heroes"></div>
+  <div class="title out">Strengths &amp; gaps</div>
+  <div class="panel pros" id="p-pros"></div>
+  <div class="title out">Career</div>
+  <div class="panel kv" id="p-career"></div>
+  <div class="title out">Left to max</div>
+  <div class="panel left" id="p-left"></div>
+  <p class="note">Levels from Clash of Stats and costs from Clash Ninja, both as of Nov 1. Cost totals use Jam + Gold Pass prices.</p>
+</section>
+
 <section id="v-now">
   <div class="now">
     <div><div class="title out" style="margin-top:4px">Do this now</div><div class="panel hero" id="donow"></div></div>
@@ -291,6 +340,7 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
 </main>
 
 <nav class="tabs" aria-label="Views"><div class="in">
+  <a href="#profile" id="t-profile"><span class="ni" data-ic="star"></span><span class="out">Profile</span></a>
   <a href="#now" id="t-now"><span class="ni" data-ic="hammer"></span><span class="out">Now</span></a>
   <a href="#plan" id="t-plan"><span class="ni" data-ic="cal"></span><span class="out">Jam plan</span></a>
   <a href="#after" id="t-after"><span class="ni" data-ic="clock"></span><span class="out">After Jam</span></a>
@@ -414,6 +464,7 @@ const IC={
   clock:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-1 4v7l5 3 1-1.7-4-2.4V6Z"/></svg>',
   list:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h3v3H3Zm5 0h13v3H8ZM3 10.5h3v3H3Zm5 0h13v3H8ZM3 16h3v3H3Zm5 0h13v3H8Z"/></svg>',
   chev:'<svg class="i chev" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6-1.6-1.6L12 11.8 7.6 7.4Z"/></svg>',
+  star:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8Z"/></svg>',
   check:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.6 1.6L9 19.4 21 7.4l-1.6-1.6Z"/></svg>',
   book:c=>`<svg class="i" viewBox="0 0 24 24"><path d="M5 3h12a2 2 0 0 1 2 2v14H7a2 2 0 0 0-2 2Z" fill="${c}" stroke="#2a1508" stroke-width="1.6"/><path d="M5 21a2 2 0 0 1 2-2h12v2Z" fill="#f4e6c4" stroke="#2a1508" stroke-width="1.6"/></svg>`,
   potion:c=>`<svg class="i" viewBox="0 0 24 24"><path d="M9.5 2h5v4l4.2 6.6A6 6 0 1 1 5.3 12.6L9.5 6Z" fill="${c}" stroke="#2a1508" stroke-width="1.6"/><rect x="9" y="1.5" width="6" height="2.4" rx="1" fill="#c99a5b" stroke="#2a1508" stroke-width="1.2"/></svg>`,
@@ -537,13 +588,37 @@ function renderTiers(){
     return `<div class="panel trow ${c?'on':''}"><span class="shield ${c?'done':t}">${c?'✓':r[1]==='—'?'·':r[1]}</span><span class="nm">${r[2]}<small>${r[3]}</small></span><input type="checkbox" data-k="${k}" ${c?'checked':''} aria-label="Started ${r[2]}"><span class="sub"><b>${r[4]}</b>${r[5]?' · '+r[5]:''}</span><span class="sub">${r[0]}</span></div>`}).join('');
 }
 
+
+/* ---------- PROFILE ---------- */
+const PROFILE={asof:'as of Nov 1, 2026',
+  offense:[['Heroes',436,480],['Troops',462,509],['Spells',122,132]],
+  areas:[['Pets',82],['Structures',76],['Heroes',75],['Lab',73],['Walls',71.7],['Equipment',58]],
+  heroes:[['Minion Prince',95,95,'Maxed'],['Royal Champion',54,55,'55 finishes Nov 2'],['Barbarian King',101,110,'102 is in the Jam plan'],['Archer Queen',100,110,'101 with a Book of Heroes'],['Grand Warden',77,85,'78 with a Book of Heroes. Furthest behind of your attack heroes'],['Dragon Duke',9,25,'Upgrading. Not in your army']],
+  strong:['Your RC walk kit is maxed: Electro Boots 27, Rocket Spear 27, Spirit Fox 10.','Every equipment piece in your main army is maxed.','Minion Prince, Dragon, Electro Dragon and Dragon Rider are maxed.','10 of 12 pets are maxed.'],
+  weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 77/85 trails your other attack heroes.'],
+  career:[['War stars','2,075'],['Best trophies','5,867'],['XP level','245'],['Builder Base best','3,310']],
+  left:[['Defenses & buildings','279M Gold','About 27 days with 6 builders at Jam prices'],['Pets','1.89M Dark Elixir','Diggy and Greedy Raven'],['Supercharges','438M Gold + 756K DE','Optional endgame, no Jam discount']],
+};
+function ringSVG(pct){const r=46,c=2*Math.PI*r,o=c*(1-pct/100);return `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="#120b05" stroke-width="18"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="#2a1f14" stroke-width="12"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#gg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${o.toFixed(1)}" transform="rotate(-90 60 60)"/><defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe36b"/><stop offset="1" stop-color="#f2a900"/></linearGradient></defs><text x="60" y="68" text-anchor="middle" class="big">${pct.toFixed(0)}%</text></svg>`}
+function renderProfile(){
+  const P=PROFILE;$('p-asof').textContent=P.asof;
+  const lv=P.offense.reduce((a,x)=>a+x[1],0),mx=P.offense.reduce((a,x)=>a+x[2],0),off=lv/mx*100;
+  const ar=P.areas,base=(ar.find(a=>a[0]==='Structures')[1]);
+  $('p-rings').innerHTML=`<div class="rings"><div class="ring">${ringSVG(off)}<b>Offense</b><small>${lv.toLocaleString()} of ${mx.toLocaleString()} levels<br>${P.offense.map(x=>`${x[0]} ${Math.round(x[1]/x[2]*100)}%`).join(' · ')}</small></div><div class="ring">${ringSVG(base)}<b>Defense</b><small>Structures by upgrade cost<br>Walls ${ar.find(a=>a[0]==='Walls')[1]}%</small></div></div>`;
+  $('p-areas').innerHTML=ar.map(([n,v])=>`<div class="arow"><span>${n}</span><div class="abar"><i class="${v>=80?'hi':v<65?'lo':''}" style="width:${v}%"></i></div><em>${v}%</em></div>`).join('');
+  $('p-heroes').innerHTML=P.heroes.map(([n,l,m,t])=>`<div class="hrow"><b>${n}</b><em>${l} / ${m}</em><div class="abar"><i class="${l>=m?'hi':l/m<.6?'lo':''}" style="width:${l/m*100}%"></i></div><small>${t}</small></div>`).join('');
+  $('p-pros').innerHTML=`<h4 style="color:var(--green-2)">${IC.check} Strengths</h4><ul>${P.strong.map(x=>`<li>${x}</li>`).join('')}</ul><h4 style="color:var(--orange-2);margin-top:6px">${IC.hammer} Gaps</h4><ul>${P.weak.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  $('p-career').innerHTML=P.career.map(([k,v])=>`<div><small>${k}</small><b>${v}</b></div>`).join('');
+  $('p-left').innerHTML=P.left.map(([n,v,t])=>`<div><b>${n}</b><em>${v}</em><small>${t}</small></div>`).join('');
+}
+
 /* ---------- shell ---------- */
 function tick(){
   const now=Date.now(),ms=JAM_END-now;
   $('cd').textContent=ms<=0?'Jam over':`${Math.floor(ms/864e5)}d ${Math.floor(ms%864e5/H)}h ${String(Math.floor(ms%H/6e4)).padStart(2,'0')}m left`;
   $('jamfill').style.width=Math.max(0,Math.min(100,ms/(JAM_END-JAM_START)*100))+'%';
 }
-const VIEWS=['now','plan','after','tiers'];
+const VIEWS=['profile','now','plan','after','tiers'];
 function route(){const h=location.hash.slice(1),v=VIEWS.includes(h)?h:'now';VIEWS.forEach(n=>{$('v-'+n).hidden=v!==n;$('t-'+n).setAttribute('aria-current',v===n?'page':'false')});window.scrollTo(0,0);
   if(v==='plan')requestAnimationFrame(()=>{const sc=$('tl-scroll');sc.scrollLeft=Math.max(0,sc.scrollWidth*((Date.now()-T0)/(T1-T0))-150)})}
 function renderAll(){renderNow();renderPlan();renderAfter();renderTiers();
@@ -561,7 +636,7 @@ $('reset').addEventListener('click',()=>{const m=$('reset-msg');if(!armed){armed
 document.querySelectorAll('[data-ic]').forEach(n=>n.innerHTML=IC[n.dataset.ic]);
 $('jamico').innerHTML=IC.hammer;
 window.addEventListener('hashchange',route);
-renderItems();renderAll();route();tick();setInterval(()=>{tick();renderNow()},30e3);
+renderItems();renderProfile();renderAll();route();tick();setInterval(()=>{tick();renderNow()},30e3);
 </script>
 </body>
 </html>
