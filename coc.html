@@ -350,11 +350,11 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
   <div class="g profg">
     <div><div class="title out">Account report <small id="p-asof"></small></div><div class="panel" id="p-rings"></div>
       <div class="title out">Progress by area <small>by upgrade cost</small></div><div class="panel area" id="p-areas"></div></div>
-    <div><div class="title out">Days to max <small>if you follow the plan</small></div><div class="panel mx" id="p-max"></div></div>
+    <div><div class="title out">Walls <small>this Jam</small></div><div class="panel mx" id="p-max"></div></div>
     <div><div class="title out">Heroes</div><div class="panel hrows" id="p-heroes"></div></div>
     <div><div class="title out">Strengths &amp; gaps</div><div class="panel pros" id="p-pros"></div></div>
     <div><div class="title out">Career</div><div class="panel kv" id="p-career"></div></div>
-    <div><div class="title out">Left to max</div><div class="panel left" id="p-left"></div></div>
+    <div><div class="title out">Left this Jam</div><div class="panel left" id="p-left"></div></div>
     <div class="wide"><p class="note">Levels from Clash of Stats and costs from Clash Ninja, both as of Nov 1. Cost totals use Jam + Gold Pass prices.</p></div>
   </div>
 </section>
@@ -382,20 +382,9 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
   <p class="note">Gold and Elixir for upgrades due to start that day and not ticked off yet. Farm ahead of the tall days.</p>
 </section>
 
-<section id="v-after" hidden>
-  <div class="title out" style="margin-top:4px">After the Jam <small>attack heroes and key traps before TH19 (~Dec 1), the rest after</small></div>
-  <div class="panel" id="a-budget"></div>
-  <div class="panel tlp" style="margin-top:14px"><div class="tl-scroll"><div class="tl" id="tl-after"></div></div></div>
-  <p class="note">Your 6 builders pick up this queue as each one finishes its final Jam upgrade. The Goblin Builder is left out.</p>
-  <div class="title out">Queue</div>
-  <div class="panel" style="padding:10px"><ul class="steps" id="after-list"></ul></div>
-  <div class="title out">When a builder would sit idle</div>
-  <div class="fill" id="fill"></div>
-</section>
-
 <section id="v-tiers" hidden>
-  <div class="title out" style="margin-top:4px">Every upgrade</div>
-  <p class="note" style="margin-top:0;margin-bottom:10px">S do next · A high value · B fill gaps · C last. Costs are Jam prices before the Gold Pass 10%.</p>
+  <div class="title out" style="margin-top:4px">Every Jam upgrade</div>
+  <p class="note" style="margin-top:0;margin-bottom:10px">Everything in this Hammer Jam. S do next · A high value · B fill gaps. Costs are Jam prices.</p>
   <div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
   <div class="tlist" id="tlist"></div>
   <p style="margin:18px 4px 0"><button class="reset" id="reset" type="button">Clear all checkmarks</button> <span class="note" id="reset-msg"></span></p>
@@ -406,7 +395,6 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
   <a href="#profile" id="t-profile"><span class="ni" data-ic="star"></span><span class="out">Profile</span></a>
   <a href="#now" id="t-now"><span class="ni" data-ic="hammer"></span><span class="out">Now</span></a>
   <a href="#plan" id="t-plan"><span class="ni" data-ic="cal"></span><span class="out">Jam plan</span></a>
-  <a href="#after" id="t-after"><span class="ni" data-ic="clock"></span><span class="out">After Jam</span></a>
   <a href="#tiers" id="t-tiers"><span class="ni" data-ic="list"></span><span class="out">All</span></a>
 </div></nav>
 
@@ -431,89 +419,38 @@ const BUILDERS = [
   {id:'b6', name:'Builder 6', cur:"Scattershot #1", free:'2026-11-05T07:34:00-05:00', steps:[
     ["Inferno Tower #2",71,'g',1.1925e+07],["Hidden Tesla #3",68,'g',1.125e+07],["Builder's Hut #5",68,'g',1.08e+07],["Spell Tower #2",52,'g',1.215e+07],["Gold Storage #2",66,'e',8.1e+06]]},
   {id:'lab', name:'Laboratory', cur:'Electro Titan 5', free:'2026-11-04T13:45:00-05:00', steps:[
-    ['Root Rider 4',84,'e',13.5e6],['Revive Spell 5',86,'e',13.28e6],['Siege Barracks 6',81,'e',12.15e6]]},
+    ['Root Rider 4',84,'e',13.5e6],['Revive Spell 5',86,'e',13.28e6],['Siege Barracks 6',81,'e',12.15e6],['Baby Dragon 12',82,'e',13.05e6]]},
   {id:'glab', name:'Goblin Lab', cur:'Headhunter 4', free:'2026-11-05T10:13:00-05:00', steps:[]},
   {id:'pet', name:'Pet House', cur:'Greedy Raven 5', free:'2026-11-03T01:43:00-05:00', steps:[
     ['Greedy Raven 6',38,'d',153e3,'opt'],['Greedy Raven 7',38,'d',162e3,'opt'],['Greedy Raven 8',38,'d',171e3,'opt'],['Greedy Raven 9',38,'d',180e3,'opt'],['Greedy Raven 10',38,'d',189e3,'opt']]},
 ];
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
-const AFTER=[
-  ["Grand Warden 80–83",344,'e',1e+08,"Before TH19 · attack hero, about 3.6 days a level"],
-  ["Archer Queen 103–106",344,'d',1.5e+06,"Before TH19 · attack hero, about 3.6 days a level"],
-  ["Seeking Air Mines 1–3",372,'g',5.13e+07,"Before TH19 · traps finish your TH18 defense cheaply"],
-  ["Giant Bombs 1–4",452,'g',6.12e+07,"Before TH19"],
-  ["Skeleton Traps 1–4",304,'g',6.48e+07,"Before TH19"],
-  ["Spring Traps 1–3",357,'g',4.32e+07,"Before TH19 if a builder is free"],
-  ["Seeking Air Mines 4–6",372,'g',5.13e+07,"After TH19"],
-  ["Seeking Air Mines 7–9",372,'g',5.13e+07,"After TH19"],
-  ["Grand Warden 84–85",172,'e',5e+07,"After TH19"],
-  ["Archer Queen 107–110",344,'d',1.5e+06,"After TH19"],
-  ["Giant Bombs 5–8",452,'g',6.12e+07,"After TH19"],
-  ["Spring Traps 4–6",357,'g',4.32e+07,"After TH19"],
-  ["Spring Traps 7–9",357,'g',4.32e+07,"After TH19"],
-  ["Air Bombs 1–4",388,'g',5.4e+07,"After TH19"],
-  ["Air Bombs 5–7",291,'g',4.05e+07,"After TH19"],
-  ["Bombs 1–4",344,'g',5.04e+07,"After TH19"],
-  ["Bombs 5–8",344,'g',5.04e+07,"After TH19"],
-  ["Gold Storage #1",135,'e',1.62e+07,"After TH19, sooner only if TH19 costs outgrow 29M"],
-  ["Gold Storage #2",135,'e',1.62e+07,"After TH19"],
-  ["Gold Storage #3",135,'e',1.62e+07,"After TH19"],
-  ["Gold Storage #4",135,'e',1.62e+07,"After TH19"],
-  ["Elixir Storage #2",135,'g',1.62e+07,"After TH19"],
-  ["Elixir Storage #3",135,'g',1.62e+07,"After TH19"],
-  ["Elixir Storage #4",135,'g',1.62e+07,"After TH19"],
-  ["Dark Elixir Drills x2",130,'e',2.16e+07,"After TH19"],
-  ["Logger 2–5",430,'e',5.49e+07,"After TH19 · Guardian"],
-  ["Barbarian King 103–110",688,'d',3e+06,"After TH19 · not in your army"],
-  ["Dragon Duke 10–25",1116,'d',6.4e+06,"After TH19 · not in your army"],
-];
-const FILL=[
-  ['Traps: Seeking Air Mine x9, Giant Bomb x8, Skeleton Trap x4, Spring Trap x9, Air Bomb x7, Bomb x8','12.6–17.1M Gold each · short and cheap'],
-  ['Gold Storage x4, Elixir Storage x4','16.2M each · only if costs outgrow storage'],
-  ['Supercharges','Skip until TH19 is out · a new max level wipes them with no refund'],
-    ['Walls x259','4.5M each in the Jam · dump loot when a builder frees up'],
-  ['Barbarian King, Dragon Duke','about 370K Dark Elixir per King level · never in your attacks'],
-];
 const TIERS = [
   ['Heroes','S','Royal Champion','54 → 55','225K DE','Finishes ~8 AM Nov 2'],
-  ['Heroes','S','Grand Warden','78 → 85','13.5M Elixir','Get to 83 before TH19. Your weakest attack hero'],
-  ['Heroes','S','Archer Queen','101 → 110','200K DE','Get to 106 before TH19'],
-  ['Heroes','C','Barbarian King','101 → 110','205K DE','After TH19, not in your army'],
-  ['Heroes','C','Dragon Duke','10 → 25','370K DE a level','After TH19, not in your army'],
+  ['Heroes','B','Barbarian King','101 → 102','184.5K DE','Builder 1, Nov 14'],
+  ['Heroes','A','Grand Warden','78 → 79','13.5M Elixir','Bonus: start it if a Builder Potion frees a builder before Nov 16'],
   ['Lab','S','Rage Spell','6 → 7','13M Elixir','Done'],
   ['Lab','S','Freeze Spell','7 → 8','14M Elixir','Done (Goblin Lab)'],
-  ['Lab','S','Meteor Golem','2 → 3 (max)','15M Elixir','Done (Goblin Lab); used in the #1 RC walk army'],
-  ['Lab','B','Siege Barracks','5 → 6','13.5M Elixir','Queen bait, so low impact. Last lab start of the Jam'],
-  ['Lab','S','Headhunter','3 → 4','185K DE','Researching (Goblin Lab), started Nov 2'],
+  ['Lab','S','Meteor Golem','2 → 3 (max)','15M Elixir','Done (Goblin Lab)'],
   ['Lab','S','Electro Titan','4 → 5','15M Elixir','Researching, done ~Nov 4'],
-  ['Lab','A','Root Rider','3 → 4','15M Elixir','Priciest research left, so the biggest Jam saving'],
-  ['Lab','B','Baby Dragon','11 → 12','14.5M Elixir','After the Jam'],
-  ['Lab','B','Archer','13 → 14','12.5M Elixir','After the Jam'],
-  ['Lab','C','Battle Blimp, Stone Slammer','5 → 6','13M Elixir each','You don\'t use them'],
-  ['Lab','C','Other troops & spells','—','12–15M Elixir / 125–190K DE','Not in your army'],
-  ['Lab','C','Sky Wagon, Ruin Witch','unlock','9.9M Elixir / 99K DE','After Workshop 9 and Dark Barracks 13'],
-  ['Pets','B','Greedy Raven','2 → 10','126–189K DE per level','Only with spare Dark Elixir'],
-  ['Pets','C','Diggy','10 → 15','99–157.5K DE per level','Only with spare Dark Elixir'],
-  ['Buildings','S','Scattershot x2','6 → 7','13.25M Gold each','First starts of the Jam'],
-  ['Buildings','S','Inferno Tower x3','11 → 12','13.25M Gold each','#3 started'],
-  ['Buildings','S','X-Bow x4','12 → 13','13M Gold each','In the Jam'],
-  ['Buildings','S','Army Camp x4','13 → 14','13M Elixir each','In the Jam. Costs Elixir, so it eases the Gold crunch'],
-  ['Buildings','A','Hidden Tesla x5','16 → 17','12.5M Gold each','In the Jam'],
-  ['Buildings','A',"Builder's Hut x5",'7 → 8','12M Gold each','In the Jam'],
-  ['Buildings','A','Spell Tower x2','3 → 4','13.5M Gold each','In the Jam'],
-  ['Buildings','A','Mortar x4','17 → 18','10.5M Gold each','In the Jam'],
-  ['Buildings','A','Giga Bomb','3 → 4','10M Gold','Final round of the Jam'],
-  ['Buildings','A','Dark Barracks','12 → 13','11.5M Elixir','Final round of the Jam; unlocks Ruin Witch'],
-  ['Buildings','C','Storages x8','18 → 19','9M each','1 in the Jam, 7 after TH19 unless TH19 costs outgrow 29M'],
-  ['Buildings','B','Traps (all)','—','7–9.5M Gold each','Air Mines, Giant Bombs, Skeletons before TH19; the rest after'],
-  ['Buildings','C','Logger','1 → 5','9M Elixir and up','After TH19'],
-  ['Buildings','—','Supercharges','—','2.5–12M Gold, 220K DE','Skip until TH19 is out. A new max level wipes them with no refund'],
-  ['Buildings','A','Walls x259','18 → 19','4.5M each in the Jam','Dump loot every time a builder frees up. On pace for ~Nov 12'],
-  ['Equipment','A','Dragon Duke 2nd piece','14 → 18','Shiny + Glowy',''],
-  ['Equipment','B','Dragon Duke level-1 pieces','1 → 18','Shiny + Glowy',''],
-  ['Equipment','B','Rocket Backpack','→ 27','Starry','Save Starry Ore for this'],
-  ['Equipment','C','Bench commons at 14','14 → 18','Shiny + Glowy','Puppets, vials'],
-  ['Equipment','C','Bench epics','→ 27','Glowy + Starry','Snake Bracelet, Action Figure, Metal Pants, Mirror'],
+  ['Lab','S','Headhunter','3 → 4','166.5K DE','Researching (Goblin Lab), done ~Nov 5'],
+  ['Lab','A','Root Rider','3 → 4','13.5M Elixir','Next in the lab, ~Nov 4'],
+  ['Lab','A','Revive Spell','4 → 5','13.3M Elixir','~Nov 8'],
+  ['Lab','B','Siege Barracks','5 → 6','12.2M Elixir','~Nov 11'],
+  ['Lab','B','Baby Dragon','11 → 12','13.1M Elixir','Last lab start, ~Nov 15. In your dragon army'],
+  ['Pets','B','Greedy Raven','5 → 10','153–189K DE per level','Use Pet Potions on 6, 7 and 8'],
+  ['Buildings','S','Scattershot x2','6 → 7','11.9M Gold each','#1 started Nov 2, #2 at 7:52 AM Nov 2'],
+  ['Buildings','S','Army Camp x4','13 → 14','11.7M Elixir each','All four start Nov 2'],
+  ['Buildings','S','Inferno Tower x3','11 → 12','11.9M Gold each','#3 done, #1 and #2 next'],
+  ['Buildings','S','X-Bow x4','12 → 13','11.7M Gold each','Nov 5–6'],
+  ['Buildings','A','Hidden Tesla x5','16 → 17','11.3M Gold each','Nov 6–8'],
+  ['Buildings','A',"Builder's Hut x5",'7 → 8','10.8M Gold each','Nov 8–9'],
+  ['Buildings','A','Mortar x4','17 → 18','9.5M Gold each','Nov 9–11'],
+  ['Buildings','A','Spell Tower x2','3 → 4','12.2M Gold each','Nov 9–11'],
+  ['Buildings','A','Giga Bomb','3 → 4','9M Gold','Nov 11'],
+  ['Buildings','A','Dark Barracks','12 → 13','10.4M Elixir','Nov 14'],
+  ['Buildings','B','Storages x6','18 → 19','8.1M each','Final starts, Nov 14–16'],
+  ['Buildings','A','Walls x259','18 → 19','4.5M each','Dump loot every time a builder frees up. On pace for ~Nov 12'],
 ];
 
 const KEY='jam-planner-v1';
@@ -559,15 +496,12 @@ const RESNAME={g:'Gold',e:'Elixir',d:'Dark Elixir'};
 const kindTile=id=>id==='lab'||id==='glab'?['lab',IC.flask]:id==='pet'?['pet',IC.paw]:id==='gob'?['gob',IC.hammer]:['',IC.hammer];
 const costHTML=(p)=>`<span class="cost">${IC[p.res]}${money(p.cost,p.res)}</span>`;
 const ITEMS=[
-  ['book','#c0392b','Books of Heroes','Both used: Grand Warden 78 and Archer Queen 101 are done.'],
-  ['potion','#f39c12','Builder Potions','None left. Claim the Gold Pass ones and save them for <strong>Nov 12–14</strong> to push the final starts in before the Jam ends.'],
-  ['potion','#d63fbf','Research Potions','All used. The boost runs to <strong>~11:30 PM Nov 1</strong>: Rage ~10 PM, Meteor Golem (Goblin Lab) ~1 AM. Start Electro Titan right after Rage.'],
-  ['book','#7d3fa8','Books of Fighting','You have <strong>0</strong> and can only hold 1. Claim one from the Gold Pass and use it on the longest troop or siege research.'],
-  ['potion','#4b3566','Rune of Dark Elixir','Fill up when a Dark Elixir hero is next and you\'re short.'],
-  ['book','#2c7be5','Book of Everything','Used Nov 1 to finish Inferno #3 and free a builder for walls.'],
-  ['ring','','Wall Rings x4','Any time. They don\'t need a free builder.'],
-  ['potion','#cfd6dc','Pet Potions x4','Dark Elixir is piling up and the Pet House needs no builder, so use them on Greedy Raven.'],
-  ['book','#d35400','Book of Building','Used Nov 1 on a Firespitter to start Inferno #3. Save the next one for an upgrade with 5+ days left.'],
+  ['potion','#f39c12','Builder Potions x5','Use one when <strong>all 7 builders have 10+ hours left</strong>. First one <strong>tonight ~10:20 PM</strong>, right after Army Camp #4. Then about one a day. Each saves ~9 hours on every builder, which pulls your final starts safely before the Jam ends Nov 16. If one frees a builder early, start Grand Warden 79 at Jam price.'],
+  ['potion','#d63fbf','Research Potion x1','Use it <strong>when you wake up</strong>. Saves 23 hours in the lab, so the last start (Baby Dragon 12) lands well before the Jam ends.'],
+  ['potion','#cfd6dc','Pet Potions x3','One at the start of <strong>Greedy Raven 6, 7 and 8</strong> (38 hours each). Each saves 23 hours. Skip Raven 5, it\'s nearly done.'],
+  ['potion','#9b59b6','Rune of Elixir','<strong>Tonight between Army Camps</strong>: start a camp, then pop the rune when Elixir is low. It can\'t be used while storage is full.'],
+  ['ring','','Wall Rings x4','Hold. A level 19 wall takes more than 8 rings, so 4 can\'t finish one.'],
+  ['book','#7d3fa8','Books','None left. Save Hammer of Fighting for after the Jam.'],
 ];
 
 /* ---------- NOW ---------- */
@@ -661,22 +595,10 @@ function renderChart(){
   $('chart').innerHTML='<div class="scroll">'+s+'</svg></div>'+`<div class="legend" style="margin:6px 0 0"><span>${IC.g}Gold (M)</span><span>${IC.e}Elixir (M)</span></div>`;
 }
 
-/* ---------- AFTER ---------- */
-const AFTER_T0=new Date('2026-11-14T00:00:00-05:00'),AFTER_T1=new Date('2027-02-06T00:00:00-05:00');
-const AFTER_ROWS=BUILDERS.filter(b=>/^b\d/.test(b.id)).map(b=>{const f=b.plan[b.plan.length-1];return{name:b.name,sub:'after '+f.name,cur:{name:f.name,start:f.start,end:f.end},free:f.end.getTime(),segs:[]}});
-const AFTER_PLAN=AFTER.map((a,i)=>{const r=AFTER_ROWS.reduce((x,y)=>y.free<x.free?y:x);const st=r.free;r.free+=a[1]*H;const p={key:'a-'+i,name:a[0],h:a[1],res:a[2],cost:a[3],note:a[4],start:new Date(st),end:new Date(r.free),builder:r.name};r.segs.push(p);return p});
-function renderAfter(){
-  drawTimeline($('tl-after'),AFTER_ROWS,AFTER_T0,AFTER_T1,7);
-  $('after-list').innerHTML=AFTER_PLAN.map(p=>`<li class="step ${state[p.key]?'on':''}"><label><input type="checkbox" data-k="${p.key}" ${state[p.key]?'checked':''}><span class="nm">${p.name}</span>${costHTML(p)}<span class="meta">${p.builder} · ${fmtDate(p.start)} · ${dur(p.h)}${p.note?' · '+p.note:''}</span></label></li>`).join('');
-  let done=0,g=0,e=0,d=0;AFTER_PLAN.forEach(p=>{if(state[p.key]){done++;return}if(p.res==='g')g+=p.cost;else if(p.res==='e')e+=p.cost;else d+=p.cost});
-  $('a-budget').innerHTML=`<div class="afterres"><div>${IC.g}${money(g,'g')}</div><div>${IC.e}${money(e,'e')}</div><div>${IC.d}${money(d,'d')}</div><div>${IC.check}${done} / ${AFTER_PLAN.length}</div></div>`;
-  $('fill').innerHTML=FILL.map(f=>`<div class="panel"><b>${f[0]}</b><span>${f[1]}</span></div>`).join('');
-}
-
 /* ---------- TIERS ---------- */
 let filter='All';
 function renderTiers(){
-  $('filters').innerHTML=['All','Heroes','Lab','Pets','Buildings','Equipment'].map(c=>`<button type="button" aria-pressed="${c===filter}" data-c="${c}">${c}</button>`).join('');
+  $('filters').innerHTML=['All','Heroes','Lab','Pets','Buildings'].map(c=>`<button type="button" aria-pressed="${c===filter}" data-c="${c}">${c}</button>`).join('');
   $('tlist').innerHTML=TIERS.map((r,i)=>({r,i})).filter(x=>filter==='All'||x.r[0]===filter).map(({r,i})=>{const k='t-'+i,c=!!state[k],t=r[1]==='—'?'x':r[1];
     return `<div class="panel trow ${c?'on':''}"><span class="shield ${c?'done':t}">${c?'✓':r[1]==='—'?'·':r[1]}</span><span class="nm">${r[2]}<small>${r[3]}</small></span><input type="checkbox" data-k="${k}" ${c?'checked':''} aria-label="Started ${r[2]}"><span class="sub"><b>${r[4]}</b>${r[5]?' · '+r[5]:''}</span><span class="sub">${r[0]}</span></div>`}).join('');
 }
@@ -686,13 +608,13 @@ function renderTiers(){
 const PROFILE={asof:'as of Nov 1, 2026',
   offense:[['Heroes',439,480],['Troops',462,509],['Spells',122,132]],
   areas:[['Pets',82],['Structures',76],['Heroes',75],['Lab',73],['Walls',71.7],['Equipment',58]],
-  heroes:[['Minion Prince',95,95,'Maxed'],['Royal Champion',54,55,'55 finishes ~8 AM Nov 2, then maxed for TH18'],['Barbarian King',101,110,'102 is in the Jam plan'],['Archer Queen',101,110,'Aim for 106 before TH19'],['Grand Warden',78,85,'Aim for 83 before TH19. Furthest behind of your attack heroes'],['Dragon Duke',10,25,'Not in your army']],
+  heroes:[['Minion Prince',95,95,'Maxed'],['Royal Champion',54,55,'55 finishes ~8 AM Nov 2, then maxed'],['Barbarian King',101,110,'102 is in the Jam plan'],['Archer Queen',101,110,'Next level after the Jam'],['Grand Warden',78,85,'79 is a bonus start if a Builder Potion frees a builder before Nov 16'],['Dragon Duke',10,25,'Not in your army']],
   strong:['Your RC walk kit is maxed: Electro Boots 27, Rocket Spear 27, Spirit Fox 10.','Every equipment piece in your main army is maxed.','Minion Prince, Dragon, Electro Dragon and Dragon Rider are maxed.','10 of 12 pets are maxed.'],
   weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 77/85 trails your other attack heroes.'],
   career:[['War stars','2,075'],['Best trophies','5,867'],['XP level','245'],['Builder Base best','3,310']],
-  left:[['Jam builder plan','284M Gold + 82M Elixir','Every defense, Army Camp and Builder\'s Hut starts before Nov 16'],['Before TH19 (Nov 16–Dec 1)','≈300M Gold + 100M Elixir + 1.5M DE','Warden to 83, Queen to 106, Air Mines, Giant Bombs, Skeleton Traps'],['After TH19','≈800M Gold + 150M Elixir + 11M DE','Rest of the traps, storages, Logger, King, Duke'],['Lab','≈200 days of research','After the Jam, one research at a time'],['Pets','1.89M Dark Elixir','Greedy Raven maxes in the Jam, then Diggy'],['Skip for now','Supercharges','TH19 wipes them, no refund']],
-  walls:{left:259,cost:4.5e6,rate:50e6,dump:150e6,need:[['2026-11-01','2026-11-16',366e6],['2026-11-16','2027-01-29',1350e6]]},
-  max:{start:'2026-11-01',end:'2027-07-01',th19:'2026-11-23',rows:[['Army research','2026-11-07'],['Ready for TH19','2026-12-01'],['Pets','2026-12-03'],['Buildings & heroes','2027-01-29'],['Lab (everything)','2027-06-07']]},
+  left:[['Builders','≈280M Gold + 80M Elixir','Defenses, Army Camps, Builder\'s Huts and storages, final starts Nov 14–16'],['Lab','Root Rider 4, Revive 5, Siege Barracks 6','Plus one more start Nov 15 before the Jam ends'],['Pets','Greedy Raven 6–10','≈830K Dark Elixir, done ~Nov 10'],['Walls','259 left','≈1.17B Gold or Elixir, on pace for ~Nov 12']],
+  walls:{left:259,cost:4.5e6,rate:50e6,dump:150e6,need:[['2026-11-01','2026-11-16',366e6]]},
+  max:{start:'2026-11-01',end:'2026-11-17'},
 };
 function ringSVG(pct){const r=46,c=2*Math.PI*r,o=c*(1-pct/100);return `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="#120b05" stroke-width="18"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="#2a1f14" stroke-width="12"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#gg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${o.toFixed(1)}" transform="rotate(-90 60 60)"/><defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe36b"/><stop offset="1" stop-color="#f2a900"/></linearGradient></defs><text x="60" y="68" text-anchor="middle" class="big">${pct.toFixed(0)}%</text></svg>`}
 
@@ -721,15 +643,8 @@ function renderProfile(){
   $('p-pros').innerHTML=`<h4 style="color:var(--green-2)">${IC.check} Strengths</h4><ul>${P.strong.map(x=>`<li>${x}</li>`).join('')}</ul><h4 style="color:var(--orange-2);margin-top:6px">${IC.hammer} Gaps</h4><ul>${P.weak.map(x=>`<li>${x}</li>`).join('')}</ul>`;
   $('p-career').innerHTML=P.career.map(([k,v])=>`<div><small>${k}</small><b>${v}</b></div>`).join('');
   const M=P.max,a=new Date(M.start+'T00:00:00-05:00').getTime(),z=new Date(M.end+'T00:00:00-05:00').getTime(),pc=t=>Math.max(0,Math.min(100,(t-a)/(z-a)*100));
-  const fin=M.rows.map(r=>new Date(r[1]+'T12:00:00-05:00').getTime()),last=Math.max(...fin),th=new Date(M.th19+'T12:00:00-05:00').getTime();
-  const days=Math.max(0,Math.ceil((last-Date.now())/864e5)),before=last<th;
   const fd=t=>new Date(t).toLocaleDateString('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric',year:'numeric'});
-  $('p-max').innerHTML=`<div class="mxhead"><div><div class="days">${days}<small>days</small></div><div class="when">Maxed around ${fd(last)}</div></div><span class="verdict ${before?'yes':'no'} out">${before?'Before TH19':'Not before TH19'}</span></div>
-    <div class="mxrows">${M.rows.map((r,i)=>`<div class="mxrow"><span>${r[0]}</span><div class="mxtrack"><i class="${fin[i]===last?'last':''}" style="width:${pc(fin[i])}%"></i><b class="out">${fd(fin[i]).replace(/, \d{4}/,'')}</b></div></div>`).join('')}
-    <div class="mxmark" style="left:calc(112px + (100% - 112px) * ${pc(th)/100})"><em>TH19?</em></div></div>
-    <div class="mxaxis"><span>Nov 2026</span><span>Mar 2027</span><span>Jul 2027</span></div>
-    <p class="mxnote">TH19 is rumoured for Nov 23, 2026 but Supercell hasn't confirmed a date. The lab is your bottleneck: Research Potions, Books of Fighting and the Goblin Lab all pull this date in. Walls are tracked separately below. Hero equipment depends on Ore, so it isn't in either date.</p>
-    ${wallsHTML(P,pc,fd)}`;
+  $('p-max').innerHTML=wallsHTML(P,pc,fd);
   $('p-left').innerHTML=P.left.map(([n,v,t])=>`<div><b>${n}</b><em>${v}</em><small>${t}</small></div>`).join('');
 }
 
@@ -739,10 +654,10 @@ function tick(){
   $('cd').textContent=ms<=0?'Jam over':`${Math.floor(ms/864e5)}d ${Math.floor(ms%864e5/H)}h ${String(Math.floor(ms%H/6e4)).padStart(2,'0')}m left`;
   $('jamfill').style.width=Math.max(0,Math.min(100,ms/(JAM_END-JAM_START)*100))+'%';
 }
-const VIEWS=['profile','now','plan','after','tiers'];
+const VIEWS=['profile','now','plan','tiers'];
 function route(){const h=location.hash.slice(1),v=VIEWS.includes(h)?h:'now';VIEWS.forEach(n=>{$('v-'+n).hidden=v!==n;$('t-'+n).setAttribute('aria-current',v===n?'page':'false')});window.scrollTo(0,0);
   if(v==='plan')requestAnimationFrame(()=>{const sc=$('tl-scroll');sc.scrollLeft=Math.max(0,sc.scrollWidth*((Date.now()-T0)/(T1-T0))-150)})}
-function renderAll(){renderNow();renderPlan();renderAfter();renderTiers();
+function renderAll(){renderNow();renderPlan();renderTiers();
   $('sync').textContent=SYNC.updated?`Synced ${SYNC.updated}${SYNC.completion?' · '+SYNC.completion:''}`:'P•K Jordan · TH18 · Gold Pass on'}
 function setK(k,v){state[k]=v;save();renderAll()}
 document.addEventListener('click',e=>{
