@@ -279,6 +279,20 @@ details.more[open] summary .chev{transform:rotate(180deg)}
 .wbig{font-family:var(--f-game);font-size:1.6rem;line-height:1}
 .wbig small{font-size:.95rem;margin-left:4px}
 .mxtrack i.wall{background:linear-gradient(#c9b48a,#8f7a52)}
+.wcount{display:grid;gap:10px;padding:12px;border-radius:14px;background:var(--panel-2);border:3px solid var(--panel-3)}
+.wcount .top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.wcount .num{font-family:var(--f-game);font-size:2.2rem;line-height:1}
+.wcount .num small{font-size:1rem;margin-left:4px;color:var(--ink-2)}
+.wcount .spent{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.wcount .spent div{display:flex;align-items:center;gap:6px;font-weight:900;font-size:.95rem}
+.wcount .spent div small{display:block;color:var(--ink-2);font-weight:800;font-size:.74rem}
+.wcount .spent .i{font-size:1.4rem}
+.wbtns{display:flex;gap:6px;flex-wrap:wrap}
+.wbtns button{border:3px solid var(--edge-dark);border-radius:10px;min-height:44px;padding:0 12px;font-family:var(--f-game);font-size:1rem;cursor:pointer;color:#fff;display:flex;align-items:center;gap:6px}
+.wbtns button[data-wt="g"]{background:linear-gradient(#ffe36b,#f2b000);color:#3a2600}
+.wbtns button[data-wt="e"]{background:linear-gradient(#f070e6,#c535b8)}
+.wbtns button[data-wt="u"]{background:var(--panel);color:var(--ink)}
+.wbtns button:disabled{opacity:.4;cursor:default}
 /* bottom nav */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:linear-gradient(#6a4a28,#45301a);border-top:3px solid var(--edge-dark);box-shadow:0 -4px 0 rgba(0,0,0,.25);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
 nav.tabs .in{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
@@ -614,7 +628,7 @@ const PROFILE={asof:'as of Nov 1, 2026',
   weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 77/85 trails your other attack heroes.'],
   career:[['War stars','2,075'],['Best trophies','5,867'],['XP level','245'],['Builder Base best','3,310']],
   left:[['Builders','≈280M Gold + 80M Elixir','Defenses, Army Camps, Builder\'s Huts and storages, final starts Nov 14–16'],['Lab','Root Rider 4, Revive 5, Siege Barracks 6','Plus one more start Nov 15 before the Jam ends'],['Pets','Greedy Raven 6–10','≈830K Dark Elixir, done ~Nov 10'],['Walls','259 left','≈1.17B Gold or Elixir, on pace for ~Nov 12']],
-  walls:{left:249,cost:4.5e6,rate:50e6,dump:150e6,need:[['2026-11-01','2026-11-16',366e6]]},
+  walls:{start:317,left:249,cost:4.5e6,rate:50e6,dump:150e6,need:[['2026-11-01','2026-11-16',366e6]]},
   max:{start:'2026-11-01',end:'2026-11-17'},
 };
 function ringSVG(pct){const r=46,c=2*Math.PI*r,o=c*(1-pct/100);return `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="#120b05" stroke-width="18"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="#2a1f14" stroke-width="12"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#gg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${o.toFixed(1)}" transform="rotate(-90 60 60)"/><defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe36b"/><stop offset="1" stop-color="#f2a900"/></linearGradient></defs><text x="60" y="68" text-anchor="middle" class="big">${pct.toFixed(0)}%</text></svg>`}
@@ -626,9 +640,25 @@ function wallsDone(W,h){
   for(let i=0;i<2000&&acc<total;i++){const n=need.find(x=>t>=x[0]&&t<x[1]);acc+=Math.min(W.dump,Math.max(0,W.rate*h-(n?n[2]:0)));t+=day}
   return t;
 }
+/* Wall taps: walls done since the last site update. Cleared automatically when the site's wall count changes. */
+const WTKEY='jam-wall-taps';
+let wtaps={base:null,log:[]};try{wtaps=JSON.parse(localStorage.getItem(WTKEY))||wtaps}catch(e){}
+if(wtaps.base!==PROFILE.walls.left)wtaps={base:PROFILE.walls.left,log:[]};
+function saveTaps(){try{localStorage.setItem(WTKEY,JSON.stringify(wtaps))}catch(e){}}
+saveTaps();
+function wallCounterHTML(W0){
+  const g=wtaps.log.filter(x=>x==='g').length,e=wtaps.log.length-g,left=Math.max(0,W0.left-wtaps.log.length);
+  const earlier=W0.start-W0.left,done=W0.start-left,c=W0.cost;
+  return `<div class="wcount" aria-live="polite"><div class="top"><div class="num">${done}<small>of ${W0.start} done</small></div><span class="meta" style="font-weight:800;color:var(--ink-2)">${left} left · ${Math.round(done/W0.start*100)}%</span></div>
+    <div class="spent"><div><span class="i" style="display:grid">${IC.g}</span><span>${money(g*c,'g')}<small>Gold · ${g} wall${g===1?'':'s'}</small></span></div>
+    <div><span class="i" style="display:grid">${IC.e}</span><span>${money(e*c,'e')}<small>Elixir · ${e} wall${e===1?'':'s'}</small></span></div>
+    <div><span>${done*c>=1e9?(done*c/1e9).toFixed(2)+'B':money(done*c,'g')}<small>Total loot this Jam${earlier?` (incl. ${earlier} earlier walls)`:''}</small></span></div></div>
+    <div class="wbtns" role="group" aria-label="Log a wall"><button type="button" data-wt="g">${IC.g}+1 Gold</button><button type="button" data-wt="e">${IC.e}+1 Elixir</button><button type="button" data-wt="u" ${wtaps.log.length?'':'disabled'}>Undo</button></div></div>`;
+}
 function wallsHTML(P,pc,fd){
-  const W=P.walls,done=wallsDone(W,wallHours),days=Math.max(0,Math.ceil((done-Date.now())/864e5));
+  const W={...P.walls,left:Math.max(0,P.walls.left-wtaps.log.length)},done=wallsDone(W,wallHours),days=Math.max(0,Math.ceil((done-Date.now())/864e5));
   return `<div class="walls"><div class="wh"><b>Walls</b><span>${W.left} to go · ${(W.left*W.cost/1e9).toFixed(2)}B loot</span></div>
+    ${wallCounterHTML(P.walls)}
     <div class="hours" role="group" aria-label="Farming hours per day"><small>Farming a day:</small>${[1,2,3,4].map(h=>`<button type="button" data-wh="${h}" aria-pressed="${h===wallHours}">${h}h</button>`).join('')}</div>
     <div class="wh"><div class="wbig">${days}<small>days</small></div><span>Walls maxed around ${fd(done)}</span></div>
     <div class="mxrow"><span>Walls</span><div class="mxtrack"><i class="wall" style="width:${pc(done)}%"></i><b class="out">${fd(done).replace(/, \d{4}/,'')}</b></div></div>
@@ -665,6 +695,7 @@ document.addEventListener('click',e=>{
   const s=e.target.closest('[data-start]');if(s){setK(s.dataset.start,true);return}
   const t=e.target.closest('[data-toggle]');if(t){setK(t.dataset.toggle,!state[t.dataset.toggle]);return}
   const g=e.target.closest('[data-seg]');if(g){selected=selected===g.dataset.seg?null:g.dataset.seg;renderPlan();return}
+  const wt=e.target.closest('[data-wt]');if(wt){const k=wt.dataset.wt;if(k==='u')wtaps.log.pop();else if(PROFILE.walls.left-wtaps.log.length>0)wtaps.log.push(k);saveTaps();renderProfile();return}
   const wh=e.target.closest('[data-wh]');if(wh){wallHours=+wh.dataset.wh;try{localStorage.setItem('jam-wall-hours',wallHours)}catch(x){}renderProfile();return}
   const f=e.target.closest('[data-c]');if(f){filter=f.dataset.c;renderTiers()}
 });
