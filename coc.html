@@ -264,7 +264,7 @@ details.more summary::-webkit-details-marker{display:none}
     <div class="card item"><div class="ic h">H</div><b>Book of Heroes x2</b><div class="when">Use one to finish <strong>Grand Warden 78</strong> instantly so he never misses a CWL attack. Keep the other for a hero after the Jam.</div></div>
     <div class="card item"><div class="ic b">B</div><b>Book of Building</b><div class="when">Used Nov 1 on a Firespitter to start Inferno #3. If you get another, save it for an upgrade with 5+ days left.</div></div>
     <div class="card item"><div class="ic b">P</div><b>Builder Potions</b><div class="when">None left after Nov 1 (boost ends ~8:25 PM). Claim the Gold Pass ones and save them for <strong>Nov 12–14</strong> to push the final starts in before the Jam ends.</div></div>
-    <div class="card item"><div class="ic r">R</div><b>Research Potions</b><div class="when">All used. The boost runs to <strong>~11:30 PM Nov 1</strong>: Rage done ~10 PM, Meteor Golem (Goblin Lab) ~1 AM. Start Baby Dragon right after Rage to catch the last of it.</div></div>
+    <div class="card item"><div class="ic r">R</div><b>Research Potions</b><div class="when">All used. The boost runs to <strong>~11:30 PM Nov 1</strong>: Rage done ~10 PM, Meteor Golem (Goblin Lab) ~1 AM. Start Siege Barracks right after Rage to catch the last of it.</div></div>
     <div class="card item"><div class="ic r">F</div><b>Books of Fighting</b><div class="when">You have <strong>0</strong> and can only hold 1 at a time. Claim one from the Gold Pass when you can and use it on the longest troop or siege research running.</div></div>
     <div class="card item"><div class="ic d">D</div><b>Rune of Dark Elixir</b><div class="when">Fill up when a Dark Elixir hero (Royal Champion, Queen, King) is next and you're short.</div></div>
     <div class="card item"><div class="ic b">E</div><b>Book of Everything</b><div class="when">Save for <strong>after the Jam</strong>, on an upgrade that takes 11+ days.</div></div>
@@ -329,8 +329,8 @@ const BUILDERS = [
   {id:'b6', name:'Builder 6', cur:'Firespitter', free:'2026-11-01T19:20:00-05:00', steps:[
     ['Inferno Tower #3',145,'g',11.93e6],['Barbarian King 102',43,'d',184.5e3],['Dark Barracks 13',54,'e',10.35e6],['X-Bow #4',145,'g',11.7e6]]},
   {id:'lab', name:'Laboratory', cur:'Rage Spell 7', free:'2026-11-01T22:05:00-05:00', steps:[
-    ['Baby Dragon 12',48,'e',13.05e6],['Siege Barracks 6',81,'e',12.15e6],['Battle Blimp 6',73,'e',11.7e6],['Stone Slammer 6',73,'e',11.7e6],['Archer 14',73,'e',11.25e6]]},
-  {id:'glab', name:'Goblin Lab', cur:'Meteor Golem 4', free:'2026-11-02T01:00:00-05:00', steps:[]},
+    ['Siege Barracks 6',47,'e',12.15e6],['Headhunter 4',84,'d',166.5e3],['Electro Titan 5',86,'e',13.5e6],['Root Rider 4',86,'e',13.5e6]]},
+  {id:'glab', name:'Goblin Lab', cur:'Meteor Golem 3', free:'2026-11-02T01:00:00-05:00', steps:[]},
   {id:'pet', name:'Pet House', cur:'Greedy Raven 2', free:'2026-11-01T23:00:00-05:00', steps:[
     ['Greedy Raven 3',86,'d',126e3,'opt'],['Greedy Raven 4',86,'d',135e3,'opt'],['Greedy Raven 5',86,'d',144e3,'opt'],['Greedy Raven 6',86,'d',153e3,'opt']]},
 ];
@@ -355,15 +355,16 @@ const TIERS = [
   ['Heroes','A','Archer Queen','100 → 110','200K DE','After CWL'],
   ['Heroes','B','Barbarian King','101 → 110','205K DE','Any time, not in your army'],
   ['Heroes','B','Dragon Duke','9 → 25','Upgrading','Any time, not in your army'],
-  ['Lab','S','Rage Spell','→ 7','13M Elixir','Army + CC'],
-  ['Lab','S','Freeze Spell','→ 8','14M Elixir','Researching (Goblin Lab)'],
-  ['Lab','A','Baby Dragon','→ 12','14.5M Elixir','2 in your army'],
-  ['Lab','A','Meteor Golem','3 → 4','15M Elixir','Researching (Goblin Lab); used in the #1 RC walk army'],
-  ['Lab','A','Battle Blimp','→ 6','13M Elixir','Your siege'],
-  ['Lab','A','Stone Slammer','→ 6','13M Elixir','Your siege'],
-  ['Lab','A','Siege Barracks','→ 6','13.5M Elixir','Your siege'],
-  ['Lab','A','Archer','→ 14','12.5M Elixir','7 in your army'],
-  ['Lab','B','Headhunter','→ 4','185K DE','CC troop'],
+  ['Lab','S','Rage Spell','6 → 7','13M Elixir','Researching'],
+  ['Lab','S','Freeze Spell','7 → 8','14M Elixir','Done (Goblin Lab)'],
+  ['Lab','S','Meteor Golem','2 → 3 (max)','15M Elixir','Researching (Goblin Lab); used in the #1 RC walk army'],
+  ['Lab','S','Siege Barracks','5 → 6','13.5M Elixir','Your only siege, and in your CC. Next after Rage'],
+  ['Lab','S','Headhunter','3 → 4','185K DE','Your CC troop, and it burns spare Dark Elixir'],
+  ['Lab','A','Electro Titan','4 → 5','15M Elixir','Priciest research left, so the biggest Jam saving'],
+  ['Lab','A','Root Rider','3 → 4','15M Elixir','Priciest research left, so the biggest Jam saving'],
+  ['Lab','B','Baby Dragon','11 → 12','14.5M Elixir','After the Jam'],
+  ['Lab','B','Archer','13 → 14','12.5M Elixir','After the Jam'],
+  ['Lab','C','Battle Blimp, Stone Slammer','5 → 6','13M Elixir each','You don\'t use them'],
   ['Lab','C','Other troops & spells','—','12–15M Elixir / 125–190K DE','Not in your army'],
   ['Lab','C','Sky Wagon, Ruin Witch','unlock','9.9M Elixir / 99K DE','After Workshop 9 and Dark Barracks 13'],
   ['Pets','B','Greedy Raven','2 → 10','126–189K DE per level','Only with spare Dark Elixir'],
