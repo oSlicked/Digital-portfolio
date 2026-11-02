@@ -249,6 +249,25 @@ details.more[open] summary .chev{transform:rotate(180deg)}
 .left b{font-weight:900} .left em{font-style:normal;font-family:var(--f-game);text-align:right}
 .left small{grid-column:1/3;color:var(--ink-2);font-size:.78rem}
 
+.mx{padding:14px;display:grid;gap:12px}
+.mxhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.mxhead .days{font-family:var(--f-game);font-size:2.4rem;line-height:1}
+.mxhead .days small{font-size:1rem;margin-left:4px}
+.mxhead .when{color:var(--ink-2);font-weight:800;font-size:.9rem}
+.verdict{border-radius:12px;padding:8px 12px;font-family:var(--f-game);font-size:1rem;border:3px solid;display:inline-flex;align-items:center;gap:6px}
+.verdict.no{background:linear-gradient(var(--orange),var(--orange-2));border-color:var(--orange-edge)}
+.verdict.yes{background:linear-gradient(var(--green),var(--green-2));border-color:var(--green-edge)}
+.mxrows{display:grid;gap:10px;position:relative}
+.mxrow{display:grid;grid-template-columns:104px 1fr;gap:8px;align-items:center}
+.mxrow > span{font-weight:900;font-size:.86rem;line-height:1.15}
+.mxtrack{position:relative;height:26px;border-radius:13px;background:var(--track);border:3px solid var(--track-edge);overflow:hidden}
+.mxtrack i{position:absolute;inset:0 auto 0 0;border-radius:10px;background:linear-gradient(var(--blue),var(--blue-2))}
+.mxtrack i.last{background:linear-gradient(var(--orange),var(--orange-2))}
+.mxtrack b{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-family:var(--f-game);font-weight:400;font-size:.82rem;white-space:nowrap}
+.mxmark{position:absolute;top:-4px;bottom:-4px;border-left:3px dashed #c0392b;pointer-events:none}
+.mxmark em{position:absolute;bottom:100%;transform:translateX(-50%);font-style:normal;font-family:var(--f-game);font-size:.7rem;color:#fff;background:#c0392b;padding:1px 6px;border-radius:6px;white-space:nowrap}
+.mxaxis{display:flex;justify-content:space-between;margin:-4px 0 0 112px;font-family:var(--f-game);font-size:.72rem;color:var(--ink-2)}
+.mxnote{font-size:.82rem;color:var(--ink-2);margin:0}
 /* bottom nav */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:linear-gradient(#6a4a28,#45301a);border-top:3px solid var(--edge-dark);box-shadow:0 -4px 0 rgba(0,0,0,.25);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
 nav.tabs .in{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
@@ -288,6 +307,8 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
   <div class="panel pros" id="p-pros"></div>
   <div class="title out">Career</div>
   <div class="panel kv" id="p-career"></div>
+  <div class="title out">Days to max <small>if you follow the plan</small></div>
+  <div class="panel mx" id="p-max"></div>
   <div class="title out">Left to max</div>
   <div class="panel left" id="p-left"></div>
   <p class="note">Levels from Clash of Stats and costs from Clash Ninja, both as of Nov 1. Cost totals use Jam + Gold Pass prices.</p>
@@ -354,32 +375,53 @@ const T0 = new Date('2026-11-01T00:00:00-05:00'), T1 = new Date('2026-11-22T00:0
 const H = 3600e3;
 const BUILDERS = [
   {id:'gob', name:'Goblin Builder', cur:'Royal Champion 55', free:'2026-11-02T08:00:00-05:00', steps:[
-    ['Scattershot #1',162,'g',11.93e6],['Hidden Tesla #2',140,'g',11.25e6],["Builder's Hut #4",140,'g',10.8e6]]},
+    ["Scattershot #1",81,'g',1.193e+07],["X-Bow #2",73,'g',1.17e+07],["Hidden Tesla #5",70,'g',1.125e+07],["Builder's Hut #5",70,'g',1.08e+07],["Grand Warden 79",43,'e',1.26e+07]]},
   {id:'b1', name:'Builder 1', cur:'Smasher', free:'2026-11-02T09:30:00-05:00', steps:[
-    ['Scattershot #2',162,'g',11.93e6],['Hidden Tesla #3',140,'g',11.25e6],["Builder's Hut #5",140,'g',10.8e6]]},
+    ["Scattershot #2",81,'g',1.193e+07],["X-Bow #3",73,'g',1.17e+07],["Army Camp #3",81,'e',1.17e+07],["Spell Tower #2",54,'g',1.215e+07],["Dark Barracks 13",54,'e',1.035e+07]]},
   {id:'b2', name:'Builder 2', cur:'Longshot', free:'2026-11-02T21:00:00-05:00', steps:[
-    ['Inferno Tower #2',145,'g',11.93e6],['Hidden Tesla #5',140,'g',11.25e6],["Builder's Hut #1",140,'g',10.8e6]]},
+    ["Army Camp #2",81,'e',1.17e+07],["Hidden Tesla #1",70,'g',1.125e+07],["Builder's Hut #1",70,'g',1.08e+07],["Spell Tower #1",54,'g',1.215e+07],["Giga Bomb 4",70,'g',9e+06]]},
   {id:'b3', name:'Builder 3', cur:'Workshop', free:'2026-11-02T19:00:00-05:00', steps:[
-    ['Archer Queen 101',0,'d',180e3,'book'],['Inferno Tower #1',145,'g',11.93e6],['X-Bow #4',145,'g',11.7e6],["Builder's Hut #3",140,'g',10.8e6]]},
+    ["Grand Warden 78",0,'e',1.215e+07,'book'],["Archer Queen 101",0,'d',180000,'book'],["Army Camp #1",81,'e',1.17e+07],["Barbarian King 102",43,'d',184500],["Hidden Tesla #4",70,'g',1.125e+07],["Builder's Hut #4",70,'g',1.08e+07],["Mortar #4",68,'g',9.45e+06]]},
   {id:'b4', name:'Builder 4', cur:'Air Defense', free:'2026-11-02T22:00:00-05:00', steps:[
-    ['Grand Warden 78',0,'e',12.15e6,'book'],['X-Bow #1',145,'g',11.7e6],['Hidden Tesla #1',140,'g',11.25e6],["Builder's Hut #2",140,'g',10.8e6]]},
+    ["Inferno Tower #1",73,'g',1.193e+07],["X-Bow #4",73,'g',1.17e+07],["Army Camp #4",81,'e',1.17e+07],["Mortar #2",68,'g',9.45e+06],["Elixir Storage #1",68,'g',8.1e+06]]},
   {id:'b5', name:'Builder 5', cur:'Firespitter', free:'2026-11-03T09:00:00-05:00', steps:[
-    ['X-Bow #2',145,'g',11.7e6],['Hidden Tesla #4',140,'g',11.25e6],['Mortar #1',135,'g',9.45e6]]},
-  {id:'b6', name:'Builder 6', cur:'Inferno Tower #3', free:'2026-11-07T20:20:00-05:00', steps:[
-    ['X-Bow #3',145,'g',11.7e6],['Barbarian King 102',43,'d',184.5e3],['Mortar #2',135,'g',9.45e6]]},
+    ["Inferno Tower #2",73,'g',1.193e+07],["Hidden Tesla #2",70,'g',1.125e+07],["Builder's Hut #2",70,'g',1.08e+07],["Mortar #1",68,'g',9.45e+06],["Archer Queen 102",43,'d',189000,'cwl']]},
+  {id:'b6', name:'Builder 6', cur:'Inferno Tower #3', free:'2026-11-04T20:20:00-05:00', steps:[
+    ["X-Bow #1",73,'g',1.17e+07],["Hidden Tesla #3",70,'g',1.125e+07],["Builder's Hut #3",70,'g',1.08e+07],["Mortar #3",68,'g',9.45e+06]]},
   {id:'lab', name:'Laboratory', cur:'Rage Spell 7', free:'2026-11-01T22:05:00-05:00', steps:[
-    ['Siege Barracks 6',47,'e',12.15e6],['Headhunter 4',84,'d',166.5e3],['Electro Titan 5',86,'e',13.5e6],['Root Rider 4',86,'e',13.5e6]]},
+    ['Siege Barracks 6',47,'e',12.15e6],['Headhunter 4',84,'d',166.5e3],['Electro Titan 5',86,'e',13.5e6],['Root Rider 4',86,'e',13.5e6],['Revive Spell 5',86,'e',13.28e6]]},
   {id:'glab', name:'Goblin Lab', cur:'Meteor Golem 3', free:'2026-11-02T01:00:00-05:00', steps:[]},
   {id:'pet', name:'Pet House', cur:'Greedy Raven 2', free:'2026-11-01T23:00:00-05:00', steps:[
-    ['Greedy Raven 3',86,'d',126e3,'opt'],['Greedy Raven 4',86,'d',135e3,'opt'],['Greedy Raven 5',86,'d',144e3,'opt'],['Greedy Raven 6',86,'d',153e3,'opt']]},
+    ['Greedy Raven 3',43,'d',126e3,'opt'],['Greedy Raven 4',43,'d',135e3,'opt'],['Greedy Raven 5',43,'d',144e3,'opt'],['Greedy Raven 6',43,'d',153e3,'opt'],['Greedy Raven 7',43,'d',162e3,'opt'],['Greedy Raven 8',43,'d',171e3,'opt'],['Greedy Raven 9',43,'d',180e3,'opt'],['Greedy Raven 10',43,'d',189e3,'opt']]},
 ];
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
 const AFTER=[
-  ['Spell Tower #1',216,'g',24.3e6,'Biggest after-Jam build'],['Spell Tower #2',216,'g',24.3e6,''],
-  ['Mortar #3',270,'g',18.9e6,''],['Mortar #4',270,'g',18.9e6,''],
-  ['Grand Warden 79',86,'e',24.3e6,'Repeat each level up to 85'],['Archer Queen 102',86,'d',360e3,'Repeat each level up to 110'],
-  ['Army Camp #1',162,'e',23.4e6,'More dragon space'],['Army Camp #2',162,'e',23.4e6,''],['Army Camp #3',162,'e',23.4e6,''],['Army Camp #4',162,'e',23.4e6,''],
-  ['Giga Bomb 4',140,'g',18e6,''],['Dark Barracks 13',108,'e',20.7e6,'Unlocks Ruin Witch'],['Logger 2',76,'e',16.2e6,'Guardian'],
+  ["Grand Warden 80–85",516,'e',1.5e+08,"Repeat each level"],
+  ["Archer Queen 103–110",688,'d',3e+06,"About 3.6 days per level"],
+  ["Barbarian King 103–110",688,'d',3e+06,"Not in your army"],
+  ["Dragon Duke 10–25",1116,'d',6.4e+06,"Not in your army"],
+  ["Gold Storage #1",135,'e',1.62e+07,""],
+  ["Gold Storage #2",135,'e',1.62e+07,""],
+  ["Gold Storage #3",135,'e',1.62e+07,""],
+  ["Gold Storage #4",135,'e',1.62e+07,""],
+  ["Elixir Storage #2",135,'g',1.62e+07,""],
+  ["Elixir Storage #3",135,'g',1.62e+07,""],
+  ["Elixir Storage #4",135,'g',1.62e+07,""],
+  ["Seeking Air Mines 1–3",372,'g',5.13e+07,""],
+  ["Seeking Air Mines 4–6",372,'g',5.13e+07,""],
+  ["Seeking Air Mines 7–9",372,'g',5.13e+07,""],
+  ["Skeleton Traps 1–4",304,'g',6.48e+07,""],
+  ["Giant Bombs 1–4",452,'g',6.12e+07,""],
+  ["Giant Bombs 5–8",452,'g',6.12e+07,""],
+  ["Spring Traps 1–3",357,'g',4.32e+07,""],
+  ["Spring Traps 4–6",357,'g',4.32e+07,""],
+  ["Spring Traps 7–9",357,'g',4.32e+07,""],
+  ["Air Bombs 1–4",388,'g',5.4e+07,""],
+  ["Air Bombs 5–7",291,'g',4.05e+07,""],
+  ["Bombs 1–4",344,'g',5.04e+07,""],
+  ["Bombs 5–8",344,'g',5.04e+07,""],
+  ["Dark Elixir Drills x2",130,'e',2.16e+07,""],
+  ["Logger 2–5",430,'e',5.49e+07,"Guardian"],
 ];
 const FILL=[
   ['Traps: Seeking Air Mine x9, Giant Bomb x8, Skeleton Trap x4, Spring Trap x9, Air Bomb x7, Bomb x8','12.6–17.1M Gold each · short and cheap'],
@@ -409,20 +451,20 @@ const TIERS = [
   ['Lab','C','Sky Wagon, Ruin Witch','unlock','9.9M Elixir / 99K DE','After Workshop 9 and Dark Barracks 13'],
   ['Pets','B','Greedy Raven','2 → 10','126–189K DE per level','Only with spare Dark Elixir'],
   ['Pets','C','Diggy','10 → 15','99–157.5K DE per level','Only with spare Dark Elixir'],
-  ['Buildings','S','Scattershot x2','6 → 7','13.25M Gold each','Longest build (7.5 days), so first in the Jam'],
+  ['Buildings','S','Scattershot x2','6 → 7','13.25M Gold each','First starts of the Jam'],
   ['Buildings','S','Inferno Tower x3','11 → 12','13.25M Gold each','#3 started'],
-  ['Buildings','S','X-Bow x4','12 → 13','13M Gold each',''],
-  ['Buildings','A','Hidden Tesla x5','16 → 17','12.5M Gold each',''],
-  ['Buildings','A',"Builder's Hut x5",'7 → 8','12M Gold each','Long build, so good Jam value'],
-  ['Buildings','A','Mortar x4','17 → 18','10.5M Gold each','2 in the Jam, 2 after'],
-  ['Buildings','B','Spell Tower x2','3 → 4','13.5M Gold each','After the Jam'],
-  ['Buildings','B','Army Camp x4','13 → 14','13M Elixir each','After the Jam, or swap in if Gold runs short'],
-  ['Buildings','B','Giga Bomb','3 → 4','10M Gold','After the Jam'],
-  ['Buildings','B','Dark Barracks','12 → 13','11.5M Elixir','After the Jam; unlocks Ruin Witch'],
-  ['Buildings','C','Logger','1 → 2','9M Elixir',''],
-  ['Buildings','C','Traps (all)','—','7–9.5M Gold each','Short builds, small saving'],
-  ['Buildings','C','Supercharges','—','2.5–12M Gold, 220K DE','No Jam discount'],
-  ['Buildings','C','Storages x8','18 → 19','9M each',''],
+  ['Buildings','S','X-Bow x4','12 → 13','13M Gold each','In the Jam'],
+  ['Buildings','S','Army Camp x4','13 → 14','13M Elixir each','In the Jam. Costs Elixir, so it eases the Gold crunch'],
+  ['Buildings','A','Hidden Tesla x5','16 → 17','12.5M Gold each','In the Jam'],
+  ['Buildings','A',"Builder's Hut x5",'7 → 8','12M Gold each','In the Jam'],
+  ['Buildings','A','Spell Tower x2','3 → 4','13.5M Gold each','In the Jam'],
+  ['Buildings','A','Mortar x4','17 → 18','10.5M Gold each','In the Jam'],
+  ['Buildings','A','Giga Bomb','3 → 4','10M Gold','Final round of the Jam'],
+  ['Buildings','A','Dark Barracks','12 → 13','11.5M Elixir','Final round of the Jam; unlocks Ruin Witch'],
+  ['Buildings','B','Storages x8','18 → 19','9M each','1 in the Jam, 7 after'],
+  ['Buildings','B','Traps (all)','—','7–9.5M Gold each','After the Jam. The biggest chunk of builder time left'],
+  ['Buildings','C','Logger','1 → 5','9M Elixir and up','After the Jam'],
+  ['Buildings','C','Supercharges','—','2.5–12M Gold, 220K DE','Optional, no Jam discount'],
   ['Buildings','—','Walls x317','18 → 19','Gold or Elixir','Only with excess. Use Elixir, since Gold is the limit'],
   ['Equipment','A','Dragon Duke 2nd piece','14 → 18','Shiny + Glowy',''],
   ['Equipment','B','Dragon Duke level-1 pieces','1 → 18','Shiny + Glowy',''],
@@ -569,11 +611,11 @@ function renderChart(){
 }
 
 /* ---------- AFTER ---------- */
-const AFTER_T0=new Date('2026-11-13T00:00:00-05:00'),AFTER_T1=new Date('2026-12-27T00:00:00-05:00');
+const AFTER_T0=new Date('2026-11-14T00:00:00-05:00'),AFTER_T1=new Date('2027-02-06T00:00:00-05:00');
 const AFTER_ROWS=BUILDERS.filter(b=>/^b\d/.test(b.id)).map(b=>{const f=b.plan[b.plan.length-1];return{name:b.name,sub:'after '+f.name,cur:{name:f.name,start:f.start,end:f.end},free:f.end.getTime(),segs:[]}});
 const AFTER_PLAN=AFTER.map((a,i)=>{const r=AFTER_ROWS.reduce((x,y)=>y.free<x.free?y:x);const st=r.free;r.free+=a[1]*H;const p={key:'a-'+i,name:a[0],h:a[1],res:a[2],cost:a[3],note:a[4],start:new Date(st),end:new Date(r.free),builder:r.name};r.segs.push(p);return p});
 function renderAfter(){
-  drawTimeline($('tl-after'),AFTER_ROWS,AFTER_T0,AFTER_T1,4);
+  drawTimeline($('tl-after'),AFTER_ROWS,AFTER_T0,AFTER_T1,7);
   $('after-list').innerHTML=AFTER_PLAN.map(p=>`<li class="step ${state[p.key]?'on':''}"><label><input type="checkbox" data-k="${p.key}" ${state[p.key]?'checked':''}><span class="nm">${p.name}</span>${costHTML(p)}<span class="meta">${p.builder} · ${fmtDate(p.start)} · ${dur(p.h)}${p.note?' · '+p.note:''}</span></label></li>`).join('');
   let done=0,g=0,e=0,d=0;AFTER_PLAN.forEach(p=>{if(state[p.key]){done++;return}if(p.res==='g')g+=p.cost;else if(p.res==='e')e+=p.cost;else d+=p.cost});
   $('a-budget').innerHTML=`<div class="afterres"><div>${IC.g}${money(g,'g')}</div><div>${IC.e}${money(e,'e')}</div><div>${IC.d}${money(d,'d')}</div><div>${IC.check}${done} / ${AFTER_PLAN.length}</div></div>`;
@@ -597,7 +639,8 @@ const PROFILE={asof:'as of Nov 1, 2026',
   strong:['Your RC walk kit is maxed: Electro Boots 27, Rocket Spear 27, Spirit Fox 10.','Every equipment piece in your main army is maxed.','Minion Prince, Dragon, Electro Dragon and Dragon Rider are maxed.','10 of 12 pets are maxed.'],
   weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 77/85 trails your other attack heroes.'],
   career:[['War stars','2,075'],['Best trophies','5,867'],['XP level','245'],['Builder Base best','3,310']],
-  left:[['Defenses & buildings','279M Gold','About 27 days with 6 builders at Jam prices'],['Pets','1.89M Dark Elixir','Diggy and Greedy Raven'],['Supercharges','438M Gold + 756K DE','Optional endgame, no Jam discount']],
+  left:[['Jam builder plan','284M Gold + 82M Elixir','Every defense, Army Camp and Builder\'s Hut starts before Nov 16'],['After the Jam','≈1.1B Gold + 250M Elixir + 12M DE','Traps, storages, Logger and the rest of your hero levels'],['Lab','≈200 days of research','After the Jam, one research at a time'],['Pets','1.89M Dark Elixir','Greedy Raven maxes in the Jam, then Diggy'],['Optional','Supercharges, crafted defenses','Not counted as max here']],
+  max:{start:'2026-11-01',end:'2027-07-01',th19:'2026-11-23',rows:[['Pets','2026-12-03'],['Buildings & heroes','2027-01-29'],['Lab','2027-06-07']]},
 };
 function ringSVG(pct){const r=46,c=2*Math.PI*r,o=c*(1-pct/100);return `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="#120b05" stroke-width="18"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="#2a1f14" stroke-width="12"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#gg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${o.toFixed(1)}" transform="rotate(-90 60 60)"/><defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe36b"/><stop offset="1" stop-color="#f2a900"/></linearGradient></defs><text x="60" y="68" text-anchor="middle" class="big">${pct.toFixed(0)}%</text></svg>`}
 function renderProfile(){
@@ -609,6 +652,15 @@ function renderProfile(){
   $('p-heroes').innerHTML=P.heroes.map(([n,l,m,t])=>`<div class="hrow"><b>${n}</b><em>${l} / ${m}</em><div class="abar"><i class="${l>=m?'hi':l/m<.6?'lo':''}" style="width:${l/m*100}%"></i></div><small>${t}</small></div>`).join('');
   $('p-pros').innerHTML=`<h4 style="color:var(--green-2)">${IC.check} Strengths</h4><ul>${P.strong.map(x=>`<li>${x}</li>`).join('')}</ul><h4 style="color:var(--orange-2);margin-top:6px">${IC.hammer} Gaps</h4><ul>${P.weak.map(x=>`<li>${x}</li>`).join('')}</ul>`;
   $('p-career').innerHTML=P.career.map(([k,v])=>`<div><small>${k}</small><b>${v}</b></div>`).join('');
+  const M=P.max,a=new Date(M.start+'T00:00:00-05:00').getTime(),z=new Date(M.end+'T00:00:00-05:00').getTime(),pc=t=>Math.max(0,Math.min(100,(t-a)/(z-a)*100));
+  const fin=M.rows.map(r=>new Date(r[1]+'T12:00:00-05:00').getTime()),last=Math.max(...fin),th=new Date(M.th19+'T12:00:00-05:00').getTime();
+  const days=Math.max(0,Math.ceil((last-Date.now())/864e5)),before=last<th;
+  const fd=t=>new Date(t).toLocaleDateString('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric',year:'numeric'});
+  $('p-max').innerHTML=`<div class="mxhead"><div><div class="days">${days}<small>days</small></div><div class="when">Maxed around ${fd(last)}</div></div><span class="verdict ${before?'yes':'no'} out">${before?'Before TH19':'Not before TH19'}</span></div>
+    <div class="mxrows">${M.rows.map((r,i)=>`<div class="mxrow"><span>${r[0]}</span><div class="mxtrack"><i class="${fin[i]===last?'last':''}" style="width:${pc(fin[i])}%"></i><b class="out">${fd(fin[i]).replace(/, \d{4}/,'')}</b></div></div>`).join('')}
+    <div class="mxmark" style="left:calc(112px + (100% - 112px) * ${pc(th)/100})"><em>TH19?</em></div></div>
+    <div class="mxaxis"><span>Nov 2026</span><span>Mar 2027</span><span>Jul 2027</span></div>
+    <p class="mxnote">TH19 is rumoured for Nov 23, 2026 but Supercell hasn't confirmed a date. The lab is your bottleneck: Research Potions, Books of Fighting and the Goblin Lab all pull this date in. Walls and hero equipment depend on loot and Ore, not time, so they aren't in this date.</p>`;
   $('p-left').innerHTML=P.left.map(([n,v,t])=>`<div><b>${n}</b><em>${v}</em><small>${t}</small></div>`).join('');
 }
 
