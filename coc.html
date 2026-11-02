@@ -257,7 +257,7 @@ details.more[open] summary .chev{transform:rotate(180deg)}
 .verdict{border-radius:12px;padding:8px 12px;font-family:var(--f-game);font-size:1rem;border:3px solid;display:inline-flex;align-items:center;gap:6px}
 .verdict.no{background:linear-gradient(var(--orange),var(--orange-2));border-color:var(--orange-edge)}
 .verdict.yes{background:linear-gradient(var(--green),var(--green-2));border-color:var(--green-edge)}
-.mxrows{display:grid;gap:10px;position:relative}
+.mxrows{display:grid;gap:10px;position:relative;margin-top:18px}
 .mxrow{display:grid;grid-template-columns:104px 1fr;gap:8px;align-items:center}
 .mxrow > span{font-weight:900;font-size:.86rem;line-height:1.15}
 .mxtrack{position:relative;height:26px;border-radius:13px;background:var(--track);border:3px solid var(--track-edge);overflow:hidden}
@@ -286,12 +286,51 @@ nav.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;text-de
 nav.tabs a .ni{width:40px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:1.25rem;background:rgba(0,0,0,.22);border:2px solid rgba(0,0,0,.35)}
 nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(--gold-2));border-color:var(--gold-edge);color:#3b2600;box-shadow:0 3px 0 rgba(0,0,0,.35)}
 
-@media (min-width:700px){
-  .now{display:grid;grid-template-columns:1.1fr 1fr;gap:14px;align-items:start}
-  .now .title{grid-column:1/-1}
-  .hud .in{grid-template-columns:auto 1fr minmax(260px,340px)}
-  .jambar{grid-column:3;grid-row:1/3;margin-top:0}
+/* section grids */
+.g{display:grid;gap:0 18px;grid-template-columns:minmax(0,1fr)}
+.g > div{min-width:0}
+.nowg{grid-template-areas:"hero" "agenda" "loot" "lanes" "items"}
+.a-hero{grid-area:hero}.a-agenda{grid-area:agenda}.a-loot{grid-area:loot}.a-lanes{grid-area:lanes}.a-items{grid-area:items}
+.g > div > .title:first-child{margin-top:4px}
+.g > div + div > .title:first-child{margin-top:26px}
+/* agenda */
+.ag{overflow:hidden}
+.agday{padding:8px 14px;font-family:var(--f-game);font-size:.95rem;letter-spacing:.02em;background:var(--panel-2);border-bottom:2px solid var(--panel-3);color:var(--ink)}
+.ag ul{list-style:none;margin:0;padding:0 14px}
+.ag li{display:grid;grid-template-columns:70px auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:2px dashed var(--panel-3)}
+.ag li:first-child{border-top:0}
+.agt{font-family:var(--f-game);font-size:.92rem;color:var(--ink-2);white-space:nowrap}
+.ag .r{font-size:1.35rem;display:grid}
+.ag .nm{font-weight:900;line-height:1.2;min-width:0}
+.ag .nm small{display:block;font-weight:700;color:var(--ink-2);font-size:.76rem}
+.ag .empty{padding:14px;color:var(--ink-2)}
+
+@media (min-width:1000px){
+  body{padding-left:272px}
+  body::before{display:none}
+  .hud{position:fixed;left:0;top:0;width:272px;border-bottom:0;box-shadow:none;background:transparent;z-index:32}
+  .hud .in{display:grid;grid-template-columns:auto 1fr;padding:22px 18px 0;max-width:none}
+  .jambar{grid-column:1/3;margin-top:14px}
+  .hud h1{font-size:1.6rem}
+  nav.tabs{top:0;bottom:0;left:0;right:auto;width:272px;padding:150px 14px 20px;background:linear-gradient(var(--hud),#0d151d);border-top:0;border-right:3px solid var(--hud-edge);box-shadow:4px 0 0 rgba(0,0,0,.2)}
+  nav.tabs .in{display:flex;flex-direction:column;gap:6px;max-width:none}
+  nav.tabs a{flex-direction:row;justify-content:flex-start;gap:12px;min-height:54px;padding:6px 10px;font-size:1.05rem;border-radius:14px}
+  nav.tabs a[aria-current="page"]{background:rgba(255,255,255,.07)}
+  main{max-width:1240px;padding:26px 32px 48px!important}
+  .nowg{grid-template-columns:minmax(0,7fr) minmax(0,5fr);grid-template-areas:"hero loot" "lanes agenda" "items items"}
+  .a-agenda{position:sticky;top:20px;align-self:start}
+  .nowg > .a-loot > .title:first-child,.profg > div:nth-child(2) > .title:first-child{margin-top:4px}
+  .lanes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .items{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .profg{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .profg > .wide{grid-column:1/-1}
+  .tlist{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #after-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fill{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tl-scroll{overflow-x:visible}
+  .tl{min-width:0}
 }
+@media (min-width:1000px) and (max-width:1199px){.lanes{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -308,34 +347,26 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
 
 <main class="gut">
 <section id="v-profile" hidden>
-  <div class="title out" style="margin-top:4px">Account report <small id="p-asof"></small></div>
-  <div class="panel" id="p-rings"></div>
-  <div class="title out">Progress by area <small>by upgrade cost</small></div>
-  <div class="panel area" id="p-areas"></div>
-  <div class="title out">Heroes</div>
-  <div class="panel hrows" id="p-heroes"></div>
-  <div class="title out">Strengths &amp; gaps</div>
-  <div class="panel pros" id="p-pros"></div>
-  <div class="title out">Career</div>
-  <div class="panel kv" id="p-career"></div>
-  <div class="title out">Days to max <small>if you follow the plan</small></div>
-  <div class="panel mx" id="p-max"></div>
-  <div class="title out">Left to max</div>
-  <div class="panel left" id="p-left"></div>
-  <p class="note">Levels from Clash of Stats and costs from Clash Ninja, both as of Nov 1. Cost totals use Jam + Gold Pass prices.</p>
+  <div class="g profg">
+    <div><div class="title out">Account report <small id="p-asof"></small></div><div class="panel" id="p-rings"></div>
+      <div class="title out">Progress by area <small>by upgrade cost</small></div><div class="panel area" id="p-areas"></div></div>
+    <div><div class="title out">Days to max <small>if you follow the plan</small></div><div class="panel mx" id="p-max"></div></div>
+    <div><div class="title out">Heroes</div><div class="panel hrows" id="p-heroes"></div></div>
+    <div><div class="title out">Strengths &amp; gaps</div><div class="panel pros" id="p-pros"></div></div>
+    <div><div class="title out">Career</div><div class="panel kv" id="p-career"></div></div>
+    <div><div class="title out">Left to max</div><div class="panel left" id="p-left"></div></div>
+    <div class="wide"><p class="note">Levels from Clash of Stats and costs from Clash Ninja, both as of Nov 1. Cost totals use Jam + Gold Pass prices.</p></div>
+  </div>
 </section>
 
 <section id="v-now">
-  <div class="now">
-    <div><div class="title out" style="margin-top:4px">Do this now</div><div class="panel hero" id="donow"></div></div>
-    <div><div class="title out" style="margin-top:4px">Coming up</div><div class="panel"><ol class="soon" id="soon"></ol></div></div>
+  <div class="g nowg">
+    <div class="a-hero"><div class="title out">Do this now</div><div class="panel hero" id="donow"></div></div>
+    <div class="a-agenda"><div class="title out">Schedule <small>next starts, by day</small></div><div class="panel ag" id="agenda"></div></div>
+    <div class="a-loot"><div class="title out">Loot left <small>this Jam's plan</small></div><div class="panel" id="budget"></div></div>
+    <div class="a-lanes"><div class="title out">Builders &amp; labs <small>tap a card to tick things off</small></div><div class="lanes" id="lanes"></div></div>
+    <div class="a-items"><div class="title out">Magic items</div><div class="items" id="items"></div></div>
   </div>
-  <div class="title out">Loot to spend <small>this Jam's plan</small></div>
-  <div class="panel" id="budget"></div>
-  <div class="title out">Builders &amp; labs <small>tap a card to tick things off</small></div>
-  <div class="lanes" id="lanes"></div>
-  <div class="title out">Magic items</div>
-  <div class="items" id="items"></div>
 </section>
 
 <section id="v-plan" hidden>
@@ -548,8 +579,8 @@ function laneStatus(b,now){
 const nextOf=b=>b.plan.find(p=>!state[p.key]);
 function renderNow(){
   const now=Date.now();
-  const nexts=BUILDERS.map(b=>({b,p:nextOf(b)})).filter(x=>x.p).sort((x,y)=>x.p.start-y.p.start);
-  const ready=nexts.filter(x=>x.p.start<=now),later=nexts.filter(x=>x.p.start>now);
+  const nexts=BUILDERS.map(b=>({b,p:nextOf(b)})).filter(x=>x.p).sort((x,y)=>(x.p.opt-y.p.opt)||(x.p.start-y.p.start));
+  const ready=nexts.filter(x=>x.p.start<=now),later=nexts.filter(x=>x.p.start>now).sort((x,y)=>x.p.start-y.p.start);
   const dn=$('donow');
   if(ready.length){
     const f=ready[0],[tc,ti]=kindTile(f.b.id);
@@ -558,13 +589,12 @@ function renderNow(){
       <div class="act">${costHTML(f.p)}<button class="btn out" data-start="${f.p.key}">${IC.check} Started</button></div>
       ${ready.length>1?`<ul class="also">${ready.slice(1).map(x=>`<li><span style="font-size:1.4rem;display:grid">${IC[x.p.res]}</span><span class="nm">${x.p.name}<small>${x.b.name} · ${money(x.p.cost,x.p.res)}</small></span><button class="btn sm out" data-start="${x.p.key}">${IC.check}</button></li>`).join('')}</ul>`:''}`;
   }else if(later.length){
-    const f=later[0],[tc,ti]=kindTile(f.b.id);
+    const f=later.find(x=>!x.p.opt)||later[0],[tc,ti]=kindTile(f.b.id);
     dn.innerHTML=`<div class="ribbon wait out">${IC.clock} Next up in ${rel(f.p.start-now)}</div>
       <div class="body"><div class="tile ${tc}">${ti}</div><div class="name">${f.p.name}</div><div class="meta">${f.b.name} · ${fmtDate(f.p.start)}${tags(f.p)}</div></div>
       <div class="act">${costHTML(f.p)}<span class="meta" style="color:var(--ink-2)">Have ${money(f.p.cost,f.p.res)} ${RESNAME[f.p.res]} ready</span></div>`;
   }else dn.innerHTML='<div class="ribbon go out">All done</div><div class="body"><div class="name" style="grid-column:1/3">Every planned upgrade is started</div></div>';
-  const list=later.slice(ready.length?0:1,ready.length?6:7);
-  $('soon').innerHTML=list.map(({b,p})=>`<li><span class="r">${IC[p.res]}</span><span class="nm">${p.name}<small>${b.name}</small></span><span class="when"><span class="timer out">${rel(p.start-now)}</span><small>${fmtDate(p.start)}</small></span></li>`).join('')||'<li><span></span><span class="nm"><small>Nothing else scheduled.</small></span><span></span></li>';
+  renderAgenda(now);
   let tot=0,done=0,g=0,e=0,d=0,G=0,E=0,D=0;
   ALL.forEach(p=>{tot++;const c=p.cost;if(p.res==='g')G+=c;else if(p.res==='e')E+=c;else D+=c;if(state[p.key]){done++;return}if(p.res==='g')g+=c;else if(p.res==='e')e+=c;else d+=c});
   const row=(r,left,all,grad)=>`<div class="rrow"><span class="lbl">${RESNAME[r]} still to spend</span><span class="amt">${money(left,r)}</span><div class="rbar"><span class="ic">${IC[r]}</span><div class="bar"><i style="width:${all?Math.max(3,Math.round(left/all*100)):0}%;background:${grad}"></i></div></div></div>`;
@@ -582,6 +612,15 @@ function renderNow(){
     return `<article class="panel lane" data-id="${b.id}"><div class="head"><div class="tile ${tc}">${ti}</div><h3>${b.name}<small>${({gob:'Goblin · costs gems',lab:'Research',glab:'Research · costs gems',pet:'Pets'})[b.id]||'Builder'}</small></h3></div>${busy}${nx}${q}</article>`;
   }).join('');
   openIds.forEach(id=>{const x=document.querySelector(`.lane[data-id="${id}"] details.more`);if(x)x.open=true});
+}
+function renderAgenda(now){
+  const key=t=>new Date(t).toLocaleDateString('en-CA',{timeZone:'America/Toronto'});
+  const today=key(now),tom=key(now+864e5);
+  const items=ALL.filter(p=>!state[p.key]&&p.start.getTime()>now).sort((a,b)=>a.start-b.start).slice(0,12);
+  if(!items.length){$('agenda').innerHTML='<div class="empty">Nothing else scheduled in the Jam.</div>';return}
+  const groups=[];items.forEach(p=>{const k=key(p.start);let g=groups.find(x=>x.k===k);if(!g)groups.push(g={k,list:[]});g.list.push(p)});
+  $('agenda').innerHTML=groups.map(g=>{const d=g.list[0].start,lbl=g.k===today?'Today':g.k===tom?'Tomorrow':d.toLocaleDateString('en-US',{timeZone:'America/Toronto',weekday:'long'});
+    return `<div class="agday">${lbl} · ${d.toLocaleDateString('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric'})}</div><ul>${g.list.map(p=>`<li><span class="agt">${p.start.toLocaleTimeString('en-US',{timeZone:'America/Toronto',hour:'numeric',minute:'2-digit'})}</span><span class="r">${IC[p.res]}</span><span class="nm">${p.name}${tags(p)}<small>${p.lane.name} · ${money(p.cost,p.res)}</small></span><span class="timer out">${rel(p.start-now)}</span></li>`).join('')}</ul>`}).join('');
 }
 function renderItems(){$('items').innerHTML=ITEMS.map(([k,c,t,w])=>`<div class="panel mi"><div class="pic">${k==='ring'?IC.ring:IC[k](c)}</div><b>${t}</b><p>${w}</p></div>`).join('')}
 
