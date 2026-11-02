@@ -389,7 +389,7 @@ const BUILDERS = [
   {id:'b6', name:'Builder 6', cur:'Inferno Tower #3', free:'2026-11-04T20:20:00-05:00', steps:[
     ["X-Bow #1",73,'g',1.17e+07],["Hidden Tesla #3",70,'g',1.125e+07],["Builder's Hut #3",70,'g',1.08e+07],["Mortar #3",68,'g',9.45e+06]]},
   {id:'lab', name:'Laboratory', cur:'Rage Spell 7', free:'2026-11-01T22:05:00-05:00', steps:[
-    ['Siege Barracks 6',47,'e',12.15e6],['Headhunter 4',84,'d',166.5e3],['Electro Titan 5',86,'e',13.5e6],['Root Rider 4',86,'e',13.5e6],['Revive Spell 5',86,'e',13.28e6]]},
+    ['Electro Titan 5',52,'e',13.5e6],['Root Rider 4',86,'e',13.5e6],['Revive Spell 5',86,'e',13.28e6],['Headhunter 4',84,'d',166.5e3],['Siege Barracks 6',81,'e',12.15e6]]},
   {id:'glab', name:'Goblin Lab', cur:'Meteor Golem 3', free:'2026-11-02T01:00:00-05:00', steps:[]},
   {id:'pet', name:'Pet House', cur:'Greedy Raven 2', free:'2026-11-01T23:00:00-05:00', steps:[
     ['Greedy Raven 3',43,'d',126e3,'opt'],['Greedy Raven 4',43,'d',135e3,'opt'],['Greedy Raven 5',43,'d',144e3,'opt'],['Greedy Raven 6',43,'d',153e3,'opt'],['Greedy Raven 7',43,'d',162e3,'opt'],['Greedy Raven 8',43,'d',171e3,'opt'],['Greedy Raven 9',43,'d',180e3,'opt'],['Greedy Raven 10',43,'d',189e3,'opt']]},
@@ -440,9 +440,9 @@ const TIERS = [
   ['Lab','S','Rage Spell','6 → 7','13M Elixir','Researching'],
   ['Lab','S','Freeze Spell','7 → 8','14M Elixir','Done (Goblin Lab)'],
   ['Lab','S','Meteor Golem','2 → 3 (max)','15M Elixir','Researching (Goblin Lab); used in the #1 RC walk army'],
-  ['Lab','S','Siege Barracks','5 → 6','13.5M Elixir','Your only siege, and in your CC. Next after Rage'],
+  ['Lab','B','Siege Barracks','5 → 6','13.5M Elixir','Queen bait, so low impact. Last lab start of the Jam'],
   ['Lab','S','Headhunter','3 → 4','185K DE','Your CC troop, and it burns spare Dark Elixir'],
-  ['Lab','A','Electro Titan','4 → 5','15M Elixir','Priciest research left, so the biggest Jam saving'],
+  ['Lab','S','Electro Titan','4 → 5','15M Elixir','Priciest research left. Starts tonight after Rage'],
   ['Lab','A','Root Rider','3 → 4','15M Elixir','Priciest research left, so the biggest Jam saving'],
   ['Lab','B','Baby Dragon','11 → 12','14.5M Elixir','After the Jam'],
   ['Lab','B','Archer','13 → 14','12.5M Elixir','After the Jam'],
@@ -478,7 +478,7 @@ let state={};
 try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 /* SYNC: updated by the daily Clash Ninja check. started = step keys seen as started or done. */
-const SYNC = {"updated":null,"completion":null,"started":[]};
+const SYNC = {"updated":null,"completion":null,"started":["lab-0"]};
 SYNC.started.forEach(k=>{if(state[k]===undefined)state[k]=true});
 
 const $=id=>document.getElementById(id);
@@ -518,7 +518,7 @@ const costHTML=(p)=>`<span class="cost">${IC[p.res]}${money(p.cost,p.res)}</span
 const ITEMS=[
   ['book','#c0392b','Book of Heroes x2','One on <strong>Grand Warden 78</strong>, one on <strong>Archer Queen 101</strong>, so neither is ever down. Start the upgrade, then finish it with the book.'],
   ['potion','#f39c12','Builder Potions','None left. Claim the Gold Pass ones and save them for <strong>Nov 12–14</strong> to push the final starts in before the Jam ends.'],
-  ['potion','#d63fbf','Research Potions','All used. The boost runs to <strong>~11:30 PM Nov 1</strong>: Rage ~10 PM, Meteor Golem (Goblin Lab) ~1 AM. Start Siege Barracks right after Rage.'],
+  ['potion','#d63fbf','Research Potions','All used. The boost runs to <strong>~11:30 PM Nov 1</strong>: Rage ~10 PM, Meteor Golem (Goblin Lab) ~1 AM. Start Electro Titan right after Rage.'],
   ['book','#7d3fa8','Books of Fighting','You have <strong>0</strong> and can only hold 1. Claim one from the Gold Pass and use it on the longest troop or siege research.'],
   ['potion','#4b3566','Rune of Dark Elixir','Fill up when a Dark Elixir hero is next and you\'re short.'],
   ['book','#2c7be5','Book of Everything','Save it for <strong>after the Jam</strong>, on an upgrade that takes 11+ days.'],
