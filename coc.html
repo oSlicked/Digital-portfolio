@@ -437,7 +437,7 @@ const BUILDERS = [
   {id:'glab', name:'Goblin Lab', cur:'Headhunter 4', free:'2026-11-02T13:10:00-05:00', steps:[
     ['Overgrowth Spell 5',83.22,'d',162e3]]},
   {id:'pet', name:'Pet House', cur:'Greedy Raven 5', free:'2026-11-02T10:11:00-05:00', steps:[
-    ['Greedy Raven 6',2.73,'d',153e3,'opt'],['Greedy Raven 7',41.6,'d',162e3,'opt'],['Greedy Raven 8',38,'d',171e3,'opt'],['Greedy Raven 9',38,'d',180e3,'opt'],['Greedy Raven 10',38,'d',189e3,'opt'],['Diggy 11',36,'d',99e3],['Diggy 12',36,'d',104e3],['Diggy 13',36,'d',108e3],['Diggy 14',36,'d',113e3],['Diggy 15',36,'d',117e3]]},
+    ['Greedy Raven 6',2.73,'d',153e3,'opt'],['Greedy Raven 7',41.6,'d',162e3,'opt'],['Greedy Raven 8',38,'d',171e3,'opt'],['Greedy Raven 9',38,'d',180e3,'opt'],['Greedy Raven 10',38,'d',189e3,'opt'],['Diggy 11',36,'d',99e3],['Diggy 12',37.8,'d',103.5e3],['Diggy 13',39.6,'d',108e3],['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
 const TIERS = [
@@ -454,7 +454,7 @@ const TIERS = [
   ['Lab','B','Overgrowth Spell','4 → 5','162K DE','Researching (Goblin Lab), done ~12:25 AM Nov 6'],
   ['Lab','B','Siege Barracks','5 → 6','12.2M Elixir','~Nov 11'],
   ['Lab','B','Baby Dragon','11 → 12','13.1M Elixir','Last lab start, ~Nov 15. In your dragon army'],
-  ['Pets','B','Diggy','10 → 15','99K DE for 11 (12 to 15 are estimates, ~104 to 117K)','After Raven 10, Nov 9. Level 15 starts ~Nov 15, before the Jam ends'],
+  ['Pets','B','Diggy','10 → 15','~94K to 119K DE each with a 15% Gold Pass. 11 is from the game, 12 to 15 are estimates','After Raven 10, Nov 8. Level 15 starts ~Nov 14, before the Jam ends'],
   ['Pets','B','Greedy Raven','5 → 10','153–189K DE per level','Raven 6 done, Raven 7 done ~6:30 AM Nov 4. No Pet Potions'],
   ['Buildings','S','Scattershot x2','6 → 7','11.9M Gold each','Both started Nov 2'],
   ['Buildings','S','Army Camp x4','13 → 14','11.7M Elixir each','All four started Nov 2, done Nov 4'],
@@ -487,7 +487,10 @@ const dur=h=>{if(!h)return 'instant';const d=Math.floor(h/24),r=Math.round(h%24)
 const money=(v,r)=>r==='d'?(v>=1e6?parseFloat((v/1e6).toFixed(2))+'M':parseFloat((v/1e3).toFixed(1))+'K'):parseFloat((v/1e6).toFixed(2))+'M';
 function rel(ms){if(ms<=0)return 'now';const h=Math.floor(ms/H),m=Math.floor(ms%H/6e4);return h>=24?`${Math.floor(h/24)}d ${h%24}h`:h?`${h}h ${m}m`:`${m}m`}
 
-BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{const st=t;t+=s[1]*H;return{key:b.id+'-'+i,lane:b,name:s[0],h:s[1],res:s[2],cost:s[3],cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
+/* Plan numbers are at Jam 50% off plus a 10% Gold Pass. Upgrades starting after PASS.from use PASS.next instead. */
+const PASS={now:.10,next:.15,from:new Date('2026-11-03T12:00:00-05:00').getTime()};
+const passF=t=>t>=PASS.from?(1-PASS.next)/(1-PASS.now):1;
+BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{const st=t,f=passF(st),hh=s[1]*f;t+=hh*H;return{key:b.id+'-'+i,lane:b,name:s[0],h:hh,res:s[2],cost:Math.round(s[3]*f/500)*500,cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
 const ALL=BUILDERS.flatMap(b=>b.plan);
 function tags(p){return (p.cwl?'<span class="tag">after CWL</span>':'')+(p.opt?'<span class="tag">spare DE only</span>':'')+(p.book?'<span class="tag">Book of Heroes</span>':'')+(p.bof?'<span class="tag">Book of Fighting</span>':'')+(p.final?'<span class="tag fin">final round</span>':'')}
 
@@ -629,7 +632,7 @@ const PROFILE={asof:'live · last synced Nov 2, 10 AM',
   strong:['Your RC walk kit is maxed: Electro Boots 27, Rocket Spear 27, Spirit Fox 10.','Every equipment piece in your main army is maxed.','Minion Prince, Dragon, Electro Dragon and Dragon Rider are maxed.','10 of 12 pets are maxed.'],
   weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 78/85 trails your other attack heroes.'],
   career:[['War stars','2,075'],['Best trophies','5,867'],['XP level','245'],['Builder Base best','3,310']],
-  left:[['Builders','≈280M Gold + 80M Elixir','Defenses, Army Camps, Builder\'s Huts and storages, final starts Nov 14–16'],['Lab','Root Rider 4, Revive 5, Siege Barracks 6','Plus one more start Nov 15 before the Jam ends'],['Pets','Greedy Raven 8 to 10, then Diggy 11 to 15','≈1.08M Dark Elixir, last start ~Nov 15'],['Walls','WALLS_LEFT','WALLS_LOOT']],
+  left:[['Builders','≈280M Gold + 80M Elixir','Defenses, Army Camps, Builder\'s Huts and storages, final starts Nov 14–16'],['Lab','Root Rider 4, Revive 5, Siege Barracks 6','Plus one more start Nov 15 before the Jam ends'],['Pets','Greedy Raven 8 to 10, then Diggy 11 to 15','≈1.03M Dark Elixir with the 15% pass, last start ~Nov 14'],['Walls','WALLS_LEFT','WALLS_LOOT']],
   walls:{start:317,left:187,cost:4.5e6,rate:50e6,dump:150e6,need:[['2026-11-01','2026-11-16',366e6]]},
   max:{start:'2026-11-01',end:'2026-11-17'},
 };
