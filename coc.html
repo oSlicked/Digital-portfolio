@@ -425,8 +425,8 @@ const BUILDERS = [
     ["Builder's Hut #3",68,'g',1.08e+07],["Mortar #4",66,'g',9.45e+06],["Archer Queen 102",42,'d',184500],["Elixir Storage #4",66,'g',8.1e+06],["Elixir Storage #1",66,'g',8.1e+06]]},
   {id:'b3', name:'Builder 3', cur:"X-Bow #3", free:'2026-11-06T09:50:00-05:00', steps:[
     ["Builder's Hut #1",68,'g',1.08e+07],["Mortar #2",66,'g',9.45e+06],["Grand Warden 79",42,'e',12.375e6],["Elixir Storage #2",66,'g',8.1e+06],["Elixir Storage #3",66,'g',8.1e+06]]},
-  {id:'b4', name:'Builder 4', cur:"Army Camp #4", free:'2026-11-03T19:43:00-05:00', steps:[
-    ["Barbarian King 102",42,'d',184500],["Hidden Tesla #1",68,'g',1.125e+07],["Builder's Hut #2",68,'g',1.08e+07],["Mortar #3",66,'g',9.45e+06],["Giga Bomb 4",68,'g',9e+06]]},
+  {id:'b4', name:'Builder 4', cur:"Barbarian King 102", free:'2026-11-05T14:36:00-05:00', steps:[
+    ["Hidden Tesla #1",68,'g',1.125e+07],["Builder's Hut #2",68,'g',1.08e+07],["Mortar #3",66,'g',9.45e+06],["Giga Bomb 4",68,'g',9e+06]]},
   {id:'b5', name:'Builder 5', cur:"Dragon Duke 11", free:'2026-11-04T10:00:00-05:00', steps:[
     ["Hidden Tesla #2",68,'g',1.125e+07],["Builder's Hut #4",68,'g',1.08e+07],["Spell Tower #1",52,'g',1.215e+07],["Hidden Tesla #4",68,'g',1.125e+07],["Dark Barracks 13",52,'e',1.035e+07]]},
   {id:'b6', name:'Builder 6', cur:"Inferno Tower #2", free:'2026-11-05T16:33:00-05:00', steps:[
@@ -441,7 +441,7 @@ const BUILDERS = [
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
 const TIERS = [
   ['Heroes','S','Royal Champion','54 → 55','225K DE','Done'],
-  ['Heroes','S','Barbarian King','101 → 104','~185K to 194K DE each','102 now on the free builder, 103 Nov 9, 104 Nov 15'],
+  ['Heroes','S','Barbarian King','101 → 104','~185K to 194K DE each','102 upgrading, done 2:36 PM Nov 5. 103 Nov 9, 104 Nov 15'],
   ['Heroes','A','Archer Queen','101 → 102','~184.5K DE (estimate)','Builder 2, Nov 12, after the Nov 1 to 11 hero freeze'],
   ['Heroes','A','Grand Warden','78 → 79','12.4M Elixir','Builder 3, Nov 12, after the hero freeze'],
   ['Heroes','B','Dragon Duke','10 → 11','~120K DE (estimate, send me the in-game cost)','Upgrading, done 10 AM Nov 4'],
@@ -473,7 +473,7 @@ const TIERS = [
   ['Buildings','B','Dark Barracks','12 → 13','10.4M Elixir','Builder 5, Nov 15'],
   ['Buildings','B','Storages x6','18 → 19','8.1M each','All six fit now. Final starts Nov 13 to 15'],
   ['Buildings','C','Supercharges','skip','','Skipped, TH19 is coming'],
-  ['Buildings','A','Walls x40','18 → 19','4.2M each (15% pass)','Dump loot every time a builder frees up'],
+  ['Buildings','A','Walls x325','18 → 19','4.2M each (15% pass)','All 325 maxed Nov 3'],
 ];
 
 const KEY='jam-planner-v2';
@@ -639,7 +639,7 @@ const PROFILE={asof:'live · last synced Nov 2, 10 AM',
   weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 78/85 trails your other attack heroes.'],
   career:[['War stars','2,075'],['Best trophies','5,867'],['XP level','245'],['Builder Base best','3,310']],
   left:[['Builders','≈250M Gold + 37M Elixir + 640K Dark Elixir','Defenses, Builder\'s Huts, heroes and storages, final starts Nov 14 to 15'],['Labs','Revive 5, Siege 6, Baby Dragon 12, plus Golem, Witch, Druid and Ice Block','≈64M Elixir + 620K Dark Elixir, last start ~Nov 14'],['Pets','Greedy Raven 8 to 10, then Diggy 11 to 15','≈1.03M Dark Elixir, last start ~Nov 14'],['Walls','WALLS_LEFT','WALLS_LOOT']],
-  walls:{start:325,left:40,cost:4.2e6,rate:232e6,dump:450e6,need:[['2026-11-01','2026-11-16',366e6]]},
+  walls:{start:325,left:0,cost:4.2e6,rate:232e6,dump:450e6,need:[['2026-11-01','2026-11-16',366e6]]},
   max:{start:'2026-11-01',end:'2026-11-17'},
 };
 function ringSVG(pct){const r=46,c=2*Math.PI*r,o=c*(1-pct/100);return `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="#120b05" stroke-width="18"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="#2a1f14" stroke-width="12"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#gg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${o.toFixed(1)}" transform="rotate(-90 60 60)"/><defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe36b"/><stop offset="1" stop-color="#f2a900"/></linearGradient></defs><text x="60" y="68" text-anchor="middle" class="big">${pct.toFixed(0)}%</text></svg>`}
@@ -687,6 +687,7 @@ const SNAP_EVENTS=[
   ['2026-11-04T01:15:00-05:00','Spells','Overgrowth Spell 5'],
   ['2026-11-04T10:00:00-05:00','Heroes','Dragon Duke 11'],
   ['2026-11-06T16:22:00-05:00','Spells','Revive Spell 5'],
+  ['2026-11-05T14:36:00-05:00','Heroes','Barbarian King 102'],
 ];
 const SPELL_RE=/Spell/;
 function liveProfile(){
