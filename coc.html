@@ -396,6 +396,17 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
   <p class="note">Gold and Elixir for upgrades due to start that day and not ticked off yet. Farm ahead of the tall days.</p>
 </section>
 
+<section id="v-after" hidden>
+  <div class="title out" style="margin-top:4px">After the Jam <small>attack heroes and key traps before TH19, the rest after</small></div>
+  <div class="panel" id="a-budget"></div>
+  <div class="panel tlp" style="margin-top:14px"><div class="tl-scroll"><div class="tl" id="tl-after"></div></div></div>
+  <p class="note">Your 6 builders pick up this queue as each one finishes its final Jam upgrade. The Goblin Builder is left out.</p>
+  <div class="title out">Queue</div>
+  <div class="panel" style="padding:10px"><ul class="steps" id="after-list"></ul></div>
+  <div class="title out">When a builder would sit idle</div>
+  <div class="fill" id="fill"></div>
+</section>
+
 <section id="v-tiers" hidden>
   <div class="title out" style="margin-top:4px">Every Jam upgrade</div>
   <p class="note" style="margin-top:0;margin-bottom:10px">Everything in this Hammer Jam. S do next · A high value · B fill gaps. Costs are Jam prices.</p>
@@ -409,6 +420,7 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
   <a href="#profile" id="t-profile"><span class="ni" data-ic="star"></span><span class="out">Profile</span></a>
   <a href="#now" id="t-now"><span class="ni" data-ic="hammer"></span><span class="out">Now</span></a>
   <a href="#plan" id="t-plan"><span class="ni" data-ic="cal"></span><span class="out">Jam plan</span></a>
+  <a href="#after" id="t-after"><span class="ni" data-ic="clock"></span><span class="out">After Jam</span></a>
   <a href="#tiers" id="t-tiers"><span class="ni" data-ic="list"></span><span class="out">All</span></a>
 </div></nav>
 
@@ -439,6 +451,37 @@ const BUILDERS = [
     ['Greedy Raven 9',38,'d',180e3,'opt'],['Greedy Raven 10',38,'d',189e3,'opt'],['Diggy 11',36,'d',99e3],['Diggy 12',37.8,'d',103.5e3],['Diggy 13',39.6,'d',108e3],['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
+const AFTER=[
+  ["Grand Warden 80–83",344,'e',1e+08,"Before TH19 · attack hero, about 3.6 days a level"],
+  ["Archer Queen 103–106",344,'d',1.5e+06,"Before TH19 · attack hero, about 3.6 days a level"],
+  ["Seeking Air Mines 1–3",372,'g',5.13e+07,"Before TH19 · traps finish your TH18 defense cheaply"],
+  ["Giant Bombs 1–4",452,'g',6.12e+07,"Before TH19"],
+  ["Skeleton Traps 1–4",304,'g',6.48e+07,"Before TH19"],
+  ["Spring Traps 1–3",357,'g',4.32e+07,"Before TH19 if a builder is free"],
+  ["Seeking Air Mines 4–6",372,'g',5.13e+07,"After TH19"],
+  ["Seeking Air Mines 7–9",372,'g',5.13e+07,"After TH19"],
+  ["Grand Warden 84–85",172,'e',5e+07,"After TH19"],
+  ["Archer Queen 107–110",344,'d',1.5e+06,"After TH19"],
+  ["Giant Bombs 5–8",452,'g',6.12e+07,"After TH19"],
+  ["Spring Traps 4–6",357,'g',4.32e+07,"After TH19"],
+  ["Spring Traps 7–9",357,'g',4.32e+07,"After TH19"],
+  ["Air Bombs 1–4",388,'g',5.4e+07,"After TH19"],
+  ["Air Bombs 5–7",291,'g',4.05e+07,"After TH19"],
+  ["Bombs 1–4",344,'g',5.04e+07,"After TH19"],
+  ["Bombs 5–8",344,'g',5.04e+07,"After TH19"],
+  ["Gold Storage #3",135,'e',1.62e+07,"After TH19, sooner only if TH19 costs outgrow storage"],
+  ["Gold Storage #4",135,'e',1.62e+07,"After TH19"],
+  ["Dark Elixir Drills x2",130,'e',2.16e+07,"After TH19"],
+  ["Logger 2–5",430,'e',5.49e+07,"After TH19 · Guardian"],
+  ["Barbarian King 105–110",516,'d',2.25e+06,"After TH19 · not in your army"],
+  ["Dragon Duke 10–25",1116,'d',6.4e+06,"After TH19 · not in your army"],
+];
+const FILL=[
+  ['Traps: Seeking Air Mine x9, Giant Bomb x8, Skeleton Trap x4, Spring Trap x9, Air Bomb x7, Bomb x8','12.6–17.1M Gold each · short and cheap'],
+  ['Gold Storage #3 and #4','16.2M Elixir each · the rest of your storages are done in the Jam'],
+  ['Supercharges','Skip until TH19 is out · a new max level wipes them with no refund'],
+  ['Barbarian King, Dragon Duke','about 370K Dark Elixir per King level · never in your attacks'],
+];
 const TIERS = [
   ['Heroes','S','Royal Champion','54 → 55','225K DE','Done'],
   ['Heroes','S','Barbarian King','101 → 104','~185K to 194K DE each','102 upgrading, done 2:36 PM Nov 5. 103 Nov 9, 104 Nov 15'],
@@ -621,6 +664,18 @@ function renderChart(){
   $('chart').innerHTML='<div class="scroll">'+s+'</svg></div>'+`<div class="legend" style="margin:6px 0 0"><span>${IC.g}Gold (M)</span><span>${IC.e}Elixir (M)</span></div>`;
 }
 
+/* ---------- AFTER ---------- */
+const AFTER_T0=new Date('2026-11-14T00:00:00-05:00'),AFTER_T1=new Date('2027-02-06T00:00:00-05:00');
+const AFTER_ROWS=BUILDERS.filter(b=>/^b\d/.test(b.id)).map(b=>{const f=b.plan[b.plan.length-1];return{name:b.name,sub:'after '+f.name,cur:{name:f.name,start:f.start,end:f.end},free:f.end.getTime(),segs:[]}});
+const AFTER_PLAN=AFTER.map((a,i)=>{const r=AFTER_ROWS.reduce((x,y)=>y.free<x.free?y:x);const st=r.free;r.free+=a[1]*H;const p={key:'a-'+i,name:a[0],h:a[1],res:a[2],cost:a[3],note:a[4],start:new Date(st),end:new Date(r.free),builder:r.name};r.segs.push(p);return p});
+function renderAfter(){
+  drawTimeline($('tl-after'),AFTER_ROWS,AFTER_T0,AFTER_T1,7);
+  $('after-list').innerHTML=AFTER_PLAN.map(p=>`<li class="step ${state[p.key]?'on':''}"><label><input type="checkbox" data-k="${p.key}" ${state[p.key]?'checked':''}><span class="nm">${p.name}</span>${costHTML(p)}<span class="meta">${p.builder} · ${fmtDate(p.start)} · ${dur(p.h)}${p.note?' · '+p.note:''}</span></label></li>`).join('');
+  let done=0,g=0,e=0,d=0;AFTER_PLAN.forEach(p=>{if(state[p.key]){done++;return}if(p.res==='g')g+=p.cost;else if(p.res==='e')e+=p.cost;else d+=p.cost});
+  $('a-budget').innerHTML=`<div class="afterres"><div>${IC.g}${money(g,'g')}</div><div>${IC.e}${money(e,'e')}</div><div>${IC.d}${money(d,'d')}</div><div>${IC.check}${done} / ${AFTER_PLAN.length}</div></div>`;
+  $('fill').innerHTML=FILL.map(f=>`<div class="panel"><b>${f[0]}</b><span>${f[1]}</span></div>`).join('');
+}
+
 /* ---------- TIERS ---------- */
 let filter='All';
 function renderTiers(){
@@ -725,10 +780,10 @@ function tick(){
   $('cd').textContent=ms<=0?'Jam over':`${Math.floor(ms/864e5)}d ${Math.floor(ms%864e5/H)}h ${String(Math.floor(ms%H/6e4)).padStart(2,'0')}m left`;
   $('jamfill').style.width=Math.max(0,Math.min(100,ms/(JAM_END-JAM_START)*100))+'%';
 }
-const VIEWS=['profile','now','plan','tiers'];
+const VIEWS=['profile','now','plan','after','tiers'];
 function route(){const h=location.hash.slice(1),v=VIEWS.includes(h)?h:'now';VIEWS.forEach(n=>{$('v-'+n).hidden=v!==n;$('t-'+n).setAttribute('aria-current',v===n?'page':'false')});window.scrollTo(0,0);
   if(v==='plan')requestAnimationFrame(()=>{const sc=$('tl-scroll');sc.scrollLeft=Math.max(0,sc.scrollWidth*((Date.now()-T0)/(T1-T0))-150)})}
-function renderAll(){renderNow();renderPlan();renderTiers();
+function renderAll(){renderNow();renderPlan();renderAfter();renderTiers();
   $('sync').textContent=SYNC.updated?`Synced ${SYNC.updated}${SYNC.completion?' · '+SYNC.completion:''}`:'P•K Jordan · TH18 · Gold Pass on'}
 function setK(k,v){state[k]=v;save();renderAll()}
 document.addEventListener('click',e=>{
