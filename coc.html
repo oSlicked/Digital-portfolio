@@ -397,10 +397,10 @@ nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(-
 </section>
 
 <section id="v-after" hidden>
-  <div class="title out" style="margin-top:4px">After the Jam <small>attack heroes and key traps before TH19, the rest after</small></div>
+  <div class="title out" style="margin-top:4px">After the Jam <small>builders, lab and pets at full price, most important first</small></div>
   <div class="panel" id="a-budget"></div>
   <div class="panel tlp" style="margin-top:14px"><div class="tl-scroll"><div class="tl" id="tl-after"></div></div></div>
-  <p class="note">Your 6 builders pick up this queue as each one finishes its final Jam upgrade. The Goblin Builder is left out.</p>
+  <p class="note">Your 6 builders pick up their queue as each one finishes its final Jam upgrade. The lab picks up its queue when Recall 7 finishes, ordered by what matters for TH18 attacks first. Lab times are about double your Jam times (no discount) and costs are full price, so the Gold Pass will shave a little off. The Goblin Builder and Goblin Lab are left out.</p>
   <div class="title out">Queue</div>
   <div class="panel" style="padding:10px"><ul class="steps" id="after-list"></ul></div>
   <div class="title out">When a builder would sit idle</div>
@@ -481,6 +481,30 @@ const FILL=[
   ['Gold Storage #3 and #4','16.2M Elixir each · the rest of your storages are done in the Jam'],
   ['Supercharges','Skip until TH19 is out · a new max level wipes them with no refund'],
   ['Barbarian King, Dragon Duke','about 370K Dark Elixir per King level · never in your attacks'],
+  ['Pets','Nothing left · Greedy Raven 10 and Diggy 15 finish in the Jam, so every pet is maxed'],
+];
+const AFTER_LAB=[
+  ["Yeti 8",167,'e',27.5e6,"Super Yeti meta"],
+  ["Siege Barracks 6",162,'e',27e6,"Skipped in the Jam"],
+  ["Hog Rider 15",157,'d',340e3,"Hybrid armies"],
+  ["Miner 12",157,'e',28e6,"Hybrid armies"],
+  ["Log Launcher 6",162,'e',27e6,"Ground siege"],
+  ["Battle Drill 6",167,'e',28e6,"Ground siege"],
+  ["Sky Wagon 3",146,'e',26e6,""],
+  ["Sky Wagon 4",173,'e',29e6,"Max"],
+  ["Valkyrie 12",151,'d',340e3,""],
+  ["Druid 6",167,'d',380e3,""],
+  ["Golem 15",157,'d',350e3,""],
+  ["Witch 8",167,'d',355e3,""],
+  ["Ice Block Spell 6",173,'d',380e3,""],
+  ["Ruin Witch 2",119,'d',220e3,"Unlocks with Dark Barracks 13 in the Jam"],
+  ["Ruin Witch 3",130,'d',300e3,""],
+  ["Ruin Witch 4",167,'d',380e3,"Max"],
+  ["Wizard 14",151,'e',27e6,"Just for %"],
+  ["Wall Breaker 14",151,'e',26e6,"Just for %"],
+  ["Archer 14",146,'e',25e6,"Just for %"],
+  ["Barbarian 13",135,'e',24e6,"Just for %"],
+  ["Goblin 10",151,'e',26e6,"Just for %"],
 ];
 const TIERS = [
   ['Heroes','S','Royal Champion','54 → 55','225K DE','Done'],
@@ -670,11 +694,15 @@ function renderChart(){
 }
 
 /* ---------- AFTER ---------- */
-const AFTER_T0=new Date('2026-11-14T00:00:00-05:00'),AFTER_T1=new Date('2027-02-06T00:00:00-05:00');
+const AFTER_T0=new Date('2026-11-14T00:00:00-05:00');let AFTER_T1=new Date('2027-02-06T00:00:00-05:00');
 const AFTER_ROWS=BUILDERS.filter(b=>/^b\d/.test(b.id)).map(b=>{const f=b.plan[b.plan.length-1];return{name:b.name,sub:'after '+f.name,cur:{name:f.name,start:f.start,end:f.end},free:f.end.getTime(),segs:[]}});
 const AFTER_PLAN=AFTER.map((a,i)=>{const r=AFTER_ROWS.reduce((x,y)=>y.free<x.free?y:x);const st=r.free;r.free+=a[1]*H;const p={key:'a-'+i,name:a[0],h:a[1],res:a[2],cost:a[3],note:a[4],start:new Date(st),end:new Date(r.free),builder:r.name};r.segs.push(p);return p});
+const LAB_ROW=(()=>{const lb=BUILDERS.find(b=>b.id==='lab'),f=lb.plan[lb.plan.length-1];return{name:'Laboratory',sub:'after '+f.name,cur:{name:f.name,start:f.start,end:f.end},free:f.end.getTime(),segs:[]}})();
+AFTER_LAB.forEach((a,i)=>{const st=LAB_ROW.free;LAB_ROW.free+=a[1]*H;const p={key:'al-'+i,name:a[0],h:a[1],res:a[2],cost:a[3],note:a[4],start:new Date(st),end:new Date(LAB_ROW.free),builder:'Lab'};LAB_ROW.segs.push(p);AFTER_PLAN.push(p)});
+AFTER_ROWS.push(LAB_ROW);
+AFTER_T1=new Date(Math.ceil((Math.max(...AFTER_ROWS.map(r=>r.free))-AFTER_T0)/(7*864e5)+1)*7*864e5+AFTER_T0.getTime());
 function renderAfter(){
-  drawTimeline($('tl-after'),AFTER_ROWS,AFTER_T0,AFTER_T1,7);
+  drawTimeline($('tl-after'),AFTER_ROWS,AFTER_T0,AFTER_T1,14);
   $('after-list').innerHTML=AFTER_PLAN.map(p=>`<li class="step ${state[p.key]?'on':''}"><label><input type="checkbox" data-k="${p.key}" ${state[p.key]?'checked':''}><span class="nm">${p.name}</span>${costHTML(p)}<span class="meta">${p.builder} · ${fmtDate(p.start)} · ${dur(p.h)}${p.note?' · '+p.note:''}</span></label></li>`).join('');
   let done=0,g=0,e=0,d=0;AFTER_PLAN.forEach(p=>{if(state[p.key]){done++;return}if(p.res==='g')g+=p.cost;else if(p.res==='e')e+=p.cost;else d+=p.cost});
   $('a-budget').innerHTML=`<div class="afterres"><div>${IC.g}${money(g,'g')}</div><div>${IC.e}${money(e,'e')}</div><div>${IC.d}${money(d,'d')}</div><div>${IC.check}${done} / ${AFTER_PLAN.length}</div></div>`;
