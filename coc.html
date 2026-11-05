@@ -438,9 +438,9 @@ const BUILDERS = [
   {id:'b3', name:'Builder 3', cur:"X-Bow #3", free:'2026-11-06T09:50:00-05:00', steps:[
     ["Builder's Hut #1",68,'g',1.08e+07],["Mortar #2",66,'g',9.45e+06],["Grand Warden 79",42,'e',12.375e6],["Elixir Storage #2",66,'g',8.1e+06],["Elixir Storage #3",66,'g',8.1e+06]]},
   {id:'b4', name:'Builder 4', cur:"Barbarian King 102", free:'2026-11-05T14:36:00-05:00', steps:[
-    ["Hidden Tesla #1",68,'g',1.125e+07],["Builder's Hut #2",68,'g',1.08e+07],["Mortar #3",66,'g',9.45e+06],["Giga Bomb 4",68,'g',9e+06]]},
+    ["Hidden Tesla #1",68,'g',1.125e+07],["Builder's Hut #2",68,'g',1.08e+07],["Mortar #3",66,'g',9.45e+06],["Giga Bomb 4",68,'g',9e+06,'gem'],["Archer Queen 103",43,'d',187.5e3]]},
   {id:'b5', name:'Builder 5', cur:"Hidden Tesla #2", free:'2026-11-07T03:25:00-05:00', steps:[
-    ["Builder's Hut #4",68,'g',1.08e+07],["Spell Tower #1",52,'g',1.215e+07],["Hidden Tesla #4",68,'g',1.125e+07],["Dark Barracks 13",52,'e',1.035e+07]]},
+    ["Builder's Hut #4",68,'g',1.08e+07],["Spell Tower #1",52,'g',1.215e+07],["Hidden Tesla #4",68,'g',1.125e+07],["Dark Barracks 13",52,'e',1.035e+07,'gem'],["Seeking Air Mine #1",62,'g',8.55e6]]},
   {id:'b6', name:'Builder 6', cur:"Inferno Tower #2", free:'2026-11-05T16:33:00-05:00', steps:[
     ["Hidden Tesla #3",68,'g',1.125e+07],["Builder's Hut #5",68,'g',1.08e+07],["Spell Tower #2",52,'g',1.215e+07],["Gold Storage #2",66,'e',8.1e+06],["Barbarian King 104",42,'d',194e3]]},
   {id:'lab', name:'Laboratory', cur:'Baby Dragon 12', free:'2026-11-06T23:36:00-05:00', steps:[
@@ -453,8 +453,8 @@ const BUILDERS = [
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
 const AFTER=[
   ["Grand Warden 81–83",258,'e',7.5e+07,"Before TH19 · attack hero, about 3.6 days a level"],
-  ["Archer Queen 103–106",344,'d',1.5e+06,"Before TH19 · attack hero, about 3.6 days a level"],
-  ["Seeking Air Mines 1–3",372,'g',5.13e+07,"Before TH19 · traps finish your TH18 defense cheaply"],
+  ["Archer Queen 104–106",258,'d',1.125e+06,"Before TH19 · attack hero, about 3.6 days a level"],
+  ["Seeking Air Mines 2–3",248,'g',3.42e+07,"Before TH19 · traps finish your TH18 defense cheaply"],
   ["Giant Bombs 1–4",452,'g',6.12e+07,"Before TH19"],
   ["Skeleton Traps 1–4",304,'g',6.48e+07,"Before TH19"],
   ["Spring Traps 1–3",357,'g',4.32e+07,"Before TH19 if a builder is free"],
@@ -509,6 +509,8 @@ const TIERS = [
   ['Heroes','S','Barbarian King','101 → 104','~185K to 194K DE each','102 upgrading, done 2:36 PM Nov 5. 103 Nov 9, 104 Nov 15'],
   ['Heroes','A','Archer Queen','101 → 102','~184.5K DE (estimate)','Builder 2, Nov 12, after the Nov 1 to 11 hero freeze'],
   ['Heroes','A','Grand Warden','78 → 79','12.4M Elixir','Builder 3, Nov 12, after the hero freeze'],
+  ['Heroes','A','Archer Queen','102 → 103','188K DE','Builder 4, 2:40 AM Nov 16 after gemming Giga Bomb 4'],
+  ['Buildings','A','Seeking Air Mine #1','next level','8.6M Gold','Builder 5, 2:40 AM Nov 16 after gemming Dark Barracks 13'],
   ['Heroes','A','Grand Warden','79 → 80','12.5M Elixir','Builder 1, 6:14 PM Nov 15. Last builder start'],
   ['Heroes','B','Dragon Duke','10 → 11','~120K DE','Done Nov 4'],
   ['Lab','S','Rage Spell','6 → 7','13M Elixir','Done'],
@@ -569,9 +571,9 @@ function rel(ms){if(ms<=0)return 'now';const h=Math.floor(ms/H),m=Math.floor(ms%
 /* Plan numbers are at Jam 50% off plus a 10% Gold Pass. Upgrades starting after PASS.from use PASS.next instead. */
 const PASS={now:.10,next:.15,from:new Date('2026-11-03T08:00:00-05:00').getTime()};
 const passF=t=>t>=PASS.from?(1-PASS.next)/(1-PASS.now):1;
-BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{const st=t,f=passF(st),hh=s[1]*f;t+=hh*H;return{key:b.id+'-'+i,lane:b,name:s[0],h:hh,res:s[2],cost:Math.round(s[3]*f/500)*500,cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
+BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{const st=t,f=passF(st);let hh=s[1]*f;t+=hh*H;const gem=s[4]==='gem'&&t>JAM_END.getTime()-5*6e4;if(gem){t=JAM_END.getTime()-5*6e4;hh=(t-st)/H}return{key:b.id+'-'+i,gem,lane:b,name:s[0],h:hh,res:s[2],cost:Math.round(s[3]*f/500)*500,cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
 const ALL=BUILDERS.flatMap(b=>b.plan);
-function tags(p){return (p.cwl?'<span class="tag">after CWL</span>':'')+(p.opt?'<span class="tag">spare DE only</span>':'')+(p.book?'<span class="tag">Book of Heroes</span>':'')+(p.bof?'<span class="tag">Book of Fighting</span>':'')+(p.final?'<span class="tag fin">final round</span>':'')}
+function tags(p){return (p.cwl?'<span class="tag">after CWL</span>':'')+(p.opt?'<span class="tag">spare DE only</span>':'')+(p.book?'<span class="tag">Book of Heroes</span>':'')+(p.bof?'<span class="tag">Book of Fighting</span>':'')+(p.gem?'<span class="tag">gem finish 2:40 AM Nov 16</span>':'')+(p.final?'<span class="tag fin">final round</span>':'')}
 
 
 /* ---------- icons (original, generic shapes) ---------- */
