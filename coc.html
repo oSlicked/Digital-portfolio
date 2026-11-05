@@ -432,7 +432,7 @@ const H = 3600e3;
 const BUILDERS = [
   {id:'gob', name:'Goblin Builder', cur:"X-Bow #1", free:'2026-11-05T20:17:00-05:00', steps:[]},
   {id:'b1', name:'Builder 1', cur:"X-Bow #2", free:'2026-11-06T05:41:00-05:00', steps:[
-    ["Hidden Tesla #5",68,'g',1.125e+07],["Barbarian King 103",42,'d',189e3],["Mortar #1",66,'g',9.45e+06],["Gold Storage #1",66,'e',8.1e+06]]},
+    ["Hidden Tesla #5",68,'g',1.125e+07],["Barbarian King 103",42,'d',189e3],["Mortar #1",66,'g',9.45e+06],["Gold Storage #1",66,'e',8.1e+06],["Grand Warden 80",43,'e',12.5e6]]},
   {id:'b2', name:'Builder 2', cur:"X-Bow #4", free:'2026-11-06T09:24:00-05:00', steps:[
     ["Builder's Hut #3",68,'g',1.08e+07],["Mortar #4",66,'g',9.45e+06],["Archer Queen 102",42,'d',184500],["Elixir Storage #4",66,'g',8.1e+06],["Elixir Storage #1",66,'g',8.1e+06]]},
   {id:'b3', name:'Builder 3', cur:"X-Bow #3", free:'2026-11-06T09:50:00-05:00', steps:[
@@ -444,15 +444,15 @@ const BUILDERS = [
   {id:'b6', name:'Builder 6', cur:"Inferno Tower #2", free:'2026-11-05T16:33:00-05:00', steps:[
     ["Hidden Tesla #3",68,'g',1.125e+07],["Builder's Hut #5",68,'g',1.08e+07],["Spell Tower #2",52,'g',1.215e+07],["Gold Storage #2",66,'e',8.1e+06],["Barbarian King 104",42,'d',194e3]]},
   {id:'lab', name:'Laboratory', cur:'Baby Dragon 12', free:'2026-11-06T23:36:00-05:00', steps:[
-    ['Stone Slammer 6',73,'e',11.7e6],['Earthquake Spell 8',73,'d',148.5e3],['Recall Spell 7',86,'e',13.05e6]]},
+    ['Stone Slammer 6',73,'e',11.7e6],['Earthquake Spell 8',73,'d',148.5e3],['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3]]},
   {id:'glab', name:'Goblin Lab', cur:'Thrower 4', free:'2026-11-07T17:18:00-05:00', steps:[
-    ['Sky Wagon 2',54,'e',9.9e6],['Battle Blimp 6',73,'e',11.7e6],['Clone Spell 9',73,'e',11.7e6]]},
+    ['Sky Wagon 2',54,'e',9.9e6],['Battle Blimp 6',73,'e',11.7e6],['Clone Spell 9',73,'e',11.7e6],['Yeti 8',83.5,'e',13.75e6]]},
   {id:'pet', name:'Pet House', cur:'Greedy Raven 10', free:'2026-11-06T16:08:00-05:00', steps:[
     ['Diggy 11',36,'d',99e3],['Diggy 12',37.8,'d',103.5e3],['Diggy 13',39.6,'d',108e3],['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
 const AFTER=[
-  ["Grand Warden 80–83",344,'e',1e+08,"Before TH19 · attack hero, about 3.6 days a level"],
+  ["Grand Warden 81–83",258,'e',7.5e+07,"Before TH19 · attack hero, about 3.6 days a level"],
   ["Archer Queen 103–106",344,'d',1.5e+06,"Before TH19 · attack hero, about 3.6 days a level"],
   ["Seeking Air Mines 1–3",372,'g',5.13e+07,"Before TH19 · traps finish your TH18 defense cheaply"],
   ["Giant Bombs 1–4",452,'g',6.12e+07,"Before TH19"],
@@ -484,9 +484,7 @@ const FILL=[
   ['Pets','Nothing left · Greedy Raven 10 and Diggy 15 finish in the Jam, so every pet is maxed'],
 ];
 const AFTER_LAB=[
-  ["Yeti 8",167,'e',27.5e6,"Super Yeti meta"],
   ["Siege Barracks 6",162,'e',27e6,"Skipped in the Jam"],
-  ["Hog Rider 15",157,'d',340e3,"Hybrid armies"],
   ["Miner 12",157,'e',28e6,"Hybrid armies"],
   ["Log Launcher 6",162,'e',27e6,"Ground siege"],
   ["Battle Drill 6",167,'e',28e6,"Ground siege"],
@@ -511,6 +509,7 @@ const TIERS = [
   ['Heroes','S','Barbarian King','101 → 104','~185K to 194K DE each','102 upgrading, done 2:36 PM Nov 5. 103 Nov 9, 104 Nov 15'],
   ['Heroes','A','Archer Queen','101 → 102','~184.5K DE (estimate)','Builder 2, Nov 12, after the Nov 1 to 11 hero freeze'],
   ['Heroes','A','Grand Warden','78 → 79','12.4M Elixir','Builder 3, Nov 12, after the hero freeze'],
+  ['Heroes','A','Grand Warden','79 → 80','12.5M Elixir','Builder 1, 6:14 PM Nov 15. Last builder start'],
   ['Heroes','B','Dragon Duke','10 → 11','~120K DE','Done Nov 4'],
   ['Lab','S','Rage Spell','6 → 7','13M Elixir','Done'],
   ['Lab','S','Freeze Spell','7 → 8','14M Elixir','Done (Goblin Lab)'],
@@ -524,9 +523,11 @@ const TIERS = [
   ['Lab','S','Stone Slammer','5 → 6','11.7M Elixir','Lab, Nov 6 after Baby Dragon. Air siege for dragon and Hydra armies'],
   ['Lab','S','Earthquake Spell','7 → 8','148.5K DE','Lab, Nov 9. In almost every TH18 meta army'],
   ['Lab','A','Lava Hound','7 → 8','155K DE','Done Nov 4. Air armies and Clan Castle'],
-  ['Lab','A','Clone Spell','8 → 9','11.7M Elixir','Goblin Lab, Nov 12. Last Goblin start'],
+  ['Lab','A','Clone Spell','8 → 9','11.7M Elixir','Goblin Lab, Nov 12'],
+  ['Lab','A','Yeti','7 → 8','13.8M Elixir','Goblin Lab, 2:11 PM Nov 15. Last Goblin start, Super Yeti meta'],
   ['Lab','A','Battle Blimp','5 → 6','11.7M Elixir','Goblin Lab, Nov 9 after Sky Wagon'],
-  ['Lab','A','Recall Spell','6 → 7','13M Elixir','Lab, Nov 12. Last lab start, must begin before the Jam ends'],
+  ['Lab','A','Recall Spell','6 → 7','13M Elixir','Lab, Nov 12'],
+  ['Lab','A','Hog Rider','14 → 15','170K DE','Lab, 2:42 AM Nov 16. Last lab start, only 3 minutes before the Jam ends'],
   ['Lab','A','Thrower','3 → 4','13.5M Elixir','Researching (Goblin Lab), done 5:18 PM Nov 7. Thrower meta'],
   ['Lab','C','Siege Barracks','5 → 6','full price after the Jam','Skipped for Thrower'],
   ['Lab','B','Sky Wagon','1 → 2','~9.9M Elixir (estimate)','Goblin Lab, Nov 7 after Thrower'],
@@ -726,7 +727,7 @@ const PROFILE={asof:'live · last synced Nov 2, 10 AM',
   strong:['Your RC walk kit is maxed: Electro Boots 27, Rocket Spear 27, Spirit Fox 10.','Every equipment piece in your main army is maxed.','Minion Prince, Dragon, Electro Dragon and Dragon Rider are maxed.','10 of 12 pets are maxed.'],
   weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 78/85 trails your other attack heroes.'],
   career:[['War stars','2,075'],['Best trophies','5,867'],['XP level','245'],['Builder Base best','3,310']],
-  left:[['Builders','≈250M Gold + 37M Elixir + 640K Dark Elixir','Defenses, Builder\'s Huts, heroes and storages, final starts Nov 14 to 15'],['Labs','Baby Dragon 12 and Thrower 4 running, then Stone Slammer 6, Earthquake 8, Recall 7, plus Sky Wagon 2, Battle Blimp 6 and Clone 9 in the Goblin Lab','≈60M Elixir + 150K Dark Elixir, last start ~Nov 12'],['Pets','Greedy Raven 8 to 10, then Diggy 11 to 15','≈1.03M Dark Elixir, last start ~Nov 14'],['Walls','WALLS_LEFT','WALLS_LOOT']],
+  left:[['Builders','≈250M Gold + 37M Elixir + 640K Dark Elixir','Defenses, Builder\'s Huts, heroes and storages, final starts Nov 14 to 15'],['Labs','Baby Dragon 12 and Thrower 4 running, then Stone Slammer 6, Earthquake 8, Recall 7, Hog Rider 15, plus Sky Wagon 2, Battle Blimp 6, Clone 9 and Yeti 8 in the Goblin Lab','≈60M Elixir + 150K Dark Elixir, last start ~Nov 12'],['Pets','Greedy Raven 8 to 10, then Diggy 11 to 15','≈1.03M Dark Elixir, last start ~Nov 14'],['Walls','WALLS_LEFT','WALLS_LOOT']],
   walls:{start:325,left:0,cost:4.2e6,rate:232e6,dump:450e6,need:[['2026-11-01','2026-11-16',366e6]]},
   max:{start:'2026-11-01',end:'2026-11-17'},
 };
