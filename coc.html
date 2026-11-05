@@ -431,7 +431,7 @@ const T0 = new Date('2026-11-01T00:00:00-05:00'), T1 = new Date('2026-11-22T00:0
 const H = 3600e3;
 const BUILDERS = [
   {id:'gob', name:'Goblin Builder', cur:"X-Bow #1", free:'2026-11-05T20:17:00-05:00', steps:[]},
-  {id:'b1', name:'Builder 1', cur:"X-Bow #2", free:'2026-11-06T10:41:00-05:00', steps:[
+  {id:'b1', name:'Builder 1', cur:"X-Bow #2", free:'2026-11-06T05:41:00-05:00', steps:[
     ["Hidden Tesla #5",68,'g',1.125e+07],["Barbarian King 103",42,'d',189e3],["Mortar #1",66,'g',9.45e+06],["Gold Storage #1",66,'e',8.1e+06]]},
   {id:'b2', name:'Builder 2', cur:"X-Bow #4", free:'2026-11-06T09:24:00-05:00', steps:[
     ["Builder's Hut #3",68,'g',1.08e+07],["Mortar #4",66,'g',9.45e+06],["Archer Queen 102",42,'d',184500],["Elixir Storage #4",66,'g',8.1e+06],["Elixir Storage #1",66,'g',8.1e+06]]},
@@ -447,8 +447,8 @@ const BUILDERS = [
     ['Stone Slammer 6',73,'e',11.7e6],['Earthquake Spell 8',73,'d',148.5e3],['Recall Spell 7',86,'e',13.05e6]]},
   {id:'glab', name:'Goblin Lab', cur:'Thrower 4', free:'2026-11-07T17:18:00-05:00', steps:[
     ['Sky Wagon 2',54,'e',9.9e6],['Battle Blimp 6',73,'e',11.7e6],['Clone Spell 9',73,'e',11.7e6]]},
-  {id:'pet', name:'Pet House', cur:'Greedy Raven 9', free:'2026-11-05T00:07:00-05:00', steps:[
-    ['Greedy Raven 10',38,'d',189e3,'opt'],['Diggy 11',36,'d',99e3],['Diggy 12',37.8,'d',103.5e3],['Diggy 13',39.6,'d',108e3],['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
+  {id:'pet', name:'Pet House', cur:'Greedy Raven 10', free:'2026-11-06T16:08:00-05:00', steps:[
+    ['Diggy 11',36,'d',99e3],['Diggy 12',37.8,'d',103.5e3],['Diggy 13',39.6,'d',108e3],['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
 const AFTER=[
@@ -531,8 +531,8 @@ const TIERS = [
   ['Lab','C','Siege Barracks','5 → 6','full price after the Jam','Skipped for Thrower'],
   ['Lab','B','Sky Wagon','1 → 2','~9.9M Elixir (estimate)','Goblin Lab, Nov 7 after Thrower'],
   ['Lab','C','Druid, Golem, Witch, Ice Block','one level each','full price after the Jam','Not in your army, after the Jam'],
-  ['Pets','B','Greedy Raven','5 → 10','153–189K DE per level','Raven 9 upgrading, done 12:07 AM Nov 5. Raven 10 next'],
-  ['Pets','B','Diggy','10 → 15','~94K to 119K DE each. 11 is from the game, 12 to 15 are estimates','After Raven 10, Nov 8. Level 15 starts ~Nov 14'],
+  ['Pets','B','Greedy Raven','5 → 10','153–189K DE per level','Raven 10 upgrading, done 4:08 PM Nov 6. Maxes the Raven'],
+  ['Pets','B','Diggy','10 → 15','~94K to 119K DE each. 11 is from the game, 12 to 15 are estimates','After Raven 10, 4:08 PM Nov 6. Level 15 starts ~Nov 13'],
   ['Buildings','S','Scattershot x2','6 → 7','11.9M Gold each','Both started Nov 2'],
   ['Buildings','S','Army Camp x4','13 → 14','11.7M Elixir each','All four started Nov 2, done Nov 4'],
   ['Buildings','S','Inferno Tower x3','11 → 12','11.9M Gold each','#3 done, #1 started Nov 2, #2 Nov 3'],
@@ -553,7 +553,7 @@ let state={};
 try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 /* SYNC: updated by the daily Clash Ninja check. started = step keys seen as started or done. */
-const SYNC = {"updated":"2026-11-04 2:18 PM (in-game export)","completion":null,"started":[],"reset":[]};
+const SYNC = {"updated":"2026-11-05 9:53 AM (in-game export)","completion":null,"started":[],"reset":["pet-0"]};
 SYNC.started.forEach(k=>{if(state[k]===undefined)state[k]=true});
 (SYNC.reset||[]).forEach(k=>{if(!state["_r"+k]){delete state[k];state["_r"+k]=1}});save();
 
