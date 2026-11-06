@@ -444,7 +444,7 @@ const BUILDERS = [
     ["Builder's Hut #4",68,'g',1.08e+07],["Spell Tower #1",52,'g',1.215e+07],["Hidden Tesla #4",68,'g',1.125e+07],["Hidden Tesla #5",68,'g',1.125e+07,'gem'],["Archer Queen 103",43,'d',187.5e3]]},
   {id:'b6', name:'Builder 6', cur:"Dragon Duke 13", free:'2026-11-07T14:16:00-05:00', steps:[
     ["Dragon Duke 14",27.5,'d',205e3],["Dragon Duke 15",27.5,'d',210e3],["Dragon Duke 16",29,'d',215e3],["Dragon Duke 17",29,'d',220e3],["Dragon Duke 18",30,'d',225e3],["Dragon Duke 19",30,'d',230e3],["Dragon Duke 20",31,'d',235e3],["Dragon Duke 21",31,'d',240e3]]},
-  {id:'lab', name:'Laboratory', cur:'Siege Barracks 6', free:'2026-11-09T21:23:00-05:00', steps:[
+  {id:'lab', name:'Laboratory', cur:'Siege Barracks 6', free:'2026-11-07T23:23:00-05:00', steps:[
     ['Stone Slammer 6',73,'e',11.7e6],['Earthquake Spell 8',73,'d',148.5e3],['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3]]},
   {id:'glab', name:'Goblin Lab', cur:'Thrower 4', free:'2026-11-07T09:17:00-05:00', steps:[
     ['Sky Wagon 2',54,'e',9.9e6],['Battle Blimp 6',73,'e',11.7e6],['Clone Spell 9',73,'e',11.7e6],['Yeti 8',83.5,'e',13.75e6]]},
@@ -527,7 +527,7 @@ const TIERS = [
   ['Lab','A','Overgrowth Spell','4 → 5','162K DE','Done'],
   ['Lab','A','Baby Dragon','11 → 12','13.1M Elixir','Researching (Lab), done 5:35 PM Nov 6. In your dragon army'],
   ['Lab','A','Revive Spell','4 → 5','13.3M Elixir','Done'],
-  ['Lab','S','Stone Slammer','5 → 6','11.7M Elixir','Lab, Nov 9 after Siege Barracks. Air siege for dragon and Hydra armies'],
+  ['Lab','S','Stone Slammer','5 → 6','11.7M Elixir','Lab, Nov 7 after Siege Barracks. Air siege for dragon and Hydra armies'],
   ['Lab','S','Earthquake Spell','7 → 8','148.5K DE','Lab, Nov 9. In almost every TH18 meta army'],
   ['Lab','A','Lava Hound','7 → 8','155K DE','Done Nov 4. Air armies and Clan Castle'],
   ['Lab','A','Clone Spell','8 → 9','11.7M Elixir','Goblin Lab, Nov 12'],
@@ -536,7 +536,7 @@ const TIERS = [
   ['Lab','A','Recall Spell','6 → 7','13M Elixir','Lab, Nov 12'],
   ['Lab','A','Hog Rider','14 → 15','170K DE','Lab, 8:41 PM Nov 15. Last lab start'],
   ['Lab','A','Thrower','3 → 4','13.5M Elixir','Researching (Goblin Lab), done 11:17 AM Nov 7. Thrower meta'],
-  ['Lab','C','Siege Barracks','5 → 6','Jam price','Running in the Lab, done Mon Nov 9 9:23 PM'],
+  ['Lab','C','Siege Barracks','5 → 6','Jam price','Running in the Lab with 2 Research Potions, done Sat Nov 7 11:23 PM'],
   ['Lab','B','Sky Wagon','1 → 2','~9.9M Elixir (estimate)','Goblin Lab, Nov 7 after Thrower'],
   ['Lab','A','Ruin Witch','1 → 4','~220K to 380K DE each','New troop. Unlocks at level 1 when Dark Barracks 13 finishes Nov 8, levels 2 to 4 first in the lab after Hog Rider 15'],
   ['Lab','C','Druid, Golem, Witch, Ice Block','one level each','full price after the Jam','Not in your army, after the Jam'],
@@ -562,7 +562,7 @@ let state={};
 try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 /* SYNC: updated by the daily Clash Ninja check. started = step keys seen as started or done. */
-const SYNC = {"updated":"2026-11-06 7:38 AM (you: Builder's Huts #1 and #3 started)","completion":null,"started":[],"reset":[]};
+const SYNC = {"updated":"2026-11-06 6:28 PM (export + 2 Research Potions, 20% Gold Pass from Sat)","completion":null,"started":[],"reset":[]};
 SYNC.started.forEach(k=>{if(state[k]===undefined)state[k]=true});
 (SYNC.reset||[]).forEach(k=>{if(!state["_r"+k]){delete state[k];state["_r"+k]=1}});save();
 
@@ -574,9 +574,9 @@ const dur=h=>{if(!h)return 'instant';const d=Math.floor(h/24),r=Math.round(h%24)
 const money=(v,r)=>r==='d'?(v>=1e6?parseFloat((v/1e6).toFixed(2))+'M':parseFloat((v/1e3).toFixed(1))+'K'):parseFloat((v/1e6).toFixed(2))+'M';
 function rel(ms){if(ms<=0)return 'now';const h=Math.floor(ms/H),m=Math.floor(ms%H/6e4);return h>=24?`${Math.floor(h/24)}d ${h%24}h`:h?`${h}h ${m}m`:`${m}m`}
 
-/* Plan numbers are at Jam 50% off plus a 10% Gold Pass. Upgrades starting after PASS.from use PASS.next instead. */
-const PASS={now:.10,next:.15,from:new Date('2026-11-03T08:00:00-05:00').getTime()};
-const passF=t=>t>=PASS.from?(1-PASS.next)/(1-PASS.now):1;
+/* Plan numbers are at Jam 50% off plus a 10% Gold Pass. Each tier applies to upgrades that start after its time. 20% tier assumed from Sat Nov 7 noon. */
+const PASS={now:.10,tiers:[[.15,'2026-11-03T08:00:00-05:00'],[.20,'2026-11-07T12:00:00-05:00']].map(([d,t])=>[d,new Date(t).getTime()])};
+const passF=t=>{let d=PASS.now;for(const[x,from]of PASS.tiers)if(t>=from)d=x;return (1-d)/(1-PASS.now)};
 /* Asleep 12:30 to 6 AM Fri to Sun: anything that frees then starts at 6 AM. */
 const SLEEP=[['2026-11-06T00:30','2026-11-06T06:00'],['2026-11-07T00:30','2026-11-07T06:00'],['2026-11-08T00:30','2026-11-08T06:00']].map(([a,b])=>[new Date(a+':00-05:00').getTime(),new Date(b+':00-05:00').getTime()]);
 const wake=t=>{for(const[a,b]of SLEEP)if(t>=a&&t<b)return b;return t};
