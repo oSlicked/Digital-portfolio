@@ -438,15 +438,15 @@ const BUILDERS = [
     ["Mortar #4",66,'g',9.45e+06],["Archer Queen 102",42,'d',184500],["Elixir Storage #4",66,'g',8.1e+06],["Elixir Storage #1",66,'g',8.1e+06]]},
   {id:'b3', name:'Builder 3', cur:"Builder's Hut #1", free:'2026-11-09T00:37:00-05:00', steps:[
     ["Mortar #2",66,'g',9.45e+06],["Grand Warden 79",42,'e',12.375e6],["Elixir Storage #2",66,'g',8.1e+06],["Elixir Storage #3",66,'g',8.1e+06]]},
-  {id:'b4', name:'Builder 4', cur:"Barbarian King 103", free:'2026-11-07T06:56:00-05:00', steps:[
-    ["Barbarian King 104",42,'d',194e3],["Barbarian King 105",43,'d',187.5e3],["Barbarian King 106",43,'d',187.5e3],["Barbarian King 107",43,'d',187.5e3],["Barbarian King 108",43,'d',187.5e3],["Barbarian King 109",43,'d',187.5e3]]},
-  {id:'b5', name:'Builder 5', cur:"Hidden Tesla #2", free:'2026-11-07T01:25:00-05:00', steps:[
-    ["Builder's Hut #4",68,'g',1.08e+07],["Spell Tower #1",52,'g',1.215e+07],["Hidden Tesla #4",68,'g',1.125e+07],["Hidden Tesla #5",68,'g',1.125e+07,'gem'],["Archer Queen 103",43,'d',187.5e3]]},
+  {id:'b4', name:'Builder 4', cur:"Barbarian King 104", free:'2026-11-08T20:16:00-05:00', steps:[
+    ["Barbarian King 105",43,'d',187.5e3],["Barbarian King 106",43,'d',187.5e3],["Barbarian King 107",43,'d',187.5e3],["Barbarian King 108",43,'d',187.5e3],["Barbarian King 109",43,'d',187.5e3]]},
+  {id:'b5', name:'Builder 5', cur:"Builder's Hut #4", free:'2026-11-09T20:03:00-05:00', steps:[
+    ["Spell Tower #1",52,'g',1.215e+07],["Hidden Tesla #4",68,'g',1.125e+07],["Hidden Tesla #5",68,'g',1.125e+07,'gem'],["Archer Queen 103",43,'d',187.5e3]]},
   {id:'b6', name:'Builder 6', cur:"Dragon Duke 13", free:'2026-11-07T14:16:00-05:00', steps:[
     ["Dragon Duke 14",27.5,'d',205e3],["Dragon Duke 15",27.5,'d',210e3],["Dragon Duke 16",29,'d',215e3],["Dragon Duke 17",29,'d',220e3],["Dragon Duke 18",30,'d',225e3],["Dragon Duke 19",30,'d',230e3],["Dragon Duke 20",31,'d',235e3],["Dragon Duke 21",31,'d',240e3]]},
-  {id:'lab', name:'Laboratory', cur:'Siege Barracks 6', free:'2026-11-07T23:23:00-05:00', steps:[
+  {id:'lab', name:'Laboratory', cur:'Siege Barracks 6', free:'2026-11-07T23:22:00-05:00', steps:[
     ['Stone Slammer 6',73,'e',11.7e6],['Earthquake Spell 8',73,'d',148.5e3],['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3]]},
-  {id:'glab', name:'Goblin Lab', cur:'Thrower 4', free:'2026-11-06T19:05:00-05:00', steps:[
+  {id:'glab', name:'Goblin Lab', cur:'Idle, waiting on gems', free:'2026-11-07T06:21:00-05:00', steps:[
     ['Sky Wagon 2',54,'e',9.9e6],['Battle Blimp 6',73,'e',11.7e6],['Clone Spell 9',73,'e',11.7e6],['Yeti 8',83.5,'e',13.75e6]]},
   {id:'pet', name:'Pet House', cur:'Diggy 11', free:'2026-11-07T20:46:00-05:00', steps:[
     ['Diggy 12',37.8,'d',103.5e3],['Diggy 13',39.6,'d',108e3],['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
@@ -562,7 +562,7 @@ let state={};
 try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 /* SYNC: updated by the daily Clash Ninja check. started = step keys seen as started or done. */
-const SYNC = {"updated":"2026-11-06 6:28 PM (export + 2 Research Potions, 20% Gold Pass from Sat)","completion":null,"started":[],"reset":[]};
+const SYNC = {"updated":"2026-11-07 6:21 AM export","completion":null,"started":[],"reset":[]};
 SYNC.started.forEach(k=>{if(state[k]===undefined)state[k]=true});
 (SYNC.reset||[]).forEach(k=>{if(!state["_r"+k]){delete state[k];state["_r"+k]=1}});save();
 
@@ -787,7 +787,7 @@ const SNAP_EVENTS=[
   ['2026-11-04T01:15:00-05:00','Spells','Overgrowth Spell 5'],
   ['2026-11-04T14:16:00-05:00','Troops','Lava Hound 8'],
   ['2026-11-06T17:35:00-05:00','Troops','Baby Dragon 12'],
-  ['2026-11-07T11:17:00-05:00','Troops','Thrower 4'],
+  ['2026-11-06T19:05:00-05:00','Troops','Thrower 4'],
   ['2026-11-04T10:00:00-05:00','Heroes','Dragon Duke 11'],
   ['2026-11-04T10:00:00-05:00','Spells','Revive Spell 5'],
   ['2026-11-05T14:36:00-05:00','Heroes','Barbarian King 102'],
