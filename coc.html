@@ -440,9 +440,9 @@ const BUILDERS = [
   {id:'b4', name:'Builder 4', cur:"Barbarian King 105", free:'2026-11-10T10:26:00-05:00', steps:[
     ["Barbarian King 106",43,'d',187.5e3],["Barbarian King 107",43,'d',187.5e3],["Barbarian King 108",43,'d',187.5e3],["Barbarian King 109",43,'d',187.5e3]]},
   {id:'b5', name:'Builder 5', cur:"Builder's Hut #4", free:'2026-11-09T05:03:00-05:00', steps:[
-    ["Spell Tower #1",52,'g',1.215e+07],["Hidden Tesla #4",68,'g',1.125e+07],["Hidden Tesla #5",68,'g',1.125e+07]]},
+    ["Spell Tower #1",52,'g',1.215e+07],["Hidden Tesla #4",68,'g',1.125e+07],["Hidden Tesla #5",68,'g',1.125e+07],["Archer Queen 103",43,'d',187.5e3]]},
   {id:'b6', name:'Builder 6', cur:"Dragon Duke 15", free:'2026-11-09T22:13:00-05:00', steps:[
-    ["Dragon Duke 16",29,'d',215e3],["Dragon Duke 17",29,'d',220e3],["Dragon Duke 18",30,'d',225e3],["Dragon Duke 19",30,'d',230e3],["Dragon Duke 20",31,'d',235e3],["Dragon Duke 21",31,'d',240e3]]},
+    ["Dragon Duke 16",29,'d',215e3],["Dragon Duke 17",29,'d',220e3],["Dragon Duke 18",30,'d',225e3],["Dragon Duke 19",30,'d',230e3],["Dragon Duke 20",31,'d',235e3],["Dragon Duke 21",31,'d',240e3],["Dragon Duke 22",32,'d',245e3]]},
   {id:'lab', name:'Laboratory', cur:'Stone Slammer 6', free:'2026-11-10T16:07:00-05:00', steps:[
     ['Earthquake Spell 8',73,'d',148.5e3],['Recall Spell 7',86,'e',13.05e6]]},
   {id:'glab', name:'Goblin Lab', cur:'Idle, no gems', free:'2026-11-08T00:14:00-05:00', steps:[]},
@@ -452,7 +452,7 @@ const BUILDERS = [
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
 const AFTER=[
   ["Grand Warden 81–83",258,'e',7.5e+07,"Before TH19 · attack hero, about 3.6 days a level"],
-  ["Archer Queen 103–106",344,'d',1.5e+06,"Before TH19 · attack hero, about 3.6 days a level"],
+  ["Archer Queen 104–106",258,'d',1.125e+06,"Before TH19 · attack hero, about 3.6 days a level"],
   ["Builder's Hut #2",136,'g',2.16e+07,"Goblin Builder queue. Start it in the Jam if you get gems"],
   ["Hidden Tesla #3",136,'g',2.25e+07,"Goblin Builder queue"],
   ["Builder's Hut #5",136,'g',2.16e+07,"Goblin Builder queue"],
@@ -481,13 +481,13 @@ const AFTER=[
   ["Logger 2–5",430,'e',5.49e+07,"After TH19 · Guardian"],
   ["Smasher 5",120,'e',1.6e+07,"Guardian still at 4 of 5 (estimate)"],
   ["Barbarian King 110",86,'d',3.75e+05,"Last King level, starts Nov 17 unless a Book of Heroes gets it into the Jam"],
-  ["Dragon Duke 22–25",340,'d',2.9e+06,"Rest of the Duke after the Jam lane, estimate"],
+  ["Dragon Duke 23–25",255,'d',2.9e+06,"Rest of the Duke after the Jam lane, estimate"],
 ];
 const FILL=[
   ['Traps: Seeking Air Mine x9, Giant Bomb x8, Skeleton Trap x4, Spring Trap x9, Air Bomb x8, Bomb x8','12.6–17.1M Gold each · short and cheap'],
   ['Gold Storage #3 and #4','16.2M Elixir each · the rest of your storages are done in the Jam'],
   ['Supercharges','Skip until TH19 is out · a new max level wipes them with no refund'],
-  ['Barbarian King, Dragon Duke','Own builder each through the Jam · King to 109, Duke to about 21'],
+  ['Barbarian King, Dragon Duke','Own builder each through the Jam · King to 109, Duke to about 22'],
   ['Pets','Nothing left · Greedy Raven 10 and Diggy 15 finish in the Jam, so every pet is maxed'],
 ];
 const AFTER_LAB=[
@@ -522,9 +522,9 @@ const TIERS = [
   ['Heroes','S','Barbarian King','101 → 109','~187K to 194K DE each','Builder 4 only does the King. 103 upgrading, done 6:56 AM Nov 7, then back to back, 109 starts 5:02 PM Nov 15. 110 needs a Book of Heroes to start in the Jam'],
   ['Heroes','A','Archer Queen','101 → 102','~184.5K DE (estimate)','Builder 2, Nov 12, after the Nov 1 to 11 hero freeze'],
   ['Heroes','A','Grand Warden','78 → 79','12.4M Elixir','Builder 3, Nov 12, after the hero freeze'],
-  ['Heroes','A','Archer Queen','102 → 103','188K DE','After the Jam, no gems for the Builder 5 gem finish'],
+  ['Heroes','A','Archer Queen','102 → 103','188K DE','Builder 5, 1:06 PM Sun Nov 15, thanks to the Builder Potions'],
   ['Heroes','A','Grand Warden','79 → 80','12.5M Elixir','Builder 1, 4:27 AM Nov 13, after 79 finishes on Builder 3'],
-  ['Heroes','A','Dragon Duke','11 → 21','~200K to 240K DE each, estimate','Builder 6 only does the Duke. 12 upgrading, done 1:41 PM Nov 6. Levels after 12 are estimates, about 10 fit before the Jam ends'],
+  ['Heroes','A','Dragon Duke','11 → 22','~200K to 240K DE each, estimate','Builder 6 only does the Duke. 12 upgrading, done 1:41 PM Nov 6. Levels after 12 are estimates. With the Builder Potions, 22 starts 10:13 PM Sun Nov 15'],
   ['Lab','S','Rage Spell','6 → 7','13M Elixir','Done'],
   ['Lab','S','Freeze Spell','7 → 8','14M Elixir','Done (Goblin Lab)'],
   ['Lab','S','Meteor Golem','2 → 3 (max)','15M Elixir','Done (Goblin Lab)'],
@@ -586,7 +586,12 @@ const PASS={now:.10,tiers:[[.15,'2026-11-03T08:00:00-05:00'],[.20,'2026-11-07T06
 const passF=t=>{let d=PASS.now;for(const[x,from]of PASS.tiers)if(t>=from)d=x;return (1-d)/(1-PASS.now)};
 /* Asleep 1 to 8 AM every night (Toronto, UTC-5): anything that frees then starts at 8 AM. */
 const wake=t=>{const d=new Date(t-5*36e5),h=d.getUTCHours()+d.getUTCMinutes()/60;if(h>=1&&h<8){d.setUTCHours(8,0,0,0);return d.getTime()+5*36e5}return t};
-BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{t=wake(t);const st=t,f=passF(st);let hh=s[1]*f;t+=hh*H;const gem=s[4]==='gem'&&t>JAM_END.getTime()-5*6e4;if(gem){t=JAM_END.getTime()-5*6e4;hh=(t-st)/H}return{key:b.id+'-'+i,gem,lane:b,name:s[0],h:hh,res:s[2],cost:Math.round(s[3]*f/500)*500,cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
+/* Builder Potions: builders work 10x during these windows. Two potions back to back Mon Nov 9 from 8 AM. */
+const BOOST=[[new Date('2026-11-09T08:00:00-05:00').getTime(),new Date('2026-11-09T10:00:00-05:00').getTime()]];
+const BOOSTED=new Set(['gob','b1','b2','b3','b4','b5','b6']);
+const runFrom=(t,w)=>{for(const[a,z]of BOOST){if(t<a){if(t+w<=a)return t+w;w-=a-t;t=a}if(t<z){const can=(z-t)*10;if(w<=can)return t+w/10;w-=can;t=z}}return t+w};
+BUILDERS.forEach(b=>{if(BOOSTED.has(b.id)){const fr=new Date(b.free).getTime(),a=BOOST[0][0];if(fr>a)b.free=new Date(runFrom(a,fr-a)).toISOString()}});
+BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{t=wake(t);const st=t,f=passF(st);let hh=s[1]*f;t=BOOSTED.has(b.id)?runFrom(st,hh*H):st+hh*H;const gem=s[4]==='gem'&&t>JAM_END.getTime()-5*6e4;if(gem){t=JAM_END.getTime()-5*6e4;hh=(t-st)/H}return{key:b.id+'-'+i,gem,lane:b,name:s[0],h:hh,res:s[2],cost:Math.round(s[3]*f/500)*500,cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
 const ALL=BUILDERS.flatMap(b=>b.plan);
 function tags(p){return (p.cwl?'<span class="tag">after CWL</span>':'')+(p.opt?'<span class="tag">spare DE only</span>':'')+(p.book?'<span class="tag">Book of Heroes</span>':'')+(p.bof?'<span class="tag">Book of Fighting</span>':'')+(p.gem?'<span class="tag">gem finish 2:40 AM Nov 16</span>':'')+(p.final?'<span class="tag fin">final round</span>':'')}
 
