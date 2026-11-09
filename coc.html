@@ -219,7 +219,7 @@ const LANES = [
     ['Dragon Duke 18',35,'d',225e3],['Dragon Duke 19',36,'d',230e3],['Dragon Duke 20',36,'d',235e3],['Dragon Duke 21',37,'d',240e3],['Dragon Duke 22',37,'d',245e3]]},
   {id:'lab', name:'Laboratory', cur:'Recall Spell 7', left:150633, steps:[
     ['Hog Rider 15',78.5,'d',170e3],['Witch 8',83.5,'d',177.5e3]]},
-  {id:'glab', name:'Goblin Lab', cur:'', left:0, steps:[]},
+  {id:'glab', name:'Goblin Lab', cur:'Angry Spell 3', left:254880, started:Date.parse('2026-11-09T17:54:00-05:00'), steps:[]},  // time is an estimate
   {id:'pet', name:'Pet House', cur:'Diggy 13', left:109632, steps:[
     ['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
@@ -263,11 +263,11 @@ const PROGRESS = [
     ['Electro Titan',4,5,5,5],['Root Rider',3,4,4,4],['Headhunter',3,4,4,4],['Lava Hound',7,8,8,8],
     ['Meteor Golem',2,3,3,3],['Hog Rider',14,14,15,15],['Witch',7,7,8,8],
     ['Rage Spell',6,7,7,7],['Freeze Spell',7,8,8,8],['Earthquake Spell',7,8,8,8],['Ice Block Spell',5,6,6,6],
-    ['Overgrowth Spell',4,5,5,5],['Revive Spell',4,5,5,5],['Recall Spell',6,6,7,7],
+    ['Overgrowth Spell',4,5,5,5],['Revive Spell',4,5,5,5],['Recall Spell',6,6,7,7],['Angry Spell',2,2,3,4],
     ['Stone Slammer',5,6,6,6],['Siege Barracks',5,6,6,6],['Battle Blimp',5,6,6,6],
   ]},
 ];
-const DONE_SINCE_NOV1 = {levels:74, walls:317, more:34}; // upgrade levels finished, walls, and levels still to start or finish in the Jam plan
+const DONE_SINCE_NOV1 = {levels:74, walls:317, more:35}; // upgrade levels finished, walls, and levels still to start or finish in the Jam plan
 /* full-price hours after the Jam */
 const AFTER_B = [
   ["Builder's Hut #2",136,'g',21.6e6,'Just misses the Jam on Builder 6 after Duke 22'],
@@ -311,7 +311,6 @@ const AFTER_L = [
   ['Archer 14',146,'e',25e6,''],
   ['Barbarian 13',135,'e',24e6,''],
   ['Goblin 10',151,'e',26e6,''],
-  ['Angry Spell 3',150,'d',350e3,'Estimate'],
   ['Angry Spell 4',170,'d',380e3,'Max (estimate)'],
 ];
 
@@ -339,7 +338,7 @@ const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 
 /* build plan */
 const plan = LANES.map(L=>{
-  const curEnd = runFrom(L.id, EXPORT, L.left*1000);
+  const curFrom = L.started||EXPORT, curEnd = runFrom(L.id, curFrom, L.left*1000);
   let t = curEnd; const q=[];
   L.steps.forEach((s,i)=>{
     const ready=t, start=wake(t), end=runFrom(L.id,start,s[1]*PASS*H);
@@ -347,7 +346,7 @@ const plan = LANES.map(L=>{
             slept:start>ready, late:start>=JAM_END, boost:boosted(L.id,start,end)});
     t=end;
   });
-  return {L, curEnd, curBoost:boosted(L.id,EXPORT,curEnd), q, idleAt:t};
+  return {L, curEnd, curBoost:boosted(L.id,curFrom,curEnd), q, idleAt:t};
 });
 
 /* started marks (per viewer, optional) */
