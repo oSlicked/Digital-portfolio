@@ -584,9 +584,8 @@ function rel(ms){if(ms<=0)return 'now';const h=Math.floor(ms/H),m=Math.floor(ms%
 /* Plan numbers are at Jam 50% off plus a 10% Gold Pass. Each tier applies to upgrades that start after its time. 20% tier unlocked Sat Nov 7 morning. */
 const PASS={now:.10,tiers:[[.15,'2026-11-03T08:00:00-05:00'],[.20,'2026-11-07T06:00:00-05:00']].map(([d,t])=>[d,new Date(t).getTime()])};
 const passF=t=>{let d=PASS.now;for(const[x,from]of PASS.tiers)if(t>=from)d=x;return (1-d)/(1-PASS.now)};
-/* Asleep 12:30 to 6 AM Fri to Sun: anything that frees then starts at 6 AM. */
-const SLEEP=[['2026-11-06T00:30','2026-11-06T06:00'],['2026-11-07T00:30','2026-11-07T06:00'],['2026-11-08T00:30','2026-11-08T06:00']].map(([a,b])=>[new Date(a+':00-05:00').getTime(),new Date(b+':00-05:00').getTime()]);
-const wake=t=>{for(const[a,b]of SLEEP)if(t>=a&&t<b)return b;return t};
+/* Asleep 1 to 8 AM every night (Toronto, UTC-5): anything that frees then starts at 8 AM. */
+const wake=t=>{const d=new Date(t-5*36e5),h=d.getUTCHours()+d.getUTCMinutes()/60;if(h>=1&&h<8){d.setUTCHours(8,0,0,0);return d.getTime()+5*36e5}return t};
 BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{t=wake(t);const st=t,f=passF(st);let hh=s[1]*f;t+=hh*H;const gem=s[4]==='gem'&&t>JAM_END.getTime()-5*6e4;if(gem){t=JAM_END.getTime()-5*6e4;hh=(t-st)/H}return{key:b.id+'-'+i,gem,lane:b,name:s[0],h:hh,res:s[2],cost:Math.round(s[3]*f/500)*500,cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
 const ALL=BUILDERS.flatMap(b=>b.plan);
 function tags(p){return (p.cwl?'<span class="tag">after CWL</span>':'')+(p.opt?'<span class="tag">spare DE only</span>':'')+(p.book?'<span class="tag">Book of Heroes</span>':'')+(p.bof?'<span class="tag">Book of Fighting</span>':'')+(p.gem?'<span class="tag">gem finish 2:40 AM Nov 16</span>':'')+(p.final?'<span class="tag fin">final round</span>':'')}
