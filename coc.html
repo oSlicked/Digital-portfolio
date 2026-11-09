@@ -122,6 +122,10 @@ td.r,th.r{text-align:right;white-space:nowrap}
 .lvl{font:16px "Lilita One"}
 .arrow{color:var(--muted);margin:0 4px}
 .max{color:var(--green-d)}
+.sub{display:block;font:800 10px Nunito,sans-serif;color:var(--muted);margin-top:-2px}
+tr.grp td{background:var(--card2);font:15px "Lilita One";color:var(--edge);padding:6px 12px}
+#progress th,#progress td{padding:7px 8px}
+#progress td:first-child,#progress th:first-child{padding-left:12px}
 .totals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 14px}
 .tot{background:#fff8e6;border:2px solid var(--line);border-radius:10px;padding:8px 10px}
 .tot .v{font:20px "Lilita One"}
@@ -157,8 +161,9 @@ footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
   <div class="note">Striped bars are already running. Anything that starts left of the orange line gets the Jam price, even if it finishes after. No starts are planned between 1 and 8 AM.</div>
 </div>
 
-<h2>Heroes and pets <small>now and after the Jam plan</small></h2>
-<div class="card"><table id="heroes"></table></div>
+<h2>Progress since Nov 1 <small>then, now and after the Jam plan</small></h2>
+<div class="card"><div class="totals" id="progtot"></div><table id="progress"></table>
+  <div class="note">Small numbers show how many of that building are at the level, like 2/5. Green means maxed for TH18. Anything not listed here hasn't been touched yet and is in After the Jam below.</div></div>
 
 <h2>Loot for the rest of the Jam <small>upgrades not started yet</small></h2>
 <div class="card"><div class="totals" id="loot"></div></div>
@@ -177,7 +182,7 @@ footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
 <div class="card"><ul class="tips">
   <li><b>Hammer of Fighting:</b> save it for after the Jam on Druid 6, the longest troop research left (167 hours, 380K DE).</li>
   <li><b>Hammer of Building (Gold Pass):</b> saved for TH19.</li>
-  <li><b>Gems:</b> 74 left after Battle Blimp 6 (106). Goblin starts run about 1.5 gems per hour of upgrade, so Sky Wagon 2 in the Goblin Lab is about 80 and Builder's Hut #5 on the Goblin Builder about 100. Either one just has to start before 2:45 AM Mon Nov 16.</li>
+  <li><b>Gems:</b> about 74 left after Battle Blimp 6 (106). Goblin starts run about 1.5 gems per hour of upgrade, so Sky Wagon 2 in the Goblin Lab is about 80 and Builder's Hut #5 on the Goblin Builder about 100. Either one just has to start before 2:45 AM Mon Nov 16.</li>
   <li><b>Not tracked:</b> hero equipment, supercharges and crafted defenses.</li>
   <li>To refresh the plan, send a new in-game data export.</li>
 </ul></div>
@@ -186,42 +191,83 @@ footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
 </div>
 
 <script>
-/* ===== Data: synced from the in-game export at 2:17 PM Mon Nov 9, 2026 ===== */
-const EXPORT = 1794251821000;                       // export timestamp
+/* ===== Data: synced from the in-game export at 5:07 PM Mon Nov 9, 2026 ===== */
+const EXPORT = 1794262069000;                       // export timestamp
 const JAM_END = Date.parse('2026-11-16T02:45:00-05:00');
 const PASS = 0.85/0.9;                              // Gold Pass builder/lab time bonus on top of the listed hours
 const SLEEP = [1, 8];                               // asleep 1 AM to 8 AM, Toronto
 const H = 3600e3;
 const BUILDER_LANES = ['gob','b1','b2','b3','b4','b5','b6'];
 const BOOSTS = [                                     // potions active at export time
-  {x:10, from:EXPORT, to:EXPORT+11311e3, lanes:BUILDER_LANES, label:'4 Builder Potions'},
-  {x:24, from:EXPORT, to:EXPORT+11316e3, lanes:['lab','glab'], label:'4 Research Potions'},
+  {x:10, from:EXPORT, to:EXPORT+1246e3, lanes:BUILDER_LANES, label:'4 Builder Potions'},
+  {x:24, from:EXPORT, to:EXPORT+1251e3, lanes:['lab','glab'], label:'4 Research Potions'},
 ];
 /* step: [name, Jam hours before Gold Pass, currency g/e/d, cost, flag] */
 const LANES = [
-  {id:'gob', name:'Goblin Builder', cur:'Spell Tower #2', left:141758, steps:[]},
-  {id:'b1', name:'Builder 1', cur:'Grand Warden 79', left:59614, steps:[
-    ['Grand Warden 80',43,'e',12.5e6],['Grand Warden 81',43,'e',12.5e6],['Grand Warden 82',43,'e',12.5e6],['Grand Warden 83',43,'e',12.5e6],['Hidden Tesla #5',68,'g',11.25e6]]},
-  {id:'b2', name:'Builder 2', cur:'Mortar #4', left:10631, steps:[
-    ['Spell Tower #1',52,'g',12.15e6],['Elixir Storage #4',66,'g',8.1e6],['Elixir Storage #1',66,'g',8.1e6],['Gold Storage #1',66,'e',8.1e6]]},
-  {id:'b3', name:'Builder 3', cur:'Mortar #2', left:10629, steps:[
-    ['Hidden Tesla #4',68,'g',11.25e6],['Elixir Storage #2',66,'g',8.1e6],['Elixir Storage #3',66,'g',8.1e6]]},
-  {id:'b4', name:'Builder 4', cur:'Barbarian King 106', left:59588, steps:[
-    ['Barbarian King 107',43,'d',187.5e3],['Barbarian King 108',43,'d',187.5e3],['Barbarian King 109',43,'d',187.5e3],['Barbarian King 110',43,'d',187.5e3],['Mortar #3',66,'g',9.45e6]]},
-  {id:'b5', name:'Builder 5', cur:'Archer Queen 103', left:97371, steps:[
-    ['Archer Queen 104',43,'d',187.5e3],['Archer Queen 105',43,'d',187.5e3],['Archer Queen 106',43,'d',187.5e3],['Hidden Tesla #3',68,'g',11.25e6]]},
-  {id:'b6', name:'Builder 6', cur:'Dragon Duke 17', left:108385, steps:[
+  {id:'gob', name:'Goblin Builder', cur:'Spell Tower #2', left:40649, steps:[]},
+  {id:'b1', name:'Builder 1', cur:'Grand Warden 80', left:95323, steps:[
+    ['Grand Warden 81',43,'e',12.5e6],['Grand Warden 82',43,'e',12.5e6],['Grand Warden 83',43,'e',12.5e6],['Hidden Tesla #5',68,'g',11.25e6]]},
+  {id:'b2', name:'Builder 2', cur:'Spell Tower #1', left:82374, steps:[
+    ['Elixir Storage #4',66,'g',8.1e6],['Elixir Storage #1',66,'g',8.1e6],['Gold Storage #1',66,'e',8.1e6]]},
+  {id:'b3', name:'Builder 3', cur:'Hidden Tesla #4', left:114662, steps:[
+    ['Elixir Storage #2',66,'g',8.1e6],['Elixir Storage #3',66,'g',8.1e6]]},
+  {id:'b4', name:'Builder 4', cur:'Barbarian King 107', left:95299, steps:[
+    ['Barbarian King 108',43,'d',187.5e3],['Barbarian King 109',43,'d',187.5e3],['Barbarian King 110',43,'d',187.5e3],['Mortar #3',66,'g',9.45e6]]},
+  {id:'b5', name:'Builder 5', cur:'Archer Queen 104', left:133072, steps:[
+    ['Archer Queen 105',43,'d',187.5e3],['Archer Queen 106',43,'d',187.5e3],['Hidden Tesla #3',68,'g',11.25e6]]},
+  {id:'b6', name:'Builder 6', cur:'Dragon Duke 17', left:7276, steps:[
     ['Dragon Duke 18',35,'d',225e3],['Dragon Duke 19',36,'d',230e3],['Dragon Duke 20',36,'d',235e3],['Dragon Duke 21',37,'d',240e3],['Dragon Duke 22',37,'d',245e3]]},
-  {id:'lab', name:'Laboratory', cur:'Yeti 8', left:122080, steps:[
-    ['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3],['Witch 8',83.5,'d',177.5e3]]},
-  {id:'glab', name:'Goblin Lab', cur:'Battle Blimp 6', left:255376, steps:[]},
-  {id:'pet', name:'Pet House', cur:'Diggy 13', left:119880, steps:[
+  {id:'lab', name:'Laboratory', cur:'Recall Spell 7', left:150633, steps:[
+    ['Hog Rider 15',78.5,'d',170e3],['Witch 8',83.5,'d',177.5e3]]},
+  {id:'glab', name:'Goblin Lab', cur:'', left:0, steps:[]},
+  {id:'pet', name:'Pet House', cur:'Diggy 13', left:109632, steps:[
     ['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
-const HEROES = [ // [name, now, after Jam plan, max]
-  ['Barbarian King',105,110,110],['Archer Queen',102,106,110],['Grand Warden',78,83,85],
-  ['Royal Champion',55,55,55],['Minion Prince',95,95,95],['Dragon Duke',16,22,25],['Diggy (pet)',12,15,15],
+/* Progress since the planner started on Nov 1. Row: [name, Nov 1, now, after the Jam plan, max].
+   A value is a level, or [level, small note]. */
+const PROGRESS = [
+  {group:'Heroes', rows:[
+    ['Barbarian King',101,106,110,110],
+    ['Archer Queen',100,103,106,110],
+    ['Grand Warden',77,79,83,85],
+    ['Royal Champion',54,55,55,55],
+    ['Minion Prince',95,95,95,95],
+    ['Dragon Duke',9,16,22,25],
+  ]},
+  {group:'Pets and guardians', rows:[
+    ['Greedy Raven',2,10,10,10],
+    ['Diggy',10,12,15,15],
+    ['Longshot',4,5,5,5],
+    ['Smasher',3,4,4,5],
+    ['Logger',1,1,1,5],
+  ]},
+  {group:'Buildings', rows:[
+    ['Walls x325',[18,'317 left'],[19,'all'],[19,'all'],19],
+    ['X-Bow x4',12,[13,'4/4'],[13,'4/4'],13],
+    ['Inferno Tower x3',11,[12,'3/3'],[12,'3/3'],12],
+    ['Scattershot x2',6,[7,'2/2'],[7,'2/2'],7],
+    ['Army Camp x4',13,[14,'4/4'],[14,'4/4'],14],
+    ['Firespitter x2',2,[3,'2/2'],[3,'2/2'],3],
+    ['Air Defense x4',[15,'1 behind'],[16,'all'],[16,'all'],16],
+    ['Workshop',8,9,9,9],
+    ['Dark Barracks',12,13,13,13],
+    ['Mortar x4',17,[18,'3/4'],[18,'4/4'],18],
+    ['Hidden Tesla x5',16,[17,'2/5'],[17,'5/5'],17],
+    ["Builder's Hut x5",7,[8,'3/5'],[8,'3/5'],8],
+    ['Spell Tower x2',3,[4,'0/2'],[4,'2/2'],4],
+    ['Elixir Storage x4',18,[19,'0/4'],[19,'4/4'],19],
+    ['Gold Storage x4',18,[19,'0/4'],[19,'1/4'],19],
+  ]},
+  {group:'Lab', rows:[
+    ['Balloon',12,13,13,13],['Baby Dragon',11,12,12,12],['Yeti',7,8,8,8],['Thrower',3,4,4,4],
+    ['Electro Titan',4,5,5,5],['Root Rider',3,4,4,4],['Headhunter',3,4,4,4],['Lava Hound',7,8,8,8],
+    ['Meteor Golem',2,3,3,3],['Hog Rider',14,14,15,15],['Witch',7,7,8,8],
+    ['Rage Spell',6,7,7,7],['Freeze Spell',7,8,8,8],['Earthquake Spell',7,8,8,8],['Ice Block Spell',5,6,6,6],
+    ['Overgrowth Spell',4,5,5,5],['Revive Spell',4,5,5,5],['Recall Spell',6,6,7,7],
+    ['Stone Slammer',5,6,6,6],['Siege Barracks',5,6,6,6],['Battle Blimp',5,6,6,6],
+  ]},
 ];
+const DONE_SINCE_NOV1 = {levels:74, walls:317, more:34}; // upgrade levels finished, walls, and levels still to start or finish in the Jam plan
 /* full-price hours after the Jam */
 const AFTER_B = [
   ["Builder's Hut #2",136,'g',21.6e6,'Just misses the Jam on Builder 6 after Duke 22'],
@@ -371,15 +417,15 @@ function lanes(){
     // what's actually on the builder right now, assuming starts on time
     let activeName=L.cur, activeStart=EXPORT-1, activeEnd=p.curEnd;
     for(const s of p.q){ if(s.start<=now){ activeName=s.name; activeStart=s.start; activeEnd=s.end; } }
-    const idle = now>=activeEnd;
+    const idle = now>=activeEnd || !activeName;
     const pct = idle?100:Math.max(2,Math.min(100,(now-activeStart)/(activeEnd-activeStart)*100));
     const nowHtml = idle
-      ? `<b>Idle</b> <span class="muted">since ${whenD(activeEnd)}</span>`
+      ? `<b>Idle</b> <span class="muted">${L.id==='glab'||L.id==='gob'?'· needs gems':'since '+whenD(activeEnd)}</span>`
       : `<b>${esc(activeName)}</b> <span class="muted">· done ${whenD(activeEnd)}</span>${(activeName===L.cur?p.curBoost:boosted(L.id,activeStart,activeEnd))?'<span class="tag t-boost">boosted</span>':''}
          <div class="prog"><i style="width:${pct}%"></i></div>`;
     const rest=p.q.filter(s=>s.start>now);
     const qHtml = rest.length ? `<ul class="q">${rest.map(s=>`<li class="${s.late?'after':''}"><span class="n">${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">gems</span>':''}${s.late?'<span class="tag t-late">after Jam</span>':''}</span><span class="t">${whenD(s.start)}</span></li>`).join('')}</ul>`
-      : `<div class="empty">${L.id==='gob'?'Needs gems for the next start':'Nothing else queued in the Jam'}</div>`;
+      : `<div class="empty">${L.id==='gob'||L.id==='glab'?'Needs gems for the next start':'Nothing else queued in the Jam'}</div>`;
     return `<div class="card lane"><div class="lh"><h3>${esc(L.name)}</h3><div class="free">${rest.length?rest.length+' queued':'last one running'}</div></div>
       <div class="now">${nowHtml}</div>${qHtml}</div>`;
   }).join('');
@@ -394,7 +440,7 @@ function timeline(){
   head+='</div>';
   const rows=plan.map(p=>{
     const L=p.L;
-    let bars=`<div class="bar cur" style="left:${x(EXPORT)}px;width:${Math.max(4,x(p.curEnd)-x(EXPORT))}px" title="${esc(L.cur)}">${esc(L.cur)}</div>`;
+    let bars=!L.cur?'':`<div class="bar cur" style="left:${x(EXPORT)}px;width:${Math.max(4,x(p.curEnd)-x(EXPORT))}px" title="${esc(L.cur)}">${esc(L.cur)}</div>`;
     p.q.forEach(s=>{ bars+=`<div class="bar ${s.cur}" style="left:${x(s.start)}px;width:${Math.max(4,x(s.end)-x(s.start)-2)}px" title="${esc(s.name)}: ${whenD(s.start)} to ${whenD(s.end)}">${esc(s.name)}</div>`; });
     const sub = p.q.length ? '' : (L.id==='gob'?'gems':'');
     return `<div class="tlrow" style="width:${W+LAB}px"><div class="tllab">${esc(L.name)}<small>${esc(sub)}</small></div>${bars}</div>`;
@@ -406,9 +452,19 @@ function timeline(){
   if(!tl.dataset.scrolled){ tl.scrollLeft=Math.max(0,x(now)-LAB-40); tl.dataset.scrolled=1; }
 }
 
-function heroes(){
-  document.getElementById('heroes').innerHTML='<tr><th>Hero</th><th class="r">Now</th><th class="r">After Jam</th><th class="r">Max</th></tr>'+
-    HEROES.map(h=>`<tr><td><b>${esc(h[0])}</b></td><td class="r lvl">${h[1]}</td><td class="r lvl ${h[2]===h[3]?'max':''}">${h[2]}</td><td class="r muted">${h[3]}</td></tr>`).join('');
+function progress(){
+  const cell=(v,max)=>{ const l=Array.isArray(v)?v[0]:v, n=Array.isArray(v)?v[1]:''; let full=l===max;
+    if(n){ const m=/^(\d+)\/(\d+)$/.exec(n); if(m) full=full&&m[1]===m[2]; else full=full&&n==='all'; }
+    return `<td class="r lvl ${full?'max':''}">${l}${n?`<small class="sub">${esc(n)}</small>`:''}</td>`; };
+  let h='<tr><th>Upgrade</th><th class="r">Nov 1</th><th class="r">Now</th><th class="r">After Jam</th><th class="r">Max</th></tr>';
+  PROGRESS.forEach(g=>{ h+=`<tr class="grp"><td colspan="5">${esc(g.group)}</td></tr>`;
+    g.rows.forEach(r=>{ h+=`<tr><td><b>${esc(r[0])}</b></td>${cell(r[1],-1)}${cell(r[2],r[4])}${cell(r[3],r[4])}<td class="r muted">${r[4]}</td></tr>`; }); });
+  document.getElementById('progress').innerHTML=h;
+  const D=DONE_SINCE_NOV1;
+  document.getElementById('progtot').innerHTML=
+    `<div class="tot"><div class="k">Done since Nov 1</div><div class="v">${D.levels}</div><div class="k">upgrade levels</div></div>`+
+    `<div class="tot"><div class="k">Walls</div><div class="v">${D.walls}</div><div class="k">all maxed</div></div>`+
+    `<div class="tot"><div class="k">Still in the Jam plan</div><div class="v">${D.more}</div><div class="k">more levels</div></div>`;
 }
 
 function loot(){
@@ -432,7 +488,7 @@ document.querySelector('.tabs').addEventListener('click',e=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b)); after();
 });
 
-function render(){ header(); upNext(); lanes(); timeline(); heroes(); loot(); after(); }
+function render(){ header(); upNext(); lanes(); timeline(); progress(); loot(); after(); }
 render();
 setInterval(()=>{ header(); upNext(); lanes(); timeline(); loot(); },60e3);
 </script>
