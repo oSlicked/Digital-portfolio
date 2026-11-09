@@ -431,23 +431,24 @@ const T0 = new Date('2026-11-01T00:00:00-05:00'), T1 = new Date('2026-11-22T00:0
 const H = 3600e3;
 const BUILDERS = [
   {id:'gob', name:'Goblin Builder', cur:"Idle, Tesla #1 done, no gems", free:'2026-11-08T14:00:00-05:00', steps:[]},
-  {id:'b1', name:'Builder 1', cur:"Mortar #1", free:'2026-11-10T01:48:42-05:00', steps:[
-    ["Grand Warden 79",43,'e',12.5e6],["Grand Warden 80",43,'e',12.5e6],["Grand Warden 81",43,'e',12.5e6],["Grand Warden 82",43,'e',12.5e6],["Grand Warden 83",43,'e',12.5e6]]},
-  {id:'b2', name:'Builder 2', cur:"Mortar #4", free:'2026-11-11T02:48:01-05:00', steps:[
+  {id:'b1', name:'Builder 1', cur:"Grand Warden 79", free:'2026-11-10T14:35:07-05:00', steps:[
+    ["Grand Warden 80",43,'e',12.5e6],["Grand Warden 81",43,'e',12.5e6],["Grand Warden 82",43,'e',12.5e6],["Grand Warden 83",43,'e',12.5e6]]},
+  {id:'b2', name:'Builder 2', cur:"Mortar #4", free:'2026-11-10T00:58:44-05:00', steps:[
     ["Spell Tower #1",52,'g',1.215e+07],["Elixir Storage #4",66,'g',8.1e+06],["Elixir Storage #1",66,'g',8.1e+06]]},
-  {id:'b3', name:'Builder 3', cur:"Mortar #2", free:'2026-11-11T02:47:59-05:00', steps:[
+  {id:'b3', name:'Builder 3', cur:"Mortar #2", free:'2026-11-10T00:58:42-05:00', steps:[
     ["Hidden Tesla #4",68,'g',1.125e+07],["Elixir Storage #2",66,'g',8.1e+06],["Elixir Storage #3",66,'g',8.1e+06]]},
-  {id:'b4', name:'Builder 4', cur:"Barbarian King 105", free:'2026-11-10T00:06:17-05:00', steps:[
-    ["Barbarian King 106",43,'d',187.5e3],["Barbarian King 107",43,'d',187.5e3],["Barbarian King 108",43,'d',187.5e3],["Barbarian King 109",43,'d',187.5e3],["Barbarian King 110",43,'d',187.5e3]]},
-  {id:'b5', name:'Builder 5', cur:"Archer Queen 102", free:'2026-11-10T12:46:22-05:00', steps:[
-    ["Archer Queen 103",43,'d',187.5e3],["Archer Queen 104",43,'d',187.5e3],["Archer Queen 105",43,'d',187.5e3],["Archer Queen 106",43,'d',187.5e3]]},
-  {id:'b6', name:'Builder 6', cur:"Dragon Duke 15", free:'2026-11-09T11:53:33-05:00', steps:[
-    ["Dragon Duke 16",29,'d',215e3],["Dragon Duke 17",29,'d',220e3],["Dragon Duke 18",30,'d',225e3],["Dragon Duke 19",30,'d',230e3],["Dragon Duke 20",31,'d',235e3],["Dragon Duke 21",31,'d',240e3],["Dragon Duke 22",32,'d',245e3]]},
-  {id:'lab', name:'Laboratory', cur:"Stone Slammer 6", free:'2026-11-10T09:21:07-05:00', steps:[
-    ['Ice Block Spell 6',0,'d',190e3,'bos'],['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3],['Yeti 8',83.5,'e',13.75e6]]},
-  {id:'glab', name:'Goblin Lab', cur:'Earthquake Spell 8', free:'2026-11-12T09:22:00-05:00', steps:[]},
-  {id:'pet', name:'Pet House', cur:"Diggy 12", free:'2026-11-10T23:35:01-05:00', steps:[
-    ['Diggy 13',39.6,'d',108e3],['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
+  {id:'b4', name:'Builder 4', cur:"Barbarian King 106", free:'2026-11-10T14:34:41-05:00', steps:[
+    ["Barbarian King 107",43,'d',187.5e3],["Barbarian King 108",43,'d',187.5e3],["Barbarian King 109",43,'d',187.5e3],["Barbarian King 110",43,'d',187.5e3]]},
+  {id:'b5', name:'Builder 5', cur:"Archer Queen 103", free:'2026-11-11T01:04:24-05:00', steps:[
+    ["Archer Queen 104",43,'d',187.5e3],["Archer Queen 105",43,'d',187.5e3],["Archer Queen 106",43,'d',187.5e3]]},
+  {id:'b6', name:'Builder 6', cur:"Dragon Duke 16", free:'2026-11-09T19:07:44-05:00', steps:[
+    ["Dragon Duke 17",29,'d',220e3],["Dragon Duke 18",30,'d',225e3],["Dragon Duke 19",30,'d',230e3],["Dragon Duke 20",31,'d',235e3],["Dragon Duke 21",31,'d',240e3],["Dragon Duke 22",32,'d',245e3]]},
+  {id:'lab', name:'Laboratory', cur:"Yeti 8", free:'2026-11-11T19:57:18-05:00', steps:[
+    ['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3]]},
+  {id:'glab', name:'Goblin Lab', cur:"Earthquake Spell 8", free:'2026-11-10T12:04:10-05:00', steps:[
+    ]},
+  {id:'pet', name:'Pet House', cur:"Diggy 13", free:'2026-11-10T23:35:01-05:00', steps:[
+    ['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
 const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
 const AFTER=[
@@ -530,13 +531,13 @@ const TIERS = [
   ['Lab','A','Baby Dragon','11 → 12','13.1M Elixir','Done Nov 6. In your dragon army'],
   ['Lab','A','Revive Spell','4 → 5','13.3M Elixir','Done'],
   ['Lab','S','Stone Slammer','5 → 6','11.7M Elixir','Researching (Lab), done 4:09 PM Tue Nov 10. Air siege for dragon and Hydra armies'],
-  ['Lab','S','Earthquake Spell','7 → 8','148.5K DE','Researching (Goblin Lab, boosted), done about 5 PM Tue Nov 10. In almost every TH18 meta army'],
+  ['Lab','S','Earthquake Spell','7 → 8','148.5K DE','Researching (Goblin Lab), done 12:04 PM Tue Nov 10. In almost every TH18 meta army'],
   ['Lab','A','Lava Hound','7 → 8','155K DE','Done Nov 4. Air armies and Clan Castle'],
   ['Lab','A','Clone Spell','8 → 9','11.7M Elixir','After the Jam unless you get gems for the Goblin Lab'],
-  ['Lab','A','Yeti','7 → 8','13.8M Elixir','Lab, Sun Nov 15 after Hog Rider 15. Last lab start, Super Yeti meta'],
+  ['Lab','A','Yeti','7 → 8','13.8M Elixir','Researching (Lab), done 7:57 PM Wed Nov 11. Super Yeti meta'],
   ['Lab','A','Battle Blimp','5 → 6','11.7M Elixir','After the Jam unless you get gems for the Goblin Lab'],
   ['Lab','A','Recall Spell','6 → 7','13M Elixir','Lab, Nov 12'],
-  ['Lab','S','Ice Block Spell','5 → 6','190K DE','Gold Pass Book of Spells at 11:14 AM Nov 9. Saves the longest after Jam research, 173 hours'],
+  ['Lab','S','Ice Block Spell','5 → 6','190K DE','Done Nov 9 with the Gold Pass Book of Spells'],
   ['Lab','B','Hog Rider','14 → 15','170K DE','Back in the Jam thanks to the Research Potions. Last lab start, Sat Nov 14'],
   ['Lab','A','Thrower','3 → 4','13.5M Elixir','Done Nov 7. Thrower meta'],
   ['Lab','C','Siege Barracks','5 → 6','Jam price','Done Nov 7'],
@@ -565,7 +566,7 @@ let state={};
 try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 /* SYNC: updated by the daily Clash Ninja check. started = step keys seen as started or done. */
-const SYNC = {"updated":"2026-11-09 10:16 AM export, potions running","completion":null,"started":[],"reset":["b2-0","b3-0","b4-0","b6-0","b2-1","b3-1","b4-1","b6-1","b1-0","b1-1","b5-0","b5-1"]};
+const SYNC = {"updated":"2026-11-09 1:12 PM export","completion":null,"started":[],"reset":["b2-0","b3-0","b4-0","b6-0","b2-1","b3-1","b4-1","b6-1","b1-0","b1-1","b5-0","b5-1"]};
 SYNC.started.forEach(k=>{if(state[k]===undefined)state[k]=true});
 (SYNC.reset||[]).forEach(k=>{if(!state["_r"+k]){delete state[k];state["_r"+k]=1}});save();
 
@@ -582,8 +583,8 @@ const PASS={now:.10,tiers:[[.15,'2026-11-03T08:00:00-05:00'],[.20,'2026-11-07T06
 const passF=t=>{let d=PASS.now;for(const[x,from]of PASS.tiers)if(t>=from)d=x;return (1-d)/(1-PASS.now)};
 /* Asleep 1 to 8 AM every night (Toronto, UTC-5): anything that frees then starts at 8 AM. */
 const wake=t=>{const d=new Date(t-5*36e5),h=d.getUTCHours()+d.getUTCMinutes()/60;if(h>=1&&h<8){d.setUTCHours(8,0,0,0);return d.getTime()+5*36e5}return t};
-/* Potions running at the 10:16 AM Nov 9 export: Builder Potions 10x until 1:08 PM, Research Potions 24x (Lab and Pet House) until 12:01 PM. Free times above are raw timers. */
-const BOOSTS=[{x:10,win:[new Date('2026-11-09T10:16:35-05:00').getTime(),new Date('2026-11-09T13:07:59-05:00').getTime()],lanes:new Set(['gob','b1','b2','b3','b4','b5','b6'])},{x:24,win:[new Date('2026-11-09T10:16:35-05:00').getTime(),new Date('2026-11-09T12:01:33-05:00').getTime()],lanes:new Set(['lab','glab','pet'])}];
+/* No potions running. Add windows here when a Builder or Research Potion is active. */
+const BOOSTS=[];
 const runFrom=(id,t,w)=>{const B=BOOSTS.find(b=>b.lanes.has(id));if(!B)return t+w;const[a,z]=B.win;if(t<a){if(t+w<=a)return t+w;w-=a-t;t=a}if(t<z){const can=(z-t)*B.x;if(w<=can)return t+w/B.x;w-=can;t=z}return t+w};
 BUILDERS.forEach(b=>{const fr=new Date(b.free).getTime(),B=BOOSTS.find(x=>x.lanes.has(b.id));if(B&&fr>B.win[0])b.free=new Date(runFrom(b.id,B.win[0],fr-B.win[0])).toISOString()});
 BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{t=wake(t);const st=t,f=passF(st);let hh=s[1]*f;t=runFrom(b.id,st,hh*H);const gem=s[4]==='gem'&&t>JAM_END.getTime()-5*6e4;if(gem){t=JAM_END.getTime()-5*6e4;hh=(t-st)/H}return{key:b.id+'-'+i,gem,lane:b,name:s[0],h:hh,res:s[2],cost:Math.round(s[3]*f/500)*500,cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',bos:s[4]==='bos',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
