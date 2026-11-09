@@ -186,42 +186,42 @@ footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
 </div>
 
 <script>
-/* ===== Data: synced from the in-game export at 1:53 PM Mon Nov 9, 2026 ===== */
-const EXPORT = 1794250407000;                       // export timestamp
+/* ===== Data: synced from the in-game export at 2:17 PM Mon Nov 9, 2026 ===== */
+const EXPORT = 1794251821000;                       // export timestamp
 const JAM_END = Date.parse('2026-11-16T02:45:00-05:00');
 const PASS = 0.85/0.9;                              // Gold Pass builder/lab time bonus on top of the listed hours
 const SLEEP = [1, 8];                               // asleep 1 AM to 8 AM, Toronto
 const H = 3600e3;
 const BUILDER_LANES = ['gob','b1','b2','b3','b4','b5','b6'];
 const BOOSTS = [                                     // potions active at export time
-  {x:10, from:EXPORT, to:EXPORT+12706e3, lanes:BUILDER_LANES, label:'4 Builder Potions'},
-  {x:24, from:EXPORT, to:EXPORT+12711e3, lanes:['lab','glab'], label:'4 Research Potions'},
+  {x:10, from:EXPORT, to:EXPORT+11311e3, lanes:BUILDER_LANES, label:'4 Builder Potions'},
+  {x:24, from:EXPORT, to:EXPORT+11316e3, lanes:['lab','glab'], label:'4 Research Potions'},
 ];
 /* step: [name, Jam hours before Gold Pass, currency g/e/d, cost, flag] */
 const LANES = [
-  {id:'gob', name:'Goblin Builder', cur:'Spell Tower #2', left:155749, steps:[]},
-  {id:'b1', name:'Builder 1', cur:'Grand Warden 79', left:73605, steps:[
+  {id:'gob', name:'Goblin Builder', cur:'Spell Tower #2', left:141758, steps:[]},
+  {id:'b1', name:'Builder 1', cur:'Grand Warden 79', left:59614, steps:[
     ['Grand Warden 80',43,'e',12.5e6],['Grand Warden 81',43,'e',12.5e6],['Grand Warden 82',43,'e',12.5e6],['Grand Warden 83',43,'e',12.5e6],['Hidden Tesla #5',68,'g',11.25e6]]},
-  {id:'b2', name:'Builder 2', cur:'Mortar #4', left:24622, steps:[
+  {id:'b2', name:'Builder 2', cur:'Mortar #4', left:10631, steps:[
     ['Spell Tower #1',52,'g',12.15e6],['Elixir Storage #4',66,'g',8.1e6],['Elixir Storage #1',66,'g',8.1e6],['Gold Storage #1',66,'e',8.1e6]]},
-  {id:'b3', name:'Builder 3', cur:'Mortar #2', left:24620, steps:[
+  {id:'b3', name:'Builder 3', cur:'Mortar #2', left:10629, steps:[
     ['Hidden Tesla #4',68,'g',11.25e6],['Elixir Storage #2',66,'g',8.1e6],['Elixir Storage #3',66,'g',8.1e6]]},
-  {id:'b4', name:'Builder 4', cur:'Barbarian King 106', left:73579, steps:[
+  {id:'b4', name:'Builder 4', cur:'Barbarian King 106', left:59588, steps:[
     ['Barbarian King 107',43,'d',187.5e3],['Barbarian King 108',43,'d',187.5e3],['Barbarian King 109',43,'d',187.5e3],['Barbarian King 110',43,'d',187.5e3],['Mortar #3',66,'g',9.45e6]]},
-  {id:'b5', name:'Builder 5', cur:'Archer Queen 103', left:111362, steps:[
+  {id:'b5', name:'Builder 5', cur:'Archer Queen 103', left:97371, steps:[
     ['Archer Queen 104',43,'d',187.5e3],['Archer Queen 105',43,'d',187.5e3],['Archer Queen 106',43,'d',187.5e3],['Hidden Tesla #3',68,'g',11.25e6]]},
-  {id:'b6', name:'Builder 6', cur:'Dragon Duke 16', left:3562, steps:[
-    ['Dragon Duke 17',36,'d',220e3],['Dragon Duke 18',37,'d',225e3],['Dragon Duke 19',37,'d',230e3],['Dragon Duke 20',38,'d',235e3],['Dragon Duke 21',38,'d',240e3],['Dragon Duke 22',39,'d',245e3]]},
-  {id:'lab', name:'Laboratory', cur:'Yeti 8', left:155640, steps:[
+  {id:'b6', name:'Builder 6', cur:'Dragon Duke 17', left:108385, steps:[
+    ['Dragon Duke 18',35,'d',225e3],['Dragon Duke 19',36,'d',230e3],['Dragon Duke 20',36,'d',235e3],['Dragon Duke 21',37,'d',240e3],['Dragon Duke 22',37,'d',245e3]]},
+  {id:'lab', name:'Laboratory', cur:'Yeti 8', left:122080, steps:[
     ['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3],['Witch 8',83.5,'d',177.5e3]]},
-  {id:'glab', name:'Goblin Lab', cur:'Earthquake Spell 8', left:40852, steps:[
+  {id:'glab', name:'Goblin Lab', cur:'Earthquake Spell 8', left:7292, steps:[
     ['Battle Blimp 6',73,'e',11.7e6,'gem']]},
-  {id:'pet', name:'Pet House', cur:'Diggy 13', left:121294, steps:[
+  {id:'pet', name:'Pet House', cur:'Diggy 13', left:119880, steps:[
     ['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
 const HEROES = [ // [name, now, after Jam plan, max]
   ['Barbarian King',105,110,110],['Archer Queen',102,106,110],['Grand Warden',78,83,85],
-  ['Royal Champion',55,55,55],['Minion Prince',95,95,95],['Dragon Duke',15,22,25],['Diggy (pet)',12,15,15],
+  ['Royal Champion',55,55,55],['Minion Prince',95,95,95],['Dragon Duke',16,22,25],['Diggy (pet)',12,15,15],
 ];
 /* full-price hours after the Jam */
 const AFTER_B = [
