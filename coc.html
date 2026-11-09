@@ -177,7 +177,7 @@ footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
 <div class="card"><ul class="tips">
   <li><b>Hammer of Fighting:</b> save it for after the Jam on Druid 6, the longest troop research left (167 hours, 380K DE).</li>
   <li><b>Hammer of Building (Gold Pass):</b> saved for TH19.</li>
-  <li><b>Gems:</b> about 160 left after Spell Tower #2. Best use is Battle Blimp 6 in the Goblin Lab while the Research Potions run. Builder's Hut #5 is the next goblin builder start if you earn about 130 more.</li>
+  <li><b>Gems:</b> 74 left after Battle Blimp 6 (106). Goblin starts run about 1.5 gems per hour of upgrade, so Sky Wagon 2 in the Goblin Lab is about 80 and Builder's Hut #5 on the Goblin Builder about 100. Either one just has to start before 2:45 AM Mon Nov 16.</li>
   <li><b>Not tracked:</b> hero equipment, supercharges and crafted defenses.</li>
   <li>To refresh the plan, send a new in-game data export.</li>
 </ul></div>
@@ -214,8 +214,7 @@ const LANES = [
     ['Dragon Duke 18',35,'d',225e3],['Dragon Duke 19',36,'d',230e3],['Dragon Duke 20',36,'d',235e3],['Dragon Duke 21',37,'d',240e3],['Dragon Duke 22',37,'d',245e3]]},
   {id:'lab', name:'Laboratory', cur:'Yeti 8', left:122080, steps:[
     ['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3],['Witch 8',83.5,'d',177.5e3]]},
-  {id:'glab', name:'Goblin Lab', cur:'Earthquake Spell 8', left:7292, steps:[
-    ['Battle Blimp 6',73,'e',11.7e6,'gem']]},
+  {id:'glab', name:'Goblin Lab', cur:'Battle Blimp 6', left:255376, steps:[]},
   {id:'pet', name:'Pet House', cur:'Diggy 13', left:119880, steps:[
     ['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
@@ -226,7 +225,7 @@ const HEROES = [ // [name, now, after Jam plan, max]
 /* full-price hours after the Jam */
 const AFTER_B = [
   ["Builder's Hut #2",136,'g',21.6e6,'Just misses the Jam on Builder 6 after Duke 22'],
-  ["Builder's Hut #5",136,'g',21.6e6,'Goblin Builder in the Jam if you get about 130 more gems'],
+  ["Builder's Hut #5",136,'g',21.6e6,'Goblin Builder in the Jam if you reach about 100 gems'],
   ['Giga Bomb 4',136,'g',18e6,''],
   ['Gold Storage #2',135,'e',16.2e6,''],
   ['Seeking Air Mines 1 to 3',372,'g',51.3e6,'Before TH19'],
@@ -254,7 +253,7 @@ const AFTER_L = [
   ['Ruin Witch 4',167,'d',380e3,'Max'],
   ['Valkyrie 12',151,'d',340e3,''],
   ['Golem 15',157,'d',350e3,''],
-  ['Sky Wagon 2',108,'e',19.8e6,''],
+  ['Sky Wagon 2',108,'e',19.8e6,'Goblin Lab in the Jam if you reach about 80 gems'],
   ['Sky Wagon 3',146,'e',26e6,''],
   ['Sky Wagon 4',173,'e',29e6,'Max'],
   ['Clone Spell 9',146,'e',23.4e6,''],
