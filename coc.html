@@ -4,852 +4,437 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#16212d">
-<meta name="mobile-web-app-capable" content="yes">
-<title>Hammer Jam Planner</title>
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#16212e">
+<title>CoC Planner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
-/* Village HUD: dark stone ground, parchment panels with wood edges, chunky outlined buttons,
-   Gold / Elixir / Dark Elixir as the colour system. One deliberate look in every theme. */
 :root{
-  color-scheme:dark;
-  --ground:#203142; --ground-2:#162330; --hud:#131d28; --hud-edge:#0a1118;
-  --panel:#f7ecd1; --panel-2:#ecdcb4; --panel-3:#e2cd9b; --edge:#5c4022; --edge-dark:#3a2812;
-  --ink:#2c2015; --ink-2:#6e5838; --ink-3:#9a8460;
-  --gold:#ffd23a; --gold-2:#f2a900; --gold-edge:#7a4f00;
-  --elixir:#f070e6; --elixir-2:#c535b8; --elixir-edge:#5e1258;
-  --dark:#8467b0; --dark-2:#4c3570; --dark-edge:#1f1430;
-  --green:#9be64a; --green-2:#55aa16; --green-edge:#235208;
-  --blue:#5bbcff; --blue-2:#1f7fd0; --blue-edge:#0d3d6b;
-  --orange:#ffb23a; --orange-2:#e8740c; --orange-edge:#6b3200;
-  --track:#2a1f14; --track-edge:#120b05;
-  --f-game:"Lilita One","Arial Rounded MT Bold",ui-rounded,system-ui,sans-serif;
-  --f-body:"Nunito",ui-rounded,system-ui,-apple-system,"Segoe UI",sans-serif;
-  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#16212e; --bg2:#1c2a3a; --ink:#2b1d0e; --muted:#7a6447;
+  --card:#f6ead0; --card2:#efe0bd; --edge:#6b4a1f; --line:#dcc79d;
+  --gold:#f2b31b; --gold-d:#a8700a; --elix:#c64fd6; --elix-d:#7d2a8c; --de:#4b3868; --de-d:#2a1c40;
+  --green:#3faa45; --green-d:#23722a; --blue:#3a8ee6; --blue-d:#1f5ea3; --red:#d9483b; --orange:#f07c1d;
+  --text:#eef3f8; --text2:#a9b8c8;
 }
 *{box-sizing:border-box}
-html{font-size:100%;-webkit-text-size-adjust:100%}
-body{margin:0;color:var(--ink);font-family:var(--f-body);font-weight:700;font-size:1rem;line-height:1.45;
-  background-color:var(--ground);
-  background-image:linear-gradient(45deg,rgba(255,255,255,.035) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.035) 75%),linear-gradient(45deg,rgba(255,255,255,.035) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.035) 75%);
-  background-size:56px 56px;background-position:0 0,28px 28px;min-height:100vh}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--hud)}
-[hidden]{display:none!important}
-button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
-:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-.out{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.55),1px 1px 0 #000,-1px 1px 0 #000,1px -1px 0 #000,-1px -1px 0 #000}
-.gut{padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px))}
-svg.i{width:1em;height:1em;flex:none;vertical-align:-.15em}
+html,body{margin:0}
+body{
+  background:var(--bg);
+  background-image:linear-gradient(45deg,var(--bg2) 25%,transparent 25%,transparent 75%,var(--bg2) 75%),linear-gradient(45deg,var(--bg2) 25%,transparent 25%,transparent 75%,var(--bg2) 75%);
+  background-size:48px 48px;background-position:0 0,24px 24px;
+  color:var(--text);font:600 15px/1.45 Nunito,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
+h1,h2,h3,.disp{font-family:"Lilita One",Nunito,sans-serif;font-weight:400;letter-spacing:.2px;margin:0}
+h2{font-size:22px;color:#fff;text-shadow:0 2px 0 #000a;margin:28px 0 10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+h2 small{font:700 13px Nunito,sans-serif;color:var(--text2);text-shadow:none}
 
-/* HUD */
-.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:linear-gradient(var(--hud),#0f1821);border-bottom:3px solid var(--hud-edge);box-shadow:0 4px 0 rgba(0,0,0,.25)}
-.hud .in{max-width:860px;margin:0 auto;padding-block:10px 12px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center}
-.badge{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(#5bbcff,#1f7fd0);border:3px solid #0a2a48;box-shadow:inset 0 -4px 0 rgba(0,0,0,.25);font-family:var(--f-game);font-size:1.25rem;grid-row:1/3}
-.hud h1{margin:0;font-family:var(--f-game);font-weight:400;font-size:1.45rem;line-height:1.05;letter-spacing:.01em}
-.hud .sync{font-size:.74rem;color:#9fb3c8;font-weight:700;line-height:1.2}
-.jambar{grid-column:1/3;margin-top:8px;display:flex;align-items:center}
-.jambar .ico{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(var(--orange),var(--orange-2));border:3px solid var(--orange-edge);z-index:2;font-size:1.05rem;color:#fff;margin-right:-14px}
-.jambar .bar{flex:1;height:26px;border-radius:13px;background:var(--track);border:3px solid var(--track-edge);position:relative;overflow:hidden}
-.jambar .bar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#ffe36b,#f5a700);border-radius:10px}
-.jambar .bar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--f-game);font-size:.92rem;letter-spacing:.02em;white-space:nowrap;padding-left:10px}
+/* header */
+header{position:sticky;top:0;z-index:20;background:#0f1822f2;backdrop-filter:blur(6px);border-bottom:2px solid #000;margin:0 -16px;padding:10px 16px 12px}
+.hrow{display:flex;align-items:center;gap:12px}
+.badge{flex:none;width:44px;height:44px;border-radius:10px;background:linear-gradient(#56a8f5,#2a6fc2);border:2px solid #0b2d55;box-shadow:inset 0 -3px 0 #0003;display:grid;place-items:center;font:24px "Lilita One";color:#fff;text-shadow:0 2px 0 #0007}
+.htxt h1{font-size:22px;color:#fff;text-shadow:0 2px 0 #000}
+.htxt p{margin:0;font-size:12px;color:var(--text2)}
+.jambar{margin-top:10px;position:relative;height:26px;border-radius:13px;background:#2a1a08;border:2px solid #000;overflow:hidden}
+.jambar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#ffd55a,#f0a500);box-shadow:inset 0 -4px 0 #0002}
+.jambar span{position:absolute;inset:0;display:grid;place-items:center;font:15px "Lilita One";color:#fff;text-shadow:0 1px 0 #000,0 0 3px #000}
+.boostrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font:800 12px Nunito;border:2px solid #0006}
+.pill.b{background:#1f5ea3;color:#fff}.pill.r{background:#7d2a8c;color:#fff}
 
-/* layout */
-main{max-width:860px;margin:0 auto;padding-block:16px calc(108px + env(safe-area-inset-bottom,0px))}
-.title{display:flex;align-items:baseline;gap:8px;margin:26px 2px 10px;font-family:var(--f-game);font-weight:400;font-size:1.3rem;letter-spacing:.01em}
-.title small{font-family:var(--f-body);font-size:.78rem;color:#b8c7d6;font-weight:700;letter-spacing:0;text-shadow:none}
-.panel{color-scheme:light;background:var(--panel);border:3px solid var(--edge-dark);border-radius:18px;box-shadow:inset 0 -5px 0 var(--panel-2),0 5px 0 rgba(0,0,0,.35)}
-.note{color:#c4d2df;font-size:.86rem;font-weight:600;margin:10px 4px 0;max-width:70ch}
+/* cards */
+.card{background:var(--card);color:var(--ink);border:3px solid var(--edge);border-radius:14px;box-shadow:0 4px 0 #0008;overflow:hidden}
+.card+.card{margin-top:12px}
+.pad{padding:12px 14px}
+.muted{color:var(--muted)}
+.tag{display:inline-block;font:800 11px Nunito;padding:1px 7px;border-radius:6px;margin-left:4px;vertical-align:1px;white-space:nowrap}
+.t-boost{background:#d8ecff;color:#1f5ea3;border:1px solid #9cc6f2}
+.t-sleep{background:#ece3ff;color:#5a3ea0;border:1px solid #c9b8f2}
+.t-gem{background:#dff7e1;color:#23722a;border:1px solid #9fd8a4}
+.t-late{background:#ffe0dc;color:#a3281d;border:1px solid #f2a59c}
+.t-book{background:#fff0c7;color:#8a5a00;border:1px solid #e9c66b}
+.cur{display:inline-flex;align-items:center;gap:4px;font-weight:800;white-space:nowrap}
+.dot{width:12px;height:12px;border-radius:50%;border:2px solid #0005;flex:none}
+.dot.g{background:var(--gold)}.dot.e{background:var(--elix)}.dot.d{background:var(--de)}
 
-/* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:3px solid var(--green-edge);border-radius:14px;background:linear-gradient(var(--green),var(--green-2));box-shadow:inset 0 -5px 0 rgba(0,0,0,.18),0 4px 0 rgba(0,0,0,.35);min-height:52px;padding:0 20px;font-family:var(--f-game);font-size:1.15rem;letter-spacing:.02em;cursor:pointer;transition:transform .08s}
-.btn:active{transform:translateY(3px);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18),0 1px 0 rgba(0,0,0,.35)}
-.btn.sm{min-height:40px;padding:0 14px;font-size:.95rem;border-radius:11px}
-.btn.blue{background:linear-gradient(var(--blue),var(--blue-2));border-color:var(--blue-edge)}
-.btn.grey{background:linear-gradient(#d9d2c2,#a99f8a);border-color:#4d4535}
-
-/* resource bits */
-.cost{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-game);font-size:1rem;letter-spacing:.01em;white-space:nowrap}
-.cost .i{font-size:1.15em}
-.timer{display:inline-flex;align-items:center;gap:5px;background:var(--track);border:2px solid var(--track-edge);border-radius:9px;padding:3px 9px;font-family:var(--f-game);font-size:.9rem;white-space:nowrap}
-
-/* hero */
-.hero{overflow:hidden}
-.ribbon{padding:8px 16px;font-family:var(--f-game);font-size:1.05rem;letter-spacing:.03em;display:flex;align-items:center;gap:8px;border-bottom:3px solid var(--edge-dark)}
-.ribbon.go{background:linear-gradient(var(--green),var(--green-2))}
-.ribbon.wait{background:linear-gradient(var(--blue),var(--blue-2))}
-.ribbon .pulse{width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #000;animation:pulse 1.4s ease-in-out infinite}
-@keyframes pulse{50%{transform:scale(.6);opacity:.6}}
-.hero .body{padding:16px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
-.tile{width:62px;height:62px;border-radius:16px;display:grid;place-items:center;font-size:2rem;color:#fff;background:linear-gradient(#a57a46,#6e4b25);border:3px solid var(--edge-dark);box-shadow:inset 0 -5px 0 rgba(0,0,0,.25);grid-row:1/3}
-.tile.lab{background:linear-gradient(#c77ee0,#7c3aa0)} .tile.pet{background:linear-gradient(#9fd0ff,#4b86c0)} .tile.gob{background:linear-gradient(#8fd463,#3f8a1d)}
-.hero .name{font-family:var(--f-game);font-size:1.75rem;line-height:1.05;letter-spacing:.01em;text-wrap:balance}
-.hero .meta{color:var(--ink-2);font-size:.9rem}
-.hero .act{padding:0 16px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
-.hero .cost{font-size:1.3rem}
-.also{margin:0 16px 16px;padding:0;list-style:none;display:grid;gap:8px}
-.also li{display:flex;align-items:center;gap:10px;background:var(--panel-2);border:2px solid var(--panel-3);border-radius:12px;padding:8px 10px}
-.also .nm{flex:1;min-width:0;font-weight:800;line-height:1.2}
-.also .nm small{display:block;font-weight:700;color:var(--ink-2);font-size:.78rem}
-
-/* coming up */
-.soon{list-style:none;margin:0;padding:6px 14px}
-.soon li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:2px dashed var(--panel-3)}
-.soon li:first-child{border-top:0}
-.soon .r{font-size:1.5rem;display:grid}
-.soon .nm{font-weight:900;line-height:1.2}
-.soon .nm small{display:block;font-weight:700;color:var(--ink-2);font-size:.78rem}
-.soon .when{text-align:right}
-.soon .when small{display:block;color:var(--ink-2);font-size:.72rem;margin-top:3px;font-weight:700}
-
-/* resources */
-.res{display:grid;gap:12px;padding:14px}
-.rrow{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
-.rrow .lbl{font-weight:800;font-size:.86rem;color:var(--ink-2)}
-.rrow .amt{font-family:var(--f-game);font-size:1.05rem}
-.rbar{grid-column:1/3;display:flex;align-items:center}
-.rbar .ic{font-size:1.9rem;z-index:2;margin-right:-12px;display:grid;filter:drop-shadow(0 2px 0 rgba(0,0,0,.35))}
-.rbar .bar{flex:1;height:20px;border-radius:10px;background:var(--track);border:3px solid var(--track-edge);overflow:hidden}
-.rbar .bar i{display:block;height:100%;border-radius:7px}
-.started{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:2px dashed var(--panel-3)}
-.started b{font-family:var(--f-game);font-size:1.3rem;font-weight:400}
+/* up next */
+.next{list-style:none;margin:0;padding:0}
+.next li{display:grid;grid-template-columns:76px 1fr auto;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
+.next li:first-child{border-top:0}
+.next .when{font:16px "Lilita One";line-height:1.1;color:var(--ink)}
+.next .when small{display:block;font:800 11px Nunito;color:var(--muted)}
+.next .what b{display:block;font-weight:800}
+.next .what span{font-size:13px;color:var(--muted)}
+.next li.ready{background:#e3f4dc}
+.next li.ready .when{color:var(--green-d)}
+.next li.done{opacity:.45}
+.next li.done .what b{text-decoration:line-through}
+.daysep{padding:6px 14px;background:var(--card2);font:800 12px Nunito;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-top:1px solid var(--line)}
+.chk{appearance:none;-webkit-appearance:none;width:30px;height:30px;border-radius:8px;border:2px solid var(--edge);background:#fff;display:grid;place-items:center;cursor:pointer;flex:none}
+.chk:checked{background:var(--green);border-color:var(--green-d)}
+.chk:checked::after{content:"";width:8px;height:14px;border:solid #fff;border-width:0 3px 3px 0;transform:translateY(-2px) rotate(45deg)}
+.more{display:block;width:100%;padding:10px;border:0;border-top:1px solid var(--line);background:var(--card2);font:800 13px Nunito;color:var(--edge);cursor:pointer}
 
 /* lanes */
-.lanes{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:14px}
-.lane{padding:12px 12px 10px;display:flex;flex-direction:column;gap:10px;min-width:0}
-.lane .head{display:flex;align-items:center;gap:10px}
-.lane .head .tile{width:42px;height:42px;font-size:1.3rem;border-radius:12px;grid-row:auto}
-.lane .head h3{margin:0;font-family:var(--f-game);font-weight:400;font-size:1.15rem;line-height:1.1;flex:1}
-.lane .head h3 small{display:block;font-family:var(--f-body);font-size:.74rem;color:var(--ink-2);font-weight:800}
-.busy .lbl{font-size:.78rem;font-weight:800;color:var(--ink-2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
-.busy .lbl b{color:var(--ink);font-weight:900}
-.gbar{position:relative;height:28px;border-radius:14px;background:var(--track);border:3px solid var(--track-edge);overflow:hidden}
-.gbar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(var(--green),var(--green-2));border-radius:10px;transition:width .6s ease}
-.gbar.unknown i{width:100%!important;background:repeating-linear-gradient(-45deg,#5a4630 0 8px,#4a3826 8px 16px)}
-.gbar span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--f-game);font-size:.92rem;letter-spacing:.02em;white-space:nowrap}
-.gbar.idle i{width:0!important}
-.next{display:flex;align-items:center;gap:10px;background:var(--panel-2);border:2px solid var(--panel-3);border-radius:12px;padding:9px 10px}
-.next.go{background:#dff3c4;border-color:#9ccd62}
-.next .r{font-size:1.4rem;display:grid}
-.next .nm{flex:1;min-width:0;font-weight:900;line-height:1.2}
-.next .nm small{display:block;color:var(--ink-2);font-weight:700;font-size:.76rem}
-.queue{display:flex;flex-wrap:wrap;gap:6px}
-.chip{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;font-weight:800;padding:3px 9px 3px 6px;border-radius:999px;background:var(--panel-2);border:2px solid var(--panel-3);color:var(--ink-2)}
-.chip.done{background:#dff3c4;border-color:#9ccd62;color:#2f6a0c}
-.chip.done span{text-decoration:line-through}
-.chip.fin{border-color:var(--orange-2)}
-.tag{display:inline-block;font-family:var(--f-body);font-size:.66rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:2px;background:#d6e9fb;color:#16538a}
-.tag.fin{background:#ffe2c2;color:#9a4100}
-details.more summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;font-weight:900;font-size:.86rem;color:var(--blue-2);border-radius:10px}
-details.more summary::-webkit-details-marker{display:none}
-details.more[open] summary .chev{transform:rotate(180deg)}
-.chev{transition:transform .2s}
-.steps{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:6px}
-.step label{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:center;padding:9px 10px;border-radius:12px;background:var(--panel-2);border:2px solid var(--panel-3);cursor:pointer}
-.step input{width:24px;height:24px;accent-color:var(--green-2);margin:0}
-.step .nm{font-weight:900;line-height:1.2}
-.step .meta{grid-column:2/4;font-size:.76rem;color:var(--ink-2)}
-.step.on .nm{text-decoration:line-through;color:var(--ink-3)}
-
-/* magic items */
-.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px}
-.mi{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:start;padding:12px}
-.mi .pic{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;background:radial-gradient(circle at 50% 30%,#d6463a,#9b1e18);border:3px solid #4a0d09;box-shadow:inset 0 -4px 0 rgba(0,0,0,.25);grid-row:1/3;font-size:1.7rem}
-.mi b{font-family:var(--f-game);font-weight:400;font-size:1.05rem;letter-spacing:.01em;line-height:1.15}
-.mi p{margin:2px 0 0;font-size:.86rem;color:var(--ink-2);font-weight:700}
-.mi p strong{color:var(--ink);font-weight:900}
+.lanes{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:700px){.lanes{grid-template-columns:1fr 1fr}}
+.lane .lh{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;background:var(--card2);border-bottom:2px solid var(--line)}
+.lane .lh h3{font-size:18px}
+.lane .lh .free{font:800 12px Nunito;color:var(--muted);text-align:right}
+.lane .now{padding:10px 14px}
+.lane .now b{font-weight:800}
+.prog{height:12px;border-radius:6px;background:#d9c59a;border:2px solid #0004;overflow:hidden;margin-top:6px}
+.prog i{display:block;height:100%;background:linear-gradient(#7ad37f,#3faa45)}
+.q{list-style:none;margin:0;padding:0 0 4px}
+.q li{display:flex;justify-content:space-between;gap:10px;padding:6px 14px;border-top:1px dashed var(--line);font-size:14px}
+.q li .n{font-weight:700}
+.q li .t{color:var(--muted);font-weight:800;font-size:12px;text-align:right;white-space:nowrap}
+.q li.after{opacity:.55}
+.empty{padding:10px 14px;color:var(--muted);font-style:italic}
 
 /* timeline */
-.tlp{padding:10px 0 8px;overflow:hidden}
-.tl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
-.tl{position:relative;min-width:1000px;padding:0 12px}
-.tl-axis{position:relative;height:26px;margin-left:124px;font-family:var(--f-game);font-size:.78rem;color:var(--ink-2)}
-.tl-axis span{position:absolute;transform:translateX(-50%);white-space:nowrap}
-.tl-row{display:flex;align-items:center;height:44px}
-.tl-label{width:124px;flex:none;font-family:var(--f-game);font-size:.88rem;line-height:1.1;position:sticky;left:0;background:var(--panel);z-index:3;padding-right:8px}
-.tl-label small{display:block;font-family:var(--f-body);font-weight:700;color:var(--ink-2);font-size:.7rem}
-.tl-track{position:relative;flex:1;height:32px;background:var(--panel-2);border-radius:8px;background-image:linear-gradient(to right,rgba(0,0,0,.08) 1px,transparent 1px);background-size:calc(100%/21) 100%}
-.seg{position:absolute;top:1px;height:30px;border-radius:8px;font-family:var(--f-game);font-size:.78rem;letter-spacing:.01em;line-height:24px;padding:0 6px;overflow:hidden;white-space:nowrap;border:3px solid;cursor:pointer;text-align:left}
-.seg.g{background:linear-gradient(#ffe36b,#f2b000);border-color:var(--gold-edge);color:#3b2600}
-.seg.e{background:linear-gradient(var(--elixir),var(--elixir-2));border-color:var(--elixir-edge)}
-.seg.d{background:linear-gradient(var(--dark),var(--dark-2));border-color:var(--dark-edge)}
-.seg.e,.seg.d{color:#fff;text-shadow:1px 1px 0 #000,-1px 1px 0 #000,1px -1px 0 #000,-1px -1px 0 #000}
-.seg.cur{background:repeating-linear-gradient(-45deg,rgba(0,0,0,.14) 0 6px,rgba(0,0,0,.04) 6px 12px);border-color:rgba(0,0,0,.2);color:var(--ink-2);cursor:default;font-family:var(--f-body);font-weight:800}
-.seg.done{opacity:.45}
-.seg[aria-pressed="true"]{box-shadow:0 0 0 3px var(--blue)}
-.vline{position:absolute;top:0;bottom:0;pointer-events:none;z-index:4}
-.vline.jam{border-left:3px dashed var(--orange-2)} .vline.now{border-left:3px solid var(--blue-2)}
-.vline em{position:absolute;top:0;left:5px;font-style:normal;font-family:var(--f-game);font-size:.72rem;white-space:nowrap;padding:1px 6px;border-radius:6px;color:#fff}
-.vline.jam em{background:var(--orange-2)} .vline.now em{background:var(--blue-2)}
-.detail{margin:10px 12px 4px;padding:12px;border-radius:12px;background:var(--panel-2);border:2px solid var(--panel-3);display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:.9rem}
-.detail b{font-family:var(--f-game);font-weight:400;font-size:1.15rem;width:100%}
-.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--ink-2);margin:8px 12px 0;font-weight:800}
-.legend span{display:inline-flex;align-items:center;gap:5px}
-.chartp{padding:12px 12px 8px}
-.chartp .scroll{overflow-x:auto}
-.chartp svg{width:100%;min-width:600px;height:auto;display:block}
-.chartp text{font-family:var(--f-game);font-size:11px;fill:var(--ink-2)}
-.chartp .gl{stroke:rgba(0,0,0,.1)}
+.tl{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tlin{position:relative}
+.tlrow{position:relative;height:40px;border-top:1px solid var(--line)}
+.tllab{position:sticky;left:0;z-index:3;width:92px;height:100%;background:var(--card2);border-right:2px solid var(--line);padding:4px 8px;font:800 12px/1.15 Nunito;display:flex;flex-direction:column;justify-content:center}
+.tllab small{font-weight:700;color:var(--muted);font-size:10px}
+.bar{position:absolute;top:7px;height:26px;border-radius:7px;border:2px solid #0006;color:#fff;font:12px/22px "Lilita One";padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 0 #0008;box-shadow:inset 0 -3px 0 #0002}
+.bar.g{background:linear-gradient(#ffc93c,#e9a106);color:#3a2600;text-shadow:none}
+.bar.e{background:linear-gradient(#dc6ee9,#b23cc4)}
+.bar.d{background:linear-gradient(#6a5490,#46335f)}
+.bar.cur{opacity:.75;background:repeating-linear-gradient(135deg,#cdb68a 0 8px,#bfa776 8px 16px);color:#4a3519;text-shadow:none}
+.tlhead{position:relative;height:26px;background:var(--card2)}
+.tick{position:absolute;top:0;bottom:0;border-left:1px solid #0001}
+.tick span{position:absolute;top:4px;left:4px;font:13px "Lilita One";color:var(--muted);white-space:nowrap}
+.vline{position:absolute;top:0;bottom:0;z-index:2;pointer-events:none}
+.vline.now{border-left:3px solid var(--blue)}
+.vline.jam{border-left:3px dashed var(--orange)}
+.vline em{position:absolute;top:2px;left:4px;font:11px "Lilita One";font-style:normal;color:#fff;padding:1px 6px;border-radius:6px;white-space:nowrap}
+.vline.now em{background:var(--blue)}.vline.jam em{background:var(--orange)}
 
-/* lists */
-.filters{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px 6px}
-.filters button{flex:none;border:3px solid var(--edge-dark);border-radius:12px;background:var(--panel);color:var(--ink);min-height:42px;padding:0 14px;font-family:var(--f-game);font-size:.95rem;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.3)}
-.filters button[aria-pressed="true"]{background:linear-gradient(var(--gold),var(--gold-2));border-color:var(--gold-edge)}
-.tlist{display:grid;gap:8px}
-.trow{display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;align-items:center;padding:10px 12px}
-.shield{width:36px;height:40px;display:grid;place-items:center;font-family:var(--f-game);font-size:1.2rem;color:#fff;clip-path:polygon(50% 0,100% 14%,100% 60%,50% 100%,0 60%,0 14%);grid-row:1/4;padding-bottom:4px;text-shadow:1px 1px 0 #000,-1px 1px 0 #000,1px -1px 0 #000,-1px -1px 0 #000}
-.shield.S{background:linear-gradient(var(--orange),var(--orange-2))} .shield.A{background:linear-gradient(var(--blue),var(--blue-2))} .shield.B{background:linear-gradient(#5fd3b4,#1f9677)} .shield.C,.shield.x{background:linear-gradient(#b9ae98,#857a64)} .shield.done{background:linear-gradient(var(--green),var(--green-2))}
-.trow .nm{font-weight:900;line-height:1.2}
-.trow .nm small{font-weight:700;color:var(--ink-2);font-size:.76rem;margin-left:4px}
-.trow .sub{grid-column:2;font-size:.82rem;color:var(--ink-2)}
-.trow .sub b{color:var(--ink);font-weight:900}
-.trow input{width:26px;height:26px;accent-color:var(--green-2);grid-row:1/4;grid-column:3}
-.trow.on .nm{text-decoration:line-through;color:var(--ink-3)}
-.fill{display:grid;gap:8px}
-.fill .panel{padding:10px 14px}
-.fill b{display:block;font-weight:900}
-.fill span{font-size:.84rem;color:var(--ink-2)}
-.reset{background:none;border:2px solid #4b6075;color:#c4d2df;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:800}
-.afterres{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:12px}
-.afterres div{display:flex;align-items:center;gap:8px;font-family:var(--f-game);font-size:1.05rem}
-.afterres div .i{font-size:1.5rem}
-
-
-/* profile */
-.rings{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
-.ring{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
-.ring svg{width:118px;height:118px}
-.ring .big{font-family:var(--f-game);font-size:1.7rem;fill:var(--ink)}
-.ring b{font-family:var(--f-game);font-weight:400;font-size:1.05rem;line-height:1.1}
-.ring small{color:var(--ink-2);font-size:.76rem;line-height:1.25}
-.area{display:grid;gap:10px;padding:14px}
-.arow{display:grid;grid-template-columns:96px 1fr 50px;gap:10px;align-items:center}
-.arow span{font-weight:900;font-size:.9rem}
-.arow em{font-style:normal;font-family:var(--f-game);text-align:right}
-.abar{height:18px;border-radius:9px;background:var(--track);border:3px solid var(--track-edge);overflow:hidden}
-.abar i{display:block;height:100%;border-radius:6px;background:linear-gradient(var(--blue),var(--blue-2))}
-.abar i.hi{background:linear-gradient(var(--green),var(--green-2))} .abar i.lo{background:linear-gradient(var(--orange),var(--orange-2))}
-.hrows{display:grid;gap:12px;padding:14px}
-.hrow{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:baseline}
-.hrow b{font-weight:900}
-.hrow em{font-style:normal;font-family:var(--f-game);font-size:1.05rem}
-.hrow .abar{grid-column:1/3;height:16px}
-.hrow small{grid-column:1/3;color:var(--ink-2);font-size:.78rem}
-.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
-.kv div{background:var(--panel-2);border:2px solid var(--panel-3);border-radius:12px;padding:10px 12px}
-.kv small{display:block;color:var(--ink-2);font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
-.kv b{font-family:var(--f-game);font-weight:400;font-size:1.35rem}
-.pros{display:grid;gap:10px;padding:14px}
-.pros h4{margin:0;font-family:var(--f-game);font-weight:400;font-size:1rem;display:flex;align-items:center;gap:6px}
-.pros ul{margin:0;padding-left:1.1em;display:grid;gap:4px;font-size:.88rem;color:var(--ink)}
-.left{display:grid;gap:8px;padding:14px}
-.left div{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 12px;background:var(--panel-2);border:2px solid var(--panel-3);border-radius:12px}
-.left b{font-weight:900} .left em{font-style:normal;font-family:var(--f-game);text-align:right}
-.left small{grid-column:1/3;color:var(--ink-2);font-size:.78rem}
-
-.mx{padding:14px;display:grid;gap:12px}
-.mxhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
-.mxhead .days{font-family:var(--f-game);font-size:2.4rem;line-height:1}
-.mxhead .days small{font-size:1rem;margin-left:4px}
-.mxhead .when{color:var(--ink-2);font-weight:800;font-size:.9rem}
-.verdict{border-radius:12px;padding:8px 12px;font-family:var(--f-game);font-size:1rem;border:3px solid;display:inline-flex;align-items:center;gap:6px}
-.verdict.no{background:linear-gradient(var(--orange),var(--orange-2));border-color:var(--orange-edge)}
-.verdict.yes{background:linear-gradient(var(--green),var(--green-2));border-color:var(--green-edge)}
-.mxrows{display:grid;gap:10px;position:relative;margin-top:18px}
-.mxrow{display:grid;grid-template-columns:104px 1fr;gap:8px;align-items:center}
-.mxrow > span{font-weight:900;font-size:.86rem;line-height:1.15}
-.mxtrack{position:relative;height:26px;border-radius:13px;background:var(--track);border:3px solid var(--track-edge);overflow:hidden}
-.mxtrack i{position:absolute;inset:0 auto 0 0;border-radius:10px;background:linear-gradient(var(--blue),var(--blue-2))}
-.mxtrack i.last{background:linear-gradient(var(--orange),var(--orange-2))}
-.mxtrack b{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-family:var(--f-game);font-weight:400;font-size:.82rem;white-space:nowrap}
-.mxmark{position:absolute;top:-4px;bottom:-4px;border-left:3px dashed #c0392b;pointer-events:none}
-.mxmark em{position:absolute;bottom:100%;transform:translateX(-50%);font-style:normal;font-family:var(--f-game);font-size:.7rem;color:#fff;background:#c0392b;padding:1px 6px;border-radius:6px;white-space:nowrap}
-.mxaxis{display:flex;justify-content:space-between;margin:-4px 0 0 112px;font-family:var(--f-game);font-size:.72rem;color:var(--ink-2)}
-.mxnote{font-size:.82rem;color:var(--ink-2);margin:0}
-.walls{display:grid;gap:10px;padding-top:12px;border-top:2px dashed var(--panel-3)}
-.wh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
-.wh b{font-family:var(--f-game);font-weight:400;font-size:1.25rem}
-.wh span{color:var(--ink-2);font-weight:800;font-size:.86rem}
-.hours{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.hours small{color:var(--ink-2);font-weight:800;font-size:.8rem;margin-right:2px}
-.hours button{border:3px solid var(--edge-dark);border-radius:10px;background:var(--panel-2);min-height:38px;min-width:48px;padding:0 10px;font-family:var(--f-game);font-size:.95rem;cursor:pointer;color:var(--ink)}
-.hours button[aria-pressed="true"]{background:linear-gradient(var(--gold),var(--gold-2));border-color:var(--gold-edge)}
-.wbig{font-family:var(--f-game);font-size:1.6rem;line-height:1}
-.wbig small{font-size:.95rem;margin-left:4px}
-.mxtrack i.wall{background:linear-gradient(#c9b48a,#8f7a52)}
-.wcount{display:grid;gap:10px;padding:12px;border-radius:14px;background:var(--panel-2);border:3px solid var(--panel-3)}
-.wcount .top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.wcount .num{font-family:var(--f-game);font-size:2.2rem;line-height:1}
-.wcount .num small{font-size:1rem;margin-left:4px;color:var(--ink-2)}
-.wcount .spent{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
-.wcount .spent div{display:flex;align-items:center;gap:6px;font-weight:900;font-size:.95rem}
-.wcount .spent div small{display:block;color:var(--ink-2);font-weight:800;font-size:.74rem}
-.wcount .spent .i{font-size:1.4rem}
-.wbtns{display:flex;gap:6px;flex-wrap:wrap}
-.wbtns button{border:3px solid var(--edge-dark);border-radius:10px;min-height:44px;padding:0 12px;font-family:var(--f-game);font-size:1rem;cursor:pointer;color:#fff;display:flex;align-items:center;gap:6px}
-.wbtns button[data-wt="g"]{background:linear-gradient(#ffe36b,#f2b000);color:#3a2600}
-.wbtns button[data-wt="e"]{background:linear-gradient(#f070e6,#c535b8)}
-.wbtns button[data-wt="u"]{background:var(--panel);color:var(--ink)}
-.wbtns button:disabled{opacity:.4;cursor:default}
-/* bottom nav */
-nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:linear-gradient(#6a4a28,#45301a);border-top:3px solid var(--edge-dark);box-shadow:0 -4px 0 rgba(0,0,0,.25);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
-nav.tabs .in{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
-nav.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;font-family:var(--f-game);font-size:.8rem;letter-spacing:.02em;padding:4px 2px;border-radius:12px;min-height:60px;justify-content:center}
-nav.tabs a .ni{width:40px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:1.25rem;background:rgba(0,0,0,.22);border:2px solid rgba(0,0,0,.35)}
-nav.tabs a[aria-current="page"] .ni{background:linear-gradient(var(--gold),var(--gold-2));border-color:var(--gold-edge);color:#3b2600;box-shadow:0 3px 0 rgba(0,0,0,.35)}
-
-/* section grids */
-.g{display:grid;gap:0 18px;grid-template-columns:minmax(0,1fr)}
-.g > div{min-width:0}
-.nowg{grid-template-areas:"hero" "agenda" "loot" "lanes" "items"}
-.a-hero{grid-area:hero}.a-agenda{grid-area:agenda}.a-loot{grid-area:loot}.a-lanes{grid-area:lanes}.a-items{grid-area:items}
-.g > div > .title:first-child{margin-top:4px}
-.g > div + div > .title:first-child{margin-top:26px}
-/* agenda */
-.ag{overflow:hidden}
-.agday{padding:8px 14px;font-family:var(--f-game);font-size:.95rem;letter-spacing:.02em;background:var(--panel-2);border-bottom:2px solid var(--panel-3);color:var(--ink)}
-.ag ul{list-style:none;margin:0;padding:0 14px}
-.ag li{display:grid;grid-template-columns:70px auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:2px dashed var(--panel-3)}
-.ag li:first-child{border-top:0}
-.agt{font-family:var(--f-game);font-size:.92rem;color:var(--ink-2);white-space:nowrap}
-.ag .r{font-size:1.35rem;display:grid}
-.ag .nm{font-weight:900;line-height:1.2;min-width:0}
-.ag .nm small{display:block;font-weight:700;color:var(--ink-2);font-size:.76rem}
-.ag .empty{padding:14px;color:var(--ink-2)}
-
-@media (min-width:1000px){
-  body{padding-left:272px}
-  body::before{display:none}
-  .hud{position:fixed;left:0;top:0;width:272px;border-bottom:0;box-shadow:none;background:transparent;z-index:32}
-  .hud .in{display:grid;grid-template-columns:auto 1fr;padding:22px 18px 0;max-width:none}
-  .jambar{grid-column:1/3;margin-top:14px}
-  .hud h1{font-size:1.6rem}
-  nav.tabs{top:0;bottom:0;left:0;right:auto;width:272px;padding:150px 14px 20px;background:linear-gradient(var(--hud),#0d151d);border-top:0;border-right:3px solid var(--hud-edge);box-shadow:4px 0 0 rgba(0,0,0,.2)}
-  nav.tabs .in{display:flex;flex-direction:column;gap:6px;max-width:none}
-  nav.tabs a{flex-direction:row;justify-content:flex-start;gap:12px;min-height:54px;padding:6px 10px;font-size:1.05rem;border-radius:14px}
-  nav.tabs a[aria-current="page"]{background:rgba(255,255,255,.07)}
-  main{max-width:1240px;padding:26px 32px 48px!important}
-  .nowg{grid-template-columns:minmax(0,7fr) minmax(0,5fr);grid-template-areas:"hero loot" "lanes agenda" "items items"}
-  .a-agenda{position:sticky;top:20px;align-self:start}
-  .nowg > .a-loot > .title:first-child,.profg > div:nth-child(2) > .title:first-child{margin-top:4px}
-  .lanes{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .items{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .profg{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .profg > .wide{grid-column:1/-1}
-  .tlist{grid-template-columns:repeat(2,minmax(0,1fr))}
-  #after-list{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .fill{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .tl-scroll{overflow-x:visible}
-  .tl{min-width:0}
-}
-@media (min-width:1000px) and (max-width:1199px){.lanes{grid-template-columns:minmax(0,1fr)}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 12px;text-align:left;border-top:1px solid var(--line);vertical-align:top}
+th{font:800 12px Nunito;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;background:var(--card2);border-top:0}
+td.r,th.r{text-align:right;white-space:nowrap}
+.lvl{font:16px "Lilita One"}
+.arrow{color:var(--muted);margin:0 4px}
+.max{color:var(--green-d)}
+.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 14px}
+.tot{background:#fff8e6;border:2px solid var(--line);border-radius:10px;padding:8px 10px}
+.tot .v{font:20px "Lilita One"}
+.tot .k{font:800 11px Nunito;color:var(--muted)}
+.tabs{display:flex;gap:6px;padding:10px 14px 0;background:var(--card2);border-bottom:2px solid var(--line)}
+.tabs button{border:2px solid var(--edge);border-bottom:0;background:var(--card);border-radius:8px 8px 0 0;padding:6px 12px;font:15px "Lilita One";color:var(--muted);cursor:pointer}
+.tabs button[aria-selected=true]{background:#fff8e6;color:var(--ink)}
+.note{font-size:13px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line);background:var(--card2)}
+ul.tips{margin:0;padding:12px 14px 12px 32px}
+ul.tips li{margin:4px 0}
+footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
 </style>
 </head>
 <body>
-<header class="hud"><div class="in gut">
-  <div class="badge out" aria-hidden="true">18</div>
-  <h1 class="out">Hammer Jam</h1>
-  <div class="sync" id="sync"></div>
-  <div class="jambar" title="Hammer Jam ends Sun Nov 16, about 2:45 AM">
-    <div class="ico" id="jamico"></div>
-    <div class="bar"><i id="jamfill"></i><span class="out" id="cd">–</span></div>
+<div class="wrap">
+<header>
+  <div class="hrow">
+    <div class="badge">18</div>
+    <div class="htxt"><h1>Hammer Jam Planner</h1><p id="synced"></p></div>
   </div>
-</div></header>
+  <div class="jambar"><i id="jamfill"></i><span id="jamtxt"></span></div>
+  <div class="boostrow" id="boosts"></div>
+</header>
 
-<main class="gut">
-<section id="v-profile" hidden>
-  <div class="g profg">
-    <div><div class="title out">Account report <small id="p-asof"></small></div><div class="panel" id="p-rings"></div>
-      <div class="title out">Progress by area <small>by upgrade cost · walls live, rest as of Nov 1</small></div><div class="panel area" id="p-areas"></div></div>
-    <div><div class="title out">Walls <small>this Jam</small></div><div class="panel mx" id="p-max"></div></div>
-    <div><div class="title out">Heroes</div><div class="panel hrows" id="p-heroes"></div></div>
-    <div><div class="title out">Strengths &amp; gaps</div><div class="panel pros" id="p-pros"></div></div>
-    <div><div class="title out">Career</div><div class="panel kv" id="p-career"></div></div>
-    <div><div class="title out">Left this Jam</div><div class="panel left" id="p-left"></div></div>
-    <div class="wide"><p class="note">Levels from Clash of Stats and costs from Clash Ninja, both as of Nov 1. Cost totals use Jam + Gold Pass prices.</p></div>
+<h2>Up next <small>start each one as soon as it frees</small></h2>
+<div class="card"><ul class="next" id="next"></ul><button class="more" id="moreBtn" type="button">Show more</button></div>
+
+<h2>Builders and labs <small>what's running and what's queued</small></h2>
+<div class="lanes" id="lanes"></div>
+
+<h2>Timeline <small>swipe sideways</small></h2>
+<div class="card"><div class="tl" id="tl"></div>
+  <div class="note">Striped bars are already running. Anything that starts left of the orange line gets the Jam price, even if it finishes after. No starts are planned between 1 and 8 AM.</div>
+</div>
+
+<h2>Heroes and pets <small>now and after the Jam plan</small></h2>
+<div class="card"><table id="heroes"></table></div>
+
+<h2>Loot for the rest of the Jam <small>upgrades not started yet</small></h2>
+<div class="card"><div class="totals" id="loot"></div></div>
+
+<h2>After the Jam <small>everything left to max TH18</small></h2>
+<div class="card">
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" aria-selected="true" data-tab="b">Builders</button>
+    <button type="button" role="tab" aria-selected="false" data-tab="l">Lab</button>
   </div>
-</section>
+  <table id="after"></table>
+  <div class="note" id="afternote"></div>
+</div>
 
-<section id="v-now">
-  <div class="g nowg">
-    <div class="a-hero"><div class="title out">Do this now</div><div class="panel hero" id="donow"></div></div>
-    <div class="a-agenda"><div class="title out">Schedule <small>next starts, by day</small></div><div class="panel ag" id="agenda"></div></div>
-    <div class="a-loot"><div class="title out">Loot left <small>this Jam's plan</small></div><div class="panel" id="budget"></div></div>
-    <div class="a-lanes"><div class="title out">Builders &amp; labs <small>tap a card to tick things off</small></div><div class="lanes" id="lanes"></div></div>
-    <div class="a-items"><div class="title out">Magic items</div><div class="items" id="items"></div></div>
-  </div>
-</section>
+<h2>Notes</h2>
+<div class="card"><ul class="tips">
+  <li><b>Hammer of Fighting:</b> save it for after the Jam on Druid 6, the longest troop research left (167 hours, 380K DE).</li>
+  <li><b>Hammer of Building (Gold Pass):</b> saved for TH19.</li>
+  <li><b>Gems:</b> about 160 left after Spell Tower #2. Best use is Battle Blimp 6 in the Goblin Lab while the Research Potions run. Builder's Hut #5 is the next goblin builder start if you earn about 130 more.</li>
+  <li><b>Not tracked:</b> hero equipment, supercharges and crafted defenses.</li>
+  <li>To refresh the plan, send a new in-game data export.</li>
+</ul></div>
 
-<section id="v-plan" hidden>
-  <div class="title out" style="margin-top:4px">Jam schedule <small>tap a bar for details</small></div>
-  <div class="panel tlp">
-    <div class="tl-scroll" id="tl-scroll"><div class="tl" id="tl"></div></div>
-    <div class="detail" id="detail" hidden></div>
-    <div class="legend" id="legend"></div>
-  </div>
-  <p class="note">Anything that starts left of the orange line gets the Jam price, even if it finishes after. Times are Toronto time and assume you start each upgrade as soon as its builder frees up.</p>
-  <div class="title out">Loot needed each day</div>
-  <div class="panel chartp"><div id="chart"></div></div>
-  <p class="note">Gold and Elixir for upgrades due to start that day and not ticked off yet. Farm ahead of the tall days.</p>
-</section>
-
-<section id="v-after" hidden>
-  <div class="title out" style="margin-top:4px">After the Jam <small>builders, lab and pets at full price, most important first</small></div>
-  <div class="panel" id="a-budget"></div>
-  <div class="panel tlp" style="margin-top:14px"><div class="tl-scroll"><div class="tl" id="tl-after"></div></div></div>
-  <p class="note">Your 6 builders pick up their queue as each one finishes its final Jam upgrade. The lab picks up its queue when Recall 7 finishes, ordered by what matters for TH18 attacks first. Lab times are about double your Jam times (no discount) and costs are full price, so the Gold Pass will shave a little off. TH19 (expected late November, not confirmed) should also cut TH18 costs and times, so treat every number here as a worst case. The Goblin Builder and Goblin Lab are left out.</p>
-  <div class="title out">Queue</div>
-  <div class="panel" style="padding:10px"><ul class="steps" id="after-list"></ul></div>
-  <div class="title out">When a builder would sit idle</div>
-  <div class="fill" id="fill"></div>
-</section>
-
-<section id="v-tiers" hidden>
-  <div class="title out" style="margin-top:4px">Every Jam upgrade</div>
-  <p class="note" style="margin-top:0;margin-bottom:10px">Everything in this Hammer Jam. S do next · A high value · B fill gaps. Costs are Jam prices.</p>
-  <div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
-  <div class="tlist" id="tlist"></div>
-  <p style="margin:18px 4px 0"><button class="reset" id="reset" type="button">Clear all checkmarks</button> <span class="note" id="reset-msg"></span></p>
-</section>
-</main>
-
-<nav class="tabs" aria-label="Views"><div class="in">
-  <a href="#profile" id="t-profile"><span class="ni" data-ic="star"></span><span class="out">Profile</span></a>
-  <a href="#now" id="t-now"><span class="ni" data-ic="hammer"></span><span class="out">Now</span></a>
-  <a href="#plan" id="t-plan"><span class="ni" data-ic="cal"></span><span class="out">Jam plan</span></a>
-  <a href="#after" id="t-after"><span class="ni" data-ic="clock"></span><span class="out">After Jam</span></a>
-  <a href="#tiers" id="t-tiers"><span class="ni" data-ic="list"></span><span class="out">All</span></a>
-</div></nav>
+<footer>Private planner · times are Toronto time · not affiliated with Supercell</footer>
+</div>
 
 <script>
-const JAM_START = new Date('2026-11-01T00:00:00-05:00');
-const JAM_END = new Date('2026-11-16T02:45:00-05:00');
-const T0 = new Date('2026-11-01T00:00:00-05:00'), T1 = new Date('2026-11-22T00:00:00-05:00');
+/* ===== Data: synced from the in-game export at 1:53 PM Mon Nov 9, 2026 ===== */
+const EXPORT = 1794250407000;                       // export timestamp
+const JAM_END = Date.parse('2026-11-16T02:45:00-05:00');
+const PASS = 0.85/0.9;                              // Gold Pass builder/lab time bonus on top of the listed hours
+const SLEEP = [1, 8];                               // asleep 1 AM to 8 AM, Toronto
 const H = 3600e3;
-const BUILDERS = [
-  {id:'gob', name:'Goblin Builder', cur:"Spell Tower #2", free:'2026-11-11T13:21:56-05:00', steps:[]},
-  {id:'b1', name:'Builder 1', cur:"Grand Warden 79", free:'2026-11-10T14:32:55-05:00', steps:[
-    ["Grand Warden 80",43,'e',12.5e6],["Grand Warden 81",43,'e',12.5e6],["Grand Warden 82",43,'e',12.5e6],["Grand Warden 83",43,'e',12.5e6],["Hidden Tesla #5",68,'g',1.125e+07]]},
-  {id:'b2', name:'Builder 2', cur:"Mortar #4", free:'2026-11-10T00:56:32-05:00', steps:[
-    ["Spell Tower #1",52,'g',1.215e+07],["Elixir Storage #4",66,'g',8.1e+06],["Elixir Storage #1",66,'g',8.1e+06],["Gold Storage #1",66,'e',8.1e+06]]},
-  {id:'b3', name:'Builder 3', cur:"Mortar #2", free:'2026-11-10T00:56:30-05:00', steps:[
-    ["Hidden Tesla #4",68,'g',1.125e+07],["Elixir Storage #2",66,'g',8.1e+06],["Elixir Storage #3",66,'g',8.1e+06]]},
-  {id:'b4', name:'Builder 4', cur:"Barbarian King 106", free:'2026-11-10T14:32:29-05:00', steps:[
-    ["Barbarian King 107",43,'d',187.5e3],["Barbarian King 108",43,'d',187.5e3],["Barbarian King 109",43,'d',187.5e3],["Barbarian King 110",43,'d',187.5e3],["Mortar #3",66,'g',9.45e+06]]},
-  {id:'b5', name:'Builder 5', cur:"Archer Queen 103", free:'2026-11-11T01:02:12-05:00', steps:[
-    ["Archer Queen 104",43,'d',187.5e3],["Archer Queen 105",43,'d',187.5e3],["Archer Queen 106",43,'d',187.5e3],["Hidden Tesla #3",68,'g',1.125e+07]]},
-  {id:'b6', name:'Builder 6', cur:"Dragon Duke 16", free:'2026-11-09T19:05:32-05:00', steps:[
-    ["Dragon Duke 17",29,'d',220e3],["Dragon Duke 18",30,'d',225e3],["Dragon Duke 19",30,'d',230e3],["Dragon Duke 20",31,'d',235e3],["Dragon Duke 21",31,'d',240e3],["Dragon Duke 22",32,'d',245e3],["Builder's Hut #2",68,'g',1.08e+07]]},
-  {id:'lab', name:'Laboratory', cur:"Yeti 8", free:'2026-11-11T19:53:21-05:00', steps:[
+const BUILDER_LANES = ['gob','b1','b2','b3','b4','b5','b6'];
+const BOOSTS = [                                     // potions active at export time
+  {x:10, from:EXPORT, to:EXPORT+12706e3, lanes:BUILDER_LANES, label:'4 Builder Potions'},
+  {x:24, from:EXPORT, to:EXPORT+12711e3, lanes:['lab','glab','pet'], label:'4 Research Potions'},
+];
+/* step: [name, Jam hours before Gold Pass, currency g/e/d, cost, flag] */
+const LANES = [
+  {id:'gob', name:'Goblin Builder', cur:'Spell Tower #2', left:155749, steps:[]},
+  {id:'b1', name:'Builder 1', cur:'Grand Warden 79', left:73605, steps:[
+    ['Grand Warden 80',43,'e',12.5e6],['Grand Warden 81',43,'e',12.5e6],['Grand Warden 82',43,'e',12.5e6],['Grand Warden 83',43,'e',12.5e6],['Hidden Tesla #5',68,'g',11.25e6]]},
+  {id:'b2', name:'Builder 2', cur:'Mortar #4', left:24622, steps:[
+    ['Spell Tower #1',52,'g',12.15e6],['Elixir Storage #4',66,'g',8.1e6],['Elixir Storage #1',66,'g',8.1e6],['Gold Storage #1',66,'e',8.1e6]]},
+  {id:'b3', name:'Builder 3', cur:'Mortar #2', left:24620, steps:[
+    ['Hidden Tesla #4',68,'g',11.25e6],['Elixir Storage #2',66,'g',8.1e6],['Elixir Storage #3',66,'g',8.1e6]]},
+  {id:'b4', name:'Builder 4', cur:'Barbarian King 106', left:73579, steps:[
+    ['Barbarian King 107',43,'d',187.5e3],['Barbarian King 108',43,'d',187.5e3],['Barbarian King 109',43,'d',187.5e3],['Barbarian King 110',43,'d',187.5e3],['Mortar #3',66,'g',9.45e6]]},
+  {id:'b5', name:'Builder 5', cur:'Archer Queen 103', left:111362, steps:[
+    ['Archer Queen 104',43,'d',187.5e3],['Archer Queen 105',43,'d',187.5e3],['Archer Queen 106',43,'d',187.5e3],['Hidden Tesla #3',68,'g',11.25e6]]},
+  {id:'b6', name:'Builder 6', cur:'Dragon Duke 16', left:3562, steps:[
+    ['Dragon Duke 17',29,'d',220e3],['Dragon Duke 18',30,'d',225e3],['Dragon Duke 19',30,'d',230e3],['Dragon Duke 20',31,'d',235e3],['Dragon Duke 21',31,'d',240e3],['Dragon Duke 22',32,'d',245e3],["Builder's Hut #2",68,'g',10.8e6]]},
+  {id:'lab', name:'Laboratory', cur:'Yeti 8', left:155640, steps:[
     ['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3],['Witch 8',83.5,'d',177.5e3]]},
-  {id:'glab', name:'Goblin Lab', cur:"Earthquake Spell 8", free:'2026-11-10T12:00:13-05:00', steps:[
-    ['Battle Blimp 6',73,'e',11.7e6]]},
-  {id:'pet', name:'Pet House', cur:"Diggy 13", free:'2026-11-10T23:35:01-05:00', steps:[
+  {id:'glab', name:'Goblin Lab', cur:'Earthquake Spell 8', left:40852, steps:[
+    ['Battle Blimp 6',73,'e',11.7e6,'gem']]},
+  {id:'pet', name:'Pet House', cur:'Diggy 13', left:121294, steps:[
     ['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
-const KIND={gob:'Goblin · gems',lab:'Research',glab:'Research · gems',pet:'Pets'};
-const AFTER=[
-  ["Builder's Hut #5",136,'g',2.16e+07,"Goblin Builder if you get ~130 more gems before the Jam ends"],
-  ["Giga Bomb 4",136,'g',1.8e+07,"Moved out of the Jam for the Queen and Warden lanes"],
-  ["Gold Storage #2",135,'e',1.62e+07,"Dropped from the Jam for the King and Duke lanes"],
-  ["Seeking Air Mines 1–3",372,'g',5.13e+07,"Before TH19 · traps finish your TH18 defense cheaply"],
-  ["Giant Bombs 1–4",452,'g',6.12e+07,"Before TH19"],
-  ["Skeleton Traps 1–4",304,'g',6.48e+07,"Before TH19"],
-  ["Spring Traps 1–3",357,'g',4.32e+07,"Before TH19 if a builder is free"],
-  ["Seeking Air Mines 4–6",372,'g',5.13e+07,"After TH19"],
-  ["Seeking Air Mines 7–9",372,'g',5.13e+07,"After TH19"],
-  ["Grand Warden 84–85",172,'e',5e+07,"After TH19"],
-  ["Archer Queen 107–110",344,'d',1.5e+06,"Before TH19 if the Queen lane keeps going"],
-  ["Giant Bombs 5–8",452,'g',6.12e+07,"After TH19"],
-  ["Spring Traps 4–6",357,'g',4.32e+07,"After TH19"],
-  ["Spring Traps 7–9",357,'g',4.32e+07,"After TH19"],
-  ["Air Bombs 1–4",388,'g',5.4e+07,"After TH19"],
-  ["Air Bombs 5–7",291,'g',4.05e+07,"After TH19"],
-  ["Air Bomb #8, levels 5–13",300,'g',4.5e+07,"Before TH19 · this one is still level 4, cheap and short early levels (estimate)"],
-  ["Bombs 1–4",344,'g',5.04e+07,"After TH19"],
-  ["Bombs 5–8",344,'g',5.04e+07,"After TH19"],
-  ["Gold Storage #3",135,'e',1.62e+07,"After TH19, sooner only if TH19 costs outgrow storage"],
-  ["Gold Storage #4",135,'e',1.62e+07,"After TH19"],
-  ["Dark Elixir Drills x2",130,'e',2.16e+07,"After TH19"],
-  ["Logger 2–5",430,'e',5.49e+07,"After TH19 · Guardian"],
-  ["Smasher 5",120,'e',1.6e+07,"Guardian still at 4 of 5 (estimate)"],
-  ["Dragon Duke 23–25",255,'d',2.9e+06,"Rest of the Duke after the Jam lane, estimate"],
+const HEROES = [ // [name, now, after Jam plan, max]
+  ['Barbarian King',105,110,110],['Archer Queen',102,106,110],['Grand Warden',78,83,85],
+  ['Royal Champion',55,55,55],['Minion Prince',95,95,95],['Dragon Duke',15,22,25],['Diggy (pet)',12,15,15],
 ];
-const FILL=[
-  ['Traps: Seeking Air Mine x9, Giant Bomb x8, Skeleton Trap x4, Spring Trap x9, Air Bomb x8, Bomb x8','12.6–17.1M Gold each · short and cheap'],
-  ['Gold Storage #3 and #4','16.2M Elixir each · the rest of your storages are done in the Jam'],
-  ['Supercharges','Skip until TH19 is out · a new max level wipes them with no refund'],
-  ['Barbarian King, Dragon Duke','Own builder each through the Jam · King to 109, Duke to about 22'],
-  ['Pets','Nothing left · Greedy Raven 10 and Diggy 15 finish in the Jam, so every pet is maxed'],
+/* full-price hours after the Jam */
+const AFTER_B = [
+  ["Builder's Hut #5",136,'g',21.6e6,'Goblin Builder in the Jam if you get about 130 more gems'],
+  ['Giga Bomb 4',136,'g',18e6,''],
+  ['Gold Storage #2',135,'e',16.2e6,''],
+  ['Seeking Air Mines 1 to 3',372,'g',51.3e6,'Before TH19'],
+  ['Giant Bombs 1 to 4',452,'g',61.2e6,'Before TH19'],
+  ['Skeleton Traps 1 to 4',304,'g',64.8e6,'Before TH19'],
+  ['Spring Traps 1 to 3',357,'g',43.2e6,'Before TH19'],
+  ['Air Bomb #8, levels 5 to 13',300,'g',45e6,'Still level 4, short early levels (estimate)'],
+  ['Archer Queen 107 to 110',344,'d',1.5e6,'Keep the Queen lane going'],
+  ['Smasher 5',120,'e',16e6,'Guardian (estimate)'],
+  ['Seeking Air Mines 4 to 9',744,'g',102.6e6,''],
+  ['Giant Bombs 5 to 8',452,'g',61.2e6,''],
+  ['Spring Traps 4 to 9',714,'g',86.4e6,''],
+  ['Air Bombs 1 to 7',679,'g',94.5e6,''],
+  ['Bombs 1 to 8',688,'g',100.8e6,''],
+  ['Gold Storage #3 and #4',270,'e',32.4e6,''],
+  ['Dark Elixir Drills x2',130,'e',21.6e6,''],
+  ['Logger 2 to 5',430,'e',54.9e6,'Guardian'],
+  ['Grand Warden 84 and 85',172,'e',50e6,''],
+  ['Dragon Duke 23 to 25',255,'d',2.9e6,'Estimate'],
 ];
-const AFTER_LAB=[
-  ["Valkyrie 12",151,'d',340e3,""],
-  ["Ruin Witch 2",119,'d',220e3,"Unlocked Nov 7. First in the lab after the Jam"],
-  ["Ruin Witch 3",130,'d',300e3,""],
-  ["Ruin Witch 4",167,'d',380e3,"Max"],
-  ["Sky Wagon 2",108,'e',19.8e6,"Goblin Lab queue"],
-  ["Clone Spell 9",146,'e',23.4e6,"Goblin Lab queue"],
-  ["Miner 12",157,'e',28e6,"Hybrid armies"],
-  ["Log Launcher 6",162,'e',27e6,"Ground siege"],
-  ["Battle Drill 6",167,'e',28e6,"Ground siege"],
-  ["Sky Wagon 3",146,'e',26e6,""],
-  ["Sky Wagon 4",173,'e',29e6,"Max"],
-  ["Druid 6",167,'d',380e3,""],
-  ["Golem 15",157,'d',350e3,""],
-  ["Wizard 14",151,'e',27e6,"Just for %"],
-  ["Wall Breaker 14",151,'e',26e6,"Just for %"],
-  ["Archer 14",146,'e',25e6,"Just for %"],
-  ["Barbarian 13",135,'e',24e6,"Just for %"],
-  ["Goblin 10",151,'e',26e6,"Just for %"],
-  ["Angry Spell 3",150,'d',350e3,"Estimate"],
-  ["Angry Spell 4",170,'d',380e3,"Max (estimate)"],
-];
-const TIERS = [
-  ['Heroes','S','Royal Champion','54 → 55','225K DE','Done'],
-  ['Heroes','S','Barbarian King','101 → 109','~187K to 194K DE each','Builder 4 only does the King, through 110 now with the potions. 103 upgrading, done 6:56 AM Nov 7, then back to back, 109 starts 5:02 PM Nov 15. 110 needs a Book of Heroes to start in the Jam'],
-  ['Heroes','S','Archer Queen','101 → 106','~185K to 188K DE each','CWL done. Builder 5 only does the Queen from 8 AM Mon Nov 9, 106 starts 8 AM Sun Nov 15'],
-  ['Heroes','S','Grand Warden','78 → 82','~12.4M to 12.5M Elixir each','CWL done. Builder 1 only does the Warden from 6:08 PM Mon Nov 9, 82 starts 12:48 PM Sat Nov 14'],
-  ['Heroes','A','Dragon Duke','11 → 22','~200K to 240K DE each, estimate','Builder 6 only does the Duke. 12 upgrading, done 1:41 PM Nov 6. Levels after 12 are estimates. With the Builder Potions, 22 starts 10:13 PM Sun Nov 15'],
-  ['Lab','S','Rage Spell','6 → 7','13M Elixir','Done'],
-  ['Lab','S','Freeze Spell','7 → 8','14M Elixir','Done (Goblin Lab)'],
-  ['Lab','S','Meteor Golem','2 → 3 (max)','15M Elixir','Done (Goblin Lab)'],
-  ['Lab','S','Electro Titan','4 → 5','15M Elixir','Done'],
-  ['Lab','S','Headhunter','3 → 4','166.5K DE','Done'],
-  ['Lab','A','Root Rider','3 → 4','13.5M Elixir','Done'],
-  ['Lab','A','Overgrowth Spell','4 → 5','162K DE','Done'],
-  ['Lab','A','Baby Dragon','11 → 12','13.1M Elixir','Done Nov 6. In your dragon army'],
-  ['Lab','A','Revive Spell','4 → 5','13.3M Elixir','Done'],
-  ['Lab','S','Stone Slammer','5 → 6','11.7M Elixir','Researching (Lab), done 4:09 PM Tue Nov 10. Air siege for dragon and Hydra armies'],
-  ['Lab','S','Earthquake Spell','7 → 8','148.5K DE','Researching (Goblin Lab), done 12:04 PM Tue Nov 10. In almost every TH18 meta army'],
-  ['Lab','A','Lava Hound','7 → 8','155K DE','Done Nov 4. Air armies and Clan Castle'],
-  ['Lab','A','Clone Spell','8 → 9','11.7M Elixir','After the Jam unless you get gems for the Goblin Lab'],
-  ['Lab','A','Yeti','7 → 8','13.8M Elixir','Researching (Lab), done 7:57 PM Wed Nov 11. Super Yeti meta'],
-  ['Lab','A','Battle Blimp','5 → 6','11.7M Elixir','After the Jam unless you get gems for the Goblin Lab'],
-  ['Lab','A','Recall Spell','6 → 7','13M Elixir','Lab, Nov 12'],
-  ['Lab','S','Ice Block Spell','5 → 6','190K DE','Done Nov 9 with the Gold Pass Book of Spells'],
-  ['Lab','B','Hog Rider','14 → 15','170K DE','Back in the Jam thanks to the Research Potions. Last lab start, Sat Nov 14'],
-  ['Lab','A','Thrower','3 → 4','13.5M Elixir','Done Nov 7. Thrower meta'],
-  ['Lab','C','Siege Barracks','5 → 6','Jam price','Done Nov 7'],
-  ['Lab','B','Sky Wagon','1 → 2','~9.9M Elixir (estimate)','After the Jam unless you get gems for the Goblin Lab'],
-  ['Lab','A','Ruin Witch','1 → 4','~220K to 380K DE each','Unlocked Nov 7 at level 1. Levels 2 to 4 first in the lab after the Jam'],
-  ['Lab','C','Druid, Golem, Witch, Ice Block','one level each','full price after the Jam','Not in your army, after the Jam'],
-  ['Pets','B','Greedy Raven','5 → 10','153–189K DE per level','Raven 10 upgrading, done 10:07 AM Nov 6. Maxes the Raven'],
-  ['Pets','B','Diggy','10 → 15','~94K to 119K DE each. 11 is from the game, 12 to 15 are estimates','11 done, 12 upgrading, done 9:48 AM Mon Nov 9. Level 15 starts ~Nov 12'],
-  ['Buildings','S','Scattershot x2','6 → 7','11.9M Gold each','Both started Nov 2'],
-  ['Buildings','S','Army Camp x4','13 → 14','11.7M Elixir each','All four started Nov 2, done Nov 4'],
-  ['Buildings','S','Inferno Tower x3','11 → 12','11.9M Gold each','All three done Nov 5'],
-  ['Buildings','S','X-Bow x4','12 → 13','11.7M Gold each','Nov 4 to 5. #1 is the only Goblin Builder start left'],
-  ['Buildings','A','Hidden Tesla x5','16 → 17','11.3M Gold each','Nov 4 to 12'],
-  ['Buildings','A',"Builder's Hut x5",'7 → 8','10.8M Gold each','Nov 7 to 10'],
-  ['Buildings','A','Mortar x4','17 → 18','9.5M Gold each','Nov 10 to 12'],
-  ['Buildings','A','Spell Tower x2','3 → 4','12.2M Gold each','Nov 10 and 13'],
-  ['Buildings','A','Giga Bomb','3 → 4','9M Gold','Builder 4, Nov 12'],
-  ['Buildings','A','Dark Barracks','12 → 13','10.4M Elixir','Done Nov 7. Ruin Witch unlocked'],
-  ['Buildings','B','Storages x6','18 → 19','8.1M each','All six fit now. Final starts Nov 13 to 15'],
-  ['Buildings','C','Supercharges','skip','','Skipped, TH19 is coming'],
-  ['Buildings','A','Walls x325','18 → 19','4.2M each (15% pass)','All 325 maxed Nov 3'],
+const AFTER_L = [
+  ['Druid 6',167,'d',380e3,'Use the Hammer of Fighting here'],
+  ['Ruin Witch 2',119,'d',220e3,'Unlocked Nov 7'],
+  ['Ruin Witch 3',130,'d',300e3,''],
+  ['Ruin Witch 4',167,'d',380e3,'Max'],
+  ['Valkyrie 12',151,'d',340e3,''],
+  ['Golem 15',157,'d',350e3,''],
+  ['Sky Wagon 2',108,'e',19.8e6,''],
+  ['Sky Wagon 3',146,'e',26e6,''],
+  ['Sky Wagon 4',173,'e',29e6,'Max'],
+  ['Clone Spell 9',146,'e',23.4e6,''],
+  ['Miner 12',157,'e',28e6,''],
+  ['Log Launcher 6',162,'e',27e6,''],
+  ['Battle Drill 6',167,'e',28e6,''],
+  ['Wizard 14',151,'e',27e6,''],
+  ['Wall Breaker 14',151,'e',26e6,''],
+  ['Archer 14',146,'e',25e6,''],
+  ['Barbarian 13',135,'e',24e6,''],
+  ['Goblin 10',151,'e',26e6,''],
+  ['Angry Spell 3',150,'d',350e3,'Estimate'],
+  ['Angry Spell 4',170,'d',380e3,'Max (estimate)'],
 ];
 
-const KEY='jam-planner-v4';
-let state={};
-try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
-/* SYNC: updated by the daily Clash Ninja check. started = step keys seen as started or done. */
-const SYNC = {"updated":"2026-11-09 1:24 PM export, 4 Builder and 4 Research Potions running","completion":null,"started":[],"reset":["b2-0","b3-0","b4-0","b6-0","b2-1","b3-1","b4-1","b6-1","b1-0","b1-1","b5-0","b5-1"]};
-SYNC.started.forEach(k=>{if(state[k]===undefined)state[k]=true});
-(SYNC.reset||[]).forEach(k=>{if(!state["_r"+k]){delete state[k];state["_r"+k]=1}});save();
-
-const $=id=>document.getElementById(id);
-const RES={g:'Gold',e:'Elixir',d:'Dark Elixir'};
-const fmtDate=d=>d.toLocaleString('en-US',{timeZone:'America/Toronto',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
-const fmtDay=d=>d.toLocaleDateString('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric'});
-const dur=h=>{if(!h)return 'instant';const d=Math.floor(h/24),r=Math.round(h%24);return [d?d+'d':'',r?r+'h':''].filter(Boolean).join(' ')};
-const money=(v,r)=>r==='d'?(v>=1e6?parseFloat((v/1e6).toFixed(2))+'M':parseFloat((v/1e3).toFixed(1))+'K'):parseFloat((v/1e6).toFixed(2))+'M';
-function rel(ms){if(ms<=0)return 'now';const h=Math.floor(ms/H),m=Math.floor(ms%H/6e4);return h>=24?`${Math.floor(h/24)}d ${h%24}h`:h?`${h}h ${m}m`:`${m}m`}
-
-/* Plan numbers are at Jam 50% off plus a 10% Gold Pass. Each tier applies to upgrades that start after its time. 20% tier unlocked Sat Nov 7 morning. */
-const PASS={now:.10,tiers:[[.15,'2026-11-03T08:00:00-05:00'],[.20,'2026-11-07T06:00:00-05:00']].map(([d,t])=>[d,new Date(t).getTime()])};
-const passF=t=>{let d=PASS.now;for(const[x,from]of PASS.tiers)if(t>=from)d=x;return (1-d)/(1-PASS.now)};
-/* Asleep 1 to 8 AM every night (Toronto, UTC-5): anything that frees then starts at 8 AM. */
-const wake=t=>{const d=new Date(t-5*36e5),h=d.getUTCHours()+d.getUTCMinutes()/60;if(h>=1&&h<8){d.setUTCHours(8,0,0,0);return d.getTime()+5*36e5}return t};
-/* Potions from the 1:24 PM Nov 9 export: 4 Builder Potions 10x until 5:24 PM, 4 Research Potions 24x (Lab, Goblin Lab, Pet House) until 5:24 PM. Free times above are raw timers. */
-const BOOSTS=[{x:10,win:[new Date('2026-11-09T13:24:58-05:00').getTime(),new Date('2026-11-09T17:24:45-05:00').getTime()],lanes:new Set(['gob','b1','b2','b3','b4','b5','b6'])},{x:24,win:[new Date('2026-11-09T13:24:58-05:00').getTime(),new Date('2026-11-09T17:24:50-05:00').getTime()],lanes:new Set(['lab','glab','pet'])}];
-const runFrom=(id,t,w)=>{const B=BOOSTS.find(b=>b.lanes.has(id));if(!B)return t+w;const[a,z]=B.win;if(t<a){if(t+w<=a)return t+w;w-=a-t;t=a}if(t<z){const can=(z-t)*B.x;if(w<=can)return t+w/B.x;w-=can;t=z}return t+w};
-BUILDERS.forEach(b=>{const fr=new Date(b.free).getTime(),B=BOOSTS.find(x=>x.lanes.has(b.id));if(B&&fr>B.win[0])b.free=new Date(runFrom(b.id,B.win[0],fr-B.win[0])).toISOString()});
-BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{t=wake(t);const st=t,f=passF(st);let hh=s[1]*f;t=runFrom(b.id,st,hh*H);const gem=s[4]==='gem'&&t>JAM_END.getTime()-5*6e4;if(gem){t=JAM_END.getTime()-5*6e4;hh=(t-st)/H}return{key:b.id+'-'+i,gem,lane:b,name:s[0],h:hh,res:s[2],cost:Math.round(s[3]*f/500)*500,cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',bos:s[4]==='bos',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
-const ALL=BUILDERS.flatMap(b=>b.plan);
-function tags(p){return (p.cwl?'<span class="tag">after CWL</span>':'')+(p.opt?'<span class="tag">spare DE only</span>':'')+(p.book?'<span class="tag">Book of Heroes</span>':'')+(p.bof?'<span class="tag">Book of Fighting</span>':'')+(p.bos?'<span class="tag">Book of Spells, done instantly</span>':'')+(p.gem?'<span class="tag">gem finish 2:40 AM Nov 16</span>':'')+(p.final?'<span class="tag fin">final round</span>':'')}
-
-
-/* ---------- icons (original, generic shapes) ---------- */
-const IC={
-  g:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffd23a" stroke="#7a4f00" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="none" stroke="#f2a900" stroke-width="2"/><path d="M8 8.5a5 5 0 0 1 4-2" stroke="#fff6c8" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
-  e:'<svg class="i" viewBox="0 0 24 24"><path d="M12 1.8S4 10.8 4 15.3a8 8 0 0 0 16 0C20 10.8 12 1.8 12 1.8Z" fill="#f070e6" stroke="#5e1258" stroke-width="2"/><ellipse cx="9" cy="14.5" rx="1.8" ry="2.8" fill="#fff" opacity=".65"/></svg>',
-  d:'<svg class="i" viewBox="0 0 24 24"><path d="M12 1.8S4 10.8 4 15.3a8 8 0 0 0 16 0C20 10.8 12 1.8 12 1.8Z" fill="#5a4080" stroke="#1f1430" stroke-width="2"/><ellipse cx="9" cy="14.5" rx="1.8" ry="2.8" fill="#c9b6ea" opacity=".6"/></svg>',
-  hammer:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 3.2 20.8 10.4 18.4 12.8 16.6 11 6.4 21.2a1.8 1.8 0 0 1-2.6 0l-1-1a1.8 1.8 0 0 1 0-2.6L13 7.4 11.2 5.6Z"/></svg>',
-  flask:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M9 2h6v2h-1v5.2l5.6 9.4A2.2 2.2 0 0 1 17.7 22H6.3a2.2 2.2 0 0 1-1.9-3.4L10 9.2V4H9Z"/></svg>',
-  paw:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><ellipse cx="6" cy="10" rx="2.2" ry="2.8"/><ellipse cx="10" cy="6" rx="2.2" ry="2.8"/><ellipse cx="14.5" cy="6" rx="2.2" ry="2.8"/><ellipse cx="18.5" cy="10" rx="2.2" ry="2.8"/><path d="M12 11c3 0 6 4.5 6 7a3 3 0 0 1-3 3c-1.2 0-2-.6-3-.6s-1.8.6-3 .6a3 3 0 0 1-3-3c0-2.5 3-7 6-7Z"/></svg>',
-  cal:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2Zm-2 8v9h14v-9Zm2 2h4v3H7Z"/></svg>',
-  clock:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm-1 4v7l5 3 1-1.7-4-2.4V6Z"/></svg>',
-  list:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h3v3H3Zm5 0h13v3H8ZM3 10.5h3v3H3Zm5 0h13v3H8ZM3 16h3v3H3Zm5 0h13v3H8Z"/></svg>',
-  chev:'<svg class="i chev" viewBox="0 0 24 24" fill="currentColor"><path d="M6 9l6 6 6-6-1.6-1.6L12 11.8 7.6 7.4Z"/></svg>',
-  star:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8Z"/></svg>',
-  check:'<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.6 1.6L9 19.4 21 7.4l-1.6-1.6Z"/></svg>',
-  book:c=>`<svg class="i" viewBox="0 0 24 24"><path d="M5 3h12a2 2 0 0 1 2 2v14H7a2 2 0 0 0-2 2Z" fill="${c}" stroke="#2a1508" stroke-width="1.6"/><path d="M5 21a2 2 0 0 1 2-2h12v2Z" fill="#f4e6c4" stroke="#2a1508" stroke-width="1.6"/></svg>`,
-  potion:c=>`<svg class="i" viewBox="0 0 24 24"><path d="M9.5 2h5v4l4.2 6.6A6 6 0 1 1 5.3 12.6L9.5 6Z" fill="${c}" stroke="#2a1508" stroke-width="1.6"/><rect x="9" y="1.5" width="6" height="2.4" rx="1" fill="#c99a5b" stroke="#2a1508" stroke-width="1.2"/></svg>`,
-  ring:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5" fill="none" stroke="#2a1508" stroke-width="5"/><circle cx="12" cy="13" r="7.5" fill="none" stroke="#ffd23a" stroke-width="3"/><path d="M9 4h6l-3 3Z" fill="#7cd3ff" stroke="#2a1508" stroke-width="1.2"/></svg>',
-};
-const RESNAME={g:'Gold',e:'Elixir',d:'Dark Elixir'};
-const kindTile=id=>id==='lab'||id==='glab'?['lab',IC.flask]:id==='pet'?['pet',IC.paw]:id==='gob'?['gob',IC.hammer]:['',IC.hammer];
-const costHTML=(p)=>`<span class="cost">${IC[p.res]}${money(p.cost,p.res)}</span>`;
-const ITEMS=[
-  ['potion','#f39c12','Builder Potions','Used today, nice. Save any others for when all 7 builders have 10+ hours left and you\'re about to sleep, so they don\'t free up overnight. Each saves ~9 hours on every builder.'],
-  ['potion','#d63fbf','Research Potions','All used on Root Rider 4. The lab plan still fits: Baby Dragon 12 starts around Nov 11, well before the Jam ends.'],
-  ['potion','#9b59b6','Rune of Elixir','<strong>Tonight between Army Camps</strong>: start a camp, then pop the rune when Elixir is low. It can\'t be used while storage is full.'],
-  ['ring','','Wall Rings x4','Hold. A level 19 wall takes more than 8 rings, so 4 can\'t finish one.'],
-  ['book','#7d3fa8','Books','None left. Save Hammer of Fighting for after the Jam.'],
-];
-
-/* ---------- NOW ---------- */
-function laneStatus(b,now){
-  const fr=new Date(b.free).getTime();
-  if(now<fr)return{run:{name:b.cur,end:fr,start:null}};
-  let run=null;for(const p of b.plan){if(state[p.key]&&now<p.end.getTime()&&now>=p.start.getTime())run={name:p.name,start:p.start.getTime(),end:p.end.getTime()}}
-  return{run};
+/* ===== Engine ===== */
+const TZ = 'America/Toronto';
+const fmtT = new Intl.DateTimeFormat('en-US',{timeZone:TZ,hour:'numeric',minute:'2-digit'});
+const fmtD = new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'short',month:'short',day:'numeric'});
+const fmtDay = new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'long',month:'short',day:'numeric'});
+const dayKey = t => fmtD.format(t);
+const when = t => fmtT.format(t);
+const whenD = t => fmtD.format(t)+', '+fmtT.format(t);
+const torontoHour = t => { const d=new Date(t-5*H); return d.getUTCHours()+d.getUTCMinutes()/60; };
+const wake = t => { const h=torontoHour(t); if(h>=SLEEP[0]&&h<SLEEP[1]){ const d=new Date(t-5*H); d.setUTCHours(SLEEP[1],0,0,0); return d.getTime()+5*H; } return t; };
+const boostFor = id => BOOSTS.find(b=>b.lanes.includes(id));
+function runFrom(id,t,w){ // finish time for w ms of normal-speed work starting at t
+  const B=boostFor(id); if(!B) return t+w;
+  if(t<B.from){ if(t+w<=B.from) return t+w; w-=B.from-t; t=B.from; }
+  if(t<B.to){ const cap=(B.to-t)*B.x; if(w<=cap) return t+w/B.x; w-=cap; t=B.to; }
+  return t+w;
 }
-const nextOf=b=>b.plan.find(p=>!state[p.key]);
-function renderNow(){
-  const now=Date.now();
-  const nexts=BUILDERS.map(b=>({b,p:nextOf(b)})).filter(x=>x.p).sort((x,y)=>(x.p.opt-y.p.opt)||(x.p.start-y.p.start));
-  const ready=nexts.filter(x=>x.p.start<=now),later=nexts.filter(x=>x.p.start>now).sort((x,y)=>x.p.start-y.p.start);
-  const dn=$('donow');
-  if(ready.length){
-    const f=ready[0],[tc,ti]=kindTile(f.b.id);
-    dn.innerHTML=`<div class="ribbon go out"><span class="pulse"></span>Ready to upgrade${ready.length>1?` · ${ready.length}`:''}</div>
-      <div class="body"><div class="tile ${tc}">${ti}</div><div class="name">${f.p.name}</div><div class="meta">${f.b.name} · ${dur(f.p.h)}${tags(f.p)}</div></div>
-      <div class="act">${costHTML(f.p)}<button class="btn out" data-start="${f.p.key}">${IC.check} Started</button></div>
-      ${ready.length>1?`<ul class="also">${ready.slice(1).map(x=>`<li><span style="font-size:1.4rem;display:grid">${IC[x.p.res]}</span><span class="nm">${x.p.name}<small>${x.b.name} · ${money(x.p.cost,x.p.res)}</small></span><button class="btn sm out" data-start="${x.p.key}">${IC.check}</button></li>`).join('')}</ul>`:''}`;
-  }else if(later.length){
-    const f=later.find(x=>!x.p.opt)||later[0],[tc,ti]=kindTile(f.b.id);
-    dn.innerHTML=`<div class="ribbon wait out">${IC.clock} Next up in ${rel(f.p.start-now)}</div>
-      <div class="body"><div class="tile ${tc}">${ti}</div><div class="name">${f.p.name}</div><div class="meta">${f.b.name} · ${fmtDate(f.p.start)}${tags(f.p)}</div></div>
-      <div class="act">${costHTML(f.p)}<span class="meta" style="color:var(--ink-2)">Have ${money(f.p.cost,f.p.res)} ${RESNAME[f.p.res]} ready</span></div>`;
-  }else dn.innerHTML='<div class="ribbon go out">All done</div><div class="body"><div class="name" style="grid-column:1/3">Every planned upgrade is started</div></div>';
-  renderAgenda(now);
-  let tot=0,done=0,g=0,e=0,d=0,G=0,E=0,D=0;
-  ALL.forEach(p=>{tot++;const c=p.cost;if(p.res==='g')G+=c;else if(p.res==='e')E+=c;else D+=c;if(state[p.key]){done++;return}if(p.res==='g')g+=c;else if(p.res==='e')e+=c;else d+=c});
-  const row=(r,left,all,grad)=>`<div class="rrow"><span class="lbl">${RESNAME[r]} still to spend</span><span class="amt">${money(left,r)}</span><div class="rbar"><span class="ic">${IC[r]}</span><div class="bar"><i style="width:${all?Math.max(3,Math.round(left/all*100)):0}%;background:${grad}"></i></div></div></div>`;
-  $('budget').innerHTML=`<div class="res">${row('g',g,G,'linear-gradient(#ffe36b,#f2b000)')}${row('e',e,E,'linear-gradient(#f070e6,#c535b8)')}${row('d',d,D,'linear-gradient(#8467b0,#4c3570)')}</div><div class="started"><span style="font-weight:900">Upgrades started</span><b>${done} / ${tot}</b></div>`;
-  const openIds=new Set([...document.querySelectorAll('.lane details.more[open]')].map(x=>x.closest('.lane').dataset.id));
-  $('lanes').innerHTML=BUILDERS.map(b=>{
-    const st=laneStatus(b,now),n=nextOf(b),[tc,ti]=kindTile(b.id);
-    let busy;
-    if(st.run){const left=st.run.end-now,pct=st.run.start?Math.min(100,Math.max(0,(now-st.run.start)/(st.run.end-st.run.start)*100)):0;
-      busy=`<div class="busy"><div class="lbl"><b>${st.run.name}</b><span>done ${fmtDate(new Date(st.run.end))}</span></div><div class="gbar ${st.run.start?'':'unknown'}"><i style="width:${pct}%"></i><span class="out">${rel(left)}</span></div></div>`}
-    else busy=`<div class="busy"><div class="lbl"><b>${n?'Free':'Plan complete'}</b></div><div class="gbar idle"><i></i><span class="out">${n?'Idle':'Done'}</span></div></div>`;
-    const nx=n?`<div class="next ${n.start<=now?'go':''}"><span class="r">${IC[n.res]}</span><span class="nm">${n.name}${tags(n)}<small>${n.start<=now?'Start now':'Next · in '+rel(n.start-now)} · ${money(n.cost,n.res)}</small></span>${n.start<=now?`<button class="btn sm out" data-start="${n.key}">${IC.check}</button>`:''}</div>`:'';
-    const q=b.plan.length?`<div class="queue">${b.plan.map(p=>`<span class="chip ${state[p.key]?'done':''} ${p.final?'fin':''}">${IC[p.res]}<span>${p.name}</span></span>`).join('')}</div>
-      <details class="more"><summary>Times &amp; checklist ${IC.chev}</summary><ul class="steps">${b.plan.map(p=>`<li class="step ${state[p.key]?'on':''}"><label><input type="checkbox" data-k="${p.key}" ${state[p.key]?'checked':''}><span class="nm">${p.name}${tags(p)}</span>${costHTML(p)}<span class="meta">${fmtDate(p.start)} → ${fmtDate(p.end)} · ${dur(p.h)}</span></label></li>`).join('')}</ul></details>`:'<p class="meta" style="margin:0;color:var(--ink-2);font-size:.84rem">Nothing queued here during the Jam.</p>';
-    return `<article class="panel lane" data-id="${b.id}"><div class="head"><div class="tile ${tc}">${ti}</div><h3>${b.name}<small>${({gob:'Goblin · costs gems',lab:'Research',glab:'Research · costs gems',pet:'Pets'})[b.id]||'Builder'}</small></h3></div>${busy}${nx}${q}</article>`;
-  }).join('');
-  openIds.forEach(id=>{const x=document.querySelector(`.lane[data-id="${id}"] details.more`);if(x)x.open=true});
-}
-function renderAgenda(now){
-  const key=t=>new Date(t).toLocaleDateString('en-CA',{timeZone:'America/Toronto'});
-  const today=key(now),tom=key(now+864e5);
-  const items=ALL.filter(p=>!state[p.key]&&p.start.getTime()>now).sort((a,b)=>a.start-b.start).slice(0,12);
-  if(!items.length){$('agenda').innerHTML='<div class="empty">Nothing else scheduled in the Jam.</div>';return}
-  const groups=[];items.forEach(p=>{const k=key(p.start);let g=groups.find(x=>x.k===k);if(!g)groups.push(g={k,list:[]});g.list.push(p)});
-  $('agenda').innerHTML=groups.map(g=>{const d=g.list[0].start,lbl=g.k===today?'Today':g.k===tom?'Tomorrow':d.toLocaleDateString('en-US',{timeZone:'America/Toronto',weekday:'long'});
-    return `<div class="agday">${lbl} · ${d.toLocaleDateString('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric'})}</div><ul>${g.list.map(p=>`<li><span class="agt">${p.start.toLocaleTimeString('en-US',{timeZone:'America/Toronto',hour:'numeric',minute:'2-digit'})}</span><span class="r">${IC[p.res]}</span><span class="nm">${p.name}${tags(p)}<small>${p.lane.name} · ${money(p.cost,p.res)}</small></span><span class="timer out">${rel(p.start-now)}</span></li>`).join('')}</ul>`}).join('');
-}
-function renderItems(){$('items').innerHTML=ITEMS.map(([k,c,t,w])=>`<div class="panel mi"><div class="pic">${k==='ring'?IC.ring:IC[k](c)}</div><b>${t}</b><p>${w}</p></div>`).join('')}
+const boosted = (id,a,b) => { const B=boostFor(id); return !!B && a<B.to && b>B.from; };
+const money = v => v>=1e6 ? (v/1e6).toFixed(v>=1e7?0:1).replace(/\.0$/,'')+'M' : Math.round(v/1e3)+'K';
+const CUR = {g:'Gold',e:'Elixir',d:'Dark Elixir'};
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-/* ---------- TIMELINE ---------- */
-let selected=null;
-function drawTimeline(el,rows,t0,t1,stepDays){
-  const pc=d=>Math.max(0,Math.min(100,(d-t0)/(t1-t0)*100));
-  let h='<div class="tl-axis">';
-  for(let d=new Date(t0);d<=t1;d=new Date(d.getTime()+stepDays*24*H))h+=`<span style="left:${pc(d)}%">${fmtDay(d)}</span>`;
-  h+='</div><div style="position:relative">';
-  rows.forEach(r=>{
-    h+=`<div class="tl-row"><div class="tl-label">${r.name}<small>${r.sub}</small></div><div class="tl-track">`;
-    if(r.cur){const l=pc(r.cur.start),w=pc(r.cur.end)-l;if(w>0)h+=`<div class="seg cur" style="left:${l}%;width:${w}%">${r.cur.name}</div>`}
-    r.segs.forEach(p=>{const l=pc(p.start),w=Math.max(.7,pc(p.end)-l);h+=`<button type="button" class="seg ${p.res} ${state[p.key]?'done':''}" data-seg="${p.key}" aria-pressed="${selected===p.key}" style="left:${l}%;width:${w}%" title="${p.name}">${p.name}</button>`});
-    h+='</div></div>';
+/* build plan */
+const plan = LANES.map(L=>{
+  const curEnd = runFrom(L.id, EXPORT, L.left*1000);
+  let t = curEnd; const q=[];
+  L.steps.forEach((s,i)=>{
+    const ready=t, start=wake(t), end=runFrom(L.id,start,s[1]*PASS*H);
+    q.push({lane:L, i, name:s[0], hrs:s[1], cur:s[2], cost:s[3], flag:s[4]||'', ready, start, end,
+            slept:start>ready, late:start>=JAM_END, boost:boosted(L.id,start,end)});
+    t=end;
   });
-  h+='<div style="position:absolute;inset:0 0 0 124px;pointer-events:none">';
-  if(JAM_END>t0&&JAM_END<t1)h+=`<div class="vline jam" style="left:${pc(JAM_END)}%"><em>Jam ends</em></div>`;
-  const now=Date.now();if(now>t0&&now<t1)h+=`<div class="vline now" style="left:${pc(now)}%"><em>Now</em></div>`;
-  h+='</div></div>';el.innerHTML=h;
-}
-function renderPlan(){
-  drawTimeline($('tl'),BUILDERS.map(b=>({name:b.name,sub:(laneStatus(b,Date.now()).run||{}).name||(nextOf(b)?'Idle':'Done'),cur:{name:b.cur,start:T0,end:new Date(b.free)},segs:b.plan})),T0,T1,2);
-  const dt=$('detail'),p=ALL.find(x=>x.key===selected);
-  if(p){dt.hidden=false;dt.innerHTML=`<b>${p.name}${tags(p)}</b><span>${p.lane.name}</span>${costHTML(p)}<span>Start ${fmtDate(p.start)}</span><span>Done ${fmtDate(p.end)}</span><button class="btn sm out ${state[p.key]?'grey':''}" data-toggle="${p.key}">${state[p.key]?'Mark not started':'Mark started'}</button>`}else dt.hidden=true;
-  $('legend').innerHTML=`<span>${IC.g}Gold</span><span>${IC.e}Elixir</span><span>${IC.d}Dark Elixir</span>`;
-  renderChart();
-}
-function renderChart(){
-  const days=[];for(let d=new Date(JAM_START);d<JAM_END;d=new Date(d.getTime()+24*H))days.push(d);
-  const data=days.map(d=>{const a=d.getTime(),z=a+24*H;let g=0,e=0;ALL.forEach(p=>{if(state[p.key])return;const s=p.start.getTime();if(s>=a&&s<z){if(p.res==='g')g+=p.cost;if(p.res==='e')e+=p.cost}});return{d,g:g/1e6,e:e/1e6}});
-  const max=Math.max(10,...data.map(x=>Math.max(x.g,x.e))),top=Math.ceil(max/10)*10;
-  const W=760,Hh=220,L=38,B=26,T=10,bw=(W-L-8)/data.length;
-  let s=`<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Gold and Elixir needed per day">`;
-  for(let v=0;v<=top;v+=top/4){const y=T+(Hh-T-B)*(1-v/top);s+=`<line class="gl" x1="${L}" x2="${W-4}" y1="${y}" y2="${y}"/><text x="${L-6}" y="${y+4}" text-anchor="end">${v}M</text>`}
-  data.forEach((x,i)=>{const x0=L+i*bw+bw*.14,w=bw*.34;[[x.g,'#f5b800','#7a4f00',0],[x.e,'#e04fd6','#5e1258',1]].forEach(([v,c,st,k])=>{if(!v)return;const hg=(Hh-T-B)*(v/top);s+=`<rect x="${x0+k*w}" y="${Hh-B-hg}" width="${w-1}" height="${hg}" rx="3" fill="${c}" stroke="${st}" stroke-width="1.5"><title>${fmtDay(x.d)}: ${v.toFixed(1)}M ${k?'Elixir':'Gold'}</title></rect>`});if(i%2===0)s+=`<text x="${L+i*bw+bw/2}" y="${Hh-8}" text-anchor="middle">${fmtDay(x.d)}</text>`});
-  $('chart').innerHTML='<div class="scroll">'+s+'</svg></div>'+`<div class="legend" style="margin:6px 0 0"><span>${IC.g}Gold (M)</span><span>${IC.e}Elixir (M)</span></div>`;
-}
-
-/* ---------- AFTER ---------- */
-const AFTER_T0=new Date('2026-11-14T00:00:00-05:00');let AFTER_T1=new Date('2027-02-06T00:00:00-05:00');
-const AFTER_ROWS=BUILDERS.filter(b=>/^b\d/.test(b.id)).map(b=>{const f=b.plan[b.plan.length-1];return{name:b.name,sub:'after '+f.name,cur:{name:f.name,start:f.start,end:f.end},free:f.end.getTime(),segs:[]}});
-const AFTER_PLAN=AFTER.map((a,i)=>{const r=AFTER_ROWS.reduce((x,y)=>y.free<x.free?y:x);const st=r.free;r.free+=a[1]*H;const p={key:'a-'+i,name:a[0],h:a[1],res:a[2],cost:a[3],note:a[4],start:new Date(st),end:new Date(r.free),builder:r.name};r.segs.push(p);return p});
-const LAB_ROW=(()=>{const lb=BUILDERS.find(b=>b.id==='lab'),f=lb.plan[lb.plan.length-1];return{name:'Laboratory',sub:'after '+f.name,cur:{name:f.name,start:f.start,end:f.end},free:f.end.getTime(),segs:[]}})();
-AFTER_LAB.forEach((a,i)=>{const st=LAB_ROW.free;LAB_ROW.free+=a[1]*H;const p={key:'al-'+i,name:a[0],h:a[1],res:a[2],cost:a[3],note:a[4],start:new Date(st),end:new Date(LAB_ROW.free),builder:'Lab'};LAB_ROW.segs.push(p);AFTER_PLAN.push(p)});
-AFTER_ROWS.push(LAB_ROW);
-AFTER_T1=new Date(Math.ceil((Math.max(...AFTER_ROWS.map(r=>r.free))-AFTER_T0)/(7*864e5)+1)*7*864e5+AFTER_T0.getTime());
-function renderAfter(){
-  drawTimeline($('tl-after'),AFTER_ROWS,AFTER_T0,AFTER_T1,14);
-  $('after-list').innerHTML=AFTER_PLAN.map(p=>`<li class="step ${state[p.key]?'on':''}"><label><input type="checkbox" data-k="${p.key}" ${state[p.key]?'checked':''}><span class="nm">${p.name}</span>${costHTML(p)}<span class="meta">${p.builder} · ${fmtDate(p.start)} · ${dur(p.h)}${p.note?' · '+p.note:''}</span></label></li>`).join('');
-  let done=0,g=0,e=0,d=0;AFTER_PLAN.forEach(p=>{if(state[p.key]){done++;return}if(p.res==='g')g+=p.cost;else if(p.res==='e')e+=p.cost;else d+=p.cost});
-  $('a-budget').innerHTML=`<div class="afterres"><div>${IC.g}${money(g,'g')}</div><div>${IC.e}${money(e,'e')}</div><div>${IC.d}${money(d,'d')}</div><div>${IC.check}${done} / ${AFTER_PLAN.length}</div></div>`;
-  $('fill').innerHTML=FILL.map(f=>`<div class="panel"><b>${f[0]}</b><span>${f[1]}</span></div>`).join('');
-}
-
-/* ---------- TIERS ---------- */
-let filter='All';
-function renderTiers(){
-  $('filters').innerHTML=['All','Heroes','Lab','Pets','Buildings'].map(c=>`<button type="button" aria-pressed="${c===filter}" data-c="${c}">${c}</button>`).join('');
-  $('tlist').innerHTML=TIERS.map((r,i)=>({r,i})).filter(x=>filter==='All'||x.r[0]===filter).map(({r,i})=>{const k='t-'+i,c=!!state[k],t=r[1]==='—'?'x':r[1];
-    return `<div class="panel trow ${c?'on':''}"><span class="shield ${c?'done':t}">${c?'✓':r[1]==='—'?'·':r[1]}</span><span class="nm">${r[2]}<small>${r[3]}</small></span><input type="checkbox" data-k="${k}" ${c?'checked':''} aria-label="Started ${r[2]}"><span class="sub"><b>${r[4]}</b>${r[5]?' · '+r[5]:''}</span><span class="sub">${r[0]}</span></div>`}).join('');
-}
-
-
-/* ---------- PROFILE ---------- */
-const PROFILE={asof:'live · last synced Nov 2, 10 AM',
-  offense:[['Heroes',439,480],['Troops',462,509],['Spells',122,132]],
-  areas:[['Pets',82],['Structures',76],['Heroes',75],['Lab',73],['Walls',71.7],['Equipment',58]],
-  heroes:[['Minion Prince',95,95,'Maxed'],['Royal Champion',54,55,'Maxed Nov 2'],['Barbarian King',105,110,'106 to 110 in the Jam, maxed'],['Archer Queen',101,110,'102 to 106 in the Jam'],['Grand Warden',78,85,'79 to 83 in the Jam'],['Dragon Duke',15,25,'16 to about 22 in the Jam']],
-  strong:['Your RC walk kit is maxed: Electro Boots 27, Rocket Spear 27, Spirit Fox 10.','Every equipment piece in your main army is maxed.','Minion Prince, Dragon, Electro Dragon and Dragon Rider are maxed.','10 of 12 pets are maxed.'],
-  weak:['Dragon Duke is 9/25 with mostly level-1 gear.','Equipment overall is 58%, with many bench pieces at 1–14.','Defenses are 76%. The Jam plan goes after this first.','Grand Warden 78/85 trails your other attack heroes.'],
-  career:[['War stars','2,075'],['Best trophies','5,867'],['XP level','245'],['Builder Base best','3,310']],
-  left:[['Builders','≈250M Gold + 37M Elixir + 640K Dark Elixir','Defenses, Builder\'s Huts, heroes and storages, final starts Nov 14 to 15'],['Labs','Stone Slammer 6 running, then Earthquake 8 and Recall 7. Goblin Lab paused, no gems','≈13M Elixir + 150K Dark Elixir, last start Nov 13'],['Pets','Diggy 12 running, then Diggy 13 to 15','≈350K Dark Elixir, last start Nov 12'],['Walls','WALLS_LEFT','WALLS_LOOT']],
-  walls:{start:325,left:0,cost:4.2e6,rate:232e6,dump:450e6,need:[['2026-11-01','2026-11-16',366e6]]},
-  max:{start:'2026-11-01',end:'2026-11-17'},
-};
-function ringSVG(pct){const r=46,c=2*Math.PI*r,o=c*(1-pct/100);return `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="#120b05" stroke-width="18"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="#2a1f14" stroke-width="12"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="url(#gg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${o.toFixed(1)}" transform="rotate(-90 60 60)"/><defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe36b"/><stop offset="1" stop-color="#f2a900"/></linearGradient></defs><text x="60" y="68" text-anchor="middle" class="big">${pct.toFixed(0)}%</text></svg>`}
-
-let wallHours=2;try{wallHours=+localStorage.getItem('jam-wall-hours')||2}catch(e){}
-function wallsDone(W,h){
-  const total=W.left*W.cost,day=864e5;let acc=0,t=Date.now();
-  const need=W.need.map(([a,b,v])=>{const s=new Date(a+'T00:00:00-05:00').getTime(),e=new Date(b+'T00:00:00-05:00').getTime();return[s,e,v/((e-s)/day)]});
-  for(let i=0;i<2000&&acc<total;i++){const n=need.find(x=>t>=x[0]&&t<x[1]);acc+=Math.min(W.dump,Math.max(0,W.rate*h-(n?n[2]:0)));t+=day}
-  return t;
-}
-/* Wall taps: walls done since the last site update. Cleared automatically when the site's wall count changes. */
-const WTKEY='jam-wall-taps';
-let wtaps={base:null,log:[]};try{wtaps=JSON.parse(localStorage.getItem(WTKEY))||wtaps}catch(e){}
-if(wtaps.base!==PROFILE.walls.left)wtaps={base:PROFILE.walls.left,log:[]};
-function saveTaps(){try{localStorage.setItem(WTKEY,JSON.stringify(wtaps))}catch(e){}}
-saveTaps();
-function wallCounterHTML(W0){
-  const g=wtaps.log.filter(x=>x==='g').length,e=wtaps.log.length-g,left=Math.max(0,W0.left-wtaps.log.length);
-  const earlier=W0.start-W0.left,done=W0.start-left,c=W0.cost;
-  return `<div class="wcount" aria-live="polite"><div class="top"><div class="num">${done}<small>of ${W0.start} done</small></div><span class="meta" style="font-weight:800;color:var(--ink-2)">${left} left · ${Math.round(done/W0.start*100)}%</span></div>
-    <div class="spent"><div><span class="i" style="display:grid">${IC.g}</span><span>${money(g*c,'g')}<small>Gold · ${g} wall${g===1?'':'s'}</small></span></div>
-    <div><span class="i" style="display:grid">${IC.e}</span><span>${money(e*c,'e')}<small>Elixir · ${e} wall${e===1?'':'s'}</small></span></div>
-    <div><span>${done*c>=1e9?(done*c/1e9).toFixed(2)+'B':money(done*c,'g')}<small>Total loot this Jam${earlier?` (incl. ${earlier} earlier walls)`:''}</small></span></div></div>
-    <div class="wbtns" role="group" aria-label="Log a wall"><button type="button" data-wt="g">${IC.g}+1 Gold</button><button type="button" data-wt="e">${IC.e}+1 Elixir</button><button type="button" data-wt="u" ${wtaps.log.length?'':'disabled'}>Undo</button></div></div>`;
-}
-function wallsHTML(P,pc,fd){
-  const W={...P.walls,left:Math.max(0,P.walls.left-wtaps.log.length)},done=wallsDone(W,wallHours),days=Math.max(0,Math.ceil((done-Date.now())/864e5));
-  return `<div class="walls"><div class="wh"><b>Walls</b><span>${W.left} to go · ${(W.left*W.cost/1e9).toFixed(2)}B loot</span></div>
-    ${wallCounterHTML(P.walls)}
-    <div class="hours" role="group" aria-label="Farming hours per day"><small>Farming a day:</small>${[1,2,3,4].map(h=>`<button type="button" data-wh="${h}" aria-pressed="${h===wallHours}">${h}h</button>`).join('')}</div>
-    <div class="wh"><div class="wbig">${days}<small>days</small></div><span>Walls maxed around ${fd(done)}</span></div>
-    <div class="mxrow"><span>Walls</span><div class="mxtrack"><i class="wall" style="width:${pc(done)}%"></i><b class="out">${fd(done).replace(/, \d{4}/,'')}</b></div></div>
-    <p class="mxnote">Based on ${W.rate/1e6}M loot an hour and ${(W.cost/1e6)}M per wall (Gold or Elixir), the price in-game right now. You wall each time a builder finishes (about 2–3 times a day) with full storages, so walls top out around ${W.dump/1e6}M a day. Upgrades take their loot first. If walls are part of the Jam discount they'll cost more after Nov 16, so wall hard during the Jam.</p></div>`;
-}
-/* Upgrades finished since the Nov 1 account snapshot that aren't in the Jam plan. [finish time, area, name] */
-const SNAP_EVENTS=[
-  ['2026-11-01T23:00:00-05:00','Spells','Rage Spell 7'],
-  ['2026-11-01T23:00:00-05:00','Spells','Freeze Spell 8'],
-  ['2026-11-02T01:00:00-05:00','Troops','Meteor Golem 3'],
-  ['2026-11-02T07:52:00-05:00','Heroes','Royal Champion 55'],
-  ['2026-11-02T10:00:00-05:00','Troops','Electro Titan 5'],
-  ['2026-11-02T13:10:00-05:00','Troops','Headhunter 4'],
-  ['2026-11-03T19:00:00-05:00','Troops','Root Rider 4'],
-  ['2026-11-04T01:15:00-05:00','Spells','Overgrowth Spell 5'],
-  ['2026-11-04T14:16:00-05:00','Troops','Lava Hound 8'],
-  ['2026-11-06T17:35:00-05:00','Troops','Baby Dragon 12'],
-  ['2026-11-06T19:05:00-05:00','Troops','Thrower 4'],
-  ['2026-11-04T10:00:00-05:00','Heroes','Dragon Duke 11'],
-  ['2026-11-04T10:00:00-05:00','Spells','Revive Spell 5'],
-  ['2026-11-05T14:36:00-05:00','Heroes','Barbarian King 102'],
-  ['2026-11-07T06:56:00-05:00','Heroes','Barbarian King 103'],
-  ['2026-11-06T13:41:00-05:00','Heroes','Dragon Duke 12'],
-];
-const SPELL_RE=/Spell/;
-function liveProfile(){
-  const now=Date.now(),P=JSON.parse(JSON.stringify(PROFILE)),bump={Heroes:0,Troops:0,Spells:0},heroUp={};
-  SNAP_EVENTS.forEach(([t,a,n])=>{if(new Date(t).getTime()<=now){bump[a]++;if(a==='Heroes')heroUp[n.replace(/ \d+$/,'')]=(heroUp[n.replace(/ \d+$/,'')]||0)+1}});
-  ALL.forEach(p=>{if(!state[p.key]||p.end.getTime()>now)return;
-    if(p.lane.id==='lab'||p.lane.id==='glab')bump[SPELL_RE.test(p.name)?'Spells':'Troops']++;
-    const hero=['Barbarian King','Archer Queen','Grand Warden','Royal Champion'].find(h=>p.name.startsWith(h));
-    if(hero){bump.Heroes++;heroUp[hero]=(heroUp[hero]||0)+1}});
-  P.offense.forEach(o=>o[1]=Math.min(o[2],o[1]+bump[o[0]]));
-  P.heroes.forEach(h=>{if(heroUp[h[0]])h[1]=Math.min(h[2],h[1]+heroUp[h[0]])});
-  const W=PROFILE.walls,left=Math.max(0,W.left-wtaps.log.length);
-  const wa=P.areas.find(a=>a[0]==='Walls');wa[1]=Math.round((100-28.3*left/W.start)*10)/10;
-  P.left.forEach(r=>{if(r[1]==='WALLS_LEFT'){r[1]=left+' left';r[2]='≈'+(left*W.cost/1e9).toFixed(2)+'B Gold or Elixir'}});
-  return P;
-}
-function renderProfile(){
-  const P=liveProfile();$('p-asof').textContent=PROFILE.asof;
-  const lv=P.offense.reduce((a,x)=>a+x[1],0),mx=P.offense.reduce((a,x)=>a+x[2],0),off=lv/mx*100;
-  const ar=P.areas,base=(ar.find(a=>a[0]==='Structures')[1]);
-  $('p-rings').innerHTML=`<div class="rings"><div class="ring">${ringSVG(off)}<b>Offense</b><small>${lv.toLocaleString()} of ${mx.toLocaleString()} levels<br>${P.offense.map(x=>`${x[0]} ${Math.round(x[1]/x[2]*100)}%`).join(' · ')}</small></div><div class="ring">${ringSVG(base)}<b>Defense</b><small>Structures by upgrade cost<br>Walls ${ar.find(a=>a[0]==='Walls')[1]}%</small></div></div>`;
-  $('p-areas').innerHTML=ar.map(([n,v])=>`<div class="arow"><span>${n}</span><div class="abar"><i class="${v>=80?'hi':v<65?'lo':''}" style="width:${v}%"></i></div><em>${v}%</em></div>`).join('');
-  $('p-heroes').innerHTML=P.heroes.map(([n,l,m,t])=>`<div class="hrow"><b>${n}</b><em>${l} / ${m}</em><div class="abar"><i class="${l>=m?'hi':l/m<.6?'lo':''}" style="width:${l/m*100}%"></i></div><small>${t}</small></div>`).join('');
-  $('p-pros').innerHTML=`<h4 style="color:var(--green-2)">${IC.check} Strengths</h4><ul>${P.strong.map(x=>`<li>${x}</li>`).join('')}</ul><h4 style="color:var(--orange-2);margin-top:6px">${IC.hammer} Gaps</h4><ul>${P.weak.map(x=>`<li>${x}</li>`).join('')}</ul>`;
-  $('p-career').innerHTML=P.career.map(([k,v])=>`<div><small>${k}</small><b>${v}</b></div>`).join('');
-  const M=P.max,a=new Date(M.start+'T00:00:00-05:00').getTime(),z=new Date(M.end+'T00:00:00-05:00').getTime(),pc=t=>Math.max(0,Math.min(100,(t-a)/(z-a)*100));
-  const fd=t=>new Date(t).toLocaleDateString('en-US',{timeZone:'America/Toronto',month:'short',day:'numeric',year:'numeric'});
-  $('p-max').innerHTML=wallsHTML(P,pc,fd);
-  $('p-left').innerHTML=P.left.map(([n,v,t])=>`<div><b>${n}</b><em>${v}</em><small>${t}</small></div>`).join('');
-}
-
-/* ---------- shell ---------- */
-function tick(){
-  const now=Date.now(),ms=JAM_END-now;
-  $('cd').textContent=ms<=0?'Jam over':`${Math.floor(ms/864e5)}d ${Math.floor(ms%864e5/H)}h ${String(Math.floor(ms%H/6e4)).padStart(2,'0')}m left`;
-  $('jamfill').style.width=Math.max(0,Math.min(100,ms/(JAM_END-JAM_START)*100))+'%';
-}
-const VIEWS=['profile','now','plan','after','tiers'];
-function route(){const h=location.hash.slice(1),v=VIEWS.includes(h)?h:'now';VIEWS.forEach(n=>{$('v-'+n).hidden=v!==n;$('t-'+n).setAttribute('aria-current',v===n?'page':'false')});window.scrollTo(0,0);
-  if(v==='plan')requestAnimationFrame(()=>{const sc=$('tl-scroll');sc.scrollLeft=Math.max(0,sc.scrollWidth*((Date.now()-T0)/(T1-T0))-150)})}
-function renderAll(){renderNow();renderPlan();renderAfter();renderTiers();
-  $('sync').textContent=SYNC.updated?`Synced ${SYNC.updated}${SYNC.completion?' · '+SYNC.completion:''}`:'P•K Jordan · TH18 · Gold Pass on'}
-function setK(k,v){state[k]=v;save();renderAll()}
-document.addEventListener('click',e=>{
-  const s=e.target.closest('[data-start]');if(s){setK(s.dataset.start,true);return}
-  const t=e.target.closest('[data-toggle]');if(t){setK(t.dataset.toggle,!state[t.dataset.toggle]);return}
-  const g=e.target.closest('[data-seg]');if(g){selected=selected===g.dataset.seg?null:g.dataset.seg;renderPlan();return}
-  const wt=e.target.closest('[data-wt]');if(wt){const k=wt.dataset.wt;if(k==='u')wtaps.log.pop();else if(PROFILE.walls.left-wtaps.log.length>0)wtaps.log.push(k);saveTaps();renderProfile();return}
-  const wh=e.target.closest('[data-wh]');if(wh){wallHours=+wh.dataset.wh;try{localStorage.setItem('jam-wall-hours',wallHours)}catch(x){}renderProfile();return}
-  const f=e.target.closest('[data-c]');if(f){filter=f.dataset.c;renderTiers()}
+  return {L, curEnd, curBoost:boosted(L.id,EXPORT,curEnd), q, idleAt:t};
 });
-document.addEventListener('change',e=>{const i=e.target.closest('input[data-k]');if(i)setK(i.dataset.k,i.checked)});
-let armed=false;
-$('reset').addEventListener('click',()=>{const m=$('reset-msg');if(!armed){armed=true;m.textContent='Tap again to clear every checkmark.';setTimeout(()=>{armed=false;m.textContent=''},4000);return}state={};save();armed=false;m.textContent='Cleared.';renderAll()});
-document.querySelectorAll('[data-ic]').forEach(n=>n.innerHTML=IC[n.dataset.ic]);
-$('jamico').innerHTML=IC.hammer;
-window.addEventListener('hashchange',route);
-renderItems();renderProfile();renderAll();route();tick();setInterval(()=>{tick();renderNow();renderPlan();renderProfile()},60e3);
+
+/* started marks (per viewer, optional) */
+const KEY='coc-planner-v5';
+let marks={}; try{ marks=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ marks={}; }
+const mk = s => s.lane.id+'|'+s.name;
+const save = () => { try{ localStorage.setItem(KEY,JSON.stringify(marks)); }catch(e){} };
+
+/* ===== Render ===== */
+function header(){
+  const now=Date.now();
+  document.getElementById('synced').textContent='Synced to your export from '+whenD(EXPORT);
+  const start=Date.parse('2026-11-02T02:45:00-05:00');
+  const left=Math.max(0,JAM_END-now), pct=Math.min(100,Math.max(0,(JAM_END-now)/(JAM_END-start)*100));
+  document.getElementById('jamfill').style.width=pct+'%';
+  const d=Math.floor(left/864e5), h=Math.floor(left%864e5/H), m=Math.floor(left%H/6e4);
+  document.getElementById('jamtxt').textContent = left>0 ? `Jam ends in ${d}d ${h}h ${m}m · Mon 2:45 AM` : 'Hammer Jam is over';
+  document.getElementById('boosts').innerHTML = BOOSTS.filter(b=>b.to>now).map(b=>
+    `<span class="pill ${b.x===10?'b':'r'}">${esc(b.label)} ${b.x}x · until ${when(b.to)}</span>`).join('');
+}
+
+let showAll=false;
+function upNext(){
+  const now=Date.now();
+  const all=plan.flatMap(p=>p.q).filter(s=>!s.late).sort((a,b)=>a.start-b.start);
+  const open=all.filter(s=>!(marks[mk(s)]) && s.start<=now);          // ready now
+  const fut=all.filter(s=>s.start>now);
+  const doneRecent=all.filter(s=>marks[mk(s)] && s.start<=now && s.start>now-6*H);
+  let list=[...open,...fut];
+  const limit=showAll?list.length:10;
+  const shown=list.slice(0,limit);
+  let html='',lastDay='';
+  shown.forEach(s=>{
+    const ready=s.start<=now;
+    const dk=ready?'Ready now':dayKey(s.start);
+    if(dk!==lastDay){ html+=`<li class="daysep">${ready?'Ready now':fmtDay.format(s.start)}</li>`; lastDay=dk; }
+    const prevName = s.i===0 ? s.lane.cur : s.lane.steps[s.i-1][0];
+    const tags=(s.boost?'<span class="tag t-boost">boosted</span>':'')+(s.slept?'<span class="tag t-sleep">after sleep</span>':'')+
+      (s.flag==='gem'?'<span class="tag t-gem">gems</span>':'');
+    html+=`<li class="${ready?'ready':''}">
+      <div class="when">${ready?'Now':when(s.start)}<small>${esc(s.lane.name)}</small></div>
+      <div class="what"><b>${esc(s.name)}${tags}</b><span>after ${esc(prevName)} · <span class="cur"><i class="dot ${s.cur}"></i>${money(s.cost)}</span></span></div>
+      <input type="checkbox" class="chk" aria-label="Started ${esc(s.name)}" data-k="${esc(mk(s))}" ${marks[mk(s)]?'checked':''}>
+    </li>`;
+  });
+  doneRecent.forEach(s=>{
+    html+=`<li class="done"><div class="when">${when(s.start)}<small>${esc(s.lane.name)}</small></div><div class="what"><b>${esc(s.name)}</b><span>marked started</span></div>
+      <input type="checkbox" class="chk" aria-label="Started ${esc(s.name)}" data-k="${esc(mk(s))}" checked></li>`;
+  });
+  if(!shown.length) html='<li><div></div><div class="what"><b>Nothing left to start in the Jam.</b></div><div></div></li>';
+  document.getElementById('next').innerHTML=html;
+  const btn=document.getElementById('moreBtn');
+  btn.style.display=list.length>10?'block':'none';
+  btn.textContent=showAll?'Show less':`Show all ${list.length}`;
+}
+document.getElementById('next').addEventListener('change',e=>{
+  const k=e.target.dataset.k; if(!k) return;
+  if(e.target.checked) marks[k]=1; else delete marks[k];
+  save(); upNext(); lanes();
+});
+document.getElementById('moreBtn').addEventListener('click',()=>{ showAll=!showAll; upNext(); });
+
+function lanes(){
+  const now=Date.now();
+  document.getElementById('lanes').innerHTML=plan.map(p=>{
+    const L=p.L, running=p.curEnd>now;
+    // what's actually on the builder right now, assuming starts on time
+    let activeName=L.cur, activeStart=EXPORT-1, activeEnd=p.curEnd;
+    for(const s of p.q){ if(s.start<=now){ activeName=s.name; activeStart=s.start; activeEnd=s.end; } }
+    const idle = now>=activeEnd;
+    const pct = idle?100:Math.max(2,Math.min(100,(now-activeStart)/(activeEnd-activeStart)*100));
+    const nowHtml = idle
+      ? `<b>Idle</b> <span class="muted">since ${whenD(activeEnd)}</span>`
+      : `<b>${esc(activeName)}</b> <span class="muted">· done ${whenD(activeEnd)}</span>${(activeName===L.cur?p.curBoost:boosted(L.id,activeStart,activeEnd))?'<span class="tag t-boost">boosted</span>':''}
+         <div class="prog"><i style="width:${pct}%"></i></div>`;
+    const rest=p.q.filter(s=>s.start>now);
+    const qHtml = rest.length ? `<ul class="q">${rest.map(s=>`<li class="${s.late?'after':''}"><span class="n">${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">gems</span>':''}${s.late?'<span class="tag t-late">after Jam</span>':''}</span><span class="t">${whenD(s.start)}</span></li>`).join('')}</ul>`
+      : `<div class="empty">${L.id==='gob'?'Needs gems for the next start':'Nothing else queued in the Jam'}</div>`;
+    return `<div class="card lane"><div class="lh"><h3>${esc(L.name)}</h3><div class="free">${rest.length?rest.length+' queued':'last one running'}</div></div>
+      <div class="now">${nowHtml}</div>${qHtml}</div>`;
+  }).join('');
+}
+
+function timeline(){
+  const t0=Date.parse('2026-11-09T00:00:00-05:00'), t1=Date.parse('2026-11-18T00:00:00-05:00');
+  const pxh=6, W=(t1-t0)/H*pxh, LAB=92;
+  const x=t=>LAB+Math.max(0,(Math.min(t,t1)-t0)/H*pxh);
+  let head=`<div class="tlhead" style="width:${W+LAB}px"><div class="tllab" style="height:26px;border:0"></div>`;
+  for(let t=t0;t<t1;t+=864e5) head+=`<div class="tick" style="left:${x(t)}px"><span>${fmtD.format(t)}</span></div>`;
+  head+='</div>';
+  const rows=plan.map(p=>{
+    const L=p.L;
+    let bars=`<div class="bar cur" style="left:${x(EXPORT)}px;width:${Math.max(4,x(p.curEnd)-x(EXPORT))}px" title="${esc(L.cur)}">${esc(L.cur)}</div>`;
+    p.q.forEach(s=>{ bars+=`<div class="bar ${s.cur}" style="left:${x(s.start)}px;width:${Math.max(4,x(s.end)-x(s.start)-2)}px" title="${esc(s.name)}: ${whenD(s.start)} to ${whenD(s.end)}">${esc(s.name)}</div>`; });
+    const sub = p.q.length ? '' : (L.id==='gob'?'gems':'');
+    return `<div class="tlrow" style="width:${W+LAB}px"><div class="tllab">${esc(L.name)}<small>${esc(sub)}</small></div>${bars}</div>`;
+  }).join('');
+  const now=Date.now();
+  const lines=`<div class="vline jam" style="left:${x(JAM_END)}px"><em>Jam ends</em></div>`+(now>t0&&now<t1?`<div class="vline now" style="left:${x(now)}px"><em>Now</em></div>`:'');
+  const tl=document.getElementById('tl');
+  tl.innerHTML=`<div class="tlin" style="width:${W+LAB}px">${head}${rows}${lines}</div>`;
+  if(!tl.dataset.scrolled){ tl.scrollLeft=Math.max(0,x(now)-LAB-40); tl.dataset.scrolled=1; }
+}
+
+function heroes(){
+  document.getElementById('heroes').innerHTML='<tr><th>Hero</th><th class="r">Now</th><th class="r">After Jam</th><th class="r">Max</th></tr>'+
+    HEROES.map(h=>`<tr><td><b>${esc(h[0])}</b></td><td class="r lvl">${h[1]}</td><td class="r lvl ${h[2]===h[3]?'max':''}">${h[2]}</td><td class="r muted">${h[3]}</td></tr>`).join('');
+}
+
+function loot(){
+  const now=Date.now(), sum={g:0,e:0,d:0}, day={g:0,e:0,d:0};
+  plan.flatMap(p=>p.q).filter(s=>!s.late && !marks[mk(s)] && s.start>=now-6*H).forEach(s=>{ sum[s.cur]+=s.cost; if(s.start<now+24*H) day[s.cur]+=s.cost; });
+  document.getElementById('loot').innerHTML=['g','e','d'].map(c=>`<div class="tot"><div class="k"><i class="dot ${c}" style="display:inline-block;vertical-align:-2px"></i> ${CUR[c]}</div><div class="v">${money(sum[c])}</div><div class="k">next 24h: ${money(day[c])}</div></div>`).join('');
+}
+
+let tab='b';
+function after(){
+  const rows=tab==='b'?AFTER_B:AFTER_L;
+  const days=rows.reduce((a,r)=>a+r[1],0)/24, tot={g:0,e:0,d:0}; rows.forEach(r=>tot[r[2]]+=r[3]);
+  document.getElementById('after').innerHTML='<tr><th>Upgrade</th><th class="r">Time</th><th class="r">Cost</th></tr>'+
+    rows.map(r=>`<tr><td><b>${esc(r[0])}</b>${r[4]?`<br><span class="muted" style="font-size:12px">${esc(r[4])}</span>`:''}</td><td class="r">${(r[1]/24).toFixed(1)}d</td><td class="r"><span class="cur"><i class="dot ${r[2]}"></i>${money(r[3])}</span></td></tr>`).join('');
+  document.getElementById('afternote').innerHTML = tab==='b'
+    ? `About <b>${Math.round(days)} builder days</b> at full price, split across 6 builders: about ${Math.round(days/6)} days. Traps are cheap, so clear them whenever a builder is free.`
+    : `About <b>${Math.round(days)} lab days</b> at full price. This is your bottleneck, so save Research Potions and books for it.`;
+}
+document.querySelector('.tabs').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return; tab=b.dataset.tab;
+  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b)); after();
+});
+
+function render(){ header(); upNext(); lanes(); timeline(); heroes(); loot(); after(); }
+render();
+setInterval(()=>{ header(); upNext(); lanes(); timeline(); loot(); },60e3);
 </script>
 </body>
 </html>
