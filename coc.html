@@ -444,7 +444,7 @@ const BUILDERS = [
   {id:'b6', name:'Builder 6', cur:"Dragon Duke 15", free:'2026-11-09T11:53:33-05:00', steps:[
     ["Dragon Duke 16",29,'d',215e3],["Dragon Duke 17",29,'d',220e3],["Dragon Duke 18",30,'d',225e3],["Dragon Duke 19",30,'d',230e3],["Dragon Duke 20",31,'d',235e3],["Dragon Duke 21",31,'d',240e3],["Dragon Duke 22",32,'d',245e3]]},
   {id:'lab', name:'Laboratory', cur:"Stone Slammer 6", free:'2026-11-10T09:21:07-05:00', steps:[
-    ['Earthquake Spell 8',73,'d',148.5e3],['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3]]},
+    ['Ice Block Spell 6',0,'d',190e3,'bos'],['Earthquake Spell 8',73,'d',148.5e3],['Recall Spell 7',86,'e',13.05e6],['Hog Rider 15',78.5,'d',170e3]]},
   {id:'glab', name:'Goblin Lab', cur:'Idle, no gems', free:'2026-11-08T00:14:00-05:00', steps:[]},
   {id:'pet', name:'Pet House', cur:"Diggy 12", free:'2026-11-10T23:35:01-05:00', steps:[
     ['Diggy 13',39.6,'d',108e3],['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
@@ -507,7 +507,6 @@ const AFTER_LAB=[
   ["Druid 6",167,'d',380e3,""],
   ["Golem 15",157,'d',350e3,""],
   ["Witch 8",167,'d',355e3,""],
-  ["Ice Block Spell 6",173,'d',380e3,""],
   ["Wizard 14",151,'e',27e6,"Just for %"],
   ["Wall Breaker 14",151,'e',26e6,"Just for %"],
   ["Archer 14",146,'e',25e6,"Just for %"],
@@ -538,6 +537,7 @@ const TIERS = [
   ['Lab','A','Yeti','7 → 8','13.8M Elixir','After the Jam unless you get gems for the Goblin Lab. Super Yeti meta'],
   ['Lab','A','Battle Blimp','5 → 6','11.7M Elixir','After the Jam unless you get gems for the Goblin Lab'],
   ['Lab','A','Recall Spell','6 → 7','13M Elixir','Lab, Nov 12'],
+  ['Lab','S','Ice Block Spell','5 → 6','190K DE','Gold Pass Book of Spells at 11:14 AM Nov 9. Saves the longest after Jam research, 173 hours'],
   ['Lab','B','Hog Rider','14 → 15','170K DE','Back in the Jam thanks to the Research Potions. Last lab start, Sat Nov 14'],
   ['Lab','A','Thrower','3 → 4','13.5M Elixir','Done Nov 7. Thrower meta'],
   ['Lab','C','Siege Barracks','5 → 6','Jam price','Done Nov 7'],
@@ -587,9 +587,9 @@ const wake=t=>{const d=new Date(t-5*36e5),h=d.getUTCHours()+d.getUTCMinutes()/60
 const BOOSTS=[{x:10,win:[new Date('2026-11-09T10:16:35-05:00').getTime(),new Date('2026-11-09T13:07:59-05:00').getTime()],lanes:new Set(['gob','b1','b2','b3','b4','b5','b6'])},{x:24,win:[new Date('2026-11-09T10:16:35-05:00').getTime(),new Date('2026-11-09T12:01:33-05:00').getTime()],lanes:new Set(['lab','glab','pet'])}];
 const runFrom=(id,t,w)=>{const B=BOOSTS.find(b=>b.lanes.has(id));if(!B)return t+w;const[a,z]=B.win;if(t<a){if(t+w<=a)return t+w;w-=a-t;t=a}if(t<z){const can=(z-t)*B.x;if(w<=can)return t+w/B.x;w-=can;t=z}return t+w};
 BUILDERS.forEach(b=>{const fr=new Date(b.free).getTime(),B=BOOSTS.find(x=>x.lanes.has(b.id));if(B&&fr>B.win[0])b.free=new Date(runFrom(b.id,B.win[0],fr-B.win[0])).toISOString()});
-BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{t=wake(t);const st=t,f=passF(st);let hh=s[1]*f;t=runFrom(b.id,st,hh*H);const gem=s[4]==='gem'&&t>JAM_END.getTime()-5*6e4;if(gem){t=JAM_END.getTime()-5*6e4;hh=(t-st)/H}return{key:b.id+'-'+i,gem,lane:b,name:s[0],h:hh,res:s[2],cost:Math.round(s[3]*f/500)*500,cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
+BUILDERS.forEach(b=>{let t=new Date(b.free).getTime();b.plan=b.steps.map((s,i)=>{t=wake(t);const st=t,f=passF(st);let hh=s[1]*f;t=runFrom(b.id,st,hh*H);const gem=s[4]==='gem'&&t>JAM_END.getTime()-5*6e4;if(gem){t=JAM_END.getTime()-5*6e4;hh=(t-st)/H}return{key:b.id+'-'+i,gem,lane:b,name:s[0],h:hh,res:s[2],cost:Math.round(s[3]*f/500)*500,cwl:s[4]==='cwl',opt:s[4]==='opt',book:s[4]==='book',bof:s[4]==='bof',bos:s[4]==='bos',start:new Date(st),end:new Date(t),final:i===b.steps.length-1}})});
 const ALL=BUILDERS.flatMap(b=>b.plan);
-function tags(p){return (p.cwl?'<span class="tag">after CWL</span>':'')+(p.opt?'<span class="tag">spare DE only</span>':'')+(p.book?'<span class="tag">Book of Heroes</span>':'')+(p.bof?'<span class="tag">Book of Fighting</span>':'')+(p.gem?'<span class="tag">gem finish 2:40 AM Nov 16</span>':'')+(p.final?'<span class="tag fin">final round</span>':'')}
+function tags(p){return (p.cwl?'<span class="tag">after CWL</span>':'')+(p.opt?'<span class="tag">spare DE only</span>':'')+(p.book?'<span class="tag">Book of Heroes</span>':'')+(p.bof?'<span class="tag">Book of Fighting</span>':'')+(p.bos?'<span class="tag">Book of Spells, done instantly</span>':'')+(p.gem?'<span class="tag">gem finish 2:40 AM Nov 16</span>':'')+(p.final?'<span class="tag fin">final round</span>':'')}
 
 
 /* ---------- icons (original, generic shapes) ---------- */
