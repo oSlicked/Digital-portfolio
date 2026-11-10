@@ -206,7 +206,7 @@ const BOOSTS = [                                     // potions active at export
 ];
 /* step: [name, Jam hours before Gold Pass, currency g/e/d, cost, flag] */
 const LANES = [
-  {id:'gob', name:'Goblin Builder', cur:'Spell Tower #2', left:40649, steps:[]},
+  {id:'gob', name:'Goblin Builder', cur:'Giga Bomb 4', left:231120, started:Date.parse('2026-11-10T02:24:00-05:00'), steps:[]},
   {id:'b1', name:'Builder 1', cur:'Grand Warden 80', left:95323, steps:[
     ['Grand Warden 81',43,'e',12.5e6],['Grand Warden 82',43,'e',12.5e6],['Grand Warden 83',43,'e',12.5e6],['Hidden Tesla #5',68,'g',11.25e6]]},
   {id:'b2', name:'Builder 2', cur:'Spell Tower #1', left:82374, steps:[
@@ -256,7 +256,8 @@ const PROGRESS = [
     ['Mortar x4',17,[18,'3/4'],[18,'4/4'],18],
     ['Hidden Tesla x5',16,[17,'2/5'],[17,'5/5'],17],
     ["Builder's Hut x5",7,[8,'3/5'],[8,'3/5'],8],
-    ['Spell Tower x2',3,[4,'0/2'],[4,'2/2'],4],
+    ['Spell Tower x2',3,[4,'1/2'],[4,'2/2'],4],
+    ['Giga Bomb',3,3,4,4],
     ['Elixir Storage x4',18,[19,'0/4'],[19,'4/4'],19],
     ['Gold Storage x4',18,[19,'0/4'],[19,'1/4'],19],
   ]},
@@ -269,12 +270,11 @@ const PROGRESS = [
     ['Stone Slammer',5,6,6,6],['Siege Barracks',5,6,6,6],['Battle Blimp',5,6,6,6],
   ]},
 ];
-const DONE_SINCE_NOV1 = {levels:74, walls:317, more:35}; // upgrade levels finished, walls, and levels still to start or finish in the Jam plan
+const DONE_SINCE_NOV1 = {levels:75, walls:317, more:35}; // upgrade levels finished, walls, and levels still to start or finish in the Jam plan
 /* full-price hours after the Jam */
 const AFTER_B = [
   ["Builder's Hut #2",136,'g',21.6e6,'Just misses the Jam on Builder 6 after Duke 22'],
   ["Builder's Hut #5",136,'g',21.6e6,'Goblin Builder in the Jam if you reach about 100 gems'],
-  ['Giga Bomb 4',136,'g',18e6,''],
   ['Gold Storage #2',135,'e',16.2e6,''],
   ['Seeking Air Mines 1 to 3',372,'g',51.3e6,'Before TH19'],
   ['Giant Bombs 1 to 4',452,'g',61.2e6,'Before TH19'],
