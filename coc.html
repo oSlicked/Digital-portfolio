@@ -1118,15 +1118,70 @@ function editAnswer(s,lane){
   const it=lane?null:findItem(s), ln=lane||(it&&it.type==='q'?it.s.lane.id:it&&it.type==='cur'?it.p.L.id:null);
   return `To move or change ${it&&it.type==='q'?'<b>'+esc(it.s.name)+'</b>':'an upgrade'}, open the editor and use the arrows. ${ln?'':'Pick one:'}`+editBtns(ln?[ln]:PLAN.map(p=>p.id));
 }
+/* gaps before the Jam ends, and what won't be maxed */
+const CTX={lane:null};
+const HEROES=['Barbarian King','Archer Queen','Grand Warden','Royal Champion','Minion Prince','Dragon Duke'];
+function lastJamStart(){ let t=JAM_END; if(inSleep(torontoHour(t))){ let s=localMidnight(t)+SETTINGS.sleep[0]*H; if(s>t) s-=864e5; t=s; } return t; }
+const isSingle=n=>!/ to |,| and | x\d|Bombs|Traps|Mines|Drills/.test(n);
+function busyHero(name,at){ const h=HEROES.find(x=>name.startsWith(x)); if(!h) return null;
+  let end=0; plan.forEach(p=>{ if(p.L.cur&&p.L.cur.startsWith(h)) end=Math.max(end,p.curEnd); p.q.forEach(x=>{ if(x.name.startsWith(h)) end=Math.max(end,x.end); }); });
+  return end>at?end:null; }
+function candidates(laneId,at){
+  const P=PLAN.find(p=>p.id===laneId), lab=P.kind==='lab'||P.kind==='glab', rows=lab?AFTER_L:AFTER_B;
+  const queued=new Set(allSteps().map(x=>x.name));
+  return rows.filter(r=>!queued.has(r[0])&&!(laneId!=='gob'&&/Goblin Builder/.test(r[4]||''))).map(r=>({r,single:isSingle(r[0]),busy:busyHero(r[0],at)}))
+    .sort((a,b)=>(b.single-a.single)||(!!a.busy-!!b.busy)||(b.r[1]-a.r[1]));
+}
+function gapReport(laneId){
+  const now=Date.now(), last=lastJamStart();
+  const lanesWithGap=plan.filter(p=>wake(Math.max(p.idleAt,now))<last);
+  if(!laneId){
+    if(!lanesWithGap.length) return `No gaps: every builder and lab is busy until after your last chance to start something in the Jam (${whenD(last)}).`;
+    return `These have room for one more Jam priced start:<ul>${lanesWithGap.map(p=>`<li><b>${esc(p.L.name)}</b>: free ${p.idleAt<=now?'now':whenD(p.idleAt)}</li>`).join('')}</ul>Ask me something like <i>what fits in builder 3's gap?</i>`;
+  }
+  CTX.lane=laneId;
+  const p=plan.find(x=>x.L.id===laneId), free=Math.max(p.idleAt,now), at=wake(free);
+  if(at>=last) return `<b>${esc(p.L.name)}</b> is busy until ${whenD(p.idleAt)}, which is after your last chance to start something in the Jam (${whenD(last)}). No gap to fill.`;
+  const list=candidates(laneId,at).slice(0,6);
+  let h=`<b>${esc(p.L.name)}</b> is free from <b>${whenD(free)}</b>${at>free?' (you wake at '+when(at)+')':''}. Start the next one before <b>${whenD(last)}</b>${last<JAM_END?' (the Jam ends '+when(JAM_END)+' but you\'re asleep)':''}.<br>`;
+  h+=`The Jam price locks in when you start, so the <b>longest, most expensive</b> upgrade is the best value. Not maxed yet:<ul>`;
+  list.forEach(c=>{ const r=c.r;
+    h+=`<li><b>${esc(r[0])}</b>: ${(r[1]/24).toFixed(1)}d, ${money(r[3])} ${CUR[r[2]]} full price${c.single?`, about ${Math.round(r[1]/2)}h and ${money(r[3]/2)} in the Jam`:''}${c.busy?` <span class="bad">(hero busy until ${whenD(c.busy)})</span>`:''}${r[4]?'<br><span class="muted">'+esc(r[4])+'</span>':''}</li>`; });
+  h+='</ul>';
+  const best=list.find(c=>c.single&&!c.busy);
+  if(best){ h+=`My pick: <b>${esc(best.r[0])}</b>.<div class="cbtns"><button type="button" class="cbtn" data-addc="${laneId}|${esc(best.r[0])}">Add ${esc(best.r[0])} to ${esc(p.L.name)}</button><button type="button" class="cbtn" data-goedit="${laneId}">Edit by hand</button></div><span class="muted" style="font-size:12px">Jam numbers are estimates at half price. Check the time in game.</span>`; }
+  return h;
+}
+function gapPick(laneId){
+  const p=plan.find(x=>x.L.id===laneId), at=wake(Math.max(p.idleAt,Date.now()));
+  if(at>=lastJamStart()) return '';
+  const best=candidates(laneId,at).find(c=>c.single&&!c.busy); if(!best) return '';
+  return `<br>For <b>${esc(p.L.name)}'s gap</b> (free ${whenD(p.idleAt)}), the best value is <b>${esc(best.r[0])}</b>.<div class="cbtns"><button type="button" class="cbtn" data-addc="${laneId}|${esc(best.r[0])}">Add it to ${esc(p.L.name)}</button><button type="button" class="cbtn" data-goedit="${laneId}">Edit by hand</button></div>`;
+}
+function maxedReport(){
+  const bits=[];
+  PROGRESS.forEach(g=>g.rows.forEach(r=>{ const a=Array.isArray(r[3])?r[3]:[r[3],''], full=a[0]===r[4]&&(!a[1]||a[1]==='all'||/^(\d+)\/\1$/.test(a[1]));
+    if(!full&&g.group!=='Lab'){ const nm=r[0].replace(/ x\d+$/,''), m=/^(\d+)\/(\d+)$/.exec(a[1]||'');
+      bits.push(m?`${nm}: ${m[1]} of ${m[2]} at level ${r[4]}`:`${nm}: level ${a[0]} of ${r[4]}`); } }));
+  const seen=bits.map(b=>b.split(':')[0].split(' ')[0]);
+  const extraB=AFTER_B.filter(r=>!seen.some(w=>r[0].startsWith(w))).map(r=>r[0]);
+  return `When the Jam ends (${whenD(JAM_END)}), these <b>won't be maxed</b> yet:<br><b>Heroes and buildings</b><ul>${bits.map(b=>`<li>${esc(b)}</li>`).join('')}</ul><b>Not touched in the Jam</b><ul>${extraB.map(n=>`<li>${esc(n)}</li>`).join('')}</ul><b>Lab</b><ul>${AFTER_L.map(r=>`<li>${esc(r[0])}</li>`).join('')}</ul>`;
+}
 function answer(q){
   const s=q.toLowerCase().trim(), now=Date.now();
   const open=allSteps().filter(x=>!marks[mk(x)]).sort((a,b)=>a.start-b.start);
   if(!s) return 'Ask me something about your plan.';
   if(/^(hi|hey|hello|yo|sup)\b/.test(s)) return `Hey. ${open.length?`Next up is <b>${esc(open[0].name)}</b> on ${esc(open[0].lane.name)}, ${open[0].start<=now?'ready now':whenD(open[0].start)}.`:'Nothing is left to start.'} Ask me anything about your plan.`;
-  if(/help|what can you|examples/.test(s)) return `I read your plan and saved data on this phone, no internet needed. Try:<ul><li>What's next?</li><li>When is Builder 3 free?</li><li>When does Grand Warden 83 start?</li><li>How much gold do I need tomorrow?</li><li>Can I afford the gem starts?</li><li>Anything idle?</li><li>What won't be upgraded after Friday 1 AM?</li><li>What's running tomorrow at 9 PM?</li><li>What starts on Thursday?</li><li>When does everything run out?</li><li>Add Cannon 21 to builder 3, 60h, 9.5M gold</li><li>Remove Witch 8</li></ul>`;
+  if(/help|what can you|examples/.test(s)) return `I read your plan and saved data on this phone, no internet needed. Try:<ul><li>What's next?</li><li>When is Builder 3 free?</li><li>When does Grand Warden 83 start?</li><li>How much gold do I need tomorrow?</li><li>Can I afford the gem starts?</li><li>Anything idle?</li><li>What won't be upgraded after Friday 1 AM?</li><li>What's running tomorrow at 9 PM?</li><li>What starts on Thursday?</li><li>When does everything run out?</li><li>Add Cannon 21 to builder 3, 60h, 9.5M gold</li><li>Remove Witch 8</li><li>What fits in Builder 3's gap?</li><li>What won't be maxed when the Jam ends?</li></ul>`;
   const lane=findLane(s), W=parseWhen(s,now);
   /* change the plan */
-  if(/\b(add|remove|delete|take off|take out|move|swap|reorder|change|edit|put|queue up|replace|cancel|skip)\b/.test(s)) return editAnswer(s,lane);
+  const ctxLane=lane||(/\b(it|that|there|the gap|same)\b/.test(s)?CTX.lane:null);
+  if(lane) CTX.lane=lane;
+  /* gaps and what won't be maxed */
+  if(/\bgap|fill|best value|most value|worth|room|space|squeeze|\bfits?\b|what (can|should) (i|we) (add|put|start)|one more/.test(s)) return gapReport(ctxLane);
+  if(!W&&(/(not|won'?t|wont|never).{0,30}(upgrad|max|done)|left to max|still (to|need)|not maxed|unmaxed/.test(s))) return maxedReport()+(ctxLane?gapPick(ctxLane):'');
+  /* change the plan: only when it's asked as a command */
+  if(/^(ok |okay |yes |yeah |so |then |now )?(please |pls )?((can|could|would|will) (you|we|i) )?(please )?(add|remove|delete|take off|take out|move|swap|reorder|change|edit|put|queue up|replace|cancel|skip)\b/.test(s)||/\badd\b.+\d+\s*(h|hours?|d|days?)\b/.test(s)) return editAnswer(s,lane);
   /* questions about a time */
   if(/run out|out of work|go idle|goes idle|last upgrade|finish everything|everything done|when .*(idle|empty)/.test(s)&&!W){
     return `When each one runs out of planned work:<ul>${plan.slice().sort((a,b)=>a.idleAt-b.idleAt).map(p=>`<li><b>${esc(p.L.name)}</b>: ${p.idleAt<=now?'already out':whenD(p.idleAt)}</li>`).join('')}</ul>${editBtns(plan.filter(p=>p.idleAt<JAM_END).map(p=>p.L.id))}`; }
@@ -1182,10 +1237,15 @@ function closeChat(){ chatEl.classList.remove('on'); bg.classList.remove('on'); 
 document.getElementById('askBtn').addEventListener('click',openChat);
 document.getElementById('chatClose').addEventListener('click',closeChat);
 bg.addEventListener('click',closeChat);
-document.getElementById('chips').innerHTML=["What's next?","Anything idle?","Loot for tomorrow","Gems","What starts tomorrow?","When does everything run out?","Add an upgrade","Jam time left","Help"].map(t=>`<button type="button">${esc(t)}</button>`).join('');
+document.getElementById('chips').innerHTML=["What's next?","Anything idle?","Loot for tomorrow","Gems","What starts tomorrow?","When does everything run out?","Any gaps before the Jam ends?","What won't be maxed?","Jam time left","Help"].map(t=>`<button type="button">${esc(t)}</button>`).join('');
 logEl.addEventListener('click',e=>{
   const g=e.target.closest('[data-goedit]');
   if(g){ closeChat(); go('plan'); editing=g.dataset.goedit; lanes(); setTimeout(()=>{ const c=document.querySelector(`[data-edit="${editing}"]`); if(c) c.closest('.lane').scrollIntoView({behavior:'smooth',block:'start'}); },60); return; }
+  const ac=e.target.closest('[data-addc]');
+  if(ac){ const [lid,nm]=ac.dataset.addc.split('|'); const r=[...AFTER_B,...AFTER_L].find(x=>x[0]===nm); if(!r) return; ac.disabled=true;
+    editLane(lid,items=>items.push([r[0],r[1]/2/PASS,r[2],r[3]/2,lid==='gob'||lid==='glab'?'gem':'',null,null]));
+    const st=allSteps().find(x=>x.lane.id===lid&&x.name===r[0]);
+    say(`Added <b>${esc(r[0])}</b> to ${esc(PLAN.find(x=>x.id===lid).name)}.${st?` Start it <b>${st.start<=Date.now()?'now':whenD(st.start)}</b>${st.late?' <span class="bad">(after the Jam)</span>':''}.`:''} You can remove it in Plan if you change your mind.`+editBtns([lid])); return; }
   if(e.target.closest('[data-rm]')&&pendingRm){ const r=pendingRm; pendingRm=null; e.target.disabled=true;
     const L=LANES.find(l=>l.id===r.lane), i=L?L.steps.findIndex(x=>x[0]===r.name):-1;
     if(i<0){ say("I couldn't find it anymore."); return; }
