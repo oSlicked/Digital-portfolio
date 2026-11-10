@@ -1,0 +1,2 @@
+{"name":"CoC Planner","short_name":"CoC Planner","start_url":"/coc","scope":"/","display":"standalone","background_color":"#0a0c10","theme_color":"#0a0c10",
+"icons":[{"src":"/coc-icon-192.png","sizes":"192x192","type":"image/png"},{"src":"/coc-icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}

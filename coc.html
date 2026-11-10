@@ -4,215 +4,383 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#16212e">
+<meta name="theme-color" content="#0a0c10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CoC Planner">
 <title>CoC Planner</title>
+<link rel="manifest" href="/coc.webmanifest">
+<link rel="apple-touch-icon" href="/coc-icon-180.png">
+<link rel="icon" type="image/png" href="/coc-icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#16212e; --bg2:#1c2a3a; --ink:#2b1d0e; --muted:#7a6447;
-  --card:#f6ead0; --card2:#efe0bd; --edge:#6b4a1f; --line:#dcc79d;
-  --gold:#f2b31b; --gold-d:#a8700a; --elix:#c64fd6; --elix-d:#7d2a8c; --de:#4b3868; --de-d:#2a1c40;
-  --green:#3faa45; --green-d:#23722a; --blue:#3a8ee6; --blue-d:#1f5ea3; --red:#d9483b; --orange:#f07c1d;
-  --text:#eef3f8; --text2:#a9b8c8;
+  --bg:#0a0c10; --surface:rgba(255,255,255,.045); --surface2:rgba(255,255,255,.075); --surface3:rgba(255,255,255,.11);
+  --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.15);
+  --text:#f3f5f9; --muted:#8e97a8; --dim:#5f6779;
+  --gold:#f6b941; --elix:#d074f2; --de:#9d8eff; --green:#34d17b; --blue:#4c9dff; --red:#ff6159; --orange:#ff9f2e;
+  --r:20px; --tabh:64px; --safe:env(safe-area-inset-bottom,0px);
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
 body{
-  background:var(--bg);
-  background-image:linear-gradient(45deg,var(--bg2) 25%,transparent 25%,transparent 75%,var(--bg2) 75%),linear-gradient(45deg,var(--bg2) 25%,transparent 25%,transparent 75%,var(--bg2) 75%);
-  background-size:48px 48px;background-position:0 0,24px 24px;
-  color:var(--text);font:600 15px/1.45 Nunito,system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background:
+    radial-gradient(1000px 520px at 0% -8%,#1a2438 0%,transparent 62%),
+    radial-gradient(800px 480px at 105% 2%,#2b1c3f 0%,transparent 58%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--text);font:400 15px/1.45 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;font-feature-settings:"tnum" 1,"cv11" 1;
 }
-.wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
-h1,h2,h3,.disp{font-family:"Lilita One",Nunito,sans-serif;font-weight:400;letter-spacing:.2px;margin:0}
-h2{font-size:22px;color:#fff;text-shadow:0 2px 0 #000a;margin:28px 0 10px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-h2 small{font:700 13px Nunito,sans-serif;color:var(--text2);text-shadow:none}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:820px;margin:0 auto;padding:0 18px calc(var(--tabh) + var(--safe) + 96px)}
 
 /* header */
-header{position:sticky;top:0;z-index:20;background:#0f1822f2;backdrop-filter:blur(6px);border-bottom:2px solid #000;margin:0 -16px;padding:10px 16px 12px}
-.hrow{display:flex;align-items:center;gap:12px}
-.badge{flex:none;width:44px;height:44px;border-radius:10px;background:linear-gradient(#56a8f5,#2a6fc2);border:2px solid #0b2d55;box-shadow:inset 0 -3px 0 #0003;display:grid;place-items:center;font:24px "Lilita One";color:#fff;text-shadow:0 2px 0 #0007}
-.htxt h1{font-size:22px;color:#fff;text-shadow:0 2px 0 #000}
-.htxt p{margin:0;font-size:12px;color:var(--text2)}
-.jambar{margin-top:10px;position:relative;height:26px;border-radius:13px;background:#2a1a08;border:2px solid #000;overflow:hidden}
-.jambar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#ffd55a,#f0a500);box-shadow:inset 0 -4px 0 #0002}
-.jambar span{position:absolute;inset:0;display:grid;place-items:center;font:15px "Lilita One";color:#fff;text-shadow:0 1px 0 #000,0 0 3px #000}
-.boostrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font:800 12px Nunito;border:2px solid #0006}
-.pill.b{background:#1f5ea3;color:#fff}.pill.r{background:#7d2a8c;color:#fff}
+.top{position:sticky;top:0;z-index:30;margin:0 -18px;padding:calc(env(safe-area-inset-top,0px) + 12px) 18px 12px;
+  background:rgba(10,12,16,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
+.toprow{display:flex;align-items:center;gap:12px}
+.th{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:17px;color:#1a1204;
+  background:linear-gradient(145deg,#ffd77a,#e9a21b);box-shadow:0 6px 18px rgba(246,185,65,.25),inset 0 1px 0 rgba(255,255,255,.5)}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.top h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.sync{margin-top:6px;font-size:12px;color:var(--muted)}
 
-/* cards */
-.card{background:var(--card);color:var(--ink);border:3px solid var(--edge);border-radius:14px;box-shadow:0 4px 0 #0008;overflow:hidden}
+/* sections */
+.view{display:none;animation:fade .25s ease}
+.view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:26px 2px 10px}
+.sh h2{margin:0;font-size:19px;font-weight:700;letter-spacing:-.01em}
+.sh small{font-size:12px;color:var(--muted);font-weight:500}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .card+.card{margin-top:12px}
-.pad{padding:12px 14px}
+.pad{padding:16px}
 .muted{color:var(--muted)}
-.tag{display:inline-block;font:800 11px Nunito;padding:1px 7px;border-radius:6px;margin-left:4px;vertical-align:1px;white-space:nowrap}
-.t-boost{background:#d8ecff;color:#1f5ea3;border:1px solid #9cc6f2}
-.t-sleep{background:#ece3ff;color:#5a3ea0;border:1px solid #c9b8f2}
-.t-gem{background:#dff7e1;color:#23722a;border:1px solid #9fd8a4}
-.t-late{background:#ffe0dc;color:#a3281d;border:1px solid #f2a59c}
-.t-book{background:#fff0c7;color:#8a5a00;border:1px solid #e9c66b}
-.cur{display:inline-flex;align-items:center;gap:4px;font-weight:800;white-space:nowrap}
-.dot{width:12px;height:12px;border-radius:50%;border:2px solid #0005;flex:none}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* hero */
+.hero{padding:20px 18px 18px;position:relative;margin-top:16px;
+  background:linear-gradient(160deg,rgba(246,185,65,.16),rgba(246,185,65,.02) 45%,rgba(255,255,255,.03));border-color:rgba(246,185,65,.22)}
+.hero .lab{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.hero .big{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:6px 0 2px}
+.hero .big span{font-size:20px;color:var(--muted);font-weight:600;margin:0 6px 0 2px}
+.hero .sub{font-size:13px;color:var(--muted)}
+.track{height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:14px}
+.track i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#ffd77a,#f0a01a)}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--surface2);border:1px solid var(--border)}
+.pill i{width:7px;height:7px;border-radius:50%}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.stat{padding:14px;border-radius:16px;background:var(--surface);border:1px solid var(--border)}
+.stat .v{font-size:24px;font-weight:800;letter-spacing:-.02em}
+.stat .k{font-size:12px;color:var(--muted);font-weight:500}
+
+/* chips and tags */
+.tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:2px;white-space:nowrap;letter-spacing:.02em}
+.t-boost{background:rgba(76,157,255,.15);color:#8cc0ff}
+.t-sleep{background:rgba(157,142,255,.15);color:#bcb2ff}
+.t-gem{background:rgba(52,209,123,.14);color:#6fe3a2}
+.t-late{background:rgba(255,97,89,.14);color:#ff9b95}
+.t-edit{background:rgba(246,185,65,.15);color:#ffd27a}
+.cur{display:inline-flex;align-items:center;gap:5px;font-weight:600;white-space:nowrap}
+.dot{width:9px;height:9px;border-radius:50%;flex:none;display:inline-block}
 .dot.g{background:var(--gold)}.dot.e{background:var(--elix)}.dot.d{background:var(--de)}
 
 /* up next */
-.next{list-style:none;margin:0;padding:0}
-.next li{display:grid;grid-template-columns:76px 1fr auto;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
+.list{list-style:none;margin:0;padding:0}
+.next li{display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:center;padding:13px 16px;border-top:1px solid var(--border)}
 .next li:first-child{border-top:0}
-.next .when{font:16px "Lilita One";line-height:1.1;color:var(--ink)}
-.next .when small{display:block;font:800 11px Nunito;color:var(--muted)}
-.next .what b{display:block;font-weight:800}
-.next .what span{font-size:13px;color:var(--muted)}
-.next li.ready{background:#e3f4dc}
-.next li.ready .when{color:var(--green-d)}
-.next li.done{opacity:.45}
+.next .when{font-weight:700;font-size:15px;line-height:1.15}
+.next .when small{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-top:2px}
+.next .what b{display:block;font-weight:600}
+.next .what span{font-size:12.5px;color:var(--muted)}
+.next li.ready{background:linear-gradient(90deg,rgba(52,209,123,.12),transparent 70%)}
+.next li.ready .when{color:var(--green)}
+.next li.done{opacity:.4}
 .next li.done .what b{text-decoration:line-through}
-.daysep{padding:6px 14px;background:var(--card2);font:800 12px Nunito;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-top:1px solid var(--line)}
-.chk{appearance:none;-webkit-appearance:none;width:30px;height:30px;border-radius:8px;border:2px solid var(--edge);background:#fff;display:grid;place-items:center;cursor:pointer;flex:none}
-.chk:checked{background:var(--green);border-color:var(--green-d)}
-.chk:checked::after{content:"";width:8px;height:14px;border:solid #fff;border-width:0 3px 3px 0;transform:translateY(-2px) rotate(45deg)}
-.more{display:block;width:100%;padding:10px;border:0;border-top:1px solid var(--line);background:var(--card2);font:800 13px Nunito;color:var(--edge);cursor:pointer}
+.daysep{padding:8px 16px !important;display:block !important;background:rgba(255,255,255,.025);font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.chk{appearance:none;-webkit-appearance:none;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border2);background:transparent;display:grid;place-items:center;cursor:pointer;flex:none;transition:.15s}
+.chk:checked{background:var(--green);border-color:var(--green)}
+.chk:checked::after{content:"";width:6px;height:12px;border:solid #06240f;border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.more{display:block;width:100%;padding:13px;border:0;border-top:1px solid var(--border);background:transparent;font-weight:600;font-size:13px;color:var(--blue);cursor:pointer}
 
 /* lanes */
 .lanes{display:grid;grid-template-columns:1fr;gap:12px}
-@media(min-width:700px){.lanes{grid-template-columns:1fr 1fr}}
-.lane .lh{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;background:var(--card2);border-bottom:2px solid var(--line)}
-.lane .lh h3{font-size:18px}
-.lane .lh .free{font:800 12px Nunito;color:var(--muted);text-align:right}
-.lane .now{padding:10px 14px}
-.lane .now b{font-weight:800}
-.prog{height:12px;border-radius:6px;background:#d9c59a;border:2px solid #0004;overflow:hidden;margin-top:6px}
-.prog i{display:block;height:100%;background:linear-gradient(#7ad37f,#3faa45)}
-.q{list-style:none;margin:0;padding:0 0 4px}
-.q li{display:flex;justify-content:space-between;gap:10px;padding:6px 14px;border-top:1px dashed var(--line);font-size:14px}
-.q li .n{font-weight:700}
-.q li .t{color:var(--muted);font-weight:800;font-size:12px;text-align:right;white-space:nowrap}
-.q li.after{opacity:.55}
-.empty{padding:10px 14px;color:var(--muted);font-style:italic}
+@media(min-width:720px){.lanes{grid-template-columns:1fr 1fr}}
+.lane .lh{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:14px 16px 6px}
+.lname{font-weight:700;font-size:16px}
+.lsub{font-size:12px;color:var(--muted)}
+.lnow{padding:6px 16px 14px}
+.lnow b{font-weight:600}
+.cdl{font-size:12.5px;color:var(--muted);margin-top:2px}
+.bar2{height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:9px}
+.bar2 i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#3fe08a,#21b866)}
+.q li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 16px;border-top:1px solid var(--border);font-size:14px}
+.q li .t{color:var(--muted);font-size:12px;text-align:right;white-space:nowrap}
+.q li.after{opacity:.5}
+.empty{padding:12px 16px;color:var(--muted);font-size:13px;border-top:1px solid var(--border)}
+.ectl{display:flex;gap:4px;flex:none}
+.ib{width:32px;height:32px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);display:grid;place-items:center;cursor:pointer;font-size:14px;color:var(--text)}
+.ib:disabled{opacity:.3}
+.ib.x{color:var(--red)}
+.addf{padding:14px 16px;border-top:1px solid var(--border);background:rgba(255,255,255,.02);display:grid;gap:8px}
+.addf .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.addf .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+/* inputs and buttons */
+.in,select.in{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--border2);background:rgba(0,0,0,.25);outline:none;font-size:15px;min-width:0}
+.in:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(76,157,255,.2)}
+textarea.in{min-height:96px;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace}
+label.fl{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:5px}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:700;font-size:14px;cursor:pointer;background:var(--text);color:#0a0c10;white-space:nowrap}
+.btn.gold{background:linear-gradient(180deg,#ffd77a,#f0a51e);color:#241703}
+.btn.alt{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.btn.red{background:rgba(255,97,89,.14);color:#ff8f88;border:1px solid rgba(255,97,89,.25)}
+.btn.sm{padding:7px 12px;font-size:13px;border-radius:10px}
+.btn:active,.ib:active{transform:scale(.97)}
+.ghost{background:transparent;border:1px solid var(--border2);color:var(--text);border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer}
+.ghost.on{background:var(--gold);border-color:var(--gold);color:#241703}
+.msg{font-size:13px;font-weight:600}
+.msg.ok{color:var(--green)}.msg.bad{color:var(--red)}
+.seg{display:flex;background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:8px 10px;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer}
+.seg button[aria-selected=true]{background:var(--surface3);color:var(--text)}
 
 /* timeline */
 .tl{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tlin{position:relative}
-.tlrow{position:relative;height:40px;border-top:1px solid var(--line)}
-.tllab{position:sticky;left:0;z-index:3;width:92px;height:100%;background:var(--card2);border-right:2px solid var(--line);padding:4px 8px;font:800 12px/1.15 Nunito;display:flex;flex-direction:column;justify-content:center}
-.tllab small{font-weight:700;color:var(--muted);font-size:10px}
-.bar{position:absolute;top:7px;height:26px;border-radius:7px;border:2px solid #0006;color:#fff;font:12px/22px "Lilita One";padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 0 #0008;box-shadow:inset 0 -3px 0 #0002}
-.bar.g{background:linear-gradient(#ffc93c,#e9a106);color:#3a2600;text-shadow:none}
-.bar.e{background:linear-gradient(#dc6ee9,#b23cc4)}
-.bar.d{background:linear-gradient(#6a5490,#46335f)}
-.bar.cur{opacity:.75;background:repeating-linear-gradient(135deg,#cdb68a 0 8px,#bfa776 8px 16px);color:#4a3519;text-shadow:none}
-.tlhead{position:relative;height:26px;background:var(--card2)}
-.tick{position:absolute;top:0;bottom:0;border-left:1px solid #0001}
-.tick span{position:absolute;top:4px;left:4px;font:13px "Lilita One";color:var(--muted);white-space:nowrap}
+.tlrow{position:relative;height:42px;border-top:1px solid var(--border)}
+.tllab{position:sticky;left:0;z-index:3;width:96px;height:100%;background:#12151c;border-right:1px solid var(--border);padding:4px 10px;font-size:12px;font-weight:600;display:flex;flex-direction:column;justify-content:center;line-height:1.15}
+.tllab small{font-weight:500;color:var(--muted);font-size:10px}
+.tbar{position:absolute;top:8px;height:26px;border-radius:8px;color:#fff;font-size:11.5px;font-weight:600;line-height:26px;padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbar.g{background:linear-gradient(180deg,#f7c454,#d9961a);color:#2a1a02}
+.tbar.e{background:linear-gradient(180deg,#c968ea,#9a3bbd)}
+.tbar.d{background:linear-gradient(180deg,#8f80f5,#6150c9)}
+.tbar.curb{background:repeating-linear-gradient(135deg,rgba(255,255,255,.14) 0 7px,rgba(255,255,255,.07) 7px 14px);color:var(--text);border:1px solid var(--border2)}
+.tlhead{position:relative;height:30px;background:rgba(255,255,255,.02)}
+.tick{position:absolute;top:0;bottom:0;border-left:1px solid var(--border)}
+.tick span{position:absolute;top:7px;left:6px;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
 .vline{position:absolute;top:0;bottom:0;z-index:2;pointer-events:none}
-.vline.now{border-left:3px solid var(--blue)}
-.vline.jam{border-left:3px dashed var(--orange)}
-.vline em{position:absolute;top:2px;left:4px;font:11px "Lilita One";font-style:normal;color:#fff;padding:1px 6px;border-radius:6px;white-space:nowrap}
-.vline.now em{background:var(--blue)}.vline.jam em{background:var(--orange)}
+.vline.now{border-left:2px solid var(--blue)}
+.vline.jam{border-left:2px dashed var(--orange)}
+.vline em{position:absolute;top:5px;left:4px;font-size:10px;font-weight:700;font-style:normal;color:#fff;padding:2px 7px;border-radius:6px;white-space:nowrap}
+.vline.now em{background:var(--blue)}.vline.jam em{background:var(--orange);color:#2a1300}
+.note{font-size:12.5px;color:var(--muted);padding:12px 16px;border-top:1px solid var(--border);line-height:1.5}
 
 /* tables */
+.tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{padding:8px 12px;text-align:left;border-top:1px solid var(--line);vertical-align:top}
-th{font:800 12px Nunito;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;background:var(--card2);border-top:0}
+th,td{padding:10px 14px;text-align:left;border-top:1px solid var(--border);vertical-align:top}
+th{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-top:0}
 td.r,th.r{text-align:right;white-space:nowrap}
-.lvl{font:16px "Lilita One"}
-.arrow{color:var(--muted);margin:0 4px}
-.max{color:var(--green-d)}
-.maxnow{color:#c62828}
-.maxcol{color:#1f5ea3}
-.sub{display:block;font:800 10px Nunito,sans-serif;color:var(--muted);margin-top:-2px}
-tr.grp td{background:var(--card2);font:15px "Lilita One";color:var(--edge);padding:6px 12px}
-#progress th,#progress td{padding:7px 8px}
-#progress td:first-child,#progress th:first-child{padding-left:12px}
-.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 14px}
-.tot{background:#fff8e6;border:2px solid var(--line);border-radius:10px;padding:8px 10px}
-.tot .v{font:20px "Lilita One"}
-.tot .k{font:800 11px Nunito;color:var(--muted)}
-.tabs{display:flex;gap:6px;padding:10px 14px 0;background:var(--card2);border-bottom:2px solid var(--line)}
-.tabs button{border:2px solid var(--edge);border-bottom:0;background:var(--card);border-radius:8px 8px 0 0;padding:6px 12px;font:15px "Lilita One";color:var(--muted);cursor:pointer}
-.tabs button[aria-selected=true]{background:#fff8e6;color:var(--ink)}
-.upd{margin-top:16px}
-.upd summary{cursor:pointer;padding:12px 14px;font:18px "Lilita One",Nunito,sans-serif;list-style:none;display:flex;justify-content:space-between;align-items:center}
-.upd summary::-webkit-details-marker{display:none}
-.upd summary::after{content:"Paste";font:800 12px Nunito,sans-serif;background:linear-gradient(#ffd55a,#f0a500);border:2px solid var(--edge);border-radius:8px;padding:3px 10px;color:#3a2600}
-.upd[open] summary::after{content:"Close"}
-.upd textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:8px;padding:8px;font:500 12px ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:#fff}
-.btn{border:2px solid var(--edge);background:linear-gradient(#ffd55a,#f0a500);color:#3a2600;border-radius:10px;padding:7px 13px;font:16px "Lilita One",Nunito,sans-serif;cursor:pointer}
-.btn.alt{background:#fff8e6}
-.note{font-size:13px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line);background:var(--card2)}
-ul.tips{margin:0;padding:12px 14px 12px 32px}
-ul.tips li{margin:4px 0}
-footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
+.lvl{font-weight:700}
+.max{color:var(--green)}.maxnow{color:var(--red)}.maxcol{color:var(--blue)}
+.sub{display:block;font-size:10px;font-weight:500;color:var(--muted)}
+tr.grp td{background:rgba(255,255,255,.03);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);padding:8px 14px}
+#progress th,#progress td{padding:9px 9px}
+#progress td:first-child,#progress th:first-child{padding-left:16px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px}
+.tile{background:rgba(255,255,255,.035);border:1px solid var(--border);border-radius:14px;padding:12px}
+.tile .v{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.tile .k{font-size:11.5px;color:var(--muted);font-weight:500}
+
+/* tools */
+.tool h3{margin:0;font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px}
+.tool h3 .ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:15px;flex:none}
+.tool .desc{font-size:13px;color:var(--muted);margin:4px 0 0}
+.gembig{display:flex;align-items:baseline;gap:8px;margin:14px 0 4px}
+.gembig .v{font-size:44px;font-weight:800;letter-spacing:-.03em;color:#6fe3a2}
+.lrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--border);font-size:14px}
+.lrow .s{font-size:12px;color:var(--muted)}
+.ok{color:var(--green)}.bad{color:var(--red)}
+.ctr{display:flex;align-items:center;gap:8px;flex:none}
+.ctr b{min-width:22px;text-align:center;font-size:16px}
+.inote{width:100%;border:0;background:transparent;color:var(--muted);font-size:12px;padding:2px 0;outline:none}
+.inote:focus{color:var(--text)}
+ul.tips{margin:0;padding:14px 16px 14px 34px;font-size:14px;color:#cfd5df}
+ul.tips li{margin:6px 0}
+ul.tips b{color:var(--text)}
+footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
+
+/* tab bar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;
+  padding:6px 8px calc(6px + var(--safe));background:rgba(12,14,19,.78);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border-top:1px solid var(--border)}
+.tabbar .in2{display:flex;width:100%;max-width:520px}
+.tabbar button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--dim);font-size:10.5px;font-weight:600;cursor:pointer}
+.tabbar button svg{width:24px;height:24px}
+.tabbar button[aria-selected=true]{color:var(--gold)}
+
+/* helper */
+.fab{position:fixed;right:18px;bottom:calc(var(--tabh) + var(--safe) + 16px);z-index:41;width:56px;height:56px;border-radius:50%;border:0;cursor:pointer;
+  background:linear-gradient(145deg,#ffd77a,#e9a21b);color:#241703;display:grid;place-items:center;box-shadow:0 10px 28px rgba(0,0,0,.45),0 4px 14px rgba(246,185,65,.3)}
+.fab svg{width:26px;height:26px}
+.sheetbg{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s}
+.sheetbg.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;max-width:640px;margin:0 auto;height:min(82vh,720px);display:flex;flex-direction:column;
+  background:#12151c;border:1px solid var(--border2);border-bottom:0;border-radius:24px 24px 0 0;transform:translateY(105%);transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+.sheet.on{transform:none}
+.sheet .grab{width:40px;height:5px;border-radius:3px;background:var(--border2);margin:8px auto 0}
+.sheet .shh{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border)}
+.sheet .shh b{display:block;font-size:16px}
+.sheet .shh span{font-size:12px;color:var(--muted)}
+.chatlog{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.bub{max-width:86%;padding:10px 14px;border-radius:18px;font-size:14.5px;line-height:1.45}
+.bub.me{align-self:flex-end;background:var(--blue);color:#fff;border-bottom-right-radius:6px}
+.bub.bot{align-self:flex-start;background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:6px}
+.bub.bot ul{margin:6px 0 0;padding-left:18px}
+.bub.bot li{margin:3px 0}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:10px 16px 0;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;border:1px solid var(--border2);background:transparent;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--text)}
+.chatf{display:flex;gap:8px;padding:10px 16px calc(12px + var(--safe))}
+.chatf .in{border-radius:999px;padding:11px 16px}
+.chatf .btn{border-radius:999px}
+@media(min-width:720px){.next li{grid-template-columns:90px 1fr auto}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header>
-  <div class="hrow">
-    <div class="badge">18</div>
-    <div class="htxt"><h1>Hammer Jam Planner</h1><p id="synced"></p></div>
+<header class="top">
+  <div class="toprow">
+    <div class="th">18</div>
+    <div style="flex:1;min-width:0"><div class="eyebrow">Hammer Jam Planner</div><h1 id="title">Today</h1></div>
   </div>
-  <div class="jambar"><i id="jamfill"></i><span id="jamtxt"></span></div>
-  <div class="boostrow" id="boosts"></div>
+  <div class="sync" id="synced"></div>
 </header>
 
-<details class="card upd" id="upd">
-  <summary>Update from export</summary>
-  <div class="pad">
-    <p style="margin:0 0 8px">Copy your village data export in game, paste it here and press Update. The page works out what finished, what's running and what's next. It saves on this device only.</p>
-    <textarea id="paste" placeholder='{"tag":"#...","timestamp":...}' aria-label="Paste your export"></textarea>
-    <div class="row" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="btn" id="updBtn" type="button">Update</button>
+<!-- TODAY -->
+<section class="view on" data-view="today">
+  <div class="card hero">
+    <div class="lab">Hammer Jam</div>
+    <div class="big" id="jamBig"></div>
+    <div class="sub" id="jamSub"></div>
+    <div class="track"><i id="jamfill"></i></div>
+    <div class="pills" id="boosts"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="v" id="stReady">0</div><div class="k">Ready to start</div></div>
+    <div class="stat"><div class="v" id="stIdle">0</div><div class="k">Idle now</div></div>
+    <div class="stat"><div class="v" id="stGems" style="color:#6fe3a2">0</div><div class="k">Gems</div></div>
+  </div>
+  <div class="sh"><h2>Up next</h2><small>tick it once you start it</small></div>
+  <div class="card"><ul class="list next" id="next"></ul><button class="more" id="moreBtn" type="button">Show more</button></div>
+  <div class="sh"><h2>Loot for the rest of the Jam</h2><small>not started yet</small></div>
+  <div class="card"><div class="tiles" id="loot"></div></div>
+</section>
+
+<!-- PLAN -->
+<section class="view" data-view="plan">
+  <div class="sh"><h2>Builders and labs</h2><small>tap Edit to change a queue</small></div>
+  <div class="lanes" id="lanes"></div>
+  <div class="sh"><h2>Timeline</h2><small>swipe sideways</small></div>
+  <div class="card"><div class="tl" id="tl"></div>
+    <div class="note">Striped bars are already running. Anything that starts left of the orange line gets the Jam price, even if it finishes after. No starts are planned while you sleep (<span class="sleepTxt"></span>).</div>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section class="view" data-view="progress">
+  <div class="sh"><h2>Since Nov 1</h2><small>then, now and after the Jam plan</small></div>
+  <div class="card"><div class="tiles" id="progtot"></div><div class="tw"><table id="progress"></table></div>
+    <div class="note">Small numbers show how many of that building are at the level, like 2/5. <b style="color:var(--red)">Red</b> is already max today. <b style="color:var(--green)">Green</b> will be max once the Jam plan finishes. <b style="color:var(--blue)">Blue</b> is the TH18 max.</div></div>
+  <div class="sh"><h2>After the Jam</h2><small>everything left to max TH18</small></div>
+  <div class="card">
+    <div class="pad" style="padding-bottom:6px"><div class="seg" id="afterSeg"><button type="button" aria-selected="true" data-tab="b">Builders</button><button type="button" aria-selected="false" data-tab="l">Lab</button></div></div>
+    <div class="tw"><table id="after"></table></div>
+    <div class="note" id="afternote"></div>
+  </div>
+  <div class="sh"><h2>Notes</h2></div>
+  <div class="card"><ul class="tips">
+    <li><b>Hammer of Fighting:</b> Druid 6 and Battle Drill 6 now get done in the Jam, so save it for Sky Wagon 4 after the Jam (173 hours full price, after Sky Wagon 3).</li>
+    <li><b>Hammer of Building (Gold Pass):</b> saved for TH19.</li>
+    <li><b>Gems:</b> about 600 for the Goblin Lab run: Battle Drill 6, Log Launcher 6, Golem 15, Clone 9 and Sky Wagon 2, roughly 110 to 125 each. Check each price in game before confirming.</li>
+    <li><b>Not tracked:</b> hero equipment, supercharges and crafted defenses.</li>
+  </ul></div>
+</section>
+
+<!-- TOOLS -->
+<section class="view" data-view="tools">
+  <div class="sh"><h2>Gems</h2><small>saved on this device</small></div>
+  <div class="card tool" id="gemCard"></div>
+
+  <div class="sh"><h2>Magic items</h2><small>books, hammers and potions</small></div>
+  <div class="card tool" id="itemCard"></div>
+
+  <div class="sh"><h2>Loot check</h2><small>can you cover the next starts?</small></div>
+  <div class="card tool" id="lootCard"></div>
+
+  <div class="sh"><h2>Calendar reminders</h2></div>
+  <div class="card tool"><div class="pad">
+    <h3><span class="ico" style="background:rgba(76,157,255,.15)">📅</span>Add starts to your calendar</h3>
+    <p class="desc">Downloads a calendar file with an alert at each planned start, so your phone reminds you even with this page closed.</p>
+    <div class="seg" id="calSeg" style="margin-top:12px"><button type="button" aria-selected="false" data-r="24">Next 24h</button><button type="button" aria-selected="true" data-r="72">Next 3 days</button><button type="button" aria-selected="false" data-r="0">Whole plan</button></div>
+    <div class="row" style="margin-top:12px"><button class="btn gold" id="calBtn" type="button">Download calendar file</button><span class="msg" id="calMsg"></span></div>
+  </div></div>
+
+  <div class="sh"><h2>Update from export</h2></div>
+  <div class="card tool"><div class="pad">
+    <h3><span class="ico" style="background:rgba(52,209,123,.14)">⟳</span>Sync with the game</h3>
+    <p class="desc">Copy your village data export in game and paste it here. The page works out what finished, what's running and what's next on its own.</p>
+    <textarea class="in" id="paste" style="margin-top:12px" placeholder='{"tag":"#...","timestamp":...}' aria-label="Paste your export"></textarea>
+    <div class="row" style="margin-top:10px">
+      <button class="btn gold" id="updBtn" type="button">Update</button>
       <button class="btn alt" id="pasteBtn" type="button">Paste from clipboard</button>
-      <button class="btn alt" id="resetBtn" type="button">Use built-in data</button>
-      <span id="updMsg" role="status" style="font-weight:800"></span>
+      <button class="btn alt" id="resetBtn" type="button">Use built in data</button>
     </div>
+    <div class="msg" id="updMsg" role="status" style="margin-top:8px"></div>
+  </div></div>
+
+  <div class="sh"><h2>Settings</h2></div>
+  <div class="card tool"><div class="pad" style="display:grid;gap:14px">
+    <div><label class="fl">Sleep window (no starts planned)</label>
+      <div class="row" style="flex-wrap:nowrap"><select class="in" id="sleepA"></select><span class="muted">to</span><select class="in" id="sleepB"></select></div></div>
+    <div><label class="fl">Gem price estimate per Goblin start</label><input class="in" id="gemPrice" inputmode="numeric"></div>
+    <div class="row"><button class="btn red sm" id="resetEdits" type="button">Reset all schedule edits</button><button class="btn red sm" id="resetMarks" type="button">Clear started ticks</button></div>
+    <div class="msg" id="setMsg"></div>
+  </div></div>
+
+  <div class="sh"><h2>App and backup</h2></div>
+  <div class="card tool"><div class="pad">
+    <h3><span class="ico" style="background:rgba(246,185,65,.15)">📲</span>Install as an app</h3>
+    <p class="desc" id="installTxt">On iPhone: open this page in Safari, tap Share, then Add to Home Screen. It opens full screen and works without signal.</p>
+    <div class="row" style="margin-top:10px"><button class="btn gold" id="installBtn" type="button" hidden>Install</button></div>
   </div>
-</details>
+  <div class="pad" style="border-top:1px solid var(--border)">
+    <h3><span class="ico" style="background:rgba(157,142,255,.15)">💾</span>Backup</h3>
+    <p class="desc">Saves your gems, items, schedule edits, ticks and settings to a file. Restore it on a new phone or if your browser gets cleared.</p>
+    <div class="row" style="margin-top:10px">
+      <button class="btn alt" id="bkDown" type="button">Download backup</button>
+      <label class="btn alt" style="cursor:pointer">Restore<input type="file" id="bkUp" accept=".json,application/json" hidden></label>
+    </div>
+    <div class="msg" id="bkMsg" style="margin-top:8px"></div>
+  </div></div>
 
-<h2>Up next <small>start each one as soon as it frees</small></h2>
-<div class="card"><ul class="next" id="next"></ul><button class="more" id="moreBtn" type="button">Show more</button></div>
-
-<h2>Builders and labs <small>what's running and what's queued</small></h2>
-<div class="lanes" id="lanes"></div>
-
-<h2>Timeline <small>swipe sideways</small></h2>
-<div class="card"><div class="tl" id="tl"></div>
-  <div class="note">Striped bars are already running. Anything that starts left of the orange line gets the Jam price, even if it finishes after. No starts are planned between 1 and 8 AM.</div>
+  <footer>Private planner · times are Toronto time · not affiliated with Supercell</footer>
+</section>
 </div>
 
-<h2>Progress since Nov 1 <small>then, now and after the Jam plan</small></h2>
-<div class="card"><div class="totals" id="progtot"></div><table id="progress"></table>
-  <div class="note">Small numbers show how many of that building are at the level, like 2/5. <b style="color:#c62828">Red</b> is already max today. <b style="color:#23722a">Green</b> will be max once the Jam plan finishes. <b style="color:#1f5ea3">Blue</b> is the TH18 max level. Anything not listed here hasn't been touched yet and is in After the Jam below.</div></div>
-
-<h2>Loot for the rest of the Jam <small>upgrades not started yet</small></h2>
-<div class="card"><div class="totals" id="loot"></div></div>
-
-<h2>After the Jam <small>everything left to max TH18</small></h2>
-<div class="card">
-  <div class="tabs" role="tablist">
-    <button type="button" role="tab" aria-selected="true" data-tab="b">Builders</button>
-    <button type="button" role="tab" aria-selected="false" data-tab="l">Lab</button>
-  </div>
-  <table id="after"></table>
-  <div class="note" id="afternote"></div>
+<button class="fab" id="askBtn" type="button" aria-label="Ask the planner helper">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
+</button>
+<div class="sheetbg" id="chatBg"></div>
+<div class="sheet" id="chat" role="dialog" aria-label="Planner helper">
+  <div class="grab"></div>
+  <div class="shh"><div class="th" style="width:36px;height:36px;font-size:15px">?</div><div style="flex:1"><b>Planner helper</b><span>Answers from your plan · works offline</span></div><button class="ghost" id="chatClose" type="button">Done</button></div>
+  <div class="chatlog" id="chatlog"></div>
+  <div class="chips" id="chips"></div>
+  <form class="chatf" id="chatf"><input class="in" id="chatIn" placeholder="Ask about your plan" autocomplete="off"><button class="btn gold" type="submit">Ask</button></form>
 </div>
 
-<h2>Notes</h2>
-<div class="card"><ul class="tips">
-  <li><b>Hammer of Fighting:</b> Druid 6 and Battle Drill 6 now get done in the Jam, so save it for Sky Wagon 4 after the Jam (173 hours full price, after Sky Wagon 3).</li>
-  <li><b>Hammer of Building (Gold Pass):</b> saved for TH19.</li>
-  <li><b>Gems:</b> about 600 bought for the Goblin Lab run: Battle Drill 6, Log Launcher 6, Golem 15, Clone 9 and Sky Wagon 2, roughly 110 to 125 each. Check each price in game before confirming.</li>
-  <li><b>Not tracked:</b> hero equipment, supercharges and crafted defenses.</li>
-  <li>To refresh the plan, send a new in-game data export.</li>
-</ul></div>
-
-<footer>Private planner · times are Toronto time · not affiliated with Supercell</footer>
-</div>
+<nav class="tabbar"><div class="in2" role="tablist">
+  <button type="button" data-go="today" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Today</button>
+  <button type="button" data-go="plan" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M4 12h16M4 18h7"/></svg>Plan</button>
+  <button type="button" data-go="progress" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progress</button>
+  <button type="button" data-go="tools" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Tools</button>
+</div></nav>
 
 <script>
 /* ===== Data =====
@@ -221,7 +389,6 @@ footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
    is finished, what is running and what to start next on its own. */
 const JAM_END = Date.parse('2026-11-16T02:45:00-05:00');
 const PASS = 0.85/0.9;                              // Gold Pass builder/lab time bonus on top of the listed hours
-const SLEEP = [1, 8];                               // asleep 1 AM to 8 AM, Toronto
 const H = 3600e3;
 const BUILDER_LANES = ['gob','b1','b2','b3','b4','b5','b6'];
 const DONE_AT_BAKED = 79;                           // upgrade levels finished from Nov 1 up to the built-in export
@@ -283,54 +450,37 @@ const NAMES = {
 /* The export this version of the page was built from (Nov 10, 12:23 PM). A newer pasted export replaces it. */
 const BAKED = {"tag":"#88RJQPR0P","timestamp":1794331406,"helpers":[{"data":93000000,"lvl":5,"helper_cooldown":10006},{"data":93000001,"lvl":1,"helper_cooldown":10006},{"data":93000002,"lvl":1,"helper_cooldown":10006},{"data":93000003,"lvl":1,"helper_cooldown":10006}],"guardians":[{"data":107000000,"lvl":5},{"data":107000001,"lvl":4},{"data":107000008,"lvl":1}],"buildings":[{"data":1000003,"lvl":18,"timer":207855},{"data":1000013,"lvl":18,"gear_up":1},{"data":1000019,"lvl":16,"timer":24130,"helper_recurrent":true},{"data":1000097,"types":[{"data":103000011,"modules":[{"data":102000033,"lvl":1},{"data":102000034,"lvl":1},{"data":102000035,"lvl":1}]},{"data":103000012,"modules":[{"data":102000036,"lvl":1},{"data":102000037,"lvl":1},{"data":102000038,"lvl":1}]},{"data":103000013,"modules":[{"data":102000039,"lvl":1},{"data":102000040,"lvl":1},{"data":102000041,"lvl":1}]}]},{"data":1000000,"lvl":14,"cnt":4},{"data":1000001,"lvl":18,"cnt":1},{"data":1000002,"lvl":17,"cnt":6},{"data":1000002,"lvl":17,"cnt":1,"supercharge":1},{"data":1000003,"lvl":18,"cnt":3},{"data":1000004,"lvl":17,"cnt":5},{"data":1000004,"lvl":17,"cnt":1,"supercharge":1},{"data":1000004,"lvl":17,"cnt":1,"supercharge":2},{"data":1000005,"lvl":18,"cnt":4},{"data":1000006,"lvl":19,"cnt":1},{"data":1000007,"lvl":16,"cnt":1},{"data":1000009,"lvl":21,"cnt":2},{"data":1000010,"lvl":19,"cnt":325},{"data":1000011,"lvl":17,"cnt":2},{"data":1000012,"lvl":16,"cnt":4},{"data":1000013,"lvl":17,"cnt":1},{"data":1000013,"lvl":18,"cnt":2},{"data":1000014,"lvl":14,"cnt":1},{"data":1000015,"lvl":7,"cnt":2},{"data":1000015,"lvl":8,"cnt":3},{"data":1000019,"lvl":16,"cnt":2},{"data":1000019,"lvl":17,"cnt":2},{"data":1000020,"lvl":9,"cnt":1},{"data":1000021,"lvl":13,"cnt":4},{"data":1000023,"lvl":10,"cnt":2},{"data":1000023,"lvl":11,"cnt":1},{"data":1000024,"lvl":13,"cnt":1},{"data":1000026,"lvl":13,"cnt":1},{"data":1000027,"lvl":12,"cnt":3},{"data":1000028,"lvl":7,"cnt":2},{"data":1000029,"lvl":8,"cnt":1},{"data":1000032,"lvl":13,"cnt":2},{"data":1000059,"lvl":9,"cnt":1},{"data":1000064,"lvl":1,"cnt":1},{"data":1000067,"lvl":7,"cnt":2},{"data":1000068,"lvl":12,"cnt":1},{"data":1000070,"lvl":10,"cnt":1},{"data":1000071,"lvl":12,"cnt":1},{"data":1000072,"lvl":4,"cnt":2},{"data":1000077,"lvl":5,"cnt":1},{"data":1000079,"lvl":3,"cnt":1},{"data":1000084,"lvl":4,"cnt":3},{"data":1000085,"lvl":4,"cnt":3},{"data":1000086,"lvl":2,"cnt":1},{"data":1000089,"lvl":3,"cnt":2},{"data":1000093,"lvl":1,"cnt":1},{"data":1000102,"lvl":2,"cnt":2}],"traps":[{"data":12000020,"lvl":3,"timer":177278,"extra":true},{"data":12000000,"lvl":13,"cnt":8},{"data":12000001,"lvl":12,"cnt":9},{"data":12000002,"lvl":11,"cnt":8},{"data":12000005,"lvl":4,"cnt":1},{"data":12000005,"lvl":12,"cnt":7},{"data":12000006,"lvl":7,"cnt":9},{"data":12000008,"lvl":4,"cnt":4},{"data":12000016,"lvl":3,"cnt":1}],"decos":[{"data":18000000,"cnt":1},{"data":18000001,"cnt":4},{"data":18000003,"cnt":1},{"data":18000005,"cnt":4},{"data":18000006,"cnt":4},{"data":18000007,"cnt":1},{"data":18000008,"cnt":1},{"data":18000009,"cnt":1},{"data":18000010,"cnt":1},{"data":18000033,"cnt":1},{"data":18000037,"cnt":1},{"data":18000060,"cnt":1},{"data":18000063,"cnt":1},{"data":18000064,"cnt":1},{"data":18000065,"cnt":1},{"data":18000067,"cnt":1},{"data":18000069,"cnt":1},{"data":18000070,"cnt":1},{"data":18000071,"cnt":1},{"data":18000072,"cnt":1},{"data":18000090,"cnt":1},{"data":18000103,"cnt":1},{"data":18000126,"cnt":1},{"data":18000127,"cnt":1},{"data":18000130,"cnt":1},{"data":18000135,"cnt":1},{"data":18000136,"cnt":1},{"data":18000137,"cnt":1},{"data":18000138,"cnt":1},{"data":18000140,"cnt":1},{"data":18000141,"cnt":1},{"data":18000155,"cnt":1},{"data":18000157,"cnt":1},{"data":18000162,"cnt":1},{"data":18000165,"cnt":1},{"data":18000166,"cnt":1},{"data":18000171,"cnt":1},{"data":18000172,"cnt":1},{"data":18000178,"cnt":1},{"data":18000184,"cnt":1},{"data":18000185,"cnt":1},{"data":18000190,"cnt":1},{"data":18000192,"cnt":1},{"data":18000193,"cnt":1},{"data":18000196,"cnt":1},{"data":18000199,"cnt":1}],"obstacles":[{"data":8000088,"cnt":1},{"data":8000089,"cnt":3},{"data":8000090,"cnt":2},{"data":8000108,"cnt":1},{"data":8000116,"cnt":1},{"data":8000117,"cnt":2},{"data":8000127,"cnt":3},{"data":8000128,"cnt":1},{"data":8000129,"cnt":2},{"data":8000131,"cnt":2},{"data":8000133,"cnt":1},{"data":8000135,"cnt":1},{"data":8000136,"cnt":1},{"data":8000137,"cnt":1},{"data":8000138,"cnt":2},{"data":8000139,"cnt":1}],"units":[{"data":4000000,"lvl":12},{"data":4000001,"lvl":13},{"data":4000002,"lvl":9},{"data":4000003,"lvl":14},{"data":4000004,"lvl":13},{"data":4000005,"lvl":13},{"data":4000006,"lvl":13},{"data":4000007,"lvl":11},{"data":4000008,"lvl":13},{"data":4000009,"lvl":13},{"data":4000010,"lvl":14},{"data":4000011,"lvl":14,"timer":160601},{"data":4000012,"lvl":11},{"data":4000013,"lvl":14},{"data":4000015,"lvl":7},{"data":4000017,"lvl":8},{"data":4000022,"lvl":10},{"data":4000023,"lvl":12},{"data":4000024,"lvl":11},{"data":4000053,"lvl":8},{"data":4000058,"lvl":9},{"data":4000059,"lvl":9},{"data":4000065,"lvl":6},{"data":4000082,"lvl":4},{"data":4000095,"lvl":5},{"data":4000097,"lvl":4},{"data":4000109,"lvl":1},{"data":4000110,"lvl":4},{"data":4000123,"lvl":5},{"data":4000132,"lvl":4},{"data":4000150,"lvl":4},{"data":4000177,"lvl":3}],"siege_machines":[{"data":4000051,"lvl":6},{"data":4000052,"lvl":6},{"data":4000062,"lvl":6},{"data":4000075,"lvl":6},{"data":4000087,"lvl":5},{"data":4000091,"lvl":5},{"data":4000092,"lvl":5,"timer":239397,"extra":true},{"data":4000135,"lvl":4},{"data":4000188,"lvl":1}],"heroes":[{"data":28000000,"lvl":106,"timer":4767},{"data":28000001,"lvl":103,"timer":42540},{"data":28000002,"lvl":79,"timer":4791},{"data":28000004,"lvl":55},{"data":28000006,"lvl":95},{"data":28000007,"lvl":17,"timer":54114}],"spells":[{"data":26000000,"lvl":13},{"data":26000001,"lvl":12},{"data":26000002,"lvl":7},{"data":26000003,"lvl":5},{"data":26000005,"lvl":8},{"data":26000009,"lvl":12},{"data":26000010,"lvl":8},{"data":26000011,"lvl":7},{"data":26000016,"lvl":8},{"data":26000017,"lvl":8},{"data":26000028,"lvl":8},{"data":26000035,"lvl":4},{"data":26000053,"lvl":7,"helper_recurrent":true},{"data":26000070,"lvl":5},{"data":26000098,"lvl":5},{"data":26000109,"lvl":6},{"data":26000120,"lvl":4},{"data":26000123,"lvl":3}],"pets":[{"data":73000000,"lvl":15},{"data":73000001,"lvl":15},{"data":73000002,"lvl":15},{"data":73000003,"lvl":15},{"data":73000004,"lvl":10},{"data":73000007,"lvl":15},{"data":73000008,"lvl":12,"timer":40295},{"data":73000009,"lvl":15},{"data":73000010,"lvl":10},{"data":73000011,"lvl":10},{"data":73000016,"lvl":10},{"data":73000017,"lvl":10}],"equipment":[{"data":90000000,"lvl":14},{"data":90000001,"lvl":18},{"data":90000002,"lvl":14},{"data":90000003,"lvl":14},{"data":90000004,"lvl":18},{"data":90000005,"lvl":18},{"data":90000006,"lvl":18},{"data":90000007,"lvl":14},{"data":90000008,"lvl":18},{"data":90000009,"lvl":18},{"data":90000010,"lvl":20},{"data":90000011,"lvl":18},{"data":90000012,"lvl":18},{"data":90000013,"lvl":27},{"data":90000014,"lvl":27},{"data":90000015,"lvl":23},{"data":90000016,"lvl":1},{"data":90000017,"lvl":18},{"data":90000019,"lvl":27},{"data":90000020,"lvl":18},{"data":90000022,"lvl":23},{"data":90000024,"lvl":18},{"data":90000032,"lvl":8},{"data":90000034,"lvl":18},{"data":90000035,"lvl":27},{"data":90000039,"lvl":20},{"data":90000040,"lvl":27},{"data":90000041,"lvl":17},{"data":90000042,"lvl":18},{"data":90000043,"lvl":18},{"data":90000044,"lvl":11},{"data":90000047,"lvl":8},{"data":90000048,"lvl":11},{"data":90000049,"lvl":26},{"data":90000050,"lvl":20},{"data":90000051,"lvl":1},{"data":90000052,"lvl":18},{"data":90000053,"lvl":1},{"data":90000056,"lvl":14},{"data":90000057,"lvl":1},{"data":90000059,"lvl":1},{"data":90000060,"lvl":1},{"data":90000061,"lvl":1}],"house_parts":[82000000,82000001,82000002,82000003,82000004,82000006,82000008,82000009,82000010,82000011,82000013,82000014,82000015,82000016,82000017,82000020,82000022,82000025,82000031,82000032,82000045,82000046,82000048,82000049,82000052,82000053,82000055,82000058,82000059,82000060,82000061,82000062,82000063,82000064,82000066,82000067,82000081,82000082,82000084,82000087,82000088,82000089,82000090,82000092,82000094],"skins":[52000020,52000004,52000012,52000015,52000025,52000063,52000055,52000056,52000065,52000039,52000051,52000067,52000041,52000097,52000090,52000092,52000122,52000105,52000126,52000120,52000136,52000128,52000141,52000174,52000060,52000131,52000150,52000194,52000210,52000022,52000176,52000198,52000253,52000215,52000181,52000238,52000023,52000183,52000258,52000099,52000220,52000206,52000005,52000264,52000226,52000248,52000292,52000320,52000270,52000331,52000304,52000337],"sceneries":[60000015,60000034,60000017,60000014,60000035,60000059,60000064,60000066,60000072,60000073,60000069,60000078],"buildings2":[{"data":1000033,"lvl":4,"cnt":65},{"data":1000033,"lvl":5,"cnt":108},{"data":1000033,"lvl":9,"cnt":2},{"data":1000033,"lvl":10,"cnt":5},{"data":1000034,"lvl":10,"cnt":1},{"data":1000035,"lvl":10,"cnt":3},{"data":1000036,"lvl":10,"cnt":2},{"data":1000037,"lvl":10,"cnt":3},{"data":1000038,"lvl":10,"cnt":2},{"data":1000039,"lvl":10,"cnt":1},{"data":1000040,"lvl":12,"cnt":1},{"data":1000041,"lvl":10,"cnt":3},{"data":1000042,"lvl":1,"cnt":6},{"data":1000043,"lvl":10,"cnt":3},{"data":1000044,"lvl":10,"cnt":3},{"data":1000045,"lvl":10,"cnt":1},{"data":1000046,"lvl":10,"cnt":1},{"data":1000048,"lvl":10,"cnt":3},{"data":1000049,"lvl":1,"cnt":2},{"data":1000050,"lvl":8,"cnt":3},{"data":1000050,"lvl":10,"cnt":2},{"data":1000051,"lvl":8,"cnt":1},{"data":1000052,"lvl":10,"cnt":1},{"data":1000053,"lvl":1,"cnt":1},{"data":1000054,"lvl":10,"cnt":1},{"data":1000055,"lvl":10,"cnt":2},{"data":1000056,"lvl":10,"cnt":1},{"data":1000057,"lvl":10,"cnt":1},{"data":1000058,"lvl":10,"cnt":1},{"data":1000063,"lvl":10,"cnt":1},{"data":1000065,"lvl":5,"cnt":1},{"data":1000078,"lvl":7,"cnt":1},{"data":1000080,"lvl":1,"cnt":1},{"data":1000081,"lvl":5,"cnt":1},{"data":1000082,"lvl":6,"cnt":1}],"traps2":[{"data":12000010,"lvl":5,"cnt":6},{"data":12000011,"lvl":10,"cnt":5},{"data":12000013,"lvl":10,"cnt":6},{"data":12000014,"lvl":10,"cnt":4}],"decos2":[{"data":18000038,"cnt":4},{"data":18000042,"cnt":25},{"data":18000045,"cnt":2}],"obstacles2":[{"data":8000049,"cnt":1},{"data":8000091,"cnt":1},{"data":8000093,"cnt":1}],"units2":[{"data":4000031,"lvl":20},{"data":4000032,"lvl":20},{"data":4000033,"lvl":17},{"data":4000034,"lvl":20},{"data":4000035,"lvl":20},{"data":4000036,"lvl":20},{"data":4000037,"lvl":20},{"data":4000038,"lvl":17},{"data":4000041,"lvl":20},{"data":4000042,"lvl":20},{"data":4000070,"lvl":20},{"data":4000106,"lvl":20}],"heroes2":[{"data":28000003,"lvl":35},{"data":28000005,"lvl":33}],"skins2":[52000153],"sceneries2":[],"boosts":{"builder_boost":2495,"lab_boost":39015}};
 
+/* ===== Saved on this device ===== */
+const store={
+  get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }
+};
+const KEY='coc-planner-v5', EXP_KEY='coc-export-v1', SET_KEY='coc-settings-v1', EDIT_KEY='coc-plan-edits-v1',
+      GEM_KEY='coc-gems-v1', ITEM_KEY='coc-items-v1', LOOT_KEY='coc-loot-v1';
+let SETTINGS=Object.assign({sleep:[1,8],gemPrice:118}, store.get(SET_KEY,{}));
+let EDITS=store.get(EDIT_KEY,{})||{};
+let marks=store.get(KEY,{})||{};
+const save=()=>store.set(KEY,marks);
+
 /* ===== Read the export ===== */
-const EXP_KEY='coc-export-v1';
 function loadExport(){
-  try{ const raw=localStorage.getItem(EXP_KEY); if(raw){ const o=JSON.parse(raw);
-    if(o && o.tag===BAKED.tag && o.timestamp>BAKED.timestamp) return {exp:o, pasted:true}; } }catch(e){}
+  const o=store.get(EXP_KEY,null);
+  if(o && o.tag===BAKED.tag && o.timestamp>BAKED.timestamp) return {exp:o, pasted:true};
   return {exp:BAKED, pasted:false};
 }
 const {exp:EXP, pasted:PASTED} = loadExport();
 const EXPORT = EXP.timestamp*1000;
-const SINGLE = ['heroes','pets','guardians','units','spells','siege_machines'], MULTI = ['buildings','traps'];
-const entries = (x,id) => [...SINGLE,...MULTI].flatMap(k=>(x[k]||[]).filter(e=>e&&e.data===id));
-const lvlOf = (x,id) => Math.max(0,...entries(x,id).map(e=>e.lvl||0));
-const countOf = (x,id) => entries(x,id).reduce((a,e)=>a+(e.cnt||1),0);
-const countAtLeast = (x,id,to) => entries(x,id).filter(e=>(e.lvl||0)>=to).reduce((a,e)=>a+(e.cnt||1),0);
-const isMulti = id => MULTI.some(k=>(BAKED[k]||[]).some(e=>e.data===id)) && countOf(BAKED,id)>1;
-const nameOf = id => NAMES[id]||('#'+id);
-/* potions running at export time */
-const BOOSTS = [];
-if((EXP.boosts||{}).builder_boost>0) BOOSTS.push({x:10, from:EXPORT, to:EXPORT+EXP.boosts.builder_boost*1000, lanes:BUILDER_LANES, label:'Builder Potion'});
-if((EXP.boosts||{}).lab_boost>0) BOOSTS.push({x:24, from:EXPORT, to:EXPORT+EXP.boosts.lab_boost*1000, lanes:['lab','glab'], label:'Research Potion'});
-/* jobs running in the export */
-const JOBS = [];
-[['buildings','b'],['traps','b'],['heroes','b'],['guardians','b'],['pets','pet'],['units','lab'],['spells','lab'],['siege_machines','lab']].forEach(([k,kind])=>
-  (EXP[k]||[]).forEach(e=>{ if(e&&e.timer>0) JOBS.push({id:e.data, to:(e.lvl||0)+1, left:e.timer, helper:!!e.helper_recurrent,
-    kind: e.extra ? (kind==='lab'?'glab':'gob') : kind, claimed:false}); }));
-/* walk each lane: finished items drop off, a running item becomes current, the rest stay queued */
-const credits = {};
-const credit = (id,to) => { const k=id+':'+to; if(!(k in credits)) credits[k]=countAtLeast(EXP,id,to)-countAtLeast(BAKED,id,to); return k; };
-const LANES = PLAN.map(P=>{
-  let cur='', left=0, steps=[], idx=0;
-  for(; idx<P.items.length; idx++){
-    const it=P.items[idx], id=it[5], to=it[6];
-    const job=JOBS.find(j=>!j.claimed && j.id===id && j.to===to && j.kind===P.kind);
-    if(job){ job.claimed=true; cur=it[0]; left=job.left; idx++; break; }
-    if(isMulti(id)){ const k=credit(id,to); if(credits[k]>0){ credits[k]--; continue; } break; }
-    if(lvlOf(EXP,id)>=to) continue;
-    break;
-  }
-  steps = P.items.slice(cur?idx:idx);
-  return {id:P.id, name:P.name, kind:P.kind, cur, left, steps:steps.map(x=>x.slice(0,5))};
-});
-/* anything running that isn't in the plan goes on a free lane of the same kind */
-const EXTRA = [];
-JOBS.filter(j=>!j.claimed).forEach(j=>{
-  const L=LANES.find(l=>l.kind===j.kind && !l.cur);
-  const nm=nameOf(j.id)+' '+j.to;
-  if(L){ L.cur=nm; L.left=j.left; L.unplanned=true; } else EXTRA.push(nm);
-});
+const SINGLE=['heroes','pets','guardians','units','spells','siege_machines'], MULTI=['buildings','traps'];
+const entries=(x,id)=>[...SINGLE,...MULTI].flatMap(k=>(x[k]||[]).filter(e=>e&&e.data===id));
+const lvlOf=(x,id)=>Math.max(0,...entries(x,id).map(e=>e.lvl||0));
+const countOf=(x,id)=>entries(x,id).reduce((a,e)=>a+(e.cnt||1),0);
+const countAtLeast=(x,id,to)=>entries(x,id).filter(e=>(e.lvl||0)>=to).reduce((a,e)=>a+(e.cnt||1),0);
+const isMulti=id=>MULTI.some(k=>(BAKED[k]||[]).some(e=>e.data===id)) && countOf(BAKED,id)>1;
+const nameOf=id=>NAMES[id]||('#'+id);
+const BOOSTS=[];
+if((EXP.boosts||{}).builder_boost>0) BOOSTS.push({x:10,from:EXPORT,to:EXPORT+EXP.boosts.builder_boost*1000,lanes:BUILDER_LANES,label:'Builder Potion'});
+if((EXP.boosts||{}).lab_boost>0) BOOSTS.push({x:24,from:EXPORT,to:EXPORT+EXP.boosts.lab_boost*1000,lanes:['lab','glab'],label:'Research Potion'});
+
 /* Progress since the planner started on Nov 1. Row: [name, Nov 1, now, after the Jam plan, max].
    A value is a level, or [level, small note]. */
 const PROGRESS = [
@@ -378,8 +528,6 @@ const PROGRESS = [
 ];
 function levelSum(x){ let t=0; ['heroes','pets','guardians','buildings','traps','units','spells','siege_machines'].forEach(k=>(x[k]||[]).forEach(e=>{
   if(!e||e.data===1000010||e.data===1000097) return; t+=(e.lvl||0)*(e.cnt||1); })); return t; }
-const DONE_SINCE_NOV1 = {levels:DONE_AT_BAKED+levelSum(EXP)-levelSum(BAKED), walls:317,
-  more:LANES.reduce((a,L)=>a+(L.cur&&!L.unplanned?1:0)+L.steps.length,0)};
 /* full-price hours after the Jam */
 const AFTER_B = [
   ["Builder's Hut #2",136,'g',21.6e6,'Just misses the Jam on Builder 6 after Duke 22'],
@@ -416,18 +564,22 @@ const AFTER_L = [
   ['Angry Spell 4',170,'d',380e3,'Max (estimate)'],
 ];
 
-/* ===== Engine ===== */
-const TZ = 'America/Toronto';
-const fmtT = new Intl.DateTimeFormat('en-US',{timeZone:TZ,hour:'numeric',minute:'2-digit'});
-const fmtD = new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'short',month:'short',day:'numeric'});
-const fmtDay = new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'long',month:'short',day:'numeric'});
-const dayKey = t => fmtD.format(t);
-const when = t => fmtT.format(t);
-const whenD = t => fmtD.format(t)+', '+fmtT.format(t);
-const torontoHour = t => { const d=new Date(t-5*H); return d.getUTCHours()+d.getUTCMinutes()/60; };
-const wake = t => { const h=torontoHour(t); if(h>=SLEEP[0]&&h<SLEEP[1]){ const d=new Date(t-5*H); d.setUTCHours(SLEEP[1],0,0,0); return d.getTime()+5*H; } return t; };
-const boostsFor = id => BOOSTS.filter(b=>b.lanes.includes(id)).sort((a,b)=>a.from-b.from);
-function runFrom(id,t,w){ // finish time for w ms of normal-speed work starting at t, through every potion window
+/* ===== Time ===== */
+const TZ='America/Toronto';
+const fmtT=new Intl.DateTimeFormat('en-US',{timeZone:TZ,hour:'numeric',minute:'2-digit'});
+const fmtD=new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'short',month:'short',day:'numeric'});
+const fmtDay=new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'long',month:'short',day:'numeric'});
+const dayKey=t=>fmtD.format(t);
+const when=t=>fmtT.format(t);
+const whenD=t=>fmtD.format(t)+', '+fmtT.format(t);
+const localMidnight=t=>Math.floor((t-5*H)/864e5)*864e5+5*H;
+const torontoHour=t=>{ const d=new Date(t-5*H); return d.getUTCHours()+d.getUTCMinutes()/60; };
+const inSleep=h=>{ const [a,b]=SETTINGS.sleep; if(a===b) return false; return a<b?(h>=a&&h<b):(h>=a||h<b); };
+const wake=t=>{ if(!inSleep(torontoHour(t))) return t; let w=localMidnight(t)+SETTINGS.sleep[1]*H; if(w<=t) w+=864e5; return w; };
+const hourName=h=>h===0?'12 AM':h<12?h+' AM':h===12?'12 PM':(h-12)+' PM';
+const sleepText=()=>hourName(SETTINGS.sleep[0])+' to '+hourName(SETTINGS.sleep[1]);
+const boostsFor=id=>BOOSTS.filter(b=>b.lanes.includes(id)).sort((a,b)=>a.from-b.from);
+function runFrom(id,t,w){
   for(const B of boostsFor(id)){
     if(t>=B.to) continue;
     if(t<B.from){ if(t+w<=B.from) return t+w; w-=B.from-t; t=B.from; }
@@ -435,127 +587,203 @@ function runFrom(id,t,w){ // finish time for w ms of normal-speed work starting 
   }
   return t+w;
 }
-const boosted = (id,a,b) => boostsFor(id).some(B=>a<B.to && b>B.from);
-const money = v => v>=1e6 ? (v/1e6).toFixed(v>=1e7?0:1).replace(/\.0$/,'')+'M' : Math.round(v/1e3)+'K';
-const CUR = {g:'Gold',e:'Elixir',d:'Dark Elixir'};
-const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const boosted=(id,a,b)=>boostsFor(id).some(B=>a<B.to&&b>B.from);
+const money=v=>!v?'0':v>=1e6?(v/1e6).toFixed(v>=1e8?0:1).replace(/\.0$/,'')+'M':Math.round(v/1e3)+'K';
+const CUR={g:'Gold',e:'Elixir',d:'Dark Elixir'};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dur=ms=>{ ms=Math.max(0,ms); const d=Math.floor(ms/864e5), h=Math.floor(ms%864e5/H), m=Math.floor(ms%H/6e4);
+  return d?`${d}d ${h}h`:h?`${h}h ${m}m`:`${m}m`; };
+const parseAmt=s=>{ s=String(s||'').trim().toLowerCase().replace(/,/g,''); const m=/^([\d.]+)\s*([km]?)$/.exec(s); if(!m) return NaN;
+  return parseFloat(m[1])*(m[2]==='m'?1e6:m[2]==='k'?1e3:1); };
 
-/* build plan */
-const plan = LANES.map(L=>{
-  const curFrom = EXPORT, curEnd = L.cur ? runFrom(L.id, curFrom, L.left*1000) : EXPORT;
-  let t = curEnd; const q=[];
-  L.steps.forEach((s,i)=>{
-    const ready=t, start=wake(t), end=runFrom(L.id,start,s[1]*PASS*H);
-    q.push({lane:L, i, name:s[0], hrs:s[1], cur:s[2], cost:s[3], flag:s[4]||'', ready, start, end,
-            slept:start>ready, late:start>=JAM_END, boost:boosted(L.id,start,end)});
-    t=end;
+/* ===== Build the plan (re-runs when you edit the schedule) ===== */
+const laneItems=P=>EDITS[P.id]||P.items;
+let LANES=[], EXTRA=[], plan=[];
+function rebuild(){
+  const JOBS=[];
+  [['buildings','b'],['traps','b'],['heroes','b'],['guardians','b'],['pets','pet'],['units','lab'],['spells','lab'],['siege_machines','lab']].forEach(([k,kind])=>
+    (EXP[k]||[]).forEach(e=>{ if(e&&e.timer>0) JOBS.push({id:e.data,to:(e.lvl||0)+1,left:e.timer,kind:e.extra?(kind==='lab'?'glab':'gob'):kind,claimed:false}); }));
+  const credits={};
+  const credit=(id,to)=>{ const k=id+':'+to; if(!(k in credits)) credits[k]=countAtLeast(EXP,id,to)-countAtLeast(BAKED,id,to); return k; };
+  LANES=PLAN.map(P=>{
+    const items=laneItems(P);
+    let cur='',left=0,idx=0;
+    for(;idx<items.length;idx++){
+      const it=items[idx], id=it[5], to=it[6];
+      if(!id) break;
+      const job=JOBS.find(j=>!j.claimed&&j.id===id&&j.to===to&&j.kind===P.kind);
+      if(job){ job.claimed=true; cur=it[0]; left=job.left; idx++; break; }
+      if(isMulti(id)){ const k=credit(id,to); if(credits[k]>0){ credits[k]--; continue; } break; }
+      if(lvlOf(EXP,id)>=to) continue;
+      break;
+    }
+    return {id:P.id,name:P.name,kind:P.kind,cur,left,first:idx,steps:items.slice(idx).map(x=>x.slice(0,5))};
   });
-  return {L, curEnd, curBoost:boosted(L.id,curFrom,curEnd), q, idleAt:t};
-});
+  EXTRA=[];
+  JOBS.filter(j=>!j.claimed).forEach(j=>{
+    const L=LANES.find(l=>l.kind===j.kind&&!l.cur), nm=nameOf(j.id)+' '+j.to;
+    if(L){ L.cur=nm; L.left=j.left; L.unplanned=true; } else EXTRA.push(nm);
+  });
+  plan=LANES.map(L=>{
+    const curEnd=L.cur?runFrom(L.id,EXPORT,L.left*1000):EXPORT;
+    let t=curEnd; const q=[];
+    L.steps.forEach((s,i)=>{
+      const ready=t, start=wake(t), end=runFrom(L.id,start,s[1]*PASS*H);
+      q.push({lane:L,i,name:s[0],hrs:s[1],cur:s[2],cost:s[3],flag:s[4]||'',ready,start,end,slept:start>ready,late:start>=JAM_END,boost:boosted(L.id,start,end)});
+      t=end;
+    });
+    return {L,curEnd,curBoost:boosted(L.id,EXPORT,curEnd),q,idleAt:t};
+  });
+}
+const mk=s=>s.lane.id+'|'+s.name;
+const allSteps=()=>plan.flatMap(p=>p.q);
 
-/* started marks (per viewer, optional) */
-const KEY='coc-planner-v5';
-let marks={}; try{ marks=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ marks={}; }
-const mk = s => s.lane.id+'|'+s.name;
-const save = () => { try{ localStorage.setItem(KEY,JSON.stringify(marks)); }catch(e){} };
-
-/* ===== Render ===== */
+/* ===== Today ===== */
 function header(){
   const now=Date.now();
   document.getElementById('synced').textContent=(PASTED?'Your pasted export from ':'Synced to your export from ')+whenD(EXPORT)+(EXTRA.length?' · also running: '+EXTRA.join(', '):'');
-  const start=Date.parse('2026-11-02T02:45:00-05:00');
-  const left=Math.max(0,JAM_END-now), pct=Math.min(100,Math.max(0,(JAM_END-now)/(JAM_END-start)*100));
-  document.getElementById('jamfill').style.width=pct+'%';
-  const d=Math.floor(left/864e5), h=Math.floor(left%864e5/H), m=Math.floor(left%H/6e4);
-  document.getElementById('jamtxt').textContent = left>0 ? `Jam ends in ${d}d ${h}h ${m}m · Mon 2:45 AM` : 'Hammer Jam is over';
-  document.getElementById('boosts').innerHTML = BOOSTS.filter(b=>b.to>now).map(b=>
-    `<span class="pill ${b.x===10?'b':'r'}">${esc(b.label)} ${b.x}x · until ${when(b.to)}</span>`).join('');
+  const start=Date.parse('2026-11-02T02:45:00-05:00'), left=Math.max(0,JAM_END-now);
+  document.getElementById('jamfill').style.width=Math.min(100,Math.max(0,left/(JAM_END-start)*100))+'%';
+  const d=Math.floor(left/864e5), h=Math.floor(left%864e5/H), m=Math.floor(left%H/6e4), s=Math.floor(left%6e4/1e3);
+  document.getElementById('jamBig').innerHTML=left>0?`${d}<span>d</span>${h}<span>h</span>${m}<span>m</span>${String(s).padStart(2,'0')}<span>s</span>`:'Over';
+  document.getElementById('jamSub').textContent=left>0?'Ends '+fmtDay.format(JAM_END)+' at '+when(JAM_END):'The Hammer Jam has ended. Full prices now.';
+  document.getElementById('boosts').innerHTML=BOOSTS.filter(b=>b.to>now).map(b=>
+    `<span class="pill"><i style="background:${b.x===10?'var(--blue)':'var(--elix)'}"></i>${esc(b.label)} ${b.x}x · until ${when(b.to)}</span>`).join('');
 }
+function stats(){
+  const now=Date.now();
+  document.getElementById('stReady').textContent=allSteps().filter(s=>!s.late&&!marks[mk(s)]&&s.start<=now).length;
+  document.getElementById('stIdle').textContent=idleLanes().length;
+  document.getElementById('stGems').textContent=GEMS.gems.toLocaleString();
+}
+function idleLanes(){ const now=Date.now(); return plan.filter(p=>{ const q=p.q.filter(s=>!s.late);
+  const running=(p.L.cur&&p.curEnd>now)||q.some(s=>marks[mk(s)]&&s.end>now); return !running; }); }
 
 let showAll=false;
 function upNext(){
   const now=Date.now();
-  const all=plan.flatMap(p=>p.q).filter(s=>!s.late).sort((a,b)=>a.start-b.start);
-  const open=all.filter(s=>!(marks[mk(s)]) && s.start<=now);          // ready now
-  const fut=all.filter(s=>s.start>now);
-  const doneRecent=all.filter(s=>marks[mk(s)] && s.start<=now && s.start>now-6*H);
-  let list=[...open,...fut];
-  const limit=showAll?list.length:10;
-  const shown=list.slice(0,limit);
-  let html='',lastDay='';
+  const all=allSteps().filter(s=>!s.late).sort((a,b)=>a.start-b.start);
+  const open=all.filter(s=>!marks[mk(s)]&&s.start<=now), fut=all.filter(s=>!marks[mk(s)]&&s.start>now);
+  const doneRecent=all.filter(s=>marks[mk(s)]&&s.start>now-6*H&&s.start<=now+48*H);
+  const list=[...open,...fut], shown=list.slice(0,showAll?list.length:8);
+  let html='', lastDay='';
   shown.forEach(s=>{
-    const ready=s.start<=now;
-    const dk=ready?'Ready now':dayKey(s.start);
+    const ready=s.start<=now, dk=ready?'Ready now':dayKey(s.start);
     if(dk!==lastDay){ html+=`<li class="daysep">${ready?'Ready now':fmtDay.format(s.start)}</li>`; lastDay=dk; }
-    const prevName = s.i===0 ? (s.lane.cur||'free now') : s.lane.steps[s.i-1][0];
-    const tags=(s.boost?'<span class="tag t-boost">boosted</span>':'')+(s.slept?'<span class="tag t-sleep">after sleep</span>':'')+
-      (s.flag==='gem'?'<span class="tag t-gem">gems</span>':'');
-    html+=`<li class="${ready?'ready':''}">
-      <div class="when">${ready?'Now':when(s.start)}<small>${esc(s.lane.name)}</small></div>
-      <div class="what"><b>${esc(s.name)}${tags}</b><span>after ${esc(prevName)} · <span class="cur"><i class="dot ${s.cur}"></i>${money(s.cost)}</span></span></div>
-      <input type="checkbox" class="chk" aria-label="Started ${esc(s.name)}" data-k="${esc(mk(s))}" ${marks[mk(s)]?'checked':''}>
-    </li>`;
+    const prev=s.i===0?(s.lane.cur||'free now'):s.lane.steps[s.i-1][0];
+    const tags=(s.boost?'<span class="tag t-boost">BOOSTED</span>':'')+(s.slept?'<span class="tag t-sleep">AFTER SLEEP</span>':'')+(s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':'');
+    html+=`<li class="${ready?'ready':''}"><div class="when">${ready?'Now':when(s.start)}<small>${esc(s.lane.name)}</small></div>
+      <div class="what"><b>${esc(s.name)}${tags}</b><span>after ${esc(prev)} · <span class="cur"><i class="dot ${s.cur}"></i>${money(s.cost)}</span></span></div>
+      <input type="checkbox" class="chk" aria-label="Started ${esc(s.name)}" data-k="${esc(mk(s))}"></li>`;
   });
-  doneRecent.forEach(s=>{
-    html+=`<li class="done"><div class="when">${when(s.start)}<small>${esc(s.lane.name)}</small></div><div class="what"><b>${esc(s.name)}</b><span>marked started</span></div>
-      <input type="checkbox" class="chk" aria-label="Started ${esc(s.name)}" data-k="${esc(mk(s))}" checked></li>`;
-  });
-  if(!shown.length) html='<li><div></div><div class="what"><b>Nothing left to start in the Jam.</b></div><div></div></li>';
+  if(doneRecent.length){ html+='<li class="daysep">Started</li>';
+    doneRecent.forEach(s=>{ html+=`<li class="done"><div class="when">${when(s.start)}<small>${esc(s.lane.name)}</small></div><div class="what"><b>${esc(s.name)}</b><span>done ${whenD(s.end)}</span></div>
+      <input type="checkbox" class="chk" aria-label="Started ${esc(s.name)}" data-k="${esc(mk(s))}" checked></li>`; }); }
+  if(!shown.length&&!doneRecent.length) html='<li style="display:block"><b>Nothing left to start in the Jam.</b></li>';
   document.getElementById('next').innerHTML=html;
   const btn=document.getElementById('moreBtn');
-  btn.style.display=list.length>10?'block':'none';
+  btn.style.display=list.length>8?'block':'none';
   btn.textContent=showAll?'Show less':`Show all ${list.length}`;
 }
 document.getElementById('next').addEventListener('change',e=>{
   const k=e.target.dataset.k; if(!k) return;
   if(e.target.checked) marks[k]=1; else delete marks[k];
-  save(); upNext(); lanes();
+  save(); renderLive();
 });
 document.getElementById('moreBtn').addEventListener('click',()=>{ showAll=!showAll; upNext(); });
 
+function loot(){
+  const now=Date.now(), sum={g:0,e:0,d:0}, day={g:0,e:0,d:0};
+  allSteps().filter(s=>!s.late&&!marks[mk(s)]).forEach(s=>{ sum[s.cur]+=s.cost; if(s.start<now+24*H) day[s.cur]+=s.cost; });
+  document.getElementById('loot').innerHTML=['g','e','d'].map(c=>`<div class="tile"><div class="k"><i class="dot ${c}"></i> ${CUR[c]}</div><div class="v">${money(sum[c])}</div><div class="k">next 24h: ${money(day[c])}</div></div>`).join('');
+}
+
+/* ===== Plan: lanes with editing ===== */
+let editing=null;
 function lanes(){
   const now=Date.now();
   document.getElementById('lanes').innerHTML=plan.map(p=>{
-    const L=p.L, running=p.curEnd>now;
-    // what's actually on the builder right now, assuming starts on time
-    let activeName=L.cur, activeStart=EXPORT-1, activeEnd=p.curEnd;
-    for(const s of p.q){ if(s.start<=now){ activeName=s.name; activeStart=s.start; activeEnd=s.end; } }
-    const idle = now>=activeEnd || !activeName;
-    const pct = idle?100:Math.max(2,Math.min(100,(now-activeStart)/(activeEnd-activeStart)*100));
-    const nowHtml = idle
-      ? `<b>Idle</b> <span class="muted">${L.id==='glab'||L.id==='gob'?'· needs gems':'since '+whenD(activeEnd)}</span>`
-      : `<b>${esc(activeName)}</b> <span class="muted">· done ${whenD(activeEnd)}</span>${(activeName===L.cur?p.curBoost:boosted(L.id,activeStart,activeEnd))?'<span class="tag t-boost">boosted</span>':''}
-         <div class="prog"><i style="width:${pct}%"></i></div>`;
-    const rest=p.q.filter(s=>s.start>now);
-    const qHtml = rest.length ? `<ul class="q">${rest.map(s=>`<li class="${s.late?'after':''}"><span class="n">${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">gems</span>':''}${s.late?'<span class="tag t-late">after Jam</span>':''}</span><span class="t">${whenD(s.start)}</span></li>`).join('')}</ul>`
-      : `<div class="empty">${L.id==='gob'||L.id==='glab'?'Needs gems for the next start':'Nothing else queued in the Jam'}</div>`;
-    return `<div class="card lane"><div class="lh"><h3>${esc(L.name)}</h3><div class="free">${rest.length?rest.length+' queued':'last one running'}</div></div>
-      <div class="now">${nowHtml}</div>${qHtml}</div>`;
+    const L=p.L;
+    let name=L.cur, a=EXPORT-1, b=p.curEnd, isCur=true;
+    for(const s of p.q){ if(s.start<=now){ name=s.name; a=s.start; b=s.end; isCur=false; } }
+    const idle=now>=b||!name, pct=idle?100:Math.max(2,Math.min(100,(now-a)/(b-a)*100));
+    const gemLane=L.id==='glab'||L.id==='gob';
+    const nowHtml=idle
+      ? `<b>Idle</b> <span class="muted">${gemLane?'· needs gems':'· since '+whenD(b)}</span>`
+      : `<b>${esc(name)}</b>${(isCur?p.curBoost:boosted(L.id,a,b))?'<span class="tag t-boost">BOOSTED</span>':''}
+         <div class="cdl"><span class="cd" data-to="${b}">${dur(b-now)}</span> left · done ${whenD(b)}</div><div class="bar2"><i style="width:${pct}%"></i></div>`;
+    const ed=editing===L.id, edited=!!EDITS[L.id];
+    let qHtml;
+    if(ed){
+      qHtml=`<ul class="list q">${p.q.map((s,i)=>`<li><span>${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':''}<span class="s muted" style="display:block;font-size:12px">${Math.round(s.hrs*PASS)}h · <span class="cur"><i class="dot ${s.cur}"></i>${money(s.cost)}</span></span></span>
+        <span class="ectl"><button class="ib" type="button" data-act="up" data-l="${L.id}" data-i="${i}" ${i===0?'disabled':''} aria-label="Move up">↑</button><button class="ib" type="button" data-act="down" data-l="${L.id}" data-i="${i}" ${i===p.q.length-1?'disabled':''} aria-label="Move down">↓</button><button class="ib x" type="button" data-act="del" data-l="${L.id}" data-i="${i}" aria-label="Remove">✕</button></span></li>`).join('')}</ul>
+        ${p.q.length?'':'<div class="empty">Nothing queued</div>'}
+        <form class="addf" data-add="${L.id}">
+          <input class="in" name="n" placeholder="Upgrade name, like Cannon 21" required>
+          <div class="g3"><input class="in" name="h" placeholder="Hours" inputmode="decimal" required><input class="in" name="c" placeholder="Cost, 9.5M" required><select class="in" name="r"><option value="g">Gold</option><option value="e">Elixir</option><option value="d">Dark</option></select></div>
+          <label class="muted" style="font-size:13px;display:flex;gap:8px;align-items:center"><input type="checkbox" name="gem"> Needs gems (Goblin)</label>
+          <div class="muted" style="font-size:12px">Use the time the game shows right now. Remove it here once it's started if it doesn't clear on its own.</div>
+          <div class="row"><button class="btn gold sm" type="submit">Add to queue</button>${edited?`<button class="btn red sm" type="button" data-act="reset" data-l="${L.id}">Reset to my plan</button>`:''}</div>
+        </form>`;
+    } else {
+      const rest=p.q.filter(s=>s.start>now);
+      qHtml=rest.length?`<ul class="list q">${rest.map(s=>`<li class="${s.late?'after':''}"><span>${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':''}${s.late?'<span class="tag t-late">AFTER JAM</span>':''}</span><span class="t">${whenD(s.start)}</span></li>`).join('')}</ul>`
+        :`<div class="empty">${gemLane?'Needs gems for the next start':'Nothing else queued in the Jam'}</div>`;
+    }
+    const cnt=p.q.filter(s=>s.start>now).length;
+    return `<div class="card lane"><div class="lh"><div><div class="lname">${esc(L.name)}${edited?'<span class="tag t-edit">EDITED</span>':''}</div><div class="lsub">${cnt?cnt+' queued':'last one running'}</div></div>
+      <button class="ghost ${ed?'on':''}" type="button" data-edit="${L.id}">${ed?'Done':'Edit'}</button></div>
+      <div class="lnow">${nowHtml}</div>${qHtml}</div>`;
   }).join('');
 }
+function editLane(id,fn){
+  const P=PLAN.find(p=>p.id===id); const items=laneItems(P).map(x=>x.slice());
+  fn(items); EDITS[id]=items; store.set(EDIT_KEY,EDITS); rebuild(); renderAll();
+}
+document.getElementById('lanes').addEventListener('click',e=>{
+  const eb=e.target.closest('[data-edit]');
+  if(eb){ editing=editing===eb.dataset.edit?null:eb.dataset.edit; lanes(); return; }
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  const id=b.dataset.l, i=+b.dataset.i, L=LANES.find(l=>l.id===id), at=L.first+i;
+  if(b.dataset.act==='reset'){ delete EDITS[id]; store.set(EDIT_KEY,EDITS); rebuild(); renderAll(); return; }
+  editLane(id,items=>{
+    if(b.dataset.act==='up'&&i>0) [items[at-1],items[at]]=[items[at],items[at-1]];
+    if(b.dataset.act==='down') [items[at+1],items[at]]=[items[at],items[at+1]];
+    if(b.dataset.act==='del') items.splice(at,1);
+  });
+});
+document.getElementById('lanes').addEventListener('submit',e=>{
+  e.preventDefault(); const f=e.target, id=f.dataset.add;
+  const n=f.n.value.trim(), h=parseFloat(f.h.value), c=parseAmt(f.c.value);
+  if(!n||!(h>0)||!(c>=0)){ f.c.style.borderColor='var(--red)'; return; }
+  editLane(id,items=>items.push([n,h/PASS,f.r.value,c,f.gem.checked?'gem':'',null,null]));
+});
 
 function timeline(){
-  const t0=Date.parse('2026-11-09T00:00:00-05:00'), t1=Date.parse('2026-11-18T00:00:00-05:00');
-  const pxh=6, W=(t1-t0)/H*pxh, LAB=92;
+  const now=Date.now();
+  const t0=localMidnight(Math.min(now,EXPORT))-0;
+  const lastEnd=Math.max(JAM_END,...plan.map(p=>p.idleAt));
+  const t1=Math.min(localMidnight(lastEnd)+2*864e5,t0+14*864e5);
+  const pxh=6, LAB=96, W=(t1-t0)/H*pxh;
   const x=t=>LAB+Math.max(0,(Math.min(t,t1)-t0)/H*pxh);
-  let head=`<div class="tlhead" style="width:${W+LAB}px"><div class="tllab" style="height:26px;border:0"></div>`;
+  let head=`<div class="tlhead" style="width:${W+LAB}px"><div class="tllab" style="height:30px;border:0;background:#12151c"></div>`;
   for(let t=t0;t<t1;t+=864e5) head+=`<div class="tick" style="left:${x(t)}px"><span>${fmtD.format(t)}</span></div>`;
   head+='</div>';
   const rows=plan.map(p=>{
     const L=p.L;
-    let bars=!L.cur?'':`<div class="bar cur" style="left:${x(EXPORT)}px;width:${Math.max(4,x(p.curEnd)-x(EXPORT))}px" title="${esc(L.cur)}">${esc(L.cur)}</div>`;
-    p.q.forEach(s=>{ bars+=`<div class="bar ${s.cur}" style="left:${x(s.start)}px;width:${Math.max(4,x(s.end)-x(s.start)-2)}px" title="${esc(s.name)}: ${whenD(s.start)} to ${whenD(s.end)}">${esc(s.name)}</div>`; });
-    const sub = p.q.length ? '' : (L.id==='gob'?'gems':'');
-    return `<div class="tlrow" style="width:${W+LAB}px"><div class="tllab">${esc(L.name)}<small>${esc(sub)}</small></div>${bars}</div>`;
+    let bars=!L.cur?'':`<div class="tbar curb" style="left:${x(EXPORT)}px;width:${Math.max(4,x(p.curEnd)-x(EXPORT))}px" title="${esc(L.cur)}">${esc(L.cur)}</div>`;
+    p.q.forEach(s=>{ bars+=`<div class="tbar ${s.cur}" style="left:${x(s.start)}px;width:${Math.max(4,x(s.end)-x(s.start)-2)}px" title="${esc(s.name)}: ${whenD(s.start)} to ${whenD(s.end)}">${esc(s.name)}</div>`; });
+    return `<div class="tlrow" style="width:${W+LAB}px"><div class="tllab">${esc(L.name)}<small>${p.q.length?'':L.id==='gob'?'gems':''}</small></div>${bars}</div>`;
   }).join('');
-  const now=Date.now();
   const lines=`<div class="vline jam" style="left:${x(JAM_END)}px"><em>Jam ends</em></div>`+(now>t0&&now<t1?`<div class="vline now" style="left:${x(now)}px"><em>Now</em></div>`:'');
   const tl=document.getElementById('tl');
   tl.innerHTML=`<div class="tlin" style="width:${W+LAB}px">${head}${rows}${lines}</div>`;
-  if(!tl.dataset.scrolled){ tl.scrollLeft=Math.max(0,x(now)-LAB-40); tl.dataset.scrolled=1; }
+  if(!tl.dataset.scrolled&&tl.offsetParent){ tl.scrollLeft=Math.max(0,x(now)-LAB-40); tl.dataset.scrolled=1; }
+  document.querySelectorAll('.sleepTxt').forEach(n=>n.textContent=sleepText());
 }
 
-function liveNow(r){ // the Now column, read from the export
+/* ===== Progress ===== */
+function liveNow(r){
   const base=r[0].replace(/ x\d+$/,'').replace(/^Walls$/,'Wall');
   const id=Number(Object.keys(NAMES).find(k=>NAMES[k]===base)); if(!id) return r[2];
   const n=countOf(EXP,id); if(!n) return r[2];
@@ -566,61 +794,331 @@ function liveNow(r){ // the Now column, read from the export
 function progress(){
   const isFull=(v,max)=>{ const l=Array.isArray(v)?v[0]:v, n=Array.isArray(v)?v[1]:''; let full=l===max;
     if(n){ const m=/^(\d+)\/(\d+)$/.exec(n); if(m) full=full&&m[1]===m[2]; else full=full&&n==='all'; } return full; };
-  // cls: 'maxnow' (red) = already max today, 'max' (green) = will be max after the Jam plan
   const cell=(v,cls)=>{ const l=Array.isArray(v)?v[0]:v, n=Array.isArray(v)?v[1]:'';
     return `<td class="r lvl ${cls||''}">${l}${n?`<small class="sub">${esc(n)}</small>`:''}</td>`; };
-  let h='<tr><th>Upgrade</th><th class="r">Nov 1</th><th class="r">Now</th><th class="r">After Jam</th><th class="r">Max</th></tr>';
+  let h='<tr><th>Upgrade</th><th class="r">Nov 1</th><th class="r">Now</th><th class="r">After</th><th class="r">Max</th></tr>';
   PROGRESS.forEach(g=>{ h+=`<tr class="grp"><td colspan="5">${esc(g.group)}</td></tr>`;
     g.rows.forEach(r0=>{ const r=r0.slice(); r[2]=liveNow(r0); const nowMax=isFull(r[2],r[4]), aftMax=isFull(r[3],r[4]);
-      h+=`<tr><td><b>${esc(r[0])}</b></td>${cell(r[1])}${cell(r[2],nowMax?'maxnow':'')}${cell(r[3],nowMax?'maxnow':aftMax?'max':'')}<td class="r lvl maxcol">${r[4]}</td></tr>`; }); });
+      h+=`<tr><td>${esc(r[0])}</td>${cell(r[1])}${cell(r[2],nowMax?'maxnow':'')}${cell(r[3],nowMax?'maxnow':aftMax?'max':'')}<td class="r lvl maxcol">${r[4]}</td></tr>`; }); });
   document.getElementById('progress').innerHTML=h;
-  const D=DONE_SINCE_NOV1;
+  const levels=DONE_AT_BAKED+levelSum(EXP)-levelSum(BAKED);
+  const more=LANES.reduce((a,L)=>a+(L.cur&&!L.unplanned?1:0)+L.steps.length,0);
   document.getElementById('progtot').innerHTML=
-    `<div class="tot"><div class="k">Done since Nov 1</div><div class="v">${D.levels}</div><div class="k">upgrade levels</div></div>`+
-    `<div class="tot"><div class="k">Walls</div><div class="v">${D.walls}</div><div class="k">all maxed</div></div>`+
-    `<div class="tot"><div class="k">Still in the Jam plan</div><div class="v">${D.more}</div><div class="k">more levels</div></div>`;
+    `<div class="tile"><div class="k">Done since Nov 1</div><div class="v">${levels}</div><div class="k">upgrade levels</div></div>`+
+    `<div class="tile"><div class="k">Walls</div><div class="v">325</div><div class="k">all maxed</div></div>`+
+    `<div class="tile"><div class="k">Still planned</div><div class="v">${more}</div><div class="k">more levels</div></div>`;
 }
-
-function loot(){
-  const now=Date.now(), sum={g:0,e:0,d:0}, day={g:0,e:0,d:0};
-  plan.flatMap(p=>p.q).filter(s=>!s.late && !marks[mk(s)] && s.start>=now-6*H).forEach(s=>{ sum[s.cur]+=s.cost; if(s.start<now+24*H) day[s.cur]+=s.cost; });
-  document.getElementById('loot').innerHTML=['g','e','d'].map(c=>`<div class="tot"><div class="k"><i class="dot ${c}" style="display:inline-block;vertical-align:-2px"></i> ${CUR[c]}</div><div class="v">${money(sum[c])}</div><div class="k">next 24h: ${money(day[c])}</div></div>`).join('');
-}
-
 let tab='b';
 function after(){
   const rows=tab==='b'?AFTER_B:AFTER_L;
-  const days=rows.reduce((a,r)=>a+r[1],0)/24, tot={g:0,e:0,d:0}; rows.forEach(r=>tot[r[2]]+=r[3]);
+  const days=rows.reduce((a,r)=>a+r[1],0)/24;
   document.getElementById('after').innerHTML='<tr><th>Upgrade</th><th class="r">Time</th><th class="r">Cost</th></tr>'+
-    rows.map(r=>`<tr><td><b>${esc(r[0])}</b>${r[4]?`<br><span class="muted" style="font-size:12px">${esc(r[4])}</span>`:''}</td><td class="r">${(r[1]/24).toFixed(1)}d</td><td class="r"><span class="cur"><i class="dot ${r[2]}"></i>${money(r[3])}</span></td></tr>`).join('');
-  document.getElementById('afternote').innerHTML = tab==='b'
+    rows.map(r=>`<tr><td>${esc(r[0])}${r[4]?`<span class="sub" style="font-size:12px">${esc(r[4])}</span>`:''}</td><td class="r">${(r[1]/24).toFixed(1)}d</td><td class="r"><span class="cur"><i class="dot ${r[2]}"></i>${money(r[3])}</span></td></tr>`).join('');
+  document.getElementById('afternote').innerHTML=tab==='b'
     ? `About <b>${Math.round(days)} builder days</b> at full price, split across 6 builders: about ${Math.round(days/6)} days. Traps are cheap, so clear them whenever a builder is free.`
     : `About <b>${Math.round(days)} lab days</b> at full price. This is your bottleneck, so save Research Potions and books for it.`;
 }
-document.querySelector('.tabs').addEventListener('click',e=>{
+document.getElementById('afterSeg').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return; tab=b.dataset.tab;
-  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b)); after();
+  document.querySelectorAll('#afterSeg button').forEach(x=>x.setAttribute('aria-selected',x===b)); after();
 });
 
+/* ===== Gems ===== */
+let GEMS=Object.assign({gems:0,log:[],goals:[],daily:0}, store.get(GEM_KEY,{}));
+const saveGems=()=>store.set(GEM_KEY,GEMS);
+function gemPlan(){
+  const fromPlan=allSteps().filter(s=>s.flag==='gem'&&!s.late&&!marks[mk(s)]).sort((a,b)=>a.start-b.start)
+    .map(s=>({name:s.name,cost:SETTINGS.gemPrice,when:s.start,plan:true}));
+  return [...fromPlan,...GEMS.goals.map((g,i)=>({name:g.name,cost:g.cost,goal:i}))];
+}
+function renderGems(){
+  const list=gemPlan(); let run=0;
+  const rows=list.map(g=>{ run+=g.cost; const ok=run<=GEMS.gems;
+    return `<div class="lrow"><div><div>${esc(g.name)}</div><div class="s">${g.plan?'Goblin start · '+whenD(g.when):'Your goal'} · ${g.cost} gems</div></div>
+      <div class="ctr"><span class="${ok?'ok':'bad'}" style="font-weight:700;font-size:13px">${ok?'Covered':'Short '+(run-GEMS.gems)}</span>${g.goal!=null?`<button class="ib x" type="button" data-goaldel="${g.goal}" aria-label="Remove goal">✕</button>`:''}</div></div>`; }).join('');
+  const short=Math.max(0,run-GEMS.gems);
+  const eta=short&&GEMS.daily>0?` At ${GEMS.daily} a day you'll have enough by <b>${fmtD.format(Date.now()+Math.ceil(short/GEMS.daily)*864e5)}</b>.`:'';
+  const log=GEMS.log.slice(-8).reverse().map((l,j)=>`<div class="lrow"><div><div class="${l.amt<0?'bad':'ok'}" style="font-weight:700">${l.amt>0?'+':''}${l.amt}</div><div class="s">${esc(l.note||(l.amt<0?'Spent':'Got'))} · ${whenD(l.t)}</div></div><button class="ib" type="button" data-undo="${GEMS.log.length-1-j}" aria-label="Undo">↺</button></div>`).join('');
+  document.getElementById('gemCard').innerHTML=`<div class="pad">
+    <h3><span class="ico" style="background:rgba(52,209,123,.14)">💎</span>Gem counter</h3>
+    <div class="gembig"><span class="v">${GEMS.gems.toLocaleString()}</span><span class="muted">gems</span></div>
+    <div class="row" style="flex-wrap:nowrap"><input class="in" id="gAmt" placeholder="Amount" inputmode="numeric" style="max-width:110px"><input class="in" id="gNote" placeholder="What for (optional)"></div>
+    <div class="row" style="margin-top:8px"><button class="btn red sm" type="button" data-g="spend">Spent</button><button class="btn gold sm" type="button" data-g="got">Got</button><button class="btn alt sm" type="button" data-g="set">Set total</button></div>
+  </div>
+  <div class="note" style="border-top:1px solid var(--border)"><b style="color:var(--text)">Planned gem spends</b> · ${run} gems total${short?`, <span class="bad">${short} short</span>.`:', <span class="ok">all covered</span>.'}${eta}</div>
+  ${rows||'<div class="empty">No gem starts left in the plan.</div>'}
+  <form class="addf" id="goalF"><div class="g2"><input class="in" name="n" placeholder="Goal, like Builder's Hut 5" required><input class="in" name="c" placeholder="Gems" inputmode="numeric" required></div>
+    <div class="row"><button class="btn alt sm" type="submit">Add goal</button><span class="muted" style="font-size:12px;display:flex;align-items:center;gap:6px">Gems per day <input class="in" id="gDaily" value="${GEMS.daily||''}" inputmode="numeric" style="width:70px;padding:7px 9px"></span></div></form>
+  ${log?'<div class="note" style="border-top:1px solid var(--border)"><b style="color:var(--text)">Recent</b></div>'+log:''}`;
+  stats();
+}
+document.getElementById('gemCard').addEventListener('click',e=>{
+  const g=e.target.closest('[data-g]'), u=e.target.closest('[data-undo]'), d=e.target.closest('[data-goaldel]');
+  if(g){ const a=Math.round(parseAmt(document.getElementById('gAmt').value)); if(!(a>=0)) return;
+    const note=document.getElementById('gNote').value.trim();
+    if(g.dataset.g==='set'){ GEMS.gems=a; }
+    else { const amt=g.dataset.g==='spend'?-a:a; GEMS.gems=Math.max(0,GEMS.gems+amt); GEMS.log.push({t:Date.now(),amt,note}); GEMS.log=GEMS.log.slice(-60); }
+    saveGems(); renderGems(); }
+  if(u){ const i=+u.dataset.undo, l=GEMS.log[i]; if(l){ GEMS.gems=Math.max(0,GEMS.gems-l.amt); GEMS.log.splice(i,1); saveGems(); renderGems(); } }
+  if(d){ GEMS.goals.splice(+d.dataset.goaldel,1); saveGems(); renderGems(); }
+});
+document.getElementById('gemCard').addEventListener('submit',e=>{
+  e.preventDefault(); const f=e.target, c=Math.round(parseAmt(f.c.value)); if(!f.n.value.trim()||!(c>0)) return;
+  GEMS.goals.push({name:f.n.value.trim(),cost:c}); saveGems(); renderGems();
+});
+document.getElementById('gemCard').addEventListener('change',e=>{
+  if(e.target.id==='gDaily'){ GEMS.daily=Math.max(0,Math.round(parseAmt(e.target.value))||0); saveGems(); renderGems(); }
+});
+
+/* ===== Magic items ===== */
+const ITEM_GROUPS=[
+  ['Books',['Book of Heroes','Book of Fighting','Book of Spells','Book of Building','Book of Everything']],
+  ['Hammers',['Hammer of Building','Hammer of Fighting','Hammer of Spells','Hammer of Heroes']],
+  ['Potions',['Builder Potion','Research Potion','Hero Potion','Pet Potion','Power Potion','Training Potion','Resource Potion']],
+  ['Other',['Wall Ring','Rune of Gold','Rune of Elixir','Rune of Dark Elixir']],
+];
+let ITEMS=Object.assign({
+  'Hammer of Fighting':{n:1,note:'Sky Wagon 4 after the Jam'},
+  'Hammer of Building':{n:1,note:'Saved for TH19'},
+  'Research Potion':{n:0,note:'3 free every week. Save for the lab'},
+}, store.get(ITEM_KEY,{}));
+let showAllItems=false;
+function renderItems(){
+  const it=k=>ITEMS[k]||{n:0,note:''};
+  const owned=Object.keys(ITEMS).filter(k=>it(k).n>0).length;
+  let h=`<div class="pad" style="padding-bottom:10px"><h3><span class="ico" style="background:rgba(208,116,242,.15)">🧪</span>Your items</h3>
+    <p class="desc">Tap + or − as you get or use them. Tap the note line to write what each one is saved for.</p></div>`;
+  ITEM_GROUPS.forEach(([g,names])=>{
+    const ns=showAllItems?names:names.filter(k=>it(k).n>0||it(k).note);
+    if(!ns.length) return;
+    h+=`<div class="note" style="padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)">${g}</div>`;
+    ns.forEach(k=>{ const v=it(k);
+      h+=`<div class="lrow"><div style="flex:1;min-width:0"><div>${esc(k)}</div><input class="inote" data-note="${esc(k)}" value="${esc(v.note||'')}" placeholder="Saved for…"></div>
+        <div class="ctr">${k==='Research Potion'?'<button class="btn alt sm" type="button" data-wk="1">+3</button>':''}<button class="ib" type="button" data-it="${esc(k)}" data-d="-1" aria-label="One less">−</button><b>${v.n}</b><button class="ib" type="button" data-it="${esc(k)}" data-d="1" aria-label="One more">+</button></div></div>`; });
+  });
+  h+=`<button class="more" type="button" id="itemsMore">${showAllItems?'Show only what I have':'Show all items'}</button>`;
+  document.getElementById('itemCard').innerHTML=h;
+}
+const saveItems=()=>store.set(ITEM_KEY,ITEMS);
+document.getElementById('itemCard').addEventListener('click',e=>{
+  const b=e.target.closest('[data-it]');
+  if(b){ const k=b.dataset.it, v=ITEMS[k]||{n:0,note:''}; v.n=Math.max(0,v.n+ +b.dataset.d); ITEMS[k]=v; saveItems(); renderItems(); }
+  if(e.target.closest('[data-wk]')){ const v=ITEMS['Research Potion']||{n:0,note:''}; v.n+=3; ITEMS['Research Potion']=v; saveItems(); renderItems(); }
+  if(e.target.id==='itemsMore'){ showAllItems=!showAllItems; renderItems(); }
+});
+document.getElementById('itemCard').addEventListener('change',e=>{
+  const k=e.target.dataset.note; if(!k) return; const v=ITEMS[k]||{n:0,note:''}; v.note=e.target.value.trim(); ITEMS[k]=v; saveItems();
+});
+
+/* ===== Loot check ===== */
+let LOOT=Object.assign({g:'',e:'',d:'',win:24}, store.get(LOOT_KEY,{}));
+function lootNeeds(hours){
+  const now=Date.now(), end=hours?now+hours*H:Infinity;
+  return allSteps().filter(s=>!marks[mk(s)]&&s.start<end).sort((a,b)=>a.start-b.start);
+}
+function renderLoot(){
+  const have={g:parseAmt(LOOT.g),e:parseAmt(LOOT.e),d:parseAmt(LOOT.d)};
+  const steps=lootNeeds(LOOT.win), need={g:0,e:0,d:0}, first={};
+  steps.forEach(s=>{ need[s.cur]+=s.cost; if(!first[s.cur]&&have[s.cur]>=0&&need[s.cur]>have[s.cur]) first[s.cur]=s; });
+  const rows=['g','e','d'].map(c=>{ const h=have[c], ok=!(h>=0)?null:h>=need[c];
+    return `<div class="lrow"><div><div class="cur"><i class="dot ${c}"></i>${CUR[c]}</div><div class="s">Need ${money(need[c])}${first[c]?` · runs out at ${esc(first[c].name)}, ${whenD(first[c].start)}`:''}</div></div>
+      <div style="font-weight:700;font-size:13px" class="${ok===null?'muted':ok?'ok':'bad'}">${ok===null?'Enter amount':ok?'Covered':'Short '+money(need[c]-h)}</div></div>`; }).join('');
+  document.getElementById('lootCard').innerHTML=`<div class="pad">
+    <h3><span class="ico" style="background:rgba(246,185,65,.15)">🪙</span>What's in your storages?</h3>
+    <p class="desc">Type amounts like 18.5M or 250K.</p>
+    <div class="g3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px">
+      <div><label class="fl">Gold</label><input class="in" data-lt="g" value="${esc(LOOT.g)}" inputmode="decimal"></div>
+      <div><label class="fl">Elixir</label><input class="in" data-lt="e" value="${esc(LOOT.e)}" inputmode="decimal"></div>
+      <div><label class="fl">Dark</label><input class="in" data-lt="d" value="${esc(LOOT.d)}" inputmode="decimal"></div></div>
+    <div class="seg" id="lootSeg" style="margin-top:12px">${[[24,'Next 24h'],[48,'Next 48h'],[0,'Whole plan']].map(([v,t])=>`<button type="button" data-w="${v}" aria-selected="${LOOT.win===v}">${t}</button>`).join('')}</div>
+  </div>${rows}<div class="note">${steps.length} starts in this window, counted in order, so "runs out at" is the first one you can't pay for.</div>`;
+}
+document.getElementById('lootCard').addEventListener('change',e=>{ const c=e.target.dataset.lt; if(!c) return; LOOT[c]=e.target.value.trim(); store.set(LOOT_KEY,LOOT); renderLoot(); });
+document.getElementById('lootCard').addEventListener('click',e=>{ const b=e.target.closest('[data-w]'); if(!b) return; LOOT.win=+b.dataset.w; store.set(LOOT_KEY,LOOT); renderLoot(); });
+
+/* ===== Calendar ===== */
+let calRange=72;
+document.getElementById('calSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; calRange=+b.dataset.r;
+  document.querySelectorAll('#calSeg button').forEach(x=>x.setAttribute('aria-selected',x===b)); });
+document.getElementById('calBtn').addEventListener('click',()=>{
+  const now=Date.now(), end=calRange?now+calRange*H:Infinity;
+  const steps=allSteps().filter(s=>!marks[mk(s)]&&s.start>now&&s.start<end).sort((a,b)=>a.start-b.start);
+  const msg=document.getElementById('calMsg');
+  if(!steps.length){ msg.className='msg bad'; msg.textContent='Nothing to start in that window.'; return; }
+  const z=t=>new Date(t).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//CoC Planner//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+  steps.forEach((s,i)=>{ L.push('BEGIN:VEVENT','UID:coc-'+s.lane.id+'-'+s.start+'-'+i+'@jordanioannoni.com','DTSTAMP:'+z(now),'DTSTART:'+z(s.start),'DTEND:'+z(s.start+15*6e4),
+    'SUMMARY:Start '+s.name.replace(/[,;]/g,' ')+' ('+s.lane.name+')','DESCRIPTION:'+CUR[s.cur]+' '+money(s.cost)+(s.flag==='gem'?' · needs gems':''),
+    'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Start '+s.name.replace(/[,;]/g,' '),'TRIGGER:PT0M','END:VALARM','END:VEVENT'); });
+  L.push('END:VCALENDAR');
+  const blob=new Blob([L.join('\r\n')],{type:'text/calendar'}), a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='coc-starts.ics'; document.body.appendChild(a); a.click(); a.remove();
+  msg.className='msg ok'; msg.textContent=steps.length+' reminders ready. Open the file to add them.';
+});
+
+/* ===== Export update ===== */
 function applyExport(text){
-  const msg=document.getElementById('updMsg');
-  let o; try{ o=JSON.parse(String(text||'').trim()); }catch(e){ msg.style.color='#c62828'; msg.textContent="That isn't a full export. Copy it again and paste the whole thing."; return; }
-  if(!o||!o.timestamp||!Array.isArray(o.buildings)){ msg.style.color='#c62828'; msg.textContent="That's not a village export."; return; }
-  if(o.tag!==BAKED.tag){ msg.style.color='#c62828'; msg.textContent='That export is from a different village.'; return; }
-  if(o.timestamp*1000<=EXPORT){ msg.style.color='#c62828'; msg.textContent='That export is older than the one already loaded.'; return; }
-  try{ localStorage.setItem(EXP_KEY,JSON.stringify(o)); localStorage.removeItem(KEY); }catch(e){ msg.style.color='#c62828'; msg.textContent="Couldn't save on this device."; return; }
-  msg.style.color='#23722a'; msg.textContent='Updated. Reloading…'; setTimeout(()=>location.reload(),300);
+  const msg=document.getElementById('updMsg'); msg.className='msg bad';
+  let o; try{ o=JSON.parse(String(text||'').trim()); }catch(e){ msg.textContent="That isn't a full export. Copy it again and paste the whole thing."; return; }
+  if(!o||!o.timestamp||!Array.isArray(o.buildings)){ msg.textContent="That's not a village export."; return; }
+  if(o.tag!==BAKED.tag){ msg.textContent='That export is from a different village.'; return; }
+  if(o.timestamp*1000<=EXPORT){ msg.textContent='That export is older than the one already loaded.'; return; }
+  if(!store.set(EXP_KEY,o)){ msg.textContent="Couldn't save on this device."; return; }
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  msg.className='msg ok'; msg.textContent='Updated. Reloading…'; setTimeout(()=>location.reload(),300);
 }
 document.getElementById('updBtn').addEventListener('click',()=>applyExport(document.getElementById('paste').value));
 document.getElementById('pasteBtn').addEventListener('click',async()=>{
   try{ const t=await navigator.clipboard.readText(); document.getElementById('paste').value=t; applyExport(t); }
-  catch(e){ const m=document.getElementById('updMsg'); m.style.color='#c62828'; m.textContent='Clipboard blocked here. Long-press the box and paste instead.'; }
+  catch(e){ const m=document.getElementById('updMsg'); m.className='msg bad'; m.textContent='Clipboard blocked here. Long press the box and paste instead.'; }
 });
 document.getElementById('resetBtn').addEventListener('click',()=>{ try{ localStorage.removeItem(EXP_KEY); }catch(e){} location.reload(); });
 
-function render(){ header(); upNext(); lanes(); timeline(); progress(); loot(); after(); }
-render();
-setInterval(()=>{ header(); upNext(); lanes(); timeline(); loot(); },60e3);
+/* ===== Settings ===== */
+(function(){
+  const A=document.getElementById('sleepA'), B=document.getElementById('sleepB');
+  for(let h=0;h<24;h++){ A.add(new Option(hourName(h),h)); B.add(new Option(hourName(h),h)); }
+  A.value=SETTINGS.sleep[0]; B.value=SETTINGS.sleep[1];
+  document.getElementById('gemPrice').value=SETTINGS.gemPrice;
+  const msg=document.getElementById('setMsg');
+  const saveSet=t=>{ store.set(SET_KEY,SETTINGS); rebuild(); renderAll(); msg.className='msg ok'; msg.textContent=t; };
+  A.addEventListener('change',()=>{ SETTINGS.sleep=[+A.value,+B.value]; saveSet('Sleep window saved. Plan updated.'); });
+  B.addEventListener('change',()=>{ SETTINGS.sleep=[+A.value,+B.value]; saveSet('Sleep window saved. Plan updated.'); });
+  document.getElementById('gemPrice').addEventListener('change',e=>{ const v=Math.round(parseAmt(e.target.value)); if(v>0){ SETTINGS.gemPrice=v; saveSet('Gem price saved.'); } });
+  document.getElementById('resetEdits').addEventListener('click',()=>{ if(!confirmTap('resetEdits')) return; EDITS={}; store.set(EDIT_KEY,EDITS); saveSet('Schedule is back to my plan.'); });
+  document.getElementById('resetMarks').addEventListener('click',()=>{ if(!confirmTap('resetMarks')) return; marks={}; save(); saveSet('Started ticks cleared.'); });
+})();
+const armed={};
+function confirmTap(id){ const b=document.getElementById(id);
+  if(armed[id]){ clearTimeout(armed[id]); delete armed[id]; b.textContent=b.dataset.t; return true; }
+  b.dataset.t=b.textContent; b.textContent='Tap again to confirm';
+  armed[id]=setTimeout(()=>{ b.textContent=b.dataset.t; delete armed[id]; },3000); return false; }
+
+/* ===== Install and offline ===== */
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferredPrompt=e; const b=document.getElementById('installBtn'); b.hidden=false;
+  document.getElementById('installTxt').textContent='Adds the planner to your home screen. It opens full screen and works without signal.'; });
+document.getElementById('installBtn').addEventListener('click',async()=>{ if(!deferredPrompt) return; deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; document.getElementById('installBtn').hidden=true; });
+if(matchMedia('(display-mode: standalone)').matches||navigator.standalone) document.getElementById('installTxt').textContent='Installed. The planner opens from your home screen and works without signal.';
+if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('/coc-sw.js',{scope:'/'}).catch(()=>{});
+
+/* ===== Backup ===== */
+document.getElementById('bkDown').addEventListener('click',()=>{
+  const data={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith('coc-')) data[k]=localStorage.getItem(k); }
+  const blob=new Blob([JSON.stringify({coc_backup:1,saved:Date.now(),data})],{type:'application/json'}), a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='coc-planner-backup.json'; document.body.appendChild(a); a.click(); a.remove();
+  const m=document.getElementById('bkMsg'); m.className='msg ok'; m.textContent='Backup saved to your downloads.';
+});
+document.getElementById('bkUp').addEventListener('change',async e=>{
+  const m=document.getElementById('bkMsg'); m.className='msg bad';
+  try{ const o=JSON.parse(await e.target.files[0].text()); if(!o||!o.coc_backup||!o.data) throw 0;
+    Object.entries(o.data).forEach(([k,v])=>{ if(k.startsWith('coc-')) localStorage.setItem(k,v); });
+    m.className='msg ok'; m.textContent='Restored. Reloading…'; setTimeout(()=>location.reload(),400);
+  }catch(err){ m.textContent="That file isn't a planner backup."; }
+});
+
+/* ===== Offline helper ===== */
+const STOP=new Set('when what whats the a an is my does do will i to of for and it on in at how much many next start starts started done finish finishes finished be can you me tell show about up get time left'.split(' '));
+const WEAK=new Set(['gold','elixir','dark','storage','spell']);
+const toks=s=>s.toLowerCase().replace(/[^a-z0-9#. ]/g,' ').split(/\s+/).filter(Boolean);
+function findItem(q){
+  const qt=toks(q).filter(t=>!STOP.has(t)); if(!qt.length) return null;
+  const nums=qt.filter(t=>/^#?\d+$/.test(t)).map(t=>t.replace('#',''));
+  const words=qt.filter(t=>!/^#?\d+$/.test(t));
+  let best=null, bs=0;
+  const consider=(name,obj)=>{ const nt=toks(name), nw=nt.filter(t=>!/^#?\d+$/.test(t)), nn=nt.filter(t=>/^#?\d+$/.test(t)).map(t=>t.replace('#',''));
+    let s=0; words.forEach(w=>{ if(nw.some(x=>x===w||(w.length>=4&&x.startsWith(w)))) s+=WEAK.has(w)?.3:1; });
+    if(s>0) nums.forEach(n=>{ if(nn.includes(n)) s+=1; });
+    if(s>bs){ bs=s; best=obj; } };
+  plan.forEach(p=>{ if(p.L.cur) consider(p.L.cur,{type:'cur',p}); p.q.forEach(s=>consider(s.name,{type:'q',s})); });
+  AFTER_B.forEach(r=>consider(r[0],{type:'after',r,lab:false})); AFTER_L.forEach(r=>consider(r[0],{type:'after',r,lab:true}));
+  return bs>=1?best:null;
+}
+function findLane(s){
+  if(/goblin\s*lab|glab/.test(s)) return 'glab';
+  if(/goblin/.test(s)) return 'gob';
+  const m=/builder\s*#?\s*(\d)/.exec(s); if(m) return 'b'+m[1];
+  if(/\bpet/.test(s)) return 'pet';
+  if(/\blab\b|research|laboratory/.test(s)) return 'lab';
+  return null;
+}
+const li=s=>`<li><b>${esc(s.name)}</b> on ${esc(s.lane.name)}: ${s.start<=Date.now()?'ready now':whenD(s.start)}</li>`;
+function answer(q){
+  const s=q.toLowerCase().trim(), now=Date.now();
+  const open=allSteps().filter(x=>!marks[mk(x)]).sort((a,b)=>a.start-b.start);
+  if(!s) return 'Ask me something about your plan.';
+  if(/^(hi|hey|hello|yo|sup)\b/.test(s)) return `Hey. ${open.length?`Next up is <b>${esc(open[0].name)}</b> on ${esc(open[0].lane.name)}, ${open[0].start<=now?'ready now':whenD(open[0].start)}.`:'Nothing is left to start.'} Ask me anything about your plan.`;
+  if(/help|what can you|examples/.test(s)) return `I read your plan and saved data on this phone, no internet needed. Try:<ul><li>What's next?</li><li>When is Builder 3 free?</li><li>When does Grand Warden 83 start?</li><li>How much gold do I need tomorrow?</li><li>Can I afford the gem starts?</li><li>Anything idle?</li><li>What's left after the Jam?</li></ul>`;
+  const lane=findLane(s);
+  const item=lane?null:findItem(s);
+  if(item){
+    if(item.type==='cur'){ const p=item.p; return p.curEnd>now?`<b>${esc(p.L.cur)}</b> is running on ${esc(p.L.name)} and finishes <b>${whenD(p.curEnd)}</b> (${dur(p.curEnd-now)} from now).`:`<b>${esc(p.L.cur)}</b> should be finished. It ended ${whenD(p.curEnd)}.`; }
+    if(item.type==='q'){ const x=item.s, st=marks[mk(x)];
+      if(st) return `You started <b>${esc(x.name)}</b>. It finishes about <b>${whenD(x.end)}</b>.`;
+      return `<b>${esc(x.name)}</b> is on ${esc(x.lane.name)}. ${x.start<=now?'It is <b>ready to start now</b>':'Start it <b>'+whenD(x.start)+'</b>'}${x.slept?' (after you wake up)':''}, and it finishes about ${whenD(x.end)}. Cost: ${money(x.cost)} ${CUR[x.cur]}${x.flag==='gem'?', plus gems for the Goblin':''}.${x.late?' That start is after the Jam, so it is full price.':''}`; }
+    if(item.type==='after'){ const r=item.r; return `<b>${esc(r[0])}</b> is in the after the Jam list (${item.lab?'lab':'builders'}): about ${(r[1]/24).toFixed(1)} days and ${money(r[3])} ${CUR[r[2]]} at full price.${r[4]?' Note: '+esc(r[4])+'.':''}`; }
+  }
+  if(lane){
+    const p=plan.find(x=>x.L.id===lane); if(!p) return "I can't find that one.";
+    let name=p.L.cur, b=p.curEnd; for(const x of p.q){ if(x.start<=now&&marks[mk(x)]){ name=x.name; b=x.end; } }
+    const nx=p.q.filter(x=>!marks[mk(x)]).slice(0,3);
+    const nowTxt=name&&b>now?`<b>${esc(p.L.name)}</b> is on <b>${esc(name)}</b>, free <b>${whenD(b)}</b> (${dur(b-now)}).`:`<b>${esc(p.L.name)}</b> is free right now.`;
+    return nowTxt+(nx.length?` Queued:<ul>${nx.map(li).join('')}</ul>`:' Nothing else queued.');
+  }
+  if(/gem/.test(s)){ const list=gemPlan(), tot=list.reduce((a,g)=>a+g.cost,0);
+    return `You have <b>${GEMS.gems.toLocaleString()} gems</b>. Planned gem spends add up to about <b>${tot}</b>${list.length?` across ${list.length} starts`:''}. ${GEMS.gems>=tot?'You have them all covered.':'You are <b>'+(tot-GEMS.gems)+' short</b>.'} Update your count in Tools.`; }
+  if(/potion|boost/.test(s)){ const b=BOOSTS.filter(x=>x.to>now); const r=(ITEMS['Research Potion']||{}).n||0;
+    return (b.length?b.map(x=>`<b>${x.label}</b> ${x.x}x until ${when(x.to)}`).join('<br>'):'No potions running in your last export.')+`<br>Research Potions saved: <b>${r}</b>.`; }
+  if(/jam|sale|discount/.test(s)) return JAM_END>now?`The Jam ends <b>${fmtDay.format(JAM_END)} at ${when(JAM_END)}</b>, ${dur(JAM_END-now)} from now. Anything you start before then gets the Jam price.`:'The Hammer Jam is over.';
+  if(/idle|free|empty|nothing running|open builder/.test(s)){ const ids=idleLanes(); return ids.length?`Idle right now: <b>${ids.map(p=>esc(p.L.name)).join(', ')}</b>.`+(open[0]&&open[0].start<=now?' Start <b>'+esc(open[0].name)+'</b>.':''):'Nothing is idle. Every builder and lab is working.'; }
+  if(/sleep|bed|wake/.test(s)) return `No starts are planned between <b>${sleepText()}</b>. Change it in Tools, Settings.`;
+  if(/gold|elixir|dark|\bde\b|loot|need|cost|afford|resource/.test(s)){
+    let a=now, b=now+24*H, lab='in the next 24 hours';
+    if(/tomorrow/.test(s)){ a=localMidnight(now)+864e5; b=a+864e5; lab='tomorrow'; }
+    else if(/today|tonight/.test(s)){ b=localMidnight(now)+864e5; lab='for the rest of today'; }
+    else if(/48|two days|2 days/.test(s)){ b=now+48*H; lab='in the next 48 hours'; }
+    else if(/jam|rest|all|total/.test(s)){ b=JAM_END; lab='for the rest of the Jam'; }
+    const n={g:0,e:0,d:0}; open.filter(x=>x.start>=(a===now?0:a)&&x.start<b).forEach(x=>n[x.cur]+=x.cost);
+    const only=/gold/.test(s)?['g']:/elixir/.test(s)&&!/dark/.test(s)?['e']:/dark|\bde\b/.test(s)?['d']:['g','e','d'];
+    return `You need ${lab}:<ul>${only.map(c=>`<li>${CUR[c]}: <b>${money(n[c])}</b></li>`).join('')}</ul>Use Loot check in Tools to compare with your storages.`; }
+  if(/progress|how far|levels|since/.test(s)){ const levels=DONE_AT_BAKED+levelSum(EXP)-levelSum(BAKED);
+    return `Since Nov 1 you've finished <b>${levels} upgrade levels</b> and maxed all 325 walls. ${open.length} more starts are planned.`; }
+  if(/after|left to max|max|th19|remaining/.test(s)){ const bd=AFTER_B.reduce((a,r)=>a+r[1],0)/24, ld=AFTER_L.reduce((a,r)=>a+r[1],0)/24;
+    return `After the Jam: about <b>${Math.round(bd)} builder days</b> (about ${Math.round(bd/6)} days across 6 builders) and <b>${Math.round(ld)} lab days</b>. The lab is your bottleneck.`; }
+  if(/next|now|start|what should|do/.test(s)){ const nx=open.filter(x=>!x.late).slice(0,4);
+    return nx.length?`Here's what's next:<ul>${nx.map(li).join('')}</ul>`:'Nothing left to start in the Jam.'; }
+  return `I'm not sure about that one. I can answer about your queue, builders, labs, loot, gems, potions and the Jam. Try "what's next?" or "when is Builder 2 free?"`;
+}
+const chatEl=document.getElementById('chat'), bg=document.getElementById('chatBg'), logEl=document.getElementById('chatlog');
+function say(html,me){ const d=document.createElement('div'); d.className='bub '+(me?'me':'bot'); if(me) d.textContent=html; else d.innerHTML=html; logEl.appendChild(d); logEl.scrollTop=logEl.scrollHeight; }
+function ask(q){ say(q,true); setTimeout(()=>say(answer(q)),180); }
+function openChat(){ chatEl.classList.add('on'); bg.classList.add('on'); if(!logEl.children.length) say(answer('hi')); }
+function closeChat(){ chatEl.classList.remove('on'); bg.classList.remove('on'); document.getElementById('chatIn').blur(); }
+document.getElementById('askBtn').addEventListener('click',openChat);
+document.getElementById('chatClose').addEventListener('click',closeChat);
+bg.addEventListener('click',closeChat);
+document.getElementById('chips').innerHTML=["What's next?","Anything idle?","Loot for tomorrow","Gems","When is Builder 1 free?","Lab","Jam time left","Help"].map(t=>`<button type="button">${esc(t)}</button>`).join('');
+document.getElementById('chips').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) ask(b.textContent); });
+document.getElementById('chatf').addEventListener('submit',e=>{ e.preventDefault(); const i=document.getElementById('chatIn'), q=i.value.trim(); if(!q) return; i.value=''; ask(q); });
+
+/* ===== Tabs ===== */
+const TITLES={today:'Today',plan:'Plan',progress:'Progress',tools:'Tools'};
+function go(v){
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.dataset.view===v));
+  document.querySelectorAll('.tabbar button').forEach(b=>b.setAttribute('aria-selected',b.dataset.go===v));
+  document.getElementById('title').textContent=TITLES[v]; scrollTo(0,0);
+  if(v==='plan') timeline();
+  try{ sessionStorage.setItem('coc-tab',v); }catch(e){}
+}
+document.querySelector('.tabbar').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) go(b.dataset.go); });
+
+/* ===== Run ===== */
+function renderLive(){ header(); upNext(); stats(); loot(); if(!document.activeElement||!document.getElementById('lanes').contains(document.activeElement)) lanes(); timeline(); }
+function renderAll(){ renderLive(); progress(); after(); renderGems(); renderItems(); renderLoot(); }
+rebuild(); renderAll();
+try{ const t=sessionStorage.getItem('coc-tab'); if(t&&TITLES[t]) go(t); }catch(e){}
+setInterval(()=>{ header(); const now=Date.now(); document.querySelectorAll('.cd').forEach(n=>n.textContent=dur(+n.dataset.to-now)); },1000);
+setInterval(renderLive,60e3);
 </script>
 </body>
 </html>
