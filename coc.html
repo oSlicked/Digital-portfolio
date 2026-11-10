@@ -244,6 +244,51 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 .chatf .btn{border-radius:999px}
 @media(min-width:720px){.next li{grid-template-columns:90px 1fr auto}}
 
+/* progress tracker */
+.pct{padding:18px}
+.pctTop{display:grid;grid-template-columns:1fr;gap:16px;justify-items:center;text-align:center}
+.pctTop .legend,.pctTop .pctTarget{justify-content:center}
+@media(min-width:720px){.pctTop{grid-template-columns:auto 1fr;justify-items:start;text-align:left;gap:24px;align-items:center}.pctTop .legend,.pctTop .pctTarget{justify-content:flex-start}}
+.ring{position:relative;width:170px;height:170px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .c{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .c b{display:block;font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.ring .c span{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:4px}
+.pctHead .big{font-size:15px;font-weight:600}
+.pctHead .big b{font-size:22px;letter-spacing:-.02em}
+.pctHead p{margin:6px 0 0;font-size:13px;color:var(--muted);line-height:1.5}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:11.5px;color:var(--muted);font-weight:600}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.cats{margin-top:18px;display:grid;gap:12px}
+.catr .ctop{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:14px}
+.catr .ctop b{font-weight:600}
+.catr .ctop span{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.catr .ctop span em{font-style:normal;color:var(--text);font-weight:700}
+.pbar{position:relative;height:9px;border-radius:5px;background:rgba(255,255,255,.07);overflow:hidden;margin-top:6px}
+.pbar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.pbar i.plan{background:rgba(246,185,65,.35)}
+.pbar i.now{background:linear-gradient(90deg,#ffd77a,#f0a01a)}
+.pbar u{position:absolute;top:-2px;bottom:-2px;width:2px;background:#fff;opacity:.85;border-radius:1px}
+.pctTiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}
+@media(min-width:720px){.pctTiles{grid-template-columns:repeat(4,1fr)}}
+.ready{margin-top:16px;border-top:1px solid var(--border);padding-top:14px}
+.ready h4{margin:0 0 8px;font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.chkl{display:flex;gap:10px;align-items:flex-start;padding:6px 0;font-size:14px}
+.chkl .ck{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;margin-top:1px}
+.chkl .ck.y{background:var(--green);color:#06240f}.chkl .ck.n{border:1.5px solid var(--border2);color:var(--muted)}
+.chkl small{display:block;color:var(--muted);font-size:12px}
+.pctFoot{margin-top:14px;font-size:12px;color:var(--muted);line-height:1.5}
+.pctTarget{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin-top:12px}
+.pctTarget input{width:64px;padding:6px 8px;border-radius:9px}
+.pctmini{display:flex;align-items:center;gap:14px;width:100%;margin-top:12px;padding:14px 16px;text-align:left;cursor:pointer;color:var(--text);font:inherit}
+.pctmini .mr{width:52px;height:52px;flex:none;position:relative}
+.pctmini .mr svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pctmini .mr b{position:absolute;inset:0;display:grid;place-items:center;font-size:13px;font-weight:800}
+.pctmini .tx{flex:1;min-width:0}
+.pctmini .tx b{display:block;font-size:15px}
+.pctmini .tx span{display:block;font-size:12.5px;color:var(--muted)}
+.pctmini .go{color:var(--muted);font-size:20px}
+@media(min-width:1100px){ .cats{grid-template-columns:1fr 1fr;column-gap:28px} }
 /* desktop */
 .fsbtn{display:none;align-items:center;gap:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);border-radius:12px;padding:8px 14px;font-weight:600;font-size:13px;cursor:pointer}
 .fsbtn svg{width:18px;height:18px}
@@ -287,6 +332,7 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
     <div class="track"><i id="jamfill"></i></div>
     <div class="pills" id="boosts"></div>
   </div>
+  <button class="card pctmini" id="pctMini" type="button" aria-label="Open TH18 progress"></button>
   <div class="stats">
     <div class="stat"><div class="v" id="stReady">0</div><div class="k">Ready to start</div></div>
     <div class="stat"><div class="v" id="stIdle">0</div><div class="k">Idle now</div></div>
@@ -314,6 +360,8 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 
 <!-- PROGRESS -->
 <section class="view" data-view="progress">
+  <div class="sh"><h2>TH18 progress</h2><small>weighted by upgrade time</small></div>
+  <div class="card pct" id="pctCard"></div>
 <div class="grid2">
 <div class="blk">
   <div class="sh"><h2>Since Nov 1</h2><small>then, now and after the Jam plan</small></div>
@@ -1401,6 +1449,8 @@ function answer(q){
     const n={g:0,e:0,d:0}; open.filter(x=>x.start>=(a===now?0:a)&&x.start<b).forEach(x=>n[x.cur]+=x.cost);
     const only=/gold/.test(s)?['g']:/elixir/.test(s)&&!/dark/.test(s)?['e']:/dark|\bde\b/.test(s)?['d']:['g','e','d'];
     return `You need ${lab}:<ul>${only.map(c=>`<li>${CUR[c]}: <b>${money(n[c])}</b></li>`).join('')}</ul>Use Loot check in Tools to compare with your storages.`; }
+  if(/percent|%|how maxed|maxed am|rush|ready for (th)?19|th19 ready/.test(s)){ const n=pctSum(villageCopies()), a=pctSum(afterPlanCopies()), tg=+(SETTINGS.pctTarget||92);
+    return `You're <b>${pf(n.p)}%</b> maxed for TH18 now and <b>${pf(a.p)}%</b> once the Jam plan finishes. Your target is ${tg}%. Weakest area: <b>Traps</b> at ${pf(n.cats.Traps.d/n.cats.Traps.t*100)}%. Open the Progress tab for the full breakdown.`; }
   if(/progress|how far|levels|since/.test(s)){ const levels=DONE_AT_BAKED+levelSum(EXP)-levelSum(BAKED);
     return `Since Nov 1 you've finished <b>${levels} upgrade levels</b> and maxed all 325 walls. ${open.length} more starts are planned.`; }
   if(/after|left to max|max|th19|remaining/.test(s)){ const bd=afterB().reduce((a,r)=>a+r[1],0)/24, ld=afterL().reduce((a,r)=>a+r[1],0)/24;
@@ -1473,6 +1523,7 @@ Now: ${f(now)}. Hammer Jam ends ${f(JAM_END)}. Player sleeps ${sleepText()} (no 
     if(String(v(r[3]))!==String(r[4])||g.group!=='Lab') s+=`\n${r[0]}: ${v(r[1])}, ${v(now2)}, ${v(r[3])}, ${r[4]}`; }));
   s+='\nLEFT AFTER THE JAM, builders (full price hours, cost):'; afterB().forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
   s+='\nLEFT AFTER THE JAM, lab:'; afterL().forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
+  try{ s+='\n'+pctText(); }catch(e){}
   s+='\nNOTES: Hammer of Fighting saved for Sky Wagon 4 after the Jam. Hammer of Building saved for TH19. Goblin Builder and Goblin Lab starts cost gems (about '+SETTINGS.gemPrice+' each). Not tracked: hero equipment, supercharges, crafted defenses.';
   return s;
 }
@@ -1585,6 +1636,116 @@ document.getElementById('askClaude').addEventListener('click',()=>{
   document.addEventListener('keydown',e=>{ if((e.key==='f'||e.key==='F')&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!/INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName||'')) toggle(); });
 })();
 
+/* ===== TH18 progress tracker =====
+   Upgrade time for every level up to the TH18 max, in hours, from the Clash of Clans Fandom wiki (Nov 10, 2026).
+   Walls, the Town Hall weapon, hero equipment and supercharges are not counted. */
+const LV_H={"1000000":[0.02,0.08,0.5,2,6,12,48,72,84,96,120,144,180,360],"1000002":[0,0,0.02,0.03,0.08,0.25,0.5,1,1.5,2,3,4,5,6,10,24,48],"1000003":[0,0.03,0.08,0.25,0.5,1,2,3,4,5,6,12,18,24,48,72,96,120,300],"1000004":[0,0,0.02,0.03,0.08,0.25,0.5,1,1.5,2,3,4,5,6,10,24,48],"1000005":[0,0.03,0.08,0.25,0.5,1,2,3,4,5,6,12,18,24,48,72,96,120,300],"1000006":[0,0,0.03,0.5,2,4,6,12,24,36,48,96,120,144,168,180,192,216,252],"1000007":[0.02,0.5,2,4,8,16,24,42,66,96,144,168,192,216,240,384],"1000009":[0,0.03,0.33,1,1.5,2,3,4,5,6,7,8,10,11,12,16,20,24,30,36,48],"1000011":[1,1.5,4,8,10,12,18,20,24,30,36,42,48,72,96,108,132],"1000012":[1,2,6,12,18,24,48,60,72,96,108,120,144,156,168,318],"1000013":[0.5,1,2,3,6,8,12,18,20,24,30,36,48,60,72,96,120,300],"1000014":[0,2,12,24,36,48,72,96,144,168,192,216,240,336],"1000015":[0,48,72,96,120,132,168,312],"1000019":[2,3,4,6,12,24,30,36,42,48,60,72,84,96,120,168,312],"1000020":[6,12,24,48,72,120,168,192,216],"1000021":[12,24,48,60,72,84,96,108,120,132,144,192,324],"1000023":[4,6,12,18,24,36,42,48,60,72,144],"1000024":[8,16,24,36,40,48,72,84,96,108,120,168,312],"1000026":[8,24,36,48,60,72,120,144,168,180,192,216,240],"1000027":[12,24,48,60,72,96,120,144,156,168,192,324],"1000028":[4,6,8,12,24,48,72],"1000029":[6,12,48,72,120,144,168,240],"1000032":[12,18,24,36,42,48,72,84,96,108,120,168,312],"1000059":[48,72,84,96,120,132,144,168,324],"1000067":[120,168,180,192,204,216,360],"1000068":[24,48,72,84,96,108,120,132,144,168,192,324],"1000071":[1,48,72,96,108,120,144,156,168,192,216,324],"1000072":[168,192,204,240],"1000077":[168,192,216,264,360],"1000079":[192,216,336],"1000084":[168,192,216,336],"1000085":[168,192,216,324],"1000086":[312,336],"1000089":[204,240,360],"1000102":[312,336],"4000000":[0,0.5,1,2,4,8,12,24,36,48,72,96,300],"4000001":[0,1,2,3,8,12,24,36,48,72,96,108,216,324],"4000002":[0,2,3,6,12,24,36,54,120,336],"4000003":[0,2,4,6,12,24,36,48,54,72,96,120,228,324],"4000004":[0,3,4,12,16,24,36,60,72,120,132,144,240,336],"4000005":[0,4,6,18,24,72,78,84,108,168,204,264,354],"4000006":[0,4,5,12,18,36,48,54,60,84,132,168,252,336],"4000007":[0,12,24,48,72,108,156,168,174,264,360],"4000008":[0,18,36,48,72,96,108,120,168,180,204,240,360],"4000009":[0,12,18,24,36,48,72,84,96,132,168,240,348],"4000010":[0,6,8,12,24,36,42,48,72,96,108,120,216,336],"4000011":[0,10,18,24,48,54,60,72,84,96,120,132,156,240,348],"4000012":[0,8,24,36,42,48,54,72,108,120,144,336],"4000013":[0,16,36,48,54,60,66,72,84,96,120,132,144,240,348],"4000015":[0,48,72,84,96,132,174,372],"4000017":[0,48,60,72,96,168,192,366],"4000022":[0,48,60,72,96,144,168,180,240,360],"4000023":[0,24,36,48,66,72,96,144,168,174,240,366],"4000024":[0,24,48,54,60,72,96,144,156,168,228,348],"4000051":[0,48,72,168,216,324],"4000052":[0,48,72,168,216,324],"4000053":[0,72,108,168,180,198,240,372],"4000058":[0,48,60,78,96,156,180,192,254],"4000059":[0,96,108,168,192,204,216,240,384],"4000062":[0,48,72,168,216,324],"4000065":[0,144,192,216,246,372],"4000075":[0,72,96,168,288,360],"4000082":[0,120,168,372],"4000087":[0,72,96,168,288,360],"4000091":[0,72,96,168,288],"4000092":[0,96,120,192,216,372],"4000095":[0,192,216,264,384],"4000097":[0,144,180,192],"4000109":[0,264,288,372],"4000110":[0,192,240,384],"4000123":[0,192,216,264,288,372],"4000132":[0,228,252,360],"4000135":[0,144,192,216],"4000150":[0,216,264,360],"4000177":[0,336,384],"4000188":[0,240,324,384],"12000000":[0,0.02,0.08,0.67,1,2,3,4,6,12,18,24,48,192],"12000001":[0,1,2,3,4,6,8,12,18,24,48,72,264],"12000002":[0,1,3,4,10,11,12,24,48,60,96,252],"12000005":[0,0.5,1,4,8,12,14,16,24,36,48,72,216],"12000006":[0,6,24,36,48,72,120,276],"12000008":[0,5,8,12,168],"12000016":[0,24,48],"12000020":[0,96,120,312],"26000000":[0,2,4,6,24,36,72,84,120,144,168,240,336],"26000001":[0,3,6,12,24,36,72,120,156,168,252,360],"26000002":[0,6,12,24,48,96,336],"26000003":[0,24,48,96,120],"26000005":[0,24,36,48,60,84,120,372],"26000009":[0,6,18,48,72,96,120,156,168,192,232,348],"26000010":[0,12,24,72,84,192,216,324],"26000011":[0,24,48,72,96,216,300],"26000016":[0,24,48,54,60,96,120,168,324],"26000017":[0,12,24,48,60,72,96,144],"26000028":[0,18,36,54,96,168,204,312],"26000035":[0,72,96,120],"26000053":[0,168,180,192,216,264,384],"26000070":[0,120,204,240,384],"26000098":[0,168,192,276,384],"26000109":[0,240,264,288,336,384],"26000120":[0,288,336,384],"26000123":[0,224,288,360],"28000000":[0,2,4,8,10,12,14,16,18,20,22,24,24,24,24,24,24,24,24,24,24,24,24,24,24,48,48,48,48,48,54,54,54,54,54,60,60,60,60,60,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,120,120,120,120,120,144,144,144,144,144,168,168,168,168,168,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192],"28000001":[0,2,4,8,10,12,14,16,18,20,22,24,24,24,24,24,24,24,24,24,24,24,24,24,24,48,48,48,48,48,54,54,54,54,54,60,60,60,60,60,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,72,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,120,120,120,120,120,144,144,144,144,144,168,168,168,168,168,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192],"28000002":[0,2,4,8,10,12,14,16,18,20,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,36,36,36,36,36,48,48,48,48,48,48,48,48,48,48,72,72,72,72,72,72,72,72,72,72,96,96,96,96,96,96,96,96,96,96,144,144,144,144,144,168,168,168,168,180,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192],"28000004":[0,4,10,12,20,24,24,24,24,24,24,24,24,24,24,36,36,36,36,36,48,48,48,48,48,72,72,72,72,72,96,96,96,96,96,120,120,120,120,120,120,144,156,168,180,192,192,192,192,192,192,192,192,192,192],"28000006":[0,2,4,8,10,12,14,16,18,20,22,24,24,24,24,24,24,24,24,24,24,24,24,24,24,36,36,36,36,36,48,48,48,48,48,48,48,48,48,48,54,54,54,54,54,72,72,72,72,72,96,96,96,96,96,96,96,96,96,96,120,120,120,120,120,144,144,144,144,144,168,168,168,168,168,180,180,180,180,180,192,192,192,192,192,192,192,192,192,192,192,192,192,192,192],"28000007":[0,6,12,24,24,48,48,48,72,72,96,120,120,144,144,168,168,192,192,192,192,192,192,192,192],"73000000":[0,24,36,48,60,72,84,96,108,120,132,144,156,168,180],"73000001":[0,36,48,72,96,108,120,132,144,156,168,192,192,192,192],"73000002":[0,24,36,48,60,72,84,96,108,120,132,144,156,168,180],"73000003":[0,36,48,72,96,108,120,132,144,156,168,192,192,192,192],"73000004":[0,36,48,72,96,108,120,132,144,156],"73000007":[0,24,36,48,60,72,84,96,108,120,144,168,192,192,192],"73000008":[0,36,48,72,96,108,120,132,144,156,168,180,192,192,192],"73000009":[0,36,48,72,96,108,120,132,144,156,168,192,192,192,192],"73000010":[0,72,96,120,132,144,156,168,180,192],"73000011":[0,72,96,120,144,168,192,192,192,192],"73000016":[0,192,192,192,192,192,192,192,192,192],"73000017":[0,192,192,192,192,192,192,192,192,192],"107000000":[0,168,216,264,312],"107000001":[0,168,216,264,312],"107000008":[0,168,216,264,312]};
+const DEF_IDS=new Set([1000009,1000011,1000012,1000013,1000019,1000021,1000027,1000028,1000032,1000067,1000072,1000077,1000079,1000084,1000085,1000086,1000089,1000102]);
+const UNUSED_LAB=new Set(['Barbarian','Archer','Goblin','Wall Breaker','Wizard','Giant','Healer','Bowler','Miner','Valkyrie']);
+const PCT_CATS=[['Heroes','var(--gold)'],['Lab','var(--elix)'],['Pets','#5fd3c6'],['Defenses','var(--blue)'],['Traps','var(--orange)'],['Other buildings','var(--muted)']];
+const GP_B=0.85, GP_L=0.9;
+function pctCat(k,id){ return {heroes:'Heroes',pets:'Pets',guardians:'Defenses',traps:'Traps',units:'Lab',spells:'Lab',siege_machines:'Lab'}[k]||(DEF_IDS.has(id)?'Defenses':'Other buildings'); }
+function villageCopies(){
+  const m={};
+  ['heroes','pets','guardians','buildings','traps','units','spells','siege_machines'].forEach(k=>(EXP[k]||[]).forEach(e=>{
+    if(!e||e.lvl==null||!LV_H[e.data]) return;
+    const o=m[e.data]=m[e.data]||{id:e.data,k,cat:pctCat(k,e.data),c:[],run:[]};
+    for(let i=0;i<(e.cnt||1);i++){ o.c.push(e.lvl); o.run.push(e.timer>0); }
+  }));
+  return m;
+}
+function afterPlanCopies(){
+  const m=villageCopies();
+  Object.values(m).forEach(o=>{ o.c=o.c.map((l,i)=>o.run[i]?l+1:l); });   // running upgrades finish
+  PLAN.forEach(P=>{ const L=LANES.find(l=>l.id===P.id); if(!L) return;
+    laneItems(P).slice(L.first).forEach(x=>{
+      let id=x[5], to=x[6]; if(!id){ const r=resolveItem(x[0]); if(r){ id=r.id; to=r.to; } }
+      const o=id&&m[id]; if(!o) return;
+      if(o.c.length===1){ o.c[0]=Math.max(o.c[0],to||o.c[0]+1); return; }
+      let i=-1; o.c.forEach((l,j)=>{ if((to?l<to:true)&&(i<0||l<o.c[i])) i=j; });
+      if(i>=0) o.c[i]=to||o.c[i]+1;
+    }); });
+  return m;
+}
+function pctSum(m){
+  const cats={}; let d=0,t=0;
+  Object.values(m).forEach(o=>{ const h=LV_H[o.id], tot=h.reduce((a,b)=>a+b,0);
+    o.c.forEach(l=>{ const dn=h.slice(0,Math.min(l,h.length)).reduce((a,b)=>a+b,0); const c=cats[o.cat]=cats[o.cat]||{d:0,t:0}; c.d+=dn; c.t+=tot; d+=dn; t+=tot; }); });
+  return {cats,d,t,p:t?d/t*100:0};
+}
+function laneIdle(ids){ const ps=plan.filter(p=>ids.includes(p.L.id)); return ps.length?ps.reduce((a,p)=>a+Math.max(p.idleAt,Date.now()),0)/ps.length:Date.now(); }
+function pctForecast(after,target){
+  const left=c=>{ const x=after.cats[c]; return x?x.t-x.d:0; };
+  let remB=left('Heroes')+left('Defenses')+left('Traps')+left('Other buildings'), remL=left('Lab'), remP=left('Pets');
+  const rB=6/GP_B, rL=(168+69)/168/GP_L, rP=1;                      // 6 builders, lab with 3 Research Potions a week, pet house
+  const sB=laneIdle(['b1','b2','b3','b4','b5','b6']), sL=laneIdle(['lab']), sP=laneIdle(['pet']);
+  const endB=sB+remB/rB*H, endL=sL+remL/rL*H, endP=sP+remP/rP*H;
+  let hit=null, done=after.d, need=target/100*after.t;
+  if(done>=need) hit=Date.now();
+  else { let b=remB,l=remL,pp=remP; const t0=Math.min(sB,sL,sP);
+    for(let day=0;day<800&&hit==null;day++){ const t=t0+day*864e5;
+      if(t>=sB&&b>0){ const x=Math.min(b,24*rB); b-=x; done+=x; } if(t>=sL&&l>0){ const x=Math.min(l,24*rL); l-=x; done+=x; } if(t>=sP&&pp>0){ const x=Math.min(pp,24*rP); pp-=x; done+=x; }
+      if(done>=need) hit=t+864e5; } }
+  return {remB,remL,remP,endB,endL,endP,full:Math.max(endB,endL,endP),hit};
+}
+function ringSvg(now,after,target,size,stroke){
+  const r=(size-stroke)/2, C=2*Math.PI*r, arc=p=>`${C*p/100} ${C}`;
+  const tA=target/100*2*Math.PI, tx=size/2+r*Math.cos(tA), ty=size/2+r*Math.sin(tA);
+  return `<svg viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="${stroke}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(246,185,65,.35)" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${arc(after)}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="url(#pg${size})" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${arc(now)}"/>
+    ${target?`<circle cx="${tx}" cy="${ty}" r="${stroke/2.6}" fill="#fff"/>`:''}
+    <defs><linearGradient id="pg${size}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd77a"/><stop offset="1" stop-color="#f0a01a"/></linearGradient></defs></svg>`;
+}
+const pf=p=>(Math.floor(p*10)/10).toFixed(1);
+const dShort=t=>new Intl.DateTimeFormat('en-US',{timeZone:TZ,month:'short',day:'numeric'}).format(t);
+function pctText(){ const n=pctSum(villageCopies()), a=pctSum(afterPlanCopies());
+  return `TH18 PROGRESS (weighted by full price upgrade time from the Fandom wiki): ${pf(n.p)}% now, ${pf(a.p)}% after the Jam plan. By category now then after plan: `+PCT_CATS.filter(([c])=>n.cats[c]).map(([c])=>`${c} ${pf(n.cats[c].d/n.cats[c].t*100)}% then ${pf(a.cats[c].d/a.cats[c].t*100)}%`).join(', ')+`. Target ${SETTINGS.pctTarget||92}%.`; }
+function renderPct(){
+  if(!LANES.length) return;
+  const target=+(SETTINGS.pctTarget||92);
+  const now=pctSum(villageCopies()), aft=pctSum(afterPlanCopies()), fc=pctForecast(aft,target);
+  const m=afterPlanCopies(), labLeft=Object.values(m).filter(o=>o.cat==='Lab').map(o=>({n:nameOf(o.id),l:o.c[0],max:LV_H[o.id].length})).filter(x=>x.l<x.max);
+  const gw=m[28000002]?m[28000002].c[0]:0, heroesLeft=Object.values(m).filter(o=>o.cat==='Heroes'&&o.c[0]<LV_H[o.id].length).map(o=>nameOf(o.id)+' '+o.c[0]+'/'+LV_H[o.id].length);
+  const usedLab=labLeft.filter(x=>!UNUSED_LAB.has(x.n));
+  const cats=PCT_CATS.map(([c,col])=>{ const a=now.cats[c], b=aft.cats[c]; if(!a) return '';
+    const pn=a.d/a.t*100, pa=b.d/b.t*100, left=(b.t-b.d)/24;
+    return `<div class="catr"><div class="ctop"><b><i class="dot" style="background:${col};margin-right:7px"></i>${c}</b><span><em>${pf(pn)}%</em>${pa-pn>=0.05?` → ${pf(pa)}%`:''} · ${left<1?'maxed':Math.round(left)+'d left'}</span></div>
+      <div class="pbar"><i class="plan" style="width:${pa}%"></i><i class="now" style="width:${pn}%"></i>${c==='Traps'||c==='Lab'||c==='Heroes'?'':''}</div></div>`; }).join('');
+  const dB=fc.remB/24, dL=fc.remL/24, planEnd=Math.max(...plan.map(p=>p.idleAt));
+  const W=s=>`<b style="color:var(--text)">${s}</b>`;
+  const targetLine=now.p>=target?`You're past your ${W(target+'%')} target`
+    :aft.p>=target?`You reach your ${W(target+'%')} target when the Jam plan finishes, around ${W(fdate(planEnd))}`
+    :`Your ${W(target+'%')} target is on pace for about ${W(fdate(fc.hit))}`;
+  document.getElementById('pctCard').innerHTML=`<div class="pctTop">
+      <div class="ring">${ringSvg(now.p,aft.p,target,170,14)}<div class="c"><div><b>${pf(now.p)}%</b><span>maxed for TH18</span></div></div></div>
+      <div class="pctHead"><div class="big">After the Jam plan: <b>${pf(aft.p)}%</b></div>
+        <p>${targetLine}. Fully maxed around <b style="color:var(--text)">${fdate(fc.full)}</b>.</p>
+        <div class="legend"><span><i style="background:linear-gradient(90deg,#ffd77a,#f0a01a)"></i>Done now</span><span><i style="background:rgba(246,185,65,.35)"></i>After the Jam plan</span><span><i style="background:#fff;border-radius:50%"></i>Target</span></div>
+        <div class="pctTarget">Target <input class="in" id="pctT" value="${target}" inputmode="decimal"> %</div></div>
+    </div>
+    <div class="cats">${cats}</div>
+    <div class="pctTiles">
+      <div class="tile"><div class="k">Builder work left</div><div class="v">${Math.round(dB)}d</div><div class="k">about ${Math.round(dB*GP_B/6)} days on 6 builders</div></div>
+      <div class="tile"><div class="k">Lab work left</div><div class="v">${Math.round(dL)}d</div><div class="k">about ${Math.round(fc.remL/((168+69)/168/GP_L)/24)} days with potions</div></div>
+      <div class="tile"><div class="k">Builders done</div><div class="v" style="font-size:17px">${fdate(fc.endB)}</div><div class="k">at full price</div></div>
+      <div class="tile"><div class="k">Lab done</div><div class="v" style="font-size:17px">${fdate(fc.endL)}</div><div class="k">at full price</div></div>
+    </div>
+    <div class="ready"><h4>Ready for TH19?</h4>
+      ${chk(gw>=85,'Grand Warden at 85',gw>=85?'Done in your plan':`At ${gw} after the Jam plan`)}
+      ${chk(!heroesLeft.filter(h=>!/Dragon Duke/.test(h)).length,'Heroes you use are maxed',heroesLeft.length?'Left: '+heroesLeft.join(', '):'All maxed')}
+      ${chk(!usedLab.length,'Lab done for troops and spells you might use',labLeft.length?'Left: '+labLeft.map(x=>x.n+' '+x.l+'/'+x.max).join(', '):'Lab maxed')}
+      ${chk(aft.p>=target,`${target}% or higher`,`${pf(aft.p)}% after the Jam plan`)}
+    </div>
+    <div class="pctFoot">Every level counts by its full price upgrade time from the Clash of Clans Fandom wiki, so a 14 day lab level counts far more than a 1 hour trap. Walls (all maxed), the Town Hall weapon, hero equipment and supercharges aren't counted. Dates assume 6 builders, the Gold Pass and 3 free Research Potions a week.</div>`;
+  const mini=document.getElementById('pctMini');
+  mini.innerHTML=`<div class="mr">${ringSvg(now.p,aft.p,target,52,6)}<b>${Math.round(now.p)}%</b></div><div class="tx"><b>TH18 ${pf(now.p)}% maxed</b><span>${pf(aft.p)}% after the Jam plan · ${now.p>=target?target+'% reached':aft.p>=target?target+'% by '+fdate(Math.max(...plan.map(p=>p.idleAt))):target+'% by '+fdate(fc.hit)}</span></div><span class="go">›</span>`;
+}
+const fdate=t=>dShort(t);
+const chk=(ok,t,s)=>`<div class="chkl"><span class="ck ${ok?'y':'n'}">${ok?'✓':''}</span><div>${esc(t)}<small>${esc(s)}</small></div></div>`;
+document.getElementById('pctMini').addEventListener('click',()=>go('progress'));
+document.getElementById('pctCard').addEventListener('change',e=>{ if(e.target.id!=='pctT') return; const v=parseFloat(e.target.value); if(v>50&&v<=100){ SETTINGS.pctTarget=v; store.set(SET_KEY,SETTINGS); renderPct(); } });
+
 /* ===== Tabs ===== */
 const TITLES={today:'Today',plan:'Plan',progress:'Progress',tools:'Tools'};
 function go(v){
@@ -1598,7 +1759,7 @@ document.querySelector('.tabbar').addEventListener('click',e=>{ const b=e.target
 
 /* ===== Run ===== */
 function renderLive(){ header(); upNext(); stats(); loot(); if(!document.activeElement||!document.getElementById('lanes').contains(document.activeElement)) lanes(); timeline(); }
-function renderAll(){ renderLive(); progress(); after(); renderGems(); renderItems(); renderLoot(); }
+function renderAll(){ renderLive(); progress(); after(); renderGems(); renderItems(); renderLoot(); try{ renderPct(); }catch(e){ console.error(e); } }
 try{ applyPatches(); }catch(e){}
 rebuild(); renderAll(); renderSync(); renderAI(); if(syncCfg()) syncPull().catch(syncErr);
 try{ const t=sessionStorage.getItem('coc-tab'); if(t&&TITLES[t]) go(t); }catch(e){}
