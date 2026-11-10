@@ -668,7 +668,10 @@ const parseAmt=s=>{ s=String(s||'').trim().toLowerCase().replace(/,/g,''); const
 
 /* ===== Build the plan (re-runs when you edit the schedule) ===== */
 const fixName=n=>String(n).replace(/(\w)'S\b/g,"$1's");
-const laneItems=P=>(EDITS[P.id]||P.items).map(x=>{ const y=x.slice(); y[0]=fixName(y[0]); return y; });
+const laneItems=P=>(EDITS[P.id]||P.items).map(x=>{ const y=x.slice(); y[0]=fixName(y[0]);
+  /* an upgrade added by name that is also in the built in plan uses the plan's Jam time and cost */
+  if(!y[5]){ const r=resolveItem(y[0]); if(r&&r.to){ for(const Q of PLAN){ const d=Q.items.find(z=>z[5]===r.id&&z[6]===r.to); if(d){ y[1]=d[1]; y[2]=d[2]; y[3]=d[3]; y[5]=d[5]; y[6]=d[6]; break; } } } }
+  return y; });
 /* match an upgrade added by name (from chat or the editor) to the game, so it clears on its own */
 const NAME_IDX={}; Object.entries(NAMES).forEach(([id,n])=>{ NAME_IDX[n.toLowerCase()]=+id; });
 function resolveItem(name){
