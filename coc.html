@@ -182,9 +182,9 @@ footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
 
 <h2>Notes</h2>
 <div class="card"><ul class="tips">
-  <li><b>Hammer of Fighting:</b> Druid 6 now gets done in the Jam, so save it for Battle Drill 6 after the Jam (167 hours full price).</li>
+  <li><b>Hammer of Fighting:</b> Druid 6 and Battle Drill 6 now get done in the Jam, so save it for Sky Wagon 4 after the Jam (173 hours full price, after Sky Wagon 3).</li>
   <li><b>Hammer of Building (Gold Pass):</b> saved for TH19.</li>
-  <li><b>Gems:</b> about 74 left after Battle Blimp 6 (106). Goblin starts run about 1.5 gems per hour of upgrade, so Sky Wagon 2 in the Goblin Lab is about 80 and Builder's Hut #5 on the Goblin Builder about 100. Either one just has to start before 2:45 AM Mon Nov 16.</li>
+  <li><b>Gems:</b> about 600 bought for the Goblin Lab run: Battle Drill 6, Log Launcher 6, Golem 15, Clone 9 and Sky Wagon 2, roughly 110 to 125 each. Check each price in game before confirming.</li>
   <li><b>Not tracked:</b> hero equipment, supercharges and crafted defenses.</li>
   <li>To refresh the plan, send a new in-game data export.</li>
 </ul></div>
@@ -223,7 +223,8 @@ const LANES = [
   {id:'lab', name:'Laboratory', cur:'Recall Spell 7', left:150633, steps:[
     ['Hog Rider 15',78.5,'d',170e3],['Witch 8',83.5,'d',177.5e3],['Ruin Witch 2',59.5,'d',110e3],['Druid 6',83.5,'d',190e3],
     ['Ruin Witch 3',65,'d',150e3],['Ruin Witch 4',83.5,'d',190e3]]},
-  {id:'glab', name:'Goblin Lab', cur:'Angry Spell 3', left:254880, started:Date.parse('2026-11-09T17:54:00-05:00'), steps:[]},  // time is an estimate
+  {id:'glab', name:'Goblin Lab', cur:'Angry Spell 3', left:254880, started:Date.parse('2026-11-09T17:54:00-05:00'), steps:[
+    ['Battle Drill 6',83.5,'e',14e6,'gem'],['Log Launcher 6',81,'e',13.5e6,'gem'],['Golem 15',78.5,'d',175e3,'gem'],['Clone Spell 9',73,'e',11.7e6,'gem'],['Sky Wagon 2',54,'e',9.9e6,'gem']]},  // time is an estimate
   {id:'pet', name:'Pet House', cur:'Diggy 13', left:109632, steps:[
     ['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
 ];
@@ -266,13 +267,13 @@ const PROGRESS = [
   {group:'Lab', rows:[
     ['Balloon',12,13,13,13],['Baby Dragon',11,12,12,12],['Yeti',7,8,8,8],['Thrower',3,4,4,4],
     ['Electro Titan',4,5,5,5],['Root Rider',3,4,4,4],['Headhunter',3,4,4,4],['Lava Hound',7,8,8,8],
-    ['Meteor Golem',2,3,3,3],['Hog Rider',14,14,15,15],['Witch',7,7,8,8],['Ruin Witch',0,1,4,4],['Druid',5,5,6,6],
+    ['Meteor Golem',2,3,3,3],['Hog Rider',14,14,15,15],['Witch',7,7,8,8],['Ruin Witch',0,1,4,4],['Druid',5,5,6,6],['Battle Drill',5,5,6,6],['Log Launcher',5,5,6,6],['Golem',14,14,15,15],['Sky Wagon',1,1,2,4],['Clone Spell',8,8,9,9],
     ['Rage Spell',6,7,7,7],['Freeze Spell',7,8,8,8],['Earthquake Spell',7,8,8,8],['Ice Block Spell',5,6,6,6],
     ['Overgrowth Spell',4,5,5,5],['Revive Spell',4,5,5,5],['Recall Spell',6,6,7,7],['Angry Spell',2,2,3,4],
     ['Stone Slammer',5,6,6,6],['Siege Barracks',5,6,6,6],['Battle Blimp',5,6,6,6],
   ]},
 ];
-const DONE_SINCE_NOV1 = {levels:75, walls:317, more:39}; // upgrade levels finished, walls, and levels still to start or finish in the Jam plan
+const DONE_SINCE_NOV1 = {levels:75, walls:317, more:44}; // upgrade levels finished, walls, and levels still to start or finish in the Jam plan
 /* full-price hours after the Jam */
 const AFTER_B = [
   ["Builder's Hut #2",136,'g',21.6e6,'Just misses the Jam on Builder 6 after Duke 22'],
@@ -298,14 +299,9 @@ const AFTER_B = [
 ];
 const AFTER_L = [
   ['Valkyrie 12',151,'d',340e3,''],
-  ['Golem 15',157,'d',350e3,''],
-  ['Sky Wagon 2',108,'e',19.8e6,'Goblin Lab in the Jam if you reach about 80 gems'],
   ['Sky Wagon 3',146,'e',26e6,''],
-  ['Sky Wagon 4',173,'e',29e6,'Max'],
-  ['Clone Spell 9',146,'e',23.4e6,''],
+  ['Sky Wagon 4',173,'e',29e6,'Max. Use the Hammer of Fighting here'],
   ['Miner 12',157,'e',28e6,''],
-  ['Battle Drill 6',167,'e',28e6,'Use the Hammer of Fighting here'],
-  ['Log Launcher 6',162,'e',27e6,''],
   ['Wizard 14',151,'e',27e6,''],
   ['Wall Breaker 14',151,'e',26e6,''],
   ['Archer 14',146,'e',25e6,''],
