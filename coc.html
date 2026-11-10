@@ -470,7 +470,7 @@ const PLAN = [
   {id:'b2', name:'Builder 2', kind:'b', items:[
     ['Elixir Storage #4',66,'g',8.1e6,'',1000003,19],['Elixir Storage #1',66,'g',8.1e6,'',1000003,19],['Gold Storage #1',66,'e',8.1e6,'',1000005,19]]},
   {id:'b3', name:'Builder 3', kind:'b', items:[
-    ['Hidden Tesla #4',68,'g',11.25e6,'',1000019,17],['Elixir Storage #2',66,'g',8.1e6,'',1000003,19],["Builder's Hut #2",62,'g',10.8e6,'',1000015,8],['Elixir Storage #3',66,'g',8.1e6,'',1000003,19]]},
+    ['Hidden Tesla #4',68,'g',11.25e6,'',1000019,17],['Elixir Storage #2',66,'g',8.1e6,'',1000003,19],["Builder's Hut #2",62,'g',10.8e6,'',1000015,8],['Elixir Storage #3',66,'g',8.1e6,'',1000003,19],['Gold Storage #2',66,'e',8.1e6,'',1000005,19]]},
   {id:'b4', name:'Builder 4', kind:'b', items:[
     ['Barbarian King 107',43,'d',187.5e3,'',28000000,107],['Barbarian King 108',43,'d',187.5e3,'',28000000,108],['Barbarian King 109',43,'d',187.5e3,'',28000000,109],
     ['Barbarian King 110',43,'d',187.5e3,'',28000000,110],['Mortar #3',66,'g',9.45e6,'',1000013,18]]},
@@ -680,6 +680,29 @@ function resolveItem(name){
   if(!id) id=NAME_IDX[base.replace(/ spell$/,'')]||NAME_IDX[base+' spell'];
   if(!id) return null;
   return {id, to:m[3]?+m[3]:null};
+}
+/* one time updates to lanes you have edited, so new plan fixes reach every device (syncs like everything else) */
+const PLAN_PATCHES=[
+  {key:'2026-11-10-fill-b3-b5', adds:[
+    {lane:'b5', item:['Hidden Tesla #3',68,'g',11.25e6,'',1000019,17]},
+    {lane:'b3', item:['Gold Storage #4',66,'e',8.1e6,'',1000005,19], ifTaken:'Gold Storage #2'},
+  ]},
+];
+function applyPatches(){
+  const done=store.get('coc-patches-v1',[])||[]; let changed=false;
+  const allNames=()=>new Set(PLAN.flatMap(P=>laneItems(P).map(x=>fixName(x[0]).toLowerCase())));
+  PLAN_PATCHES.forEach(pt=>{
+    if(done.includes(pt.key)) return;
+    pt.adds.forEach(a=>{
+      if(!EDITS[a.lane]) return;                       // not edited: the built in plan already has it
+      const names=allNames(); let item=a.item.slice();
+      if(names.has(item[0].toLowerCase())) return;     // already planned somewhere
+      EDITS[a.lane].push(item); changed=true;
+    });
+    done.push(pt.key);
+  });
+  if(changed) store.set(EDIT_KEY,EDITS);
+  store.set('coc-patches-v1',done);
 }
 let LANES=[], EXTRA=[], plan=[];
 function rebuild(){
@@ -1571,6 +1594,7 @@ document.querySelector('.tabbar').addEventListener('click',e=>{ const b=e.target
 /* ===== Run ===== */
 function renderLive(){ header(); upNext(); stats(); loot(); if(!document.activeElement||!document.getElementById('lanes').contains(document.activeElement)) lanes(); timeline(); }
 function renderAll(){ renderLive(); progress(); after(); renderGems(); renderItems(); renderLoot(); }
+try{ applyPatches(); }catch(e){}
 rebuild(); renderAll(); renderSync(); renderAI(); if(syncCfg()) syncPull().catch(syncErr);
 try{ const t=sessionStorage.getItem('coc-tab'); if(t&&TITLES[t]) go(t); }catch(e){}
 setInterval(()=>{ header(); const now=Date.now(); document.querySelectorAll('.cd').forEach(n=>n.textContent=dur(+n.dataset.to-now)); },1000);
