@@ -916,9 +916,14 @@ function progress(){
     `<div class="tile"><div class="k">Walls</div><div class="v">325</div><div class="k">all maxed</div></div>`+
     `<div class="tile"><div class="k">Still planned</div><div class="v">${more}</div><div class="k">more levels</div></div>`;
 }
+/* the after the Jam lists, minus anything already planned in a lane */
+function plannedSet(){ return new Set([...allSteps().map(x=>x.name.toLowerCase()),...plan.filter(p=>p.L.cur).map(p=>p.L.cur.toLowerCase())]); }
+function rowPlanned(n,s){ const m=/^(.*?)#(\d+) and #(\d+)$/.exec(n); const ns=m?[m[1]+'#'+m[2],m[1]+'#'+m[3]]:[n]; return ns.every(x=>s.has(x.toLowerCase().trim())); }
+function afterB(){ const s=plannedSet(); return AFTER_B.filter(r=>!rowPlanned(r[0],s)); }
+function afterL(){ const s=plannedSet(); return AFTER_L.filter(r=>!rowPlanned(r[0],s)); }
 let tab='b';
 function after(){
-  const rows=tab==='b'?AFTER_B:AFTER_L;
+  const rows=tab==='b'?afterB():afterL();
   const days=rows.reduce((a,r)=>a+r[1],0)/24;
   document.getElementById('after').innerHTML='<tr><th>Upgrade</th><th class="r">Time</th><th class="r">Cost</th></tr>'+
     rows.map(r=>`<tr><td>${esc(r[0])}${r[4]?`<span class="sub" style="font-size:12px">${esc(r[4])}</span>`:''}</td><td class="r">${(r[1]/24).toFixed(1)}d</td><td class="r"><span class="cur"><i class="dot ${r[2]}"></i>${money(r[3])}</span></td></tr>`).join('');
@@ -1209,7 +1214,7 @@ function findItem(q){
     if(s>0) nums.forEach(n=>{ if(nn.includes(n)) s+=1; });
     if(s>bs){ bs=s; best=obj; } };
   plan.forEach(p=>{ if(p.L.cur) consider(p.L.cur,{type:'cur',p}); p.q.forEach(s=>consider(s.name,{type:'q',s})); });
-  AFTER_B.forEach(r=>consider(r[0],{type:'after',r,lab:false})); AFTER_L.forEach(r=>consider(r[0],{type:'after',r,lab:true}));
+  afterB().forEach(r=>consider(r[0],{type:'after',r,lab:false})); afterL().forEach(r=>consider(r[0],{type:'after',r,lab:true}));
   return bs>=1?best:null;
 }
 function findLane(s){
@@ -1302,7 +1307,7 @@ function busyHero(name,at){ const h=HEROES.find(x=>name.startsWith(x)); if(!h) r
   let end=0; plan.forEach(p=>{ if(p.L.cur&&p.L.cur.startsWith(h)) end=Math.max(end,p.curEnd); p.q.forEach(x=>{ if(x.name.startsWith(h)) end=Math.max(end,x.end); }); });
   return end>at?end:null; }
 function candidates(laneId,at){
-  const P=PLAN.find(p=>p.id===laneId), lab=P.kind==='lab'||P.kind==='glab', rows=lab?AFTER_L:AFTER_B;
+  const P=PLAN.find(p=>p.id===laneId), lab=P.kind==='lab'||P.kind==='glab', rows=lab?afterL():afterB();
   const queued=new Set(allSteps().map(x=>x.name));
   return rows.filter(r=>!queued.has(r[0])&&!(laneId!=='gob'&&/Goblin Builder/.test(r[4]||''))).map(r=>({r,single:isSingle(r[0]),busy:busyHero(r[0],at)}))
     .sort((a,b)=>(b.single-a.single)||(!!a.busy-!!b.busy)||(b.r[1]-a.r[1]));
@@ -1339,8 +1344,8 @@ function maxedReport(){
     if(!full&&g.group!=='Lab'){ const nm=r[0].replace(/ x\d+$/,''), m=/^(\d+)\/(\d+)$/.exec(a[1]||'');
       bits.push(m?`${nm}: ${m[1]} of ${m[2]} at level ${r[4]}`:`${nm}: level ${a[0]} of ${r[4]}`); } }));
   const seen=bits.map(b=>b.split(':')[0].split(' ')[0]);
-  const extraB=AFTER_B.filter(r=>!seen.some(w=>r[0].startsWith(w))).map(r=>r[0]);
-  return `When the Jam ends (${whenD(JAM_END)}), these <b>won't be maxed</b> yet:<br><b>Heroes and buildings</b><ul>${bits.map(b=>`<li>${esc(b)}</li>`).join('')}</ul><b>Not touched in the Jam</b><ul>${extraB.map(n=>`<li>${esc(n)}</li>`).join('')}</ul><b>Lab</b><ul>${AFTER_L.map(r=>`<li>${esc(r[0])}</li>`).join('')}</ul>`;
+  const extraB=afterB().filter(r=>!seen.some(w=>r[0].startsWith(w))).map(r=>r[0]);
+  return `When the Jam ends (${whenD(JAM_END)}), these <b>won't be maxed</b> yet:<br><b>Heroes and buildings</b><ul>${bits.map(b=>`<li>${esc(b)}</li>`).join('')}</ul><b>Not touched in the Jam</b><ul>${extraB.map(n=>`<li>${esc(n)}</li>`).join('')}</ul><b>Lab</b><ul>${afterL().map(r=>`<li>${esc(r[0])}</li>`).join('')}</ul>`;
 }
 function answer(q){
   const s=q.toLowerCase().trim(), now=Date.now();
@@ -1398,7 +1403,7 @@ function answer(q){
     return `You need ${lab}:<ul>${only.map(c=>`<li>${CUR[c]}: <b>${money(n[c])}</b></li>`).join('')}</ul>Use Loot check in Tools to compare with your storages.`; }
   if(/progress|how far|levels|since/.test(s)){ const levels=DONE_AT_BAKED+levelSum(EXP)-levelSum(BAKED);
     return `Since Nov 1 you've finished <b>${levels} upgrade levels</b> and maxed all 325 walls. ${open.length} more starts are planned.`; }
-  if(/after|left to max|max|th19|remaining/.test(s)){ const bd=AFTER_B.reduce((a,r)=>a+r[1],0)/24, ld=AFTER_L.reduce((a,r)=>a+r[1],0)/24;
+  if(/after|left to max|max|th19|remaining/.test(s)){ const bd=afterB().reduce((a,r)=>a+r[1],0)/24, ld=afterL().reduce((a,r)=>a+r[1],0)/24;
     return `After the Jam: about <b>${Math.round(bd)} builder days</b> (about ${Math.round(bd/6)} days across 6 builders) and <b>${Math.round(ld)} lab days</b>. The lab is your bottleneck.`; }
   if(/next|now|start|what should|do/.test(s)){ const nx=open.filter(x=>!x.late).slice(0,4);
     return nx.length?`Here's what's next:<ul>${nx.map(li).join('')}</ul>`:'Nothing left to start in the Jam.'; }
@@ -1466,8 +1471,8 @@ Now: ${f(now)}. Hammer Jam ends ${f(JAM_END)}. Player sleeps ${sleepText()} (no 
   s+='\nLEVELS (Nov 1, now, after Jam plan, TH18 max):';
   PROGRESS.forEach(g=>g.rows.forEach(r=>{ const v=x=>Array.isArray(x)?x[0]+(x[1]?'('+x[1]+')':''):x; const now2=liveNow(r);
     if(String(v(r[3]))!==String(r[4])||g.group!=='Lab') s+=`\n${r[0]}: ${v(r[1])}, ${v(now2)}, ${v(r[3])}, ${r[4]}`; }));
-  s+='\nLEFT AFTER THE JAM, builders (full price hours, cost):'; AFTER_B.forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
-  s+='\nLEFT AFTER THE JAM, lab:'; AFTER_L.forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
+  s+='\nLEFT AFTER THE JAM, builders (full price hours, cost):'; afterB().forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
+  s+='\nLEFT AFTER THE JAM, lab:'; afterL().forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
   s+='\nNOTES: Hammer of Fighting saved for Sky Wagon 4 after the Jam. Hammer of Building saved for TH19. Goblin Builder and Goblin Lab starts cost gems (about '+SETTINGS.gemPrice+' each). Not tracked: hero equipment, supercharges, crafted defenses.';
   return s;
 }
