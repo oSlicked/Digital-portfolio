@@ -233,6 +233,9 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 .bub.bot{align-self:flex-start;background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:6px}
 .bub.bot ul{margin:6px 0 0;padding-left:18px}
 .bub.bot li{margin:3px 0}
+.cbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.cbtn{border:0;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#ffd77a,#f0a51e);color:#241703}
+.cbtn:disabled{opacity:.4}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:10px 16px 0;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chips button{flex:none;border:1px solid var(--border2);background:transparent;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--text)}
@@ -1043,13 +1046,95 @@ function findLane(s){
   return null;
 }
 const li=s=>`<li><b>${esc(s.name)}</b> on ${esc(s.lane.name)}: ${s.start<=Date.now()?'ready now':whenD(s.start)}</li>`;
+/* dates like "friday", "nov 13 at 12:51am", "tomorrow night", "in 5 hours" */
+function parseWhen(s,now){
+  let m, day=null, hasTime=false, mins=0;
+  const mid=localMidnight(now), MON='jan feb mar apr may jun jul aug sep oct nov dec'.split(' ');
+  if(m=/\bin\s+(\d+(?:\.\d+)?)\s*(hours?|hrs?|h|days?|d|minutes?|mins?|m)\b/.exec(s)){ const n=+m[1], u=m[2][0]; const t=now+n*(u==='d'?864e5:u==='h'?H:6e4); return {start:t,end:t,dayOnly:false,label:whenD(t)}; }
+  if(m=/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})(?:st|nd|rd|th)?\b/.exec(s)){
+    let y=new Date(now-5*H).getUTCFullYear(); day=Date.UTC(y,MON.indexOf(m[1]),+m[2])+5*H; if(day<mid-60*864e5) day=Date.UTC(y+1,MON.indexOf(m[1]),+m[2])+5*H; }
+  else if(m=/\bthe\s+(\d{1,2})(?:st|nd|rd|th)\b/.exec(s)){ const d=new Date(now-5*H); day=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),+m[1])+5*H; if(day<mid) day=Date.UTC(d.getUTCFullYear(),d.getUTCMonth()+1,+m[1])+5*H; }
+  else if(/\btomorrow\b/.test(s)) day=mid+864e5;
+  else if(/\b(today|tonight|this (morning|afternoon|evening))\b/.test(s)) day=mid;
+  else if(m=/\b(sunday|monday|tuesday|wednesday|thursday|friday|saturday|sun|mon|tues?|wed|thu|thurs?|fri|sat)\b/.exec(s)){
+    const want=['sun','mon','tue','wed','thu','fri','sat'].indexOf(m[1].slice(0,3)), cur=new Date(now-5*H).getUTCDay();
+    day=mid+((want-cur+7)%7)*864e5; }
+  if(m=/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm|a\.m\.?|p\.m\.?)/.exec(s)){ let h=+m[1]%12; if(m[3][0]==='p') h+=12; mins=h*60+(+(m[2]||0)); hasTime=true; }
+  else if(m=/\b(\d{1,2}):(\d{2})\b/.exec(s)){ mins=(+m[1])*60+(+m[2]); hasTime=true; }
+  else if(/\bnoon\b/.test(s)){ mins=720; hasTime=true; }
+  else if(/\bmidnight\b/.test(s)){ mins=0; hasTime=true; if(day!==null) day+=864e5; }
+  else if(/\btonight\b/.test(s)){ mins=22*60; hasTime=true; }
+  else if(/\bmorning\b/.test(s)&&day!==null){ mins=9*60; hasTime=true; }
+  if(day===null&&!hasTime) return null;
+  if(hasTime){ let t=(day===null?mid:day)+mins*6e4; if(day===null&&t<now) t+=864e5; return {start:t,end:t,dayOnly:false,label:whenD(t)}; }
+  return {start:day,end:day+864e5-6e4,dayOnly:true,label:fmtDay.format(day)};
+}
+const editBtns=ids=>ids.length?`<div class="cbtns">${ids.map(id=>`<button type="button" class="cbtn" data-goedit="${id}">Edit ${esc(PLAN.find(p=>p.id===id).name)}</button>`).join('')}</div>`:'';
+function whatAt(p,T){
+  if(p.L.cur&&T>=EXPORT&&T<p.curEnd) return {name:p.L.cur,end:p.curEnd};
+  for(const x of p.q){ if(T>=x.start&&T<x.end) return {name:x.name,end:x.end}; }
+  const nx=p.q.find(x=>x.start>T); return nx?{wait:nx}:null;
+}
+function idleReport(T,W){
+  const now=Date.now(), idle=plan.filter(p=>p.idleAt<=T).sort((a,b)=>a.idleAt-b.idleAt), busy=plan.filter(p=>p.idleAt>T);
+  let h=`By <b>${W.dayOnly?'the end of '+W.label:W.label}</b>:`;
+  h+=idle.length?`<br>These will have <b>nothing left to upgrade</b>:<ul>${idle.map(p=>`<li><b>${esc(p.L.name)}</b>, out of work ${p.idleAt<=now?'already':'from '+whenD(p.idleAt)}${p.L.id==='gob'||p.L.id==='glab'?' (gem lane)':''}</li>`).join('')}</ul>`:'<br>Every builder and lab still has work planned.';
+  if(busy.length) h+=`Still working then:<ul>${busy.map(p=>{ const w=whatAt(p,T); return `<li><b>${esc(p.L.name)}</b>: ${w&&w.name?esc(w.name)+' until '+whenD(w.end):w&&w.wait?'waiting to start '+esc(w.wait.name):'busy'}, last one done ${whenD(p.idleAt)}</li>`; }).join('')}</ul>`;
+  if(idle.length) h+=`Want to give them more? Tap one to add upgrades:`+editBtns(idle.map(p=>p.L.id));
+  return h;
+}
+function stateReport(T,W){
+  return `At <b>${W.dayOnly?W.label+' (midday)':W.label}</b>:<ul>${plan.map(p=>{ const w=whatAt(p,T);
+    return `<li><b>${esc(p.L.name)}</b>: ${w&&w.name?esc(w.name)+', done '+whenD(w.end):w&&w.wait?'free, next is '+esc(w.wait.name)+' at '+whenD(w.wait.start):'nothing planned'}</li>`; }).join('')}</ul>`;
+}
+function dayReport(W){
+  const st=allSteps().filter(x=>x.start>=W.start&&x.start<=W.end).sort((a,b)=>a.start-b.start);
+  const fin=[...allSteps().filter(x=>x.end>=W.start&&x.end<=W.end).map(x=>({name:x.name,lane:x.lane.name,t:x.end})),
+    ...plan.filter(p=>p.L.cur&&p.curEnd>=W.start&&p.curEnd<=W.end).map(p=>({name:p.L.cur,lane:p.L.name,t:p.curEnd}))].sort((a,b)=>a.t-b.t);
+  return `<b>${W.label}</b><br>Starts:${st.length?`<ul>${st.map(x=>`<li>${when(x.start)}: <b>${esc(x.name)}</b> on ${esc(x.lane.name)}</li>`).join('')}</ul>`:' none<br>'}Finishes:${fin.length?`<ul>${fin.map(x=>`<li>${when(x.t)}: <b>${esc(x.name)}</b> on ${esc(x.lane)}</li>`).join('')}</ul>`:' none'}`;
+}
+/* "add Cannon 21 to builder 3, 60h, 9.5M gold" / "remove Witch 8" / "move X up" */
+let pendingRm=null;
+function editAnswer(s,lane){
+  const how=`Say it like: <i>add Cannon 21 to builder 3, 60h, 9.5M gold</i>. Use the time the game shows now. Or tap below to edit by hand.`;
+  if(/\b(add|put|queue up)\b/.test(s)){
+    if(!lane) return `Which one should I add it to?<br>${how}`+editBtns(PLAN.map(p=>p.id));
+    const hm=/(\d+(?:\.\d+)?)\s*(hours?|hrs?|h|days?|d)\b(?!\w)/.exec(s), cm=/(\d+(?:\.\d+)?)\s*(m|mil|million|k)\b/.exec(s.replace(hm?hm[0]:'',''));
+    let name=s.replace(/^.*?\b(add|put|queue up)\b\s*(an? upgrade|upgrade)?\s*/,'').replace(/\s*(to|on|onto|in|for)\s+(the\s+)?(goblin\s*lab|goblin\s*builder|goblin|builder\s*#?\s*\d|lab(oratory)?|pet\s*house|pets?)\b.*$/,'').replace(/[,.]+$/,'').trim();
+    if(!hm||!cm||!name||name.length<3) return `Sure, I can add it to <b>${esc(PLAN.find(p=>p.id===lane).name)}</b>. I need the name, time and cost.<br>${how}`+editBtns([lane]);
+    const hrs=+hm[1]*(hm[2][0]==='d'?24:1), cost=+cm[1]*(cm[2][0]==='k'?1e3:1e6);
+    const cur=/dark|\bde\b/.test(s)?'d':/elix/.test(s)?'e':/gold/.test(s)?'g':(PLAN.find(p=>p.id===lane).kind==='lab'?'e':'g');
+    name=name.replace(/\b\w/g,c=>c.toUpperCase());
+    editLane(lane,items=>items.push([name,hrs/PASS,cur,cost,/gem/.test(s)||lane==='gob'||lane==='glab'?'gem':'',null,null]));
+    const st=allSteps().find(x=>x.lane.id===lane&&x.name===name);
+    return `Added <b>${esc(name)}</b> to the end of <b>${esc(PLAN.find(p=>p.id===lane).name)}</b>: ${hrs}h, ${money(cost)} ${CUR[cur]}.${st?` Start it <b>${st.start<=Date.now()?'now':whenD(st.start)}</b>${st.late?' (after the Jam, full price)':''}.`:''} You can reorder it in Plan.`+editBtns([lane]);
+  }
+  if(/\b(remove|delete|take off|take out|cancel|skip)\b/.test(s)){
+    const it=findItem(s);
+    if(!it||it.type!=='q') return `Which upgrade should I take off? Say the name, like <i>remove Witch 8</i>. Or tap below.`+editBtns(lane?[lane]:PLAN.map(p=>p.id));
+    pendingRm={lane:it.s.lane.id,name:it.s.name};
+    return `Take <b>${esc(it.s.name)}</b> off ${esc(it.s.lane.name)}? Everything after it moves up.<div class="cbtns"><button type="button" class="cbtn" data-rm="1">Yes, remove it</button></div>`;
+  }
+  const it=lane?null:findItem(s), ln=lane||(it&&it.type==='q'?it.s.lane.id:it&&it.type==='cur'?it.p.L.id:null);
+  return `To move or change ${it&&it.type==='q'?'<b>'+esc(it.s.name)+'</b>':'an upgrade'}, open the editor and use the arrows. ${ln?'':'Pick one:'}`+editBtns(ln?[ln]:PLAN.map(p=>p.id));
+}
 function answer(q){
   const s=q.toLowerCase().trim(), now=Date.now();
   const open=allSteps().filter(x=>!marks[mk(x)]).sort((a,b)=>a.start-b.start);
   if(!s) return 'Ask me something about your plan.';
   if(/^(hi|hey|hello|yo|sup)\b/.test(s)) return `Hey. ${open.length?`Next up is <b>${esc(open[0].name)}</b> on ${esc(open[0].lane.name)}, ${open[0].start<=now?'ready now':whenD(open[0].start)}.`:'Nothing is left to start.'} Ask me anything about your plan.`;
-  if(/help|what can you|examples/.test(s)) return `I read your plan and saved data on this phone, no internet needed. Try:<ul><li>What's next?</li><li>When is Builder 3 free?</li><li>When does Grand Warden 83 start?</li><li>How much gold do I need tomorrow?</li><li>Can I afford the gem starts?</li><li>Anything idle?</li><li>What's left after the Jam?</li></ul>`;
-  const lane=findLane(s);
+  if(/help|what can you|examples/.test(s)) return `I read your plan and saved data on this phone, no internet needed. Try:<ul><li>What's next?</li><li>When is Builder 3 free?</li><li>When does Grand Warden 83 start?</li><li>How much gold do I need tomorrow?</li><li>Can I afford the gem starts?</li><li>Anything idle?</li><li>What won't be upgraded after Friday 1 AM?</li><li>What's running tomorrow at 9 PM?</li><li>What starts on Thursday?</li><li>When does everything run out?</li><li>Add Cannon 21 to builder 3, 60h, 9.5M gold</li><li>Remove Witch 8</li></ul>`;
+  const lane=findLane(s), W=parseWhen(s,now);
+  /* change the plan */
+  if(/\b(add|remove|delete|take off|take out|move|swap|reorder|change|edit|put|queue up|replace|cancel|skip)\b/.test(s)) return editAnswer(s,lane);
+  /* questions about a time */
+  if(/run out|out of work|go idle|goes idle|last upgrade|finish everything|everything done|when .*(idle|empty)/.test(s)&&!W){
+    return `When each one runs out of planned work:<ul>${plan.slice().sort((a,b)=>a.idleAt-b.idleAt).map(p=>`<li><b>${esc(p.L.name)}</b>: ${p.idleAt<=now?'already out':whenD(p.idleAt)}</li>`).join('')}</ul>${editBtns(plan.filter(p=>p.idleAt<JAM_END).map(p=>p.L.id))}`; }
+  if(W){
+    if(/won'?t|wont|not be|nothing|idle|free|empty|run out|out of work|stop|no upgrade|without|done by|finished by|will be done|left over/.test(s)) return idleReport(W.end,W);
+    if(/start|finish|done|end|complete/.test(s)&&W.dayOnly) return dayReport(W);
+    if(!/gold|elixir|dark|\bde\b|loot|need|cost|afford|gem/.test(s)) return stateReport(W.dayOnly?Math.max(now,W.start+12*H):W.end,W);
+  }
   const item=lane?null:findItem(s);
   if(item){
     if(item.type==='cur'){ const p=item.p; return p.curEnd>now?`<b>${esc(p.L.cur)}</b> is running on ${esc(p.L.name)} and finishes <b>${whenD(p.curEnd)}</b> (${dur(p.curEnd-now)} from now).`:`<b>${esc(p.L.cur)}</b> should be finished. It ended ${whenD(p.curEnd)}.`; }
@@ -1087,7 +1172,7 @@ function answer(q){
     return `After the Jam: about <b>${Math.round(bd)} builder days</b> (about ${Math.round(bd/6)} days across 6 builders) and <b>${Math.round(ld)} lab days</b>. The lab is your bottleneck.`; }
   if(/next|now|start|what should|do/.test(s)){ const nx=open.filter(x=>!x.late).slice(0,4);
     return nx.length?`Here's what's next:<ul>${nx.map(li).join('')}</ul>`:'Nothing left to start in the Jam.'; }
-  return `I'm not sure about that one. I can answer about your queue, builders, labs, loot, gems, potions and the Jam. Try "what's next?" or "when is Builder 2 free?"`;
+  return `I didn't catch that one. I work best with a builder, an upgrade name or a day in the question. Try:<ul><li>What's on builder 2?</li><li>What won't be upgraded after Friday?</li><li>When does Witch 8 start?</li><li>What starts tomorrow?</li></ul>Type <b>help</b> for more.`;
 }
 const chatEl=document.getElementById('chat'), bg=document.getElementById('chatBg'), logEl=document.getElementById('chatlog');
 function say(html,me){ const d=document.createElement('div'); d.className='bub '+(me?'me':'bot'); if(me) d.textContent=html; else d.innerHTML=html; logEl.appendChild(d); logEl.scrollTop=logEl.scrollHeight; }
@@ -1097,7 +1182,15 @@ function closeChat(){ chatEl.classList.remove('on'); bg.classList.remove('on'); 
 document.getElementById('askBtn').addEventListener('click',openChat);
 document.getElementById('chatClose').addEventListener('click',closeChat);
 bg.addEventListener('click',closeChat);
-document.getElementById('chips').innerHTML=["What's next?","Anything idle?","Loot for tomorrow","Gems","When is Builder 1 free?","Lab","Jam time left","Help"].map(t=>`<button type="button">${esc(t)}</button>`).join('');
+document.getElementById('chips').innerHTML=["What's next?","Anything idle?","Loot for tomorrow","Gems","What starts tomorrow?","When does everything run out?","Add an upgrade","Jam time left","Help"].map(t=>`<button type="button">${esc(t)}</button>`).join('');
+logEl.addEventListener('click',e=>{
+  const g=e.target.closest('[data-goedit]');
+  if(g){ closeChat(); go('plan'); editing=g.dataset.goedit; lanes(); setTimeout(()=>{ const c=document.querySelector(`[data-edit="${editing}"]`); if(c) c.closest('.lane').scrollIntoView({behavior:'smooth',block:'start'}); },60); return; }
+  if(e.target.closest('[data-rm]')&&pendingRm){ const r=pendingRm; pendingRm=null; e.target.disabled=true;
+    const L=LANES.find(l=>l.id===r.lane), i=L?L.steps.findIndex(x=>x[0]===r.name):-1;
+    if(i<0){ say("I couldn't find it anymore."); return; }
+    editLane(r.lane,items=>items.splice(L.first+i,1)); say(`Removed <b>${esc(r.name)}</b>. Use Reset to my plan in the editor if you want it back.`+editBtns([r.lane])); }
+});
 document.getElementById('chips').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) ask(b.textContent); });
 document.getElementById('chatf').addEventListener('submit',e=>{ e.preventDefault(); const i=document.getElementById('chatIn'), q=i.value.trim(); if(!q) return; i.value=''; ask(q); });
 
