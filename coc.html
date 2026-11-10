@@ -135,6 +135,14 @@ tr.grp td{background:var(--card2);font:15px "Lilita One";color:var(--edge);paddi
 .tabs{display:flex;gap:6px;padding:10px 14px 0;background:var(--card2);border-bottom:2px solid var(--line)}
 .tabs button{border:2px solid var(--edge);border-bottom:0;background:var(--card);border-radius:8px 8px 0 0;padding:6px 12px;font:15px "Lilita One";color:var(--muted);cursor:pointer}
 .tabs button[aria-selected=true]{background:#fff8e6;color:var(--ink)}
+.upd{margin-top:16px}
+.upd summary{cursor:pointer;padding:12px 14px;font:18px "Lilita One",Nunito,sans-serif;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.upd summary::-webkit-details-marker{display:none}
+.upd summary::after{content:"Paste";font:800 12px Nunito,sans-serif;background:linear-gradient(#ffd55a,#f0a500);border:2px solid var(--edge);border-radius:8px;padding:3px 10px;color:#3a2600}
+.upd[open] summary::after{content:"Close"}
+.upd textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:8px;padding:8px;font:500 12px ui-monospace,Menlo,Consolas,monospace;color:var(--ink);background:#fff}
+.btn{border:2px solid var(--edge);background:linear-gradient(#ffd55a,#f0a500);color:#3a2600;border-radius:10px;padding:7px 13px;font:16px "Lilita One",Nunito,sans-serif;cursor:pointer}
+.btn.alt{background:#fff8e6}
 .note{font-size:13px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line);background:var(--card2)}
 ul.tips{margin:0;padding:12px 14px 12px 32px}
 ul.tips li{margin:4px 0}
@@ -151,6 +159,20 @@ footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
   <div class="jambar"><i id="jamfill"></i><span id="jamtxt"></span></div>
   <div class="boostrow" id="boosts"></div>
 </header>
+
+<details class="card upd" id="upd">
+  <summary>Update from export</summary>
+  <div class="pad">
+    <p style="margin:0 0 8px">Copy your village data export in game, paste it here and press Update. The page works out what finished, what's running and what's next. It saves on this device only.</p>
+    <textarea id="paste" placeholder='{"tag":"#...","timestamp":...}' aria-label="Paste your export"></textarea>
+    <div class="row" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="btn" id="updBtn" type="button">Update</button>
+      <button class="btn alt" id="pasteBtn" type="button">Paste from clipboard</button>
+      <button class="btn alt" id="resetBtn" type="button">Use built-in data</button>
+      <span id="updMsg" role="status" style="font-weight:800"></span>
+    </div>
+  </div>
+</details>
 
 <h2>Up next <small>start each one as soon as it frees</small></h2>
 <div class="card"><ul class="next" id="next"></ul><button class="more" id="moreBtn" type="button">Show more</button></div>
@@ -193,41 +215,122 @@ footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
 </div>
 
 <script>
-/* ===== Data: synced from the in-game export at 5:07 PM Mon Nov 9, 2026 ===== */
-const EXPORT = 1794262069000;                       // export timestamp
+/* ===== Data =====
+   The plan below is the order you want things done. The page reads your latest
+   in-game export (built in, or the one you paste on the page) and works out what
+   is finished, what is running and what to start next on its own. */
 const JAM_END = Date.parse('2026-11-16T02:45:00-05:00');
 const PASS = 0.85/0.9;                              // Gold Pass builder/lab time bonus on top of the listed hours
 const SLEEP = [1, 8];                               // asleep 1 AM to 8 AM, Toronto
 const H = 3600e3;
 const BUILDER_LANES = ['gob','b1','b2','b3','b4','b5','b6'];
-const BOOSTS = [                                     // potions active at export time
-  {x:10, from:EXPORT, to:EXPORT+1246e3, lanes:BUILDER_LANES, label:'4 Builder Potions'},
-  {x:24, from:EXPORT, to:EXPORT+1251e3, lanes:['lab','glab'], label:'4 Research Potions'},
-  {x:24, from:Date.parse('2026-11-10T10:15:00-05:00'), to:Date.parse('2026-11-10T23:14:00-05:00'), lanes:['lab','glab'], label:'13 Research Potions'},
+const DONE_AT_BAKED = 79;                           // upgrade levels finished from Nov 1 up to the built-in export
+/* item: [name, Jam hours before Gold Pass, currency g/e/d, cost, flag, export ID, level it upgrades to] */
+const PLAN = [
+  {id:'gob', name:'Goblin Builder', kind:'gob', items:[
+    ['Giga Bomb 4',68,'g',9e6,'gem',12000020,4]]},
+  {id:'b1', name:'Builder 1', kind:'b', items:[
+    ['Grand Warden 80',43,'e',12.5e6,'',28000002,80],['Grand Warden 81',43,'e',12.5e6,'',28000002,81],['Grand Warden 82',43,'e',12.5e6,'',28000002,82],
+    ['Grand Warden 83',43,'e',12.5e6,'',28000002,83],['Hidden Tesla #5',68,'g',11.25e6,'',1000019,17]]},
+  {id:'b2', name:'Builder 2', kind:'b', items:[
+    ['Elixir Storage #4',66,'g',8.1e6,'',1000003,19],['Elixir Storage #1',66,'g',8.1e6,'',1000003,19],['Gold Storage #1',66,'e',8.1e6,'',1000005,19]]},
+  {id:'b3', name:'Builder 3', kind:'b', items:[
+    ['Hidden Tesla #4',68,'g',11.25e6,'',1000019,17],['Elixir Storage #2',66,'g',8.1e6,'',1000003,19],['Elixir Storage #3',66,'g',8.1e6,'',1000003,19]]},
+  {id:'b4', name:'Builder 4', kind:'b', items:[
+    ['Barbarian King 107',43,'d',187.5e3,'',28000000,107],['Barbarian King 108',43,'d',187.5e3,'',28000000,108],['Barbarian King 109',43,'d',187.5e3,'',28000000,109],
+    ['Barbarian King 110',43,'d',187.5e3,'',28000000,110],['Mortar #3',66,'g',9.45e6,'',1000013,18]]},
+  {id:'b5', name:'Builder 5', kind:'b', items:[
+    ['Archer Queen 104',43,'d',187.5e3,'',28000001,104],['Archer Queen 105',43,'d',187.5e3,'',28000001,105],['Archer Queen 106',43,'d',187.5e3,'',28000001,106],
+    ['Hidden Tesla #3',68,'g',11.25e6,'',1000019,17]]},
+  {id:'b6', name:'Builder 6', kind:'b', items:[
+    ['Dragon Duke 18',35,'d',225e3,'',28000007,18],['Dragon Duke 19',36,'d',230e3,'',28000007,19],['Dragon Duke 20',36,'d',235e3,'',28000007,20],
+    ['Dragon Duke 21',37,'d',240e3,'',28000007,21],['Dragon Duke 22',37,'d',245e3,'',28000007,22]]},
+  {id:'lab', name:'Laboratory', kind:'lab', items:[
+    ['Hog Rider 15',78.5,'d',170e3,'',4000011,15],['Witch 8',83.5,'d',177.5e3,'',4000015,8],['Ruin Witch 2',59.5,'d',110e3,'',4000109,2],
+    ['Druid 6',83.5,'d',190e3,'',4000123,6],['Ruin Witch 3',65,'d',150e3,'',4000109,3],['Ruin Witch 4',83.5,'d',190e3,'',4000109,4]]},
+  {id:'glab', name:'Goblin Lab', kind:'glab', items:[
+    ['Battle Drill 6',83.5,'e',14e6,'gem',4000092,6],['Log Launcher 6',81,'e',13.5e6,'gem',4000087,6],['Golem 15',78.5,'d',175e3,'gem',4000013,15],
+    ['Clone Spell 9',73,'e',11.7e6,'gem',26000016,9],['Sky Wagon 2',54,'e',9.9e6,'gem',4000188,2]]},
+  {id:'pet', name:'Pet House', kind:'pet', items:[
+    ['Diggy 13',39,'d',100e3,'',73000008,13],['Diggy 14',41.4,'d',111.6e3,'',73000008,14],['Diggy 15',43.2,'d',126e3,'',73000008,15]]},
 ];
-/* step: [name, Jam hours before Gold Pass, currency g/e/d, cost, flag] */
-const LANES = [
-  {id:'gob', name:'Goblin Builder', cur:'Giga Bomb 4', left:231120, started:Date.parse('2026-11-10T02:24:00-05:00'), steps:[]},
-  {id:'b1', name:'Builder 1', cur:'Grand Warden 80', left:95323, steps:[
-    ['Grand Warden 81',43,'e',12.5e6],['Grand Warden 82',43,'e',12.5e6],['Grand Warden 83',43,'e',12.5e6],['Hidden Tesla #5',68,'g',11.25e6]]},
-  {id:'b2', name:'Builder 2', cur:'Spell Tower #1', left:82374, steps:[
-    ['Elixir Storage #4',66,'g',8.1e6],['Elixir Storage #1',66,'g',8.1e6],['Gold Storage #1',66,'e',8.1e6]]},
-  {id:'b3', name:'Builder 3', cur:'Hidden Tesla #4', left:114662, steps:[
-    ['Elixir Storage #2',66,'g',8.1e6],['Elixir Storage #3',66,'g',8.1e6]]},
-  {id:'b4', name:'Builder 4', cur:'Barbarian King 107', left:95299, steps:[
-    ['Barbarian King 108',43,'d',187.5e3],['Barbarian King 109',43,'d',187.5e3],['Barbarian King 110',43,'d',187.5e3],['Mortar #3',66,'g',9.45e6]]},
-  {id:'b5', name:'Builder 5', cur:'Archer Queen 104', left:133072, steps:[
-    ['Archer Queen 105',43,'d',187.5e3],['Archer Queen 106',43,'d',187.5e3],['Hidden Tesla #3',68,'g',11.25e6]]},
-  {id:'b6', name:'Builder 6', cur:'Dragon Duke 17', left:7276, steps:[
-    ['Dragon Duke 18',35,'d',225e3],['Dragon Duke 19',36,'d',230e3],['Dragon Duke 20',36,'d',235e3],['Dragon Duke 21',37,'d',240e3],['Dragon Duke 22',37,'d',245e3]]},
-  {id:'lab', name:'Laboratory', cur:'Recall Spell 7', left:150633, steps:[
-    ['Hog Rider 15',78.5,'d',170e3],['Witch 8',83.5,'d',177.5e3],['Ruin Witch 2',59.5,'d',110e3],['Druid 6',83.5,'d',190e3],
-    ['Ruin Witch 3',65,'d',150e3],['Ruin Witch 4',83.5,'d',190e3]]},
-  {id:'glab', name:'Goblin Lab', cur:'Angry Spell 3', left:254880, started:Date.parse('2026-11-09T17:54:00-05:00'), steps:[
-    ['Battle Drill 6',83.5,'e',14e6,'gem'],['Log Launcher 6',81,'e',13.5e6,'gem'],['Golem 15',78.5,'d',175e3,'gem'],['Clone Spell 9',73,'e',11.7e6,'gem'],['Sky Wagon 2',54,'e',9.9e6,'gem']]},  // time is an estimate
-  {id:'pet', name:'Pet House', cur:'Diggy 13', left:109632, steps:[
-    ['Diggy 14',41.4,'d',111.6e3],['Diggy 15',43.2,'d',126e3]]},
-];
+const NAMES = {
+  1000000:'Army Camp',1000001:'Town Hall',1000002:'Elixir Collector',1000003:'Elixir Storage',1000004:'Gold Mine',1000005:'Gold Storage',
+  1000006:'Barracks',1000007:'Laboratory',1000008:'Cannon',1000009:'Archer Tower',1000010:'Wall',1000011:'Wizard Tower',1000012:'Air Defense',
+  1000013:'Mortar',1000014:'Clan Castle',1000015:"Builder's Hut",1000019:'Hidden Tesla',1000020:'Spell Factory',1000021:'X-Bow',
+  1000023:'Dark Elixir Drill',1000024:'Dark Elixir Storage',1000026:'Dark Barracks',1000027:'Inferno Tower',1000028:'Air Sweeper',
+  1000029:'Dark Spell Factory',1000031:'Eagle Artillery',1000032:'Bomb Tower',1000059:'Workshop',1000067:'Scattershot',1000068:'Pet House',
+  1000070:'Blacksmith',1000071:'Hero Hall',1000072:'Spell Tower',1000077:'Monolith',1000079:'Multi-Gear Tower',1000084:'Multi-Archer Tower',
+  1000085:'Ricochet Cannon',1000086:'Revenge Tower',1000089:'Firespitter',1000097:'Crafting Station',1000102:'Super Wizard Tower',
+  12000000:'Bomb',12000001:'Spring Trap',12000002:'Giant Bomb',12000005:'Air Bomb',12000006:'Seeking Air Mine',12000008:'Skeleton Trap',
+  12000016:'Tornado Trap',12000020:'Giga Bomb',
+  28000000:'Barbarian King',28000001:'Archer Queen',28000002:'Grand Warden',28000004:'Royal Champion',28000006:'Minion Prince',28000007:'Dragon Duke',
+  73000000:'L.A.S.S.I',73000001:'Electro Owl',73000002:'Mighty Yak',73000003:'Unicorn',73000004:'Phoenix',73000007:'Poison Lizard',
+  73000008:'Diggy',73000009:'Frosty',73000010:'Spirit Fox',73000011:'Angry Jelly',73000016:'Sneezy',73000017:'Greedy Raven',
+  107000000:'Longshot',107000001:'Smasher',107000008:'Logger',
+  4000000:'Barbarian',4000001:'Archer',4000002:'Goblin',4000003:'Giant',4000004:'Wall Breaker',4000005:'Balloon',4000006:'Wizard',
+  4000007:'Healer',4000008:'Dragon',4000009:'P.E.K.K.A',4000010:'Minion',4000011:'Hog Rider',4000012:'Valkyrie',4000013:'Golem',
+  4000015:'Witch',4000017:'Lava Hound',4000022:'Bowler',4000023:'Baby Dragon',4000024:'Miner',4000053:'Yeti',4000058:'Ice Golem',
+  4000059:'Electro Dragon',4000065:'Dragon Rider',4000082:'Headhunter',4000095:'Electro Titan',4000097:'Apprentice Warden',
+  4000109:'Ruin Witch',4000110:'Root Rider',4000123:'Druid',4000132:'Thrower',4000150:'Furnace',4000177:'Meteor Golem',
+  4000051:'Wall Wrecker',4000052:'Battle Blimp',4000062:'Stone Slammer',4000075:'Siege Barracks',4000087:'Log Launcher',
+  4000091:'Flame Flinger',4000092:'Battle Drill',4000135:'Troop Launcher',4000188:'Sky Wagon',
+  26000000:'Lightning Spell',26000001:'Healing Spell',26000002:'Rage Spell',26000003:'Jump Spell',26000005:'Freeze Spell',
+  26000009:'Poison Spell',26000010:'Earthquake Spell',26000011:'Haste Spell',26000016:'Clone Spell',26000017:'Skeleton Spell',
+  26000028:'Bat Spell',26000035:'Invisibility Spell',26000053:'Recall Spell',26000070:'Overgrowth Spell',26000098:'Revive Spell',
+  26000109:'Ice Block Spell',26000120:'Totem Spell',26000123:'Angry Spell'
+};
+/* The export this version of the page was built from (Nov 10, 12:23 PM). A newer pasted export replaces it. */
+const BAKED = {"tag":"#88RJQPR0P","timestamp":1794331406,"helpers":[{"data":93000000,"lvl":5,"helper_cooldown":10006},{"data":93000001,"lvl":1,"helper_cooldown":10006},{"data":93000002,"lvl":1,"helper_cooldown":10006},{"data":93000003,"lvl":1,"helper_cooldown":10006}],"guardians":[{"data":107000000,"lvl":5},{"data":107000001,"lvl":4},{"data":107000008,"lvl":1}],"buildings":[{"data":1000003,"lvl":18,"timer":207855},{"data":1000013,"lvl":18,"gear_up":1},{"data":1000019,"lvl":16,"timer":24130,"helper_recurrent":true},{"data":1000097,"types":[{"data":103000011,"modules":[{"data":102000033,"lvl":1},{"data":102000034,"lvl":1},{"data":102000035,"lvl":1}]},{"data":103000012,"modules":[{"data":102000036,"lvl":1},{"data":102000037,"lvl":1},{"data":102000038,"lvl":1}]},{"data":103000013,"modules":[{"data":102000039,"lvl":1},{"data":102000040,"lvl":1},{"data":102000041,"lvl":1}]}]},{"data":1000000,"lvl":14,"cnt":4},{"data":1000001,"lvl":18,"cnt":1},{"data":1000002,"lvl":17,"cnt":6},{"data":1000002,"lvl":17,"cnt":1,"supercharge":1},{"data":1000003,"lvl":18,"cnt":3},{"data":1000004,"lvl":17,"cnt":5},{"data":1000004,"lvl":17,"cnt":1,"supercharge":1},{"data":1000004,"lvl":17,"cnt":1,"supercharge":2},{"data":1000005,"lvl":18,"cnt":4},{"data":1000006,"lvl":19,"cnt":1},{"data":1000007,"lvl":16,"cnt":1},{"data":1000009,"lvl":21,"cnt":2},{"data":1000010,"lvl":19,"cnt":325},{"data":1000011,"lvl":17,"cnt":2},{"data":1000012,"lvl":16,"cnt":4},{"data":1000013,"lvl":17,"cnt":1},{"data":1000013,"lvl":18,"cnt":2},{"data":1000014,"lvl":14,"cnt":1},{"data":1000015,"lvl":7,"cnt":2},{"data":1000015,"lvl":8,"cnt":3},{"data":1000019,"lvl":16,"cnt":2},{"data":1000019,"lvl":17,"cnt":2},{"data":1000020,"lvl":9,"cnt":1},{"data":1000021,"lvl":13,"cnt":4},{"data":1000023,"lvl":10,"cnt":2},{"data":1000023,"lvl":11,"cnt":1},{"data":1000024,"lvl":13,"cnt":1},{"data":1000026,"lvl":13,"cnt":1},{"data":1000027,"lvl":12,"cnt":3},{"data":1000028,"lvl":7,"cnt":2},{"data":1000029,"lvl":8,"cnt":1},{"data":1000032,"lvl":13,"cnt":2},{"data":1000059,"lvl":9,"cnt":1},{"data":1000064,"lvl":1,"cnt":1},{"data":1000067,"lvl":7,"cnt":2},{"data":1000068,"lvl":12,"cnt":1},{"data":1000070,"lvl":10,"cnt":1},{"data":1000071,"lvl":12,"cnt":1},{"data":1000072,"lvl":4,"cnt":2},{"data":1000077,"lvl":5,"cnt":1},{"data":1000079,"lvl":3,"cnt":1},{"data":1000084,"lvl":4,"cnt":3},{"data":1000085,"lvl":4,"cnt":3},{"data":1000086,"lvl":2,"cnt":1},{"data":1000089,"lvl":3,"cnt":2},{"data":1000093,"lvl":1,"cnt":1},{"data":1000102,"lvl":2,"cnt":2}],"traps":[{"data":12000020,"lvl":3,"timer":177278,"extra":true},{"data":12000000,"lvl":13,"cnt":8},{"data":12000001,"lvl":12,"cnt":9},{"data":12000002,"lvl":11,"cnt":8},{"data":12000005,"lvl":4,"cnt":1},{"data":12000005,"lvl":12,"cnt":7},{"data":12000006,"lvl":7,"cnt":9},{"data":12000008,"lvl":4,"cnt":4},{"data":12000016,"lvl":3,"cnt":1}],"decos":[{"data":18000000,"cnt":1},{"data":18000001,"cnt":4},{"data":18000003,"cnt":1},{"data":18000005,"cnt":4},{"data":18000006,"cnt":4},{"data":18000007,"cnt":1},{"data":18000008,"cnt":1},{"data":18000009,"cnt":1},{"data":18000010,"cnt":1},{"data":18000033,"cnt":1},{"data":18000037,"cnt":1},{"data":18000060,"cnt":1},{"data":18000063,"cnt":1},{"data":18000064,"cnt":1},{"data":18000065,"cnt":1},{"data":18000067,"cnt":1},{"data":18000069,"cnt":1},{"data":18000070,"cnt":1},{"data":18000071,"cnt":1},{"data":18000072,"cnt":1},{"data":18000090,"cnt":1},{"data":18000103,"cnt":1},{"data":18000126,"cnt":1},{"data":18000127,"cnt":1},{"data":18000130,"cnt":1},{"data":18000135,"cnt":1},{"data":18000136,"cnt":1},{"data":18000137,"cnt":1},{"data":18000138,"cnt":1},{"data":18000140,"cnt":1},{"data":18000141,"cnt":1},{"data":18000155,"cnt":1},{"data":18000157,"cnt":1},{"data":18000162,"cnt":1},{"data":18000165,"cnt":1},{"data":18000166,"cnt":1},{"data":18000171,"cnt":1},{"data":18000172,"cnt":1},{"data":18000178,"cnt":1},{"data":18000184,"cnt":1},{"data":18000185,"cnt":1},{"data":18000190,"cnt":1},{"data":18000192,"cnt":1},{"data":18000193,"cnt":1},{"data":18000196,"cnt":1},{"data":18000199,"cnt":1}],"obstacles":[{"data":8000088,"cnt":1},{"data":8000089,"cnt":3},{"data":8000090,"cnt":2},{"data":8000108,"cnt":1},{"data":8000116,"cnt":1},{"data":8000117,"cnt":2},{"data":8000127,"cnt":3},{"data":8000128,"cnt":1},{"data":8000129,"cnt":2},{"data":8000131,"cnt":2},{"data":8000133,"cnt":1},{"data":8000135,"cnt":1},{"data":8000136,"cnt":1},{"data":8000137,"cnt":1},{"data":8000138,"cnt":2},{"data":8000139,"cnt":1}],"units":[{"data":4000000,"lvl":12},{"data":4000001,"lvl":13},{"data":4000002,"lvl":9},{"data":4000003,"lvl":14},{"data":4000004,"lvl":13},{"data":4000005,"lvl":13},{"data":4000006,"lvl":13},{"data":4000007,"lvl":11},{"data":4000008,"lvl":13},{"data":4000009,"lvl":13},{"data":4000010,"lvl":14},{"data":4000011,"lvl":14,"timer":160601},{"data":4000012,"lvl":11},{"data":4000013,"lvl":14},{"data":4000015,"lvl":7},{"data":4000017,"lvl":8},{"data":4000022,"lvl":10},{"data":4000023,"lvl":12},{"data":4000024,"lvl":11},{"data":4000053,"lvl":8},{"data":4000058,"lvl":9},{"data":4000059,"lvl":9},{"data":4000065,"lvl":6},{"data":4000082,"lvl":4},{"data":4000095,"lvl":5},{"data":4000097,"lvl":4},{"data":4000109,"lvl":1},{"data":4000110,"lvl":4},{"data":4000123,"lvl":5},{"data":4000132,"lvl":4},{"data":4000150,"lvl":4},{"data":4000177,"lvl":3}],"siege_machines":[{"data":4000051,"lvl":6},{"data":4000052,"lvl":6},{"data":4000062,"lvl":6},{"data":4000075,"lvl":6},{"data":4000087,"lvl":5},{"data":4000091,"lvl":5},{"data":4000092,"lvl":5,"timer":239397,"extra":true},{"data":4000135,"lvl":4},{"data":4000188,"lvl":1}],"heroes":[{"data":28000000,"lvl":106,"timer":4767},{"data":28000001,"lvl":103,"timer":42540},{"data":28000002,"lvl":79,"timer":4791},{"data":28000004,"lvl":55},{"data":28000006,"lvl":95},{"data":28000007,"lvl":17,"timer":54114}],"spells":[{"data":26000000,"lvl":13},{"data":26000001,"lvl":12},{"data":26000002,"lvl":7},{"data":26000003,"lvl":5},{"data":26000005,"lvl":8},{"data":26000009,"lvl":12},{"data":26000010,"lvl":8},{"data":26000011,"lvl":7},{"data":26000016,"lvl":8},{"data":26000017,"lvl":8},{"data":26000028,"lvl":8},{"data":26000035,"lvl":4},{"data":26000053,"lvl":7,"helper_recurrent":true},{"data":26000070,"lvl":5},{"data":26000098,"lvl":5},{"data":26000109,"lvl":6},{"data":26000120,"lvl":4},{"data":26000123,"lvl":3}],"pets":[{"data":73000000,"lvl":15},{"data":73000001,"lvl":15},{"data":73000002,"lvl":15},{"data":73000003,"lvl":15},{"data":73000004,"lvl":10},{"data":73000007,"lvl":15},{"data":73000008,"lvl":12,"timer":40295},{"data":73000009,"lvl":15},{"data":73000010,"lvl":10},{"data":73000011,"lvl":10},{"data":73000016,"lvl":10},{"data":73000017,"lvl":10}],"equipment":[{"data":90000000,"lvl":14},{"data":90000001,"lvl":18},{"data":90000002,"lvl":14},{"data":90000003,"lvl":14},{"data":90000004,"lvl":18},{"data":90000005,"lvl":18},{"data":90000006,"lvl":18},{"data":90000007,"lvl":14},{"data":90000008,"lvl":18},{"data":90000009,"lvl":18},{"data":90000010,"lvl":20},{"data":90000011,"lvl":18},{"data":90000012,"lvl":18},{"data":90000013,"lvl":27},{"data":90000014,"lvl":27},{"data":90000015,"lvl":23},{"data":90000016,"lvl":1},{"data":90000017,"lvl":18},{"data":90000019,"lvl":27},{"data":90000020,"lvl":18},{"data":90000022,"lvl":23},{"data":90000024,"lvl":18},{"data":90000032,"lvl":8},{"data":90000034,"lvl":18},{"data":90000035,"lvl":27},{"data":90000039,"lvl":20},{"data":90000040,"lvl":27},{"data":90000041,"lvl":17},{"data":90000042,"lvl":18},{"data":90000043,"lvl":18},{"data":90000044,"lvl":11},{"data":90000047,"lvl":8},{"data":90000048,"lvl":11},{"data":90000049,"lvl":26},{"data":90000050,"lvl":20},{"data":90000051,"lvl":1},{"data":90000052,"lvl":18},{"data":90000053,"lvl":1},{"data":90000056,"lvl":14},{"data":90000057,"lvl":1},{"data":90000059,"lvl":1},{"data":90000060,"lvl":1},{"data":90000061,"lvl":1}],"house_parts":[82000000,82000001,82000002,82000003,82000004,82000006,82000008,82000009,82000010,82000011,82000013,82000014,82000015,82000016,82000017,82000020,82000022,82000025,82000031,82000032,82000045,82000046,82000048,82000049,82000052,82000053,82000055,82000058,82000059,82000060,82000061,82000062,82000063,82000064,82000066,82000067,82000081,82000082,82000084,82000087,82000088,82000089,82000090,82000092,82000094],"skins":[52000020,52000004,52000012,52000015,52000025,52000063,52000055,52000056,52000065,52000039,52000051,52000067,52000041,52000097,52000090,52000092,52000122,52000105,52000126,52000120,52000136,52000128,52000141,52000174,52000060,52000131,52000150,52000194,52000210,52000022,52000176,52000198,52000253,52000215,52000181,52000238,52000023,52000183,52000258,52000099,52000220,52000206,52000005,52000264,52000226,52000248,52000292,52000320,52000270,52000331,52000304,52000337],"sceneries":[60000015,60000034,60000017,60000014,60000035,60000059,60000064,60000066,60000072,60000073,60000069,60000078],"buildings2":[{"data":1000033,"lvl":4,"cnt":65},{"data":1000033,"lvl":5,"cnt":108},{"data":1000033,"lvl":9,"cnt":2},{"data":1000033,"lvl":10,"cnt":5},{"data":1000034,"lvl":10,"cnt":1},{"data":1000035,"lvl":10,"cnt":3},{"data":1000036,"lvl":10,"cnt":2},{"data":1000037,"lvl":10,"cnt":3},{"data":1000038,"lvl":10,"cnt":2},{"data":1000039,"lvl":10,"cnt":1},{"data":1000040,"lvl":12,"cnt":1},{"data":1000041,"lvl":10,"cnt":3},{"data":1000042,"lvl":1,"cnt":6},{"data":1000043,"lvl":10,"cnt":3},{"data":1000044,"lvl":10,"cnt":3},{"data":1000045,"lvl":10,"cnt":1},{"data":1000046,"lvl":10,"cnt":1},{"data":1000048,"lvl":10,"cnt":3},{"data":1000049,"lvl":1,"cnt":2},{"data":1000050,"lvl":8,"cnt":3},{"data":1000050,"lvl":10,"cnt":2},{"data":1000051,"lvl":8,"cnt":1},{"data":1000052,"lvl":10,"cnt":1},{"data":1000053,"lvl":1,"cnt":1},{"data":1000054,"lvl":10,"cnt":1},{"data":1000055,"lvl":10,"cnt":2},{"data":1000056,"lvl":10,"cnt":1},{"data":1000057,"lvl":10,"cnt":1},{"data":1000058,"lvl":10,"cnt":1},{"data":1000063,"lvl":10,"cnt":1},{"data":1000065,"lvl":5,"cnt":1},{"data":1000078,"lvl":7,"cnt":1},{"data":1000080,"lvl":1,"cnt":1},{"data":1000081,"lvl":5,"cnt":1},{"data":1000082,"lvl":6,"cnt":1}],"traps2":[{"data":12000010,"lvl":5,"cnt":6},{"data":12000011,"lvl":10,"cnt":5},{"data":12000013,"lvl":10,"cnt":6},{"data":12000014,"lvl":10,"cnt":4}],"decos2":[{"data":18000038,"cnt":4},{"data":18000042,"cnt":25},{"data":18000045,"cnt":2}],"obstacles2":[{"data":8000049,"cnt":1},{"data":8000091,"cnt":1},{"data":8000093,"cnt":1}],"units2":[{"data":4000031,"lvl":20},{"data":4000032,"lvl":20},{"data":4000033,"lvl":17},{"data":4000034,"lvl":20},{"data":4000035,"lvl":20},{"data":4000036,"lvl":20},{"data":4000037,"lvl":20},{"data":4000038,"lvl":17},{"data":4000041,"lvl":20},{"data":4000042,"lvl":20},{"data":4000070,"lvl":20},{"data":4000106,"lvl":20}],"heroes2":[{"data":28000003,"lvl":35},{"data":28000005,"lvl":33}],"skins2":[52000153],"sceneries2":[],"boosts":{"builder_boost":2495,"lab_boost":39015}};
+
+/* ===== Read the export ===== */
+const EXP_KEY='coc-export-v1';
+function loadExport(){
+  try{ const raw=localStorage.getItem(EXP_KEY); if(raw){ const o=JSON.parse(raw);
+    if(o && o.tag===BAKED.tag && o.timestamp>BAKED.timestamp) return {exp:o, pasted:true}; } }catch(e){}
+  return {exp:BAKED, pasted:false};
+}
+const {exp:EXP, pasted:PASTED} = loadExport();
+const EXPORT = EXP.timestamp*1000;
+const SINGLE = ['heroes','pets','guardians','units','spells','siege_machines'], MULTI = ['buildings','traps'];
+const entries = (x,id) => [...SINGLE,...MULTI].flatMap(k=>(x[k]||[]).filter(e=>e&&e.data===id));
+const lvlOf = (x,id) => Math.max(0,...entries(x,id).map(e=>e.lvl||0));
+const countOf = (x,id) => entries(x,id).reduce((a,e)=>a+(e.cnt||1),0);
+const countAtLeast = (x,id,to) => entries(x,id).filter(e=>(e.lvl||0)>=to).reduce((a,e)=>a+(e.cnt||1),0);
+const isMulti = id => MULTI.some(k=>(BAKED[k]||[]).some(e=>e.data===id)) && countOf(BAKED,id)>1;
+const nameOf = id => NAMES[id]||('#'+id);
+/* potions running at export time */
+const BOOSTS = [];
+if((EXP.boosts||{}).builder_boost>0) BOOSTS.push({x:10, from:EXPORT, to:EXPORT+EXP.boosts.builder_boost*1000, lanes:BUILDER_LANES, label:'Builder Potion'});
+if((EXP.boosts||{}).lab_boost>0) BOOSTS.push({x:24, from:EXPORT, to:EXPORT+EXP.boosts.lab_boost*1000, lanes:['lab','glab'], label:'Research Potion'});
+/* jobs running in the export */
+const JOBS = [];
+[['buildings','b'],['traps','b'],['heroes','b'],['guardians','b'],['pets','pet'],['units','lab'],['spells','lab'],['siege_machines','lab']].forEach(([k,kind])=>
+  (EXP[k]||[]).forEach(e=>{ if(e&&e.timer>0) JOBS.push({id:e.data, to:(e.lvl||0)+1, left:e.timer, helper:!!e.helper_recurrent,
+    kind: e.extra ? (kind==='lab'?'glab':'gob') : kind, claimed:false}); }));
+/* walk each lane: finished items drop off, a running item becomes current, the rest stay queued */
+const credits = {};
+const credit = (id,to) => { const k=id+':'+to; if(!(k in credits)) credits[k]=countAtLeast(EXP,id,to)-countAtLeast(BAKED,id,to); return k; };
+const LANES = PLAN.map(P=>{
+  let cur='', left=0, steps=[], idx=0;
+  for(; idx<P.items.length; idx++){
+    const it=P.items[idx], id=it[5], to=it[6];
+    const job=JOBS.find(j=>!j.claimed && j.id===id && j.to===to && j.kind===P.kind);
+    if(job){ job.claimed=true; cur=it[0]; left=job.left; idx++; break; }
+    if(isMulti(id)){ const k=credit(id,to); if(credits[k]>0){ credits[k]--; continue; } break; }
+    if(lvlOf(EXP,id)>=to) continue;
+    break;
+  }
+  steps = P.items.slice(cur?idx:idx);
+  return {id:P.id, name:P.name, kind:P.kind, cur, left, steps:steps.map(x=>x.slice(0,5))};
+});
+/* anything running that isn't in the plan goes on a free lane of the same kind */
+const EXTRA = [];
+JOBS.filter(j=>!j.claimed).forEach(j=>{
+  const L=LANES.find(l=>l.kind===j.kind && !l.cur);
+  const nm=nameOf(j.id)+' '+j.to;
+  if(L){ L.cur=nm; L.left=j.left; L.unplanned=true; } else EXTRA.push(nm);
+});
 /* Progress since the planner started on Nov 1. Row: [name, Nov 1, now, after the Jam plan, max].
    A value is a level, or [level, small note]. */
 const PROGRESS = [
@@ -273,7 +376,10 @@ const PROGRESS = [
     ['Stone Slammer',5,6,6,6],['Siege Barracks',5,6,6,6],['Battle Blimp',5,6,6,6],
   ]},
 ];
-const DONE_SINCE_NOV1 = {levels:75, walls:317, more:44}; // upgrade levels finished, walls, and levels still to start or finish in the Jam plan
+function levelSum(x){ let t=0; ['heroes','pets','guardians','buildings','traps','units','spells','siege_machines'].forEach(k=>(x[k]||[]).forEach(e=>{
+  if(!e||e.data===1000010||e.data===1000097) return; t+=(e.lvl||0)*(e.cnt||1); })); return t; }
+const DONE_SINCE_NOV1 = {levels:DONE_AT_BAKED+levelSum(EXP)-levelSum(BAKED), walls:317,
+  more:LANES.reduce((a,L)=>a+(L.cur&&!L.unplanned?1:0)+L.steps.length,0)};
 /* full-price hours after the Jam */
 const AFTER_B = [
   ["Builder's Hut #2",136,'g',21.6e6,'Just misses the Jam on Builder 6 after Duke 22'],
@@ -336,7 +442,7 @@ const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 
 /* build plan */
 const plan = LANES.map(L=>{
-  const curFrom = L.started||EXPORT, curEnd = runFrom(L.id, curFrom, L.left*1000);
+  const curFrom = EXPORT, curEnd = L.cur ? runFrom(L.id, curFrom, L.left*1000) : EXPORT;
   let t = curEnd; const q=[];
   L.steps.forEach((s,i)=>{
     const ready=t, start=wake(t), end=runFrom(L.id,start,s[1]*PASS*H);
@@ -356,7 +462,7 @@ const save = () => { try{ localStorage.setItem(KEY,JSON.stringify(marks)); }catc
 /* ===== Render ===== */
 function header(){
   const now=Date.now();
-  document.getElementById('synced').textContent='Synced to your export from '+whenD(EXPORT);
+  document.getElementById('synced').textContent=(PASTED?'Your pasted export from ':'Synced to your export from ')+whenD(EXPORT)+(EXTRA.length?' · also running: '+EXTRA.join(', '):'');
   const start=Date.parse('2026-11-02T02:45:00-05:00');
   const left=Math.max(0,JAM_END-now), pct=Math.min(100,Math.max(0,(JAM_END-now)/(JAM_END-start)*100));
   document.getElementById('jamfill').style.width=pct+'%';
@@ -381,7 +487,7 @@ function upNext(){
     const ready=s.start<=now;
     const dk=ready?'Ready now':dayKey(s.start);
     if(dk!==lastDay){ html+=`<li class="daysep">${ready?'Ready now':fmtDay.format(s.start)}</li>`; lastDay=dk; }
-    const prevName = s.i===0 ? s.lane.cur : s.lane.steps[s.i-1][0];
+    const prevName = s.i===0 ? (s.lane.cur||'free now') : s.lane.steps[s.i-1][0];
     const tags=(s.boost?'<span class="tag t-boost">boosted</span>':'')+(s.slept?'<span class="tag t-sleep">after sleep</span>':'')+
       (s.flag==='gem'?'<span class="tag t-gem">gems</span>':'');
     html+=`<li class="${ready?'ready':''}">
@@ -449,6 +555,14 @@ function timeline(){
   if(!tl.dataset.scrolled){ tl.scrollLeft=Math.max(0,x(now)-LAB-40); tl.dataset.scrolled=1; }
 }
 
+function liveNow(r){ // the Now column, read from the export
+  const base=r[0].replace(/ x\d+$/,'').replace(/^Walls$/,'Wall');
+  const id=Number(Object.keys(NAMES).find(k=>NAMES[k]===base)); if(!id) return r[2];
+  const n=countOf(EXP,id); if(!n) return r[2];
+  if(n===1) return lvlOf(EXP,id);
+  const T=Array.isArray(r[3])?r[3][0]:r[3], k=countAtLeast(EXP,id,T);
+  return [k?T:lvlOf(EXP,id), id===1000010&&k===n?'all':`${k}/${n}`];
+}
 function progress(){
   const isFull=(v,max)=>{ const l=Array.isArray(v)?v[0]:v, n=Array.isArray(v)?v[1]:''; let full=l===max;
     if(n){ const m=/^(\d+)\/(\d+)$/.exec(n); if(m) full=full&&m[1]===m[2]; else full=full&&n==='all'; } return full; };
@@ -457,7 +571,7 @@ function progress(){
     return `<td class="r lvl ${cls||''}">${l}${n?`<small class="sub">${esc(n)}</small>`:''}</td>`; };
   let h='<tr><th>Upgrade</th><th class="r">Nov 1</th><th class="r">Now</th><th class="r">After Jam</th><th class="r">Max</th></tr>';
   PROGRESS.forEach(g=>{ h+=`<tr class="grp"><td colspan="5">${esc(g.group)}</td></tr>`;
-    g.rows.forEach(r=>{ const nowMax=isFull(r[2],r[4]), aftMax=isFull(r[3],r[4]);
+    g.rows.forEach(r0=>{ const r=r0.slice(); r[2]=liveNow(r0); const nowMax=isFull(r[2],r[4]), aftMax=isFull(r[3],r[4]);
       h+=`<tr><td><b>${esc(r[0])}</b></td>${cell(r[1])}${cell(r[2],nowMax?'maxnow':'')}${cell(r[3],nowMax?'maxnow':aftMax?'max':'')}<td class="r lvl maxcol">${r[4]}</td></tr>`; }); });
   document.getElementById('progress').innerHTML=h;
   const D=DONE_SINCE_NOV1;
@@ -487,6 +601,22 @@ document.querySelector('.tabs').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return; tab=b.dataset.tab;
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b)); after();
 });
+
+function applyExport(text){
+  const msg=document.getElementById('updMsg');
+  let o; try{ o=JSON.parse(String(text||'').trim()); }catch(e){ msg.style.color='#c62828'; msg.textContent="That isn't a full export. Copy it again and paste the whole thing."; return; }
+  if(!o||!o.timestamp||!Array.isArray(o.buildings)){ msg.style.color='#c62828'; msg.textContent="That's not a village export."; return; }
+  if(o.tag!==BAKED.tag){ msg.style.color='#c62828'; msg.textContent='That export is from a different village.'; return; }
+  if(o.timestamp*1000<=EXPORT){ msg.style.color='#c62828'; msg.textContent='That export is older than the one already loaded.'; return; }
+  try{ localStorage.setItem(EXP_KEY,JSON.stringify(o)); localStorage.removeItem(KEY); }catch(e){ msg.style.color='#c62828'; msg.textContent="Couldn't save on this device."; return; }
+  msg.style.color='#23722a'; msg.textContent='Updated. Reloading…'; setTimeout(()=>location.reload(),300);
+}
+document.getElementById('updBtn').addEventListener('click',()=>applyExport(document.getElementById('paste').value));
+document.getElementById('pasteBtn').addEventListener('click',async()=>{
+  try{ const t=await navigator.clipboard.readText(); document.getElementById('paste').value=t; applyExport(t); }
+  catch(e){ const m=document.getElementById('updMsg'); m.style.color='#c62828'; m.textContent='Clipboard blocked here. Long-press the box and paste instead.'; }
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{ try{ localStorage.removeItem(EXP_KEY); }catch(e){} location.reload(); });
 
 function render(){ header(); upNext(); lanes(); timeline(); progress(); loot(); after(); }
 render();
