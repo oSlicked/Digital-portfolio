@@ -360,7 +360,8 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
       <label class="btn alt" style="cursor:pointer">Restore<input type="file" id="bkUp" accept=".json,application/json" hidden></label>
     </div>
     <div class="msg" id="bkMsg" style="margin-top:8px"></div>
-  </div></div>
+  </div>
+  <div class="pad" style="border-top:1px solid var(--border)" id="syncPad"></div></div>
 
   <footer>Private planner · times are Toronto time · not affiliated with Supercell</footer>
 </section>
@@ -456,7 +457,7 @@ const BAKED = {"tag":"#88RJQPR0P","timestamp":1794331406,"helpers":[{"data":9300
 /* ===== Saved on this device ===== */
 const store={
   get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } },
-  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); if(k.startsWith('coc-')&&!k.startsWith('coc-sync')) touch(); return true; }catch(e){ return false; } }
 };
 const KEY='coc-planner-v5', EXP_KEY='coc-export-v1', SET_KEY='coc-settings-v1', EDIT_KEY='coc-plan-edits-v1',
       GEM_KEY='coc-gems-v1', ITEM_KEY='coc-items-v1', LOOT_KEY='coc-loot-v1';
@@ -644,7 +645,7 @@ const allSteps=()=>plan.flatMap(p=>p.q);
 /* ===== Today ===== */
 function header(){
   const now=Date.now();
-  document.getElementById('synced').textContent=(PASTED?'Your pasted export from ':'Synced to your export from ')+whenD(EXPORT)+(EXTRA.length?' · also running: '+EXTRA.join(', '):'');
+  document.getElementById('synced').textContent=(PASTED?'Your pasted export from ':'Synced to your export from ')+whenD(EXPORT)+(EXTRA.length?' · also running: '+EXTRA.join(', '):'')+(syncCfg()?' · synced across devices':'');
   const start=Date.parse('2026-11-02T02:45:00-05:00'), left=Math.max(0,JAM_END-now);
   document.getElementById('jamfill').style.width=Math.min(100,Math.max(0,left/(JAM_END-start)*100))+'%';
   const d=Math.floor(left/864e5), h=Math.floor(left%864e5/H), m=Math.floor(left%H/6e4), s=Math.floor(left%6e4/1e3);
@@ -968,14 +969,14 @@ function applyExport(text){
   if(o.timestamp*1000<=EXPORT){ msg.textContent='That export is older than the one already loaded.'; return; }
   if(!store.set(EXP_KEY,o)){ msg.textContent="Couldn't save on this device."; return; }
   try{ localStorage.removeItem(KEY); }catch(e){}
-  msg.className='msg ok'; msg.textContent='Updated. Reloading…'; setTimeout(()=>location.reload(),300);
+  msg.className='msg ok'; msg.textContent='Updated. Reloading…'; touch(); syncThenReload();
 }
 document.getElementById('updBtn').addEventListener('click',()=>applyExport(document.getElementById('paste').value));
 document.getElementById('pasteBtn').addEventListener('click',async()=>{
   try{ const t=await navigator.clipboard.readText(); document.getElementById('paste').value=t; applyExport(t); }
   catch(e){ const m=document.getElementById('updMsg'); m.className='msg bad'; m.textContent='Clipboard blocked here. Long press the box and paste instead.'; }
 });
-document.getElementById('resetBtn').addEventListener('click',()=>{ try{ localStorage.removeItem(EXP_KEY); }catch(e){} location.reload(); });
+document.getElementById('resetBtn').addEventListener('click',()=>{ try{ localStorage.removeItem(EXP_KEY); }catch(e){} touch(); syncThenReload(); });
 
 /* ===== Settings ===== */
 (function(){
@@ -1005,9 +1006,79 @@ document.getElementById('installBtn').addEventListener('click',async()=>{ if(!de
 if(matchMedia('(display-mode: standalone)').matches||navigator.standalone) document.getElementById('installTxt').textContent='Installed. The planner opens from your home screen and works without signal.';
 if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('/coc-sw.js',{scope:'/'}).catch(()=>{});
 
+/* ===== Sync between devices (private GitHub gist) ===== */
+var SYNC_KEY='coc-sync', SYNC_FILE='coc-planner-sync.json', syncTimer=null, syncBusy=false;
+function syncCfg(){ try{ return JSON.parse(localStorage.getItem(SYNC_KEY)||'null'); }catch(e){ return null; } }
+function setCfg(c){ try{ if(c) localStorage.setItem(SYNC_KEY,JSON.stringify(c)); else localStorage.removeItem(SYNC_KEY); }catch(e){} }
+function localTs(){ try{ return +(localStorage.getItem('coc-sync-ts')||0); }catch(e){ return 0; } }
+function touch(){ try{ localStorage.setItem('coc-sync-ts',String(Date.now())); }catch(e){} schedulePush(); }
+function snapshot(){ const d={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith('coc-')&&!k.startsWith('coc-sync')) d[k]=localStorage.getItem(k); } return d; }
+async function gh(path,opt){ opt=opt||{}; const c=syncCfg(), tok=opt.token||(c&&c.token);
+  const r=await fetch('https://api.github.com'+path,{method:opt.method||'GET',body:opt.body,keepalive:!!opt.keepalive,cache:'no-store',
+    headers:Object.assign({'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'},opt.body?{'Content-Type':'application/json'}:{})});
+  if(!r.ok){ const e=new Error('GitHub said '+r.status); e.status=r.status; throw e; } return r.json(); }
+function syncMsg(text,bad){ const m=document.getElementById('syncMsg'); if(m){ m.className='msg '+(bad?'bad':'ok'); m.textContent=text; } }
+function syncErr(e){ syncMsg(e&&e.status===401?'Your token stopped working. Disconnect and connect again with a new one.':'Couldn\'t reach GitHub. It will try again when you\'re back online.',true); }
+function schedulePush(){ if(!syncCfg()) return; clearTimeout(syncTimer); syncTimer=setTimeout(()=>{ syncTimer=null; syncPush().catch(syncErr); },2000); }
+async function syncPush(keepalive){ const c=syncCfg(); if(!c) return; clearTimeout(syncTimer); syncTimer=null;
+  const body={saved:localTs()||Date.now(),data:snapshot()};
+  await gh('/gists/'+c.id,{method:'PATCH',keepalive,body:JSON.stringify({files:{[SYNC_FILE]:{content:JSON.stringify(body)}}})});
+  c.last=Date.now(); setCfg(c); syncMsg('Saved. Your other devices will pick it up.'); renderSyncTime(); }
+async function syncPull(force){ const c=syncCfg(); if(!c||syncBusy||syncTimer) return false; syncBusy=true;
+  try{
+    const g=await gh('/gists/'+c.id), f=g.files&&g.files[SYNC_FILE]; if(!f) return false;
+    const txt=f.truncated?await (await fetch(f.raw_url,{cache:'no-store'})).text():f.content, o=JSON.parse(txt);
+    c.last=Date.now(); setCfg(c);
+    if(o&&o.data&&(force||o.saved>localTs())){
+      for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.startsWith('coc-')&&!k.startsWith('coc-sync')&&!(k in o.data)) localStorage.removeItem(k); }
+      Object.entries(o.data).forEach(([k,v])=>{ if(k.startsWith('coc-')&&!k.startsWith('coc-sync')) localStorage.setItem(k,v); });
+      localStorage.setItem('coc-sync-ts',String(o.saved)); location.reload(); return true; }
+    if(localTs()>(o.saved||0)) schedulePush(); else syncMsg('Up to date.');
+    renderSyncTime(); return false;
+  } finally { syncBusy=false; } }
+function syncThenReload(){ const go=()=>location.reload(); if(syncCfg()) syncPush().catch(()=>{}).finally(go); else setTimeout(go,300); }
+async function syncConnect(token){
+  token=token.trim(); if(!token) throw new Error('Paste your token first.');
+  const me=await gh('/user',{token});
+  const list=await gh('/gists?per_page=100',{token});
+  const found=list.find(x=>x.files&&x.files[SYNC_FILE]);
+  if(found){ setCfg({token,id:found.id,user:me.login,last:0}); await syncPull(true); return; }
+  const body={saved:localTs()||Date.now(),data:snapshot()};
+  const g=await gh('/gists',{token,method:'POST',body:JSON.stringify({description:'CoC Planner sync (private, used by jordanioannoni.com/coc)',public:false,files:{[SYNC_FILE]:{content:JSON.stringify(body)}}})});
+  setCfg({token,id:g.id,user:me.login,last:Date.now()}); renderSync(); header(); syncMsg('Connected. Now connect your other device with the same token.');
+}
+function ago(t){ if(!t) return 'not yet'; const s=(Date.now()-t)/1e3; return s<60?'just now':s<3600?Math.floor(s/60)+' min ago':Math.floor(s/3600)+'h ago'; }
+function renderSyncTime(){ const n=document.getElementById('syncAgo'), c=syncCfg(); if(n&&c) n.textContent=ago(c.last); }
+function renderSync(){
+  const c=syncCfg(), el=document.getElementById('syncPad');
+  if(c){ el.innerHTML=`<h3><span class="ico" style="background:rgba(52,209,123,.14)">☁</span>Sync between devices</h3>
+    <p class="desc">On. Connected to <b style="color:var(--text)">@${esc(c.user)}</b> on GitHub. Last synced <span id="syncAgo">${ago(c.last)}</span>. Changes save in a couple of seconds and show up on your other devices when you open the page.</p>
+    <div class="row" style="margin-top:10px"><button class="btn alt sm" id="syncNow" type="button">Sync now</button><button class="btn red sm" id="syncOff" type="button">Disconnect this device</button></div>
+    <div class="msg" id="syncMsg" style="margin-top:8px"></div>`; return; }
+  el.innerHTML=`<h3><span class="ico" style="background:rgba(76,157,255,.15)">☁</span>Sync between devices</h3>
+    <p class="desc">Keeps your gems, items, ticks, schedule edits and pasted exports the same on your phone and laptop. It saves to a private gist on your GitHub account, so only you can see it.</p>
+    <ol class="desc" style="padding-left:18px;margin:10px 0 0;line-height:1.6">
+      <li><a href="https://github.com/settings/tokens/new?scopes=gist&description=CoC%20Planner%20sync" target="_blank" rel="noopener" style="color:var(--blue)">Make a GitHub token</a>. Set Expiration to <b>No expiration</b>, leave only <b>gist</b> ticked, then tap Generate token and copy it.</li>
+      <li>Paste it below and tap Connect. Do this once on each device with the same token. The first device you connect sends its data up; the next one loads it.</li></ol>
+    <div class="row" style="margin-top:10px;flex-wrap:nowrap"><input class="in" id="syncTok" type="password" placeholder="ghp_…" autocomplete="off"><button class="btn gold" id="syncGo" type="button">Connect</button></div>
+    <div class="msg" id="syncMsg" style="margin-top:8px"></div>`;
+}
+document.getElementById('syncPad').addEventListener('click',async e=>{
+  if(e.target.id==='syncGo'){ e.target.disabled=true; syncMsg('Connecting…');
+    try{ await syncConnect(document.getElementById('syncTok').value); }catch(err){ syncMsg(err.status===401?'That token didn\'t work. Copy it again.':err.message||'Couldn\'t connect.',true); }
+    e.target.disabled=false; }
+  if(e.target.id==='syncNow'){ syncMsg('Syncing…'); try{ if(syncTimer) await syncPush(); await syncPull(); }catch(err){ syncErr(err); } }
+  if(e.target.id==='syncOff'){ if(!confirmTap('syncOff')) return; setCfg(null); renderSync(); header(); }
+});
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible') syncPull().catch(()=>{});
+  else if(syncTimer) syncPush(true).catch(()=>{});
+});
+setInterval(()=>{ if(document.visibilityState==='visible') syncPull().catch(()=>{}); },45e3);
+
 /* ===== Backup ===== */
 document.getElementById('bkDown').addEventListener('click',()=>{
-  const data={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith('coc-')) data[k]=localStorage.getItem(k); }
+  const data={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith('coc-')&&!k.startsWith('coc-sync')) data[k]=localStorage.getItem(k); }
   const blob=new Blob([JSON.stringify({coc_backup:1,saved:Date.now(),data})],{type:'application/json'}), a=document.createElement('a');
   a.href=URL.createObjectURL(blob); a.download='coc-planner-backup.json'; document.body.appendChild(a); a.click(); a.remove();
   const m=document.getElementById('bkMsg'); m.className='msg ok'; m.textContent='Backup saved to your downloads.';
@@ -1016,7 +1087,7 @@ document.getElementById('bkUp').addEventListener('change',async e=>{
   const m=document.getElementById('bkMsg'); m.className='msg bad';
   try{ const o=JSON.parse(await e.target.files[0].text()); if(!o||!o.coc_backup||!o.data) throw 0;
     Object.entries(o.data).forEach(([k,v])=>{ if(k.startsWith('coc-')) localStorage.setItem(k,v); });
-    m.className='msg ok'; m.textContent='Restored. Reloading…'; setTimeout(()=>location.reload(),400);
+    m.className='msg ok'; m.textContent='Restored. Reloading…'; touch(); syncThenReload();
   }catch(err){ m.textContent="That file isn't a planner backup."; }
 });
 
@@ -1268,7 +1339,7 @@ document.querySelector('.tabbar').addEventListener('click',e=>{ const b=e.target
 /* ===== Run ===== */
 function renderLive(){ header(); upNext(); stats(); loot(); if(!document.activeElement||!document.getElementById('lanes').contains(document.activeElement)) lanes(); timeline(); }
 function renderAll(){ renderLive(); progress(); after(); renderGems(); renderItems(); renderLoot(); }
-rebuild(); renderAll();
+rebuild(); renderAll(); renderSync(); if(syncCfg()) syncPull().catch(syncErr);
 try{ const t=sessionStorage.getItem('coc-tab'); if(t&&TITLES[t]) go(t); }catch(e){}
 setInterval(()=>{ header(); const now=Date.now(); document.querySelectorAll('.cd').forEach(n=>n.textContent=dur(+n.dataset.to-now)); },1000);
 setInterval(renderLive,60e3);
