@@ -667,7 +667,17 @@ const parseAmt=s=>{ s=String(s||'').trim().toLowerCase().replace(/,/g,''); const
   return parseFloat(m[1])*(m[2]==='m'?1e6:m[2]==='k'?1e3:1); };
 
 /* ===== Build the plan (re-runs when you edit the schedule) ===== */
-const laneItems=P=>EDITS[P.id]||P.items;
+const fixName=n=>String(n).replace(/(\w)'S\b/g,"$1's");
+const laneItems=P=>(EDITS[P.id]||P.items).map(x=>{ const y=x.slice(); y[0]=fixName(y[0]); return y; });
+/* match an upgrade added by name (from chat or the editor) to the game, so it clears on its own */
+const NAME_IDX={}; Object.entries(NAMES).forEach(([id,n])=>{ NAME_IDX[n.toLowerCase()]=+id; });
+function resolveItem(name){
+  const m=/^(.*?)\s*(?:#(\d+)|(\d+))?\s*$/.exec(String(name).trim()); if(!m) return null;
+  let base=m[1].toLowerCase().replace(/\s+/g,' ').trim(), id=NAME_IDX[base];
+  if(!id) id=NAME_IDX[base.replace(/ spell$/,'')]||NAME_IDX[base+' spell'];
+  if(!id) return null;
+  return {id, to:m[3]?+m[3]:null};
+}
 let LANES=[], EXTRA=[], plan=[];
 function rebuild(){
   const JOBS=[];
@@ -679,8 +689,10 @@ function rebuild(){
     const items=laneItems(P);
     let cur='',left=0,idx=0;
     for(;idx<items.length;idx++){
-      const it=items[idx], id=it[5], to=it[6];
+      const it=items[idx]; let id=it[5], to=it[6];
+      if(!id){ const r=resolveItem(it[0]); if(r){ id=r.id; to=r.to; } }
       if(!id) break;
+      if(!to){ const job=JOBS.find(j=>!j.claimed&&j.id===id&&j.kind===P.kind); if(job){ job.claimed=true; cur=it[0]; left=job.left; idx++; } break; }
       const job=JOBS.find(j=>!j.claimed&&j.id===id&&j.to===to&&j.kind===P.kind);
       if(job){ job.claimed=true; cur=it[0]; left=job.left; idx++; break; }
       if(isMulti(id)){ const k=credit(id,to); if(credits[k]>0){ credits[k]--; continue; } break; }
@@ -1241,7 +1253,7 @@ function editAnswer(s,lane){
     if(!hm||!cm||!name||name.length<3) return `Sure, I can add it to <b>${esc(PLAN.find(p=>p.id===lane).name)}</b>. I need the name, time and cost.<br>${how}`+editBtns([lane]);
     const hrs=+hm[1]*(hm[2][0]==='d'?24:1), cost=+cm[1]*(cm[2][0]==='k'?1e3:1e6);
     const cur=/dark|\bde\b/.test(s)?'d':/elix/.test(s)?'e':/gold/.test(s)?'g':(PLAN.find(p=>p.id===lane).kind==='lab'?'e':'g');
-    name=name.replace(/\b\w/g,c=>c.toUpperCase());
+    name=name.split(' ').map(w=>w?w[0].toUpperCase()+w.slice(1):w).join(' ');
     editLane(lane,items=>items.push([name,hrs/PASS,cur,cost,/gem/.test(s)||lane==='gob'||lane==='glab'?'gem':'',null,null]));
     const st=allSteps().find(x=>x.lane.id===lane&&x.name===name);
     return `Added <b>${esc(name)}</b> to the end of <b>${esc(PLAN.find(p=>p.id===lane).name)}</b>: ${hrs}h, ${money(cost)} ${CUR[cur]}.${st?` Start it <b>${st.start<=Date.now()?'now':whenD(st.start)}</b>${st.late?' (after the Jam, full price)':''}.`:''} You can reorder it in Plan.`+editBtns([lane]);
