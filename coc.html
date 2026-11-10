@@ -337,6 +337,9 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
     <div class="msg" id="updMsg" role="status" style="margin-top:8px"></div>
   </div></div>
 
+  <div class="sh"><h2>AI helper</h2><small>optional, uses your own key</small></div>
+  <div class="card tool"><div class="pad" id="aiPad"></div></div>
+
   <div class="sh"><h2>Settings</h2></div>
   <div class="card tool"><div class="pad" style="display:grid;gap:14px">
     <div><label class="fl">Sleep window (no starts planned)</label>
@@ -373,7 +376,7 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 <div class="sheetbg" id="chatBg"></div>
 <div class="sheet" id="chat" role="dialog" aria-label="Planner helper">
   <div class="grab"></div>
-  <div class="shh"><div class="th" style="width:36px;height:36px;font-size:15px">?</div><div style="flex:1"><b>Planner helper</b><span>Answers from your plan · works offline</span></div><button class="ghost" id="chatClose" type="button">Done</button></div>
+  <div class="shh"><div class="th" style="width:36px;height:36px;font-size:15px">?</div><div style="flex:1"><b>Planner helper</b><span id="chatSub">Answers from your plan · works offline</span></div><button class="ghost" id="chatClose" type="button">Done</button></div>
   <div class="chatlog" id="chatlog"></div>
   <div class="chips" id="chips"></div>
   <form class="chatf" id="chatf"><input class="in" id="chatIn" placeholder="Ask about your plan" autocomplete="off"><button class="btn gold" type="submit">Ask</button></form>
@@ -1301,8 +1304,8 @@ function answer(q){
   return `I didn't catch that one. I work best with a builder, an upgrade name or a day in the question. Try:<ul><li>What's on builder 2?</li><li>What won't be upgraded after Friday?</li><li>When does Witch 8 start?</li><li>What starts tomorrow?</li></ul>Type <b>help</b> for more.`;
 }
 const chatEl=document.getElementById('chat'), bg=document.getElementById('chatBg'), logEl=document.getElementById('chatlog');
-function say(html,me){ const d=document.createElement('div'); d.className='bub '+(me?'me':'bot'); if(me) d.textContent=html; else d.innerHTML=html; logEl.appendChild(d); logEl.scrollTop=logEl.scrollHeight; }
-function ask(q){ say(q,true); setTimeout(()=>say(answer(q)),180); }
+function say(html,me){ const d=document.createElement('div'); d.className='bub '+(me?'me':'bot'); if(me) d.textContent=html; else d.innerHTML=html; logEl.appendChild(d); logEl.scrollTop=logEl.scrollHeight; return d; }
+function ask(q,quick){ say(q,true); if(!quick&&aiCfg()) return aiAsk(q); setTimeout(()=>say(answer(q)),180); }
 function openChat(){ chatEl.classList.add('on'); bg.classList.add('on'); if(!logEl.children.length) say(answer('hi')); }
 function closeChat(){ chatEl.classList.remove('on'); bg.classList.remove('on'); document.getElementById('chatIn').blur(); }
 document.getElementById('askBtn').addEventListener('click',openChat);
@@ -1312,6 +1315,16 @@ document.getElementById('chips').innerHTML=["What's next?","Anything idle?","Loo
 logEl.addEventListener('click',e=>{
   const g=e.target.closest('[data-goedit]');
   if(g){ closeChat(); go('plan'); editing=g.dataset.goedit; lanes(); setTimeout(()=>{ const c=document.querySelector(`[data-edit="${editing}"]`); if(c) c.closest('.lane').scrollIntoView({behavior:'smooth',block:'start'}); },60); return; }
+  const aa=e.target.closest('[data-aiact]');
+  if(aa){ const [act,lid,name,h,cost,cur]=aa.dataset.aiact.split('|'); const P=PLAN.find(p=>p.id===lid); if(!P) return; aa.disabled=true;
+    if(act==='add'){ const hrs=parseFloat(h), c=parseAmt(cost); if(!(hrs>0)||!(c>=0)){ say("That add was missing the time or cost. Use Edit in Plan instead."+editBtns([lid])); return; }
+      editLane(lid,items=>items.push([name,hrs/PASS,/^[ged]$/.test(cur)?cur:'g',c,lid==='gob'||lid==='glab'?'gem':'',null,null]));
+      const st=allSteps().find(x=>x.lane.id===lid&&x.name===name);
+      say(`Added <b>${esc(name)}</b> to ${esc(P.name)}.${st?` Start it <b>${st.start<=Date.now()?'now':whenD(st.start)}</b>${st.late?' <span class="bad">(after the Jam)</span>':''}.`:''}`+editBtns([lid])); }
+    else { const L=LANES.find(l=>l.id===lid), i=L?L.steps.findIndex(x=>x[0].toLowerCase()===name.toLowerCase()):-1;
+      if(i<0){ say(`I couldn't find ${esc(name)} in ${esc(P.name)}'s queue.`+editBtns([lid])); return; }
+      editLane(lid,items=>items.splice(L.first+i,1)); say(`Removed <b>${esc(name)}</b> from ${esc(P.name)}.`+editBtns([lid])); }
+    return; }
   const ac=e.target.closest('[data-addc]');
   if(ac){ const [lid,nm]=ac.dataset.addc.split('|'); const r=[...AFTER_B,...AFTER_L].find(x=>x[0]===nm); if(!r) return; ac.disabled=true;
     editLane(lid,items=>items.push([r[0],r[1]/2/PASS,r[2],r[3]/2,lid==='gob'||lid==='glab'?'gem':'',null,null]));
@@ -1322,8 +1335,107 @@ logEl.addEventListener('click',e=>{
     if(i<0){ say("I couldn't find it anymore."); return; }
     editLane(r.lane,items=>items.splice(L.first+i,1)); say(`Removed <b>${esc(r.name)}</b>. Use Reset to my plan in the editor if you want it back.`+editBtns([r.lane])); }
 });
-document.getElementById('chips').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) ask(b.textContent); });
+document.getElementById('chips').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) ask(b.textContent,true); });
 document.getElementById('chatf').addEventListener('submit',e=>{ e.preventDefault(); const i=document.getElementById('chatIn'), q=i.value.trim(); if(!q) return; i.value=''; ask(q); });
+
+/* ===== AI helper (Claude Haiku, your own API key, kept only on this device) ===== */
+const AI_KEY='coc-sync-ai', AI_USE='coc-sync-aiuse', AI_MODELS=['claude-haiku-5-5','claude-haiku-4-5'];
+const AIHIST=[];
+function aiCfg(){ try{ return JSON.parse(localStorage.getItem(AI_KEY)||'null'); }catch(e){ return null; } }
+function aiUse(){ try{ const u=JSON.parse(localStorage.getItem(AI_USE)||'null'); const m=new Date().toISOString().slice(0,7); return u&&u.m===m?u:{m,i:0,o:0,n:0}; }catch(e){ return {m:'',i:0,o:0,n:0}; } }
+function aiSystem(){
+  const now=Date.now(), f=t=>whenD(t), cn={g:'gold',e:'elixir',d:'DE'};
+  let s=`You are the helper inside a private Clash of Clans upgrade planner web page (Town Hall 18, preparing for TH19). Answer from the PLAN DATA below plus general Clash of Clans knowledge. If the data doesn't cover something, say so briefly instead of guessing numbers.
+Style: short and phone friendly (usually under 100 words). Plain text; **bold** and lines starting with "- " are allowed. Never use dashes (— or –) as punctuation. Times are Toronto time, written like "Sun, Nov 15, 10:20 PM".
+Player goals: be as ready for TH19 as possible, about 92 to 93% overall at TH18 without being more than 7 to 8% rushed. The lab is the bottleneck. Dark elixir is easy for them to farm. Supercharging is pointless with TH19 coming. Hero equipment doesn't count toward max. They don't use Dragon Duke in their army. Best Jam value: start the longest, most expensive upgrades before the Jam ends; the Jam price locks in at start (about half cost and time).
+Actions: if the user clearly asks you to add or remove an upgrade, put ONE line at the very end in this exact form and the page will show a confirm button:
+[[add|laneId|Upgrade name|hours as the game shows now|cost number|g or e or d]]
+[[remove|laneId|exact queued name]]
+Only use lane ids from the data.
+
+PLAN DATA
+Now: ${f(now)}. Hammer Jam ends ${f(JAM_END)}. Player sleeps ${sleepText()} (no starts then). Last game export ${f(EXPORT)}.`;
+  BOOSTS.filter(b=>b.to>now).forEach(b=>{ s+=`\n${b.label} ${b.x}x until ${f(b.to)}.`; });
+  s+='\nLANES (id: name, planned queue in order):';
+  plan.forEach(p=>{ s+=`\n${p.L.id}: ${p.L.name}`+(p.L.cur&&p.curEnd>now?`, running ${p.L.cur} until ${f(p.curEnd)}`:'')+`, out of planned work ${f(p.idleAt)}`;
+    p.q.forEach(x=>{ s+=`\n  ${x.name} | start ${x.start<=now?'ready now':f(x.start)} | done ${f(x.end)} | ${money(x.cost)} ${cn[x.cur]}${x.flag==='gem'?' | needs gems':''}${marks[mk(x)]?' | started':''}${x.late?' | after Jam':''}`; }); });
+  const gp=gemPlan(); s+=`\nGEMS: has ${GEMS.gems}. Planned gem spends: ${gp.map(g=>g.name+' '+g.cost).join(', ')||'none'}.`;
+  const own=Object.entries(ITEMS).filter(([k,v])=>v.n>0||v.note).map(([k,v])=>`${k} x${v.n}${v.note?' ('+v.note+')':''}`); if(own.length) s+=`\nMAGIC ITEMS: ${own.join('; ')}.`;
+  if(LOOT.g||LOOT.e||LOOT.d) s+=`\nSTORAGES: gold ${LOOT.g||'?'}, elixir ${LOOT.e||'?'}, DE ${LOOT.d||'?'}.`;
+  s+='\nLEVELS (Nov 1, now, after Jam plan, TH18 max):';
+  PROGRESS.forEach(g=>g.rows.forEach(r=>{ const v=x=>Array.isArray(x)?x[0]+(x[1]?'('+x[1]+')':''):x; const now2=liveNow(r);
+    if(String(v(r[3]))!==String(r[4])||g.group!=='Lab') s+=`\n${r[0]}: ${v(r[1])}, ${v(now2)}, ${v(r[3])}, ${r[4]}`; }));
+  s+='\nLEFT AFTER THE JAM, builders (full price hours, cost):'; AFTER_B.forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
+  s+='\nLEFT AFTER THE JAM, lab:'; AFTER_L.forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
+  s+='\nNOTES: Hammer of Fighting saved for Sky Wagon 4 after the Jam. Hammer of Building saved for TH19. Goblin Builder and Goblin Lab starts cost gems (about '+SETTINGS.gemPrice+' each). Not tracked: hero equipment, supercharges, crafted defenses.';
+  return s;
+}
+function aiRender(text){
+  const acts=[]; text=text.replace(/\[\[(add|remove)\|([^\]]+)\]\]/g,(m,a,rest)=>{ acts.push([a,...rest.split('|').map(x=>x.trim())]); return ''; }).trim();
+  let h=esc(text).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+  h=h.split('\n').map(l=>/^\s*[-*•] /.test(l)?'<li>'+l.replace(/^\s*[-*•] /,'')+'</li>':l).join('\n')
+     .replace(/(<li>.*<\/li>\n?)+/g,m=>'<ul>'+m.replace(/\n/g,'')+'</ul>').replace(/\n/g,'<br>');
+  acts.forEach(a=>{ const P=PLAN.find(p=>p.id===a[1]); if(!P) return;
+    const label=a[0]==='add'?`Add ${a[2]} to ${P.name}`:`Remove ${a[2]} from ${P.name}`;
+    h+=`<div class="cbtns"><button type="button" class="cbtn" data-aiact="${esc(a.join('|'))}">${esc(label)}</button></div>`; });
+  return h;
+}
+async function aiCall(model,msgs,key){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model,max_tokens:500,system:aiSystem(),messages:msgs})});
+  let j={}; try{ j=await r.json(); }catch(e){}
+  if(!r.ok){ const e=new Error((j.error&&j.error.message)||('status '+r.status)); e.status=r.status; throw e; }
+  return j;
+}
+async function aiAsk(q){
+  const c=aiCfg(), b=say('<span class="muted">Thinking…</span>');
+  const msgs=[...AIHIST.slice(-6),{role:'user',content:q}];
+  try{
+    if(!navigator.onLine) throw Object.assign(new Error('offline'),{offline:true});
+    let j, models=c.model?[c.model]:AI_MODELS;
+    for(let i=0;i<models.length;i++){ try{ j=await aiCall(models[i],msgs,c.key); if(!c.model){ c.model=models[i]; localStorage.setItem(AI_KEY,JSON.stringify(c)); } break; }
+      catch(e){ if(e.status===404&&i<models.length-1) continue; throw e; } }
+    const text=(j.content||[]).filter(x=>x.type==='text').map(x=>x.text).join('').trim()||'(no answer)';
+    AIHIST.push({role:'user',content:q},{role:'assistant',content:text}); if(AIHIST.length>12) AIHIST.splice(0,AIHIST.length-12);
+    const u=aiUse(); u.i+=(j.usage||{}).input_tokens||0; u.o+=(j.usage||{}).output_tokens||0; u.n++; try{ localStorage.setItem(AI_USE,JSON.stringify(u)); }catch(e){}
+    b.innerHTML=aiRender(text); renderAI();
+  }catch(e){
+    const why=e.offline?"You're offline, so here's the built in answer:":e.status===401?'Your API key didn\'t work. Check it in Tools, AI helper. Built in answer:':e.status===429?'Too many questions too fast, or your credit ran out. Built in answer:':e.status===400&&/credit/i.test(e.message)?'Your Anthropic credit ran out. Built in answer:':'The AI had a problem ('+esc(e.message)+'). Built in answer:';
+    b.innerHTML=`<span class="muted">${why}</span><br>`+answer(q);
+  }
+  logEl.scrollTop=logEl.scrollHeight;
+}
+function aiCost(u){ return (u.i*0.10+u.o*0.50)/1e6; }
+function renderAI(){
+  const c=aiCfg(), el=document.getElementById('aiPad'), sub=document.getElementById('chatSub');
+  sub.textContent=c?'AI on · Claude Haiku · quick buttons stay free':'Answers from your plan · works offline';
+  if(c){ const u=aiUse();
+    el.innerHTML=`<h3><span class="ico" style="background:rgba(246,185,65,.15)">✦</span>AI helper is on</h3>
+      <p class="desc">Typed questions go to Claude Haiku with your plan attached. The quick buttons in the chat still use the free built in answers. If you're offline, it falls back to the built in helper.</p>
+      <div class="tiles" style="padding:12px 0 0;grid-template-columns:repeat(3,1fr)"><div class="tile"><div class="k">This month</div><div class="v">${u.n}</div><div class="k">questions</div></div>
+        <div class="tile"><div class="k">Tokens</div><div class="v">${((u.i+u.o)/1000).toFixed(1)}K</div><div class="k">in and out</div></div>
+        <div class="tile"><div class="k">About</div><div class="v">$${aiCost(u).toFixed(aiCost(u)<0.1?3:2)}</div><div class="k">USD spent</div></div></div>
+      <div class="row" style="margin-top:12px"><button class="btn red sm" id="aiOff" type="button">Turn off and forget key</button></div>
+      <div class="msg" id="aiMsg" style="margin-top:8px"></div>`; return; }
+  el.innerHTML=`<h3><span class="ico" style="background:rgba(246,185,65,.15)">✦</span>Use real AI in the chat</h3>
+    <p class="desc">Lets the helper understand any question, using Claude Haiku, the cheapest Claude model. Each question costs a fraction of a cent, paid from your own Anthropic account. This is separate from your Claude subscription.</p>
+    <ol class="desc" style="padding-left:18px;margin:10px 0 0;line-height:1.6">
+      <li>Go to <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener" style="color:var(--blue)">console.anthropic.com</a>, sign in, and add a small amount of credit under Billing (a few dollars lasts a long time).</li>
+      <li>Under API keys, tap Create Key, name it CoC Planner, and copy it.</li>
+      <li>Paste it below. Set it up on each device. The key stays on that device and is never synced or backed up.</li></ol>
+    <div class="row" style="margin-top:10px;flex-wrap:nowrap"><input class="in" id="aiKey" type="password" placeholder="sk-ant-…" autocomplete="off"><button class="btn gold" id="aiGo" type="button">Turn on</button></div>
+    <div class="msg" id="aiMsg" style="margin-top:8px"></div>`;
+}
+document.getElementById('aiPad').addEventListener('click',async e=>{
+  const m=document.getElementById('aiMsg');
+  if(e.target.id==='aiGo'){ const key=document.getElementById('aiKey').value.trim(); if(!/^sk-ant-/.test(key)){ m.className='msg bad'; m.textContent='That doesn\'t look like an Anthropic key. It starts with sk-ant-'; return; }
+    e.target.disabled=true; m.className='msg'; m.textContent='Checking your key…';
+    try{ let ok=null; for(const md of AI_MODELS){ try{ await aiCall(md,[{role:'user',content:'Reply with just: ok'}],key); ok=md; break; }catch(err){ if(err.status===404) continue; throw err; } }
+      localStorage.setItem(AI_KEY,JSON.stringify({key,model:ok})); renderAI(); const m2=document.getElementById('aiMsg'); m2.className='msg ok'; m2.textContent='On. Open the chat and ask anything.'; }
+    catch(err){ m.className='msg bad'; m.textContent=err.status===401?'That key didn\'t work. Copy it again.':/credit/i.test(err.message)?'The key works but your account has no credit yet. Add some under Billing.':'Couldn\'t check it: '+err.message; }
+    e.target.disabled=false; }
+  if(e.target.id==='aiOff'){ if(!confirmTap('aiOff')) return; try{ localStorage.removeItem(AI_KEY); }catch(err){} AIHIST.length=0; renderAI(); }
+});
 
 /* ===== Tabs ===== */
 const TITLES={today:'Today',plan:'Plan',progress:'Progress',tools:'Tools'};
@@ -1339,7 +1451,7 @@ document.querySelector('.tabbar').addEventListener('click',e=>{ const b=e.target
 /* ===== Run ===== */
 function renderLive(){ header(); upNext(); stats(); loot(); if(!document.activeElement||!document.getElementById('lanes').contains(document.activeElement)) lanes(); timeline(); }
 function renderAll(){ renderLive(); progress(); after(); renderGems(); renderItems(); renderLoot(); }
-rebuild(); renderAll(); renderSync(); if(syncCfg()) syncPull().catch(syncErr);
+rebuild(); renderAll(); renderSync(); renderAI(); if(syncCfg()) syncPull().catch(syncErr);
 try{ const t=sessionStorage.getItem('coc-tab'); if(t&&TITLES[t]) go(t); }catch(e){}
 setInterval(()=>{ header(); const now=Date.now(); document.querySelectorAll('.cd').forEach(n=>n.textContent=dur(+n.dataset.to-now)); },1000);
 setInterval(renderLive,60e3);
