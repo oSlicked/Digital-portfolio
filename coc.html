@@ -1643,7 +1643,11 @@ const LV_H={"1000000":[0.02,0.08,0.5,2,6,12,48,72,84,96,120,144,180,360],"100000
 const DEF_IDS=new Set([1000009,1000011,1000012,1000013,1000019,1000021,1000027,1000028,1000032,1000067,1000072,1000077,1000079,1000084,1000085,1000086,1000089,1000102]);
 const UNUSED_LAB=new Set(['Barbarian','Archer','Goblin','Wall Breaker','Wizard','Giant','Healer','Bowler','Miner','Valkyrie']);
 const PCT_CATS=[['Heroes','var(--gold)'],['Lab','var(--elix)'],['Pets','#5fd3c6'],['Defenses','var(--blue)'],['Traps','var(--orange)'],['Other buildings','var(--muted)']];
-const GP_B=0.85, GP_L=0.9;
+/* The wiki lists older, longer times. Checked against this village's own timers (Jam 50% off, Gold Pass 20% off),
+   the game's full price times are about 45% of the wiki's, so dates and days left are scaled to match. */
+const WIKI_TO_GAME=0.45;
+const gpOn=()=>SETTINGS.goldPass!==false;
+const GPF=()=>gpOn()?0.8:1;
 function pctCat(k,id){ return {heroes:'Heroes',pets:'Pets',guardians:'Defenses',traps:'Traps',units:'Lab',spells:'Lab',siege_machines:'Lab'}[k]||(DEF_IDS.has(id)?'Defenses':'Other buildings'); }
 function villageCopies(){
   const m={};
@@ -1676,11 +1680,12 @@ function pctSum(m){
 function laneIdle(ids){ const ps=plan.filter(p=>ids.includes(p.L.id)); return ps.length?ps.reduce((a,p)=>a+Math.max(p.idleAt,Date.now()),0)/ps.length:Date.now(); }
 function pctForecast(after,target){
   const left=c=>{ const x=after.cats[c]; return x?x.t-x.d:0; };
-  let remB=left('Heroes')+left('Defenses')+left('Traps')+left('Other buildings'), remL=left('Lab'), remP=left('Pets');
-  const rB=6/GP_B, rL=(168+69)/168/GP_L, rP=1;                      // 6 builders, lab with 3 Research Potions a week, pet house
+  let remB=(left('Heroes')+left('Defenses')+left('Traps')+left('Other buildings'))*WIKI_TO_GAME, remL=left('Lab')*WIKI_TO_GAME, remP=left('Pets')*WIKI_TO_GAME;
+  const rB=6/GPF(), rL=(168+69)/168/GPF(), rP=1;                      // 6 builders, lab with 3 Research Potions a week, pet house
   const sB=laneIdle(['b1','b2','b3','b4','b5','b6']), sL=laneIdle(['lab']), sP=laneIdle(['pet']);
   const endB=sB+remB/rB*H, endL=sL+remL/rL*H, endP=sP+remP/rP*H;
   let hit=null, done=after.d, need=target/100*after.t;
+  done*=WIKI_TO_GAME; need*=WIKI_TO_GAME;
   if(done>=need) hit=Date.now();
   else { let b=remB,l=remL,pp=remP; const t0=Math.min(sB,sL,sP);
     for(let day=0;day<800&&hit==null;day++){ const t=t0+day*864e5;
@@ -1709,7 +1714,7 @@ function renderPct(){
   const gw=m[28000002]?m[28000002].c[0]:0, heroesLeft=Object.values(m).filter(o=>o.cat==='Heroes'&&o.c[0]<LV_H[o.id].length).map(o=>nameOf(o.id)+' '+o.c[0]+'/'+LV_H[o.id].length);
   const usedLab=labLeft.filter(x=>!UNUSED_LAB.has(x.n));
   const cats=PCT_CATS.map(([c,col])=>{ const a=now.cats[c], b=aft.cats[c]; if(!a) return '';
-    const pn=a.d/a.t*100, pa=b.d/b.t*100, left=(b.t-b.d)/24;
+    const pn=a.d/a.t*100, pa=b.d/b.t*100, left=(b.t-b.d)/24*WIKI_TO_GAME;
     return `<div class="catr"><div class="ctop"><b><i class="dot" style="background:${col};margin-right:7px"></i>${c}</b><span><em>${pf(pn)}%</em>${pa-pn>=0.05?` → ${pf(pa)}%`:''} · ${left<1?'maxed':Math.round(left)+'d left'}</span></div>
       <div class="pbar"><i class="plan" style="width:${pa}%"></i><i class="now" style="width:${pn}%"></i>${c==='Traps'||c==='Lab'||c==='Heroes'?'':''}</div></div>`; }).join('');
   const dB=fc.remB/24, dL=fc.remL/24, planEnd=Math.max(...plan.map(p=>p.idleAt));
@@ -1722,14 +1727,14 @@ function renderPct(){
       <div class="pctHead"><div class="big">After the Jam plan: <b>${pf(aft.p)}%</b></div>
         <p>${targetLine}. Fully maxed around <b style="color:var(--text)">${fdate(fc.full)}</b>.</p>
         <div class="legend"><span><i style="background:linear-gradient(90deg,#ffd77a,#f0a01a)"></i>Done now</span><span><i style="background:rgba(246,185,65,.35)"></i>After the Jam plan</span><span><i style="background:#fff;border-radius:50%"></i>Target</span></div>
-        <div class="pctTarget">Target <input class="in" id="pctT" value="${target}" inputmode="decimal"> %</div></div>
+        <div class="pctTarget">Target <input class="in" id="pctT" value="${target}" inputmode="decimal"> % <label style="display:flex;align-items:center;gap:6px;margin-left:12px;cursor:pointer"><input type="checkbox" id="pctGP" ${gpOn()?'checked':''}> Gold Pass</label></div></div>
     </div>
     <div class="cats">${cats}</div>
     <div class="pctTiles">
-      <div class="tile"><div class="k">Builder work left</div><div class="v">${Math.round(dB)}d</div><div class="k">about ${Math.round(dB*GP_B/6)} days on 6 builders</div></div>
-      <div class="tile"><div class="k">Lab work left</div><div class="v">${Math.round(dL)}d</div><div class="k">about ${Math.round(fc.remL/((168+69)/168/GP_L)/24)} days with potions</div></div>
-      <div class="tile"><div class="k">Builders done</div><div class="v" style="font-size:17px">${fdate(fc.endB)}</div><div class="k">at full price</div></div>
-      <div class="tile"><div class="k">Lab done</div><div class="v" style="font-size:17px">${fdate(fc.endL)}</div><div class="k">at full price</div></div>
+      <div class="tile"><div class="k">Builder work left</div><div class="v">${Math.round(dB)}d</div><div class="k">at full price · about ${Math.round(dB*GPF()/6)} days on 6 builders</div></div>
+      <div class="tile"><div class="k">Lab work left</div><div class="v">${Math.round(dL)}d</div><div class="k">at full price · about ${Math.round(fc.remL*GPF()/((168+69)/168)/24)} days with potions</div></div>
+      <div class="tile"><div class="k">Builders done</div><div class="v" style="font-size:17px">${fdate(fc.endB)}</div><div class="k">${gpOn()?'with the Gold Pass':'no Gold Pass'}</div></div>
+      <div class="tile"><div class="k">Lab done</div><div class="v" style="font-size:17px">${fdate(fc.endL)}</div><div class="k">${gpOn()?'with the Gold Pass':'no Gold Pass'}</div></div>
     </div>
     <div class="ready"><h4>Ready for TH19?</h4>
       ${chk(gw>=85,'Grand Warden at 85',gw>=85?'Done in your plan':`At ${gw} after the Jam plan`)}
@@ -1737,14 +1742,14 @@ function renderPct(){
       ${chk(!usedLab.length,'Lab done for troops and spells you might use',labLeft.length?'Left: '+labLeft.map(x=>x.n+' '+x.l+'/'+x.max).join(', '):'Lab maxed')}
       ${chk(aft.p>=target,`${target}% or higher`,`${pf(aft.p)}% after the Jam plan`)}
     </div>
-    <div class="pctFoot">Every level counts by its full price upgrade time from the Clash of Clans Fandom wiki, so a 14 day lab level counts far more than a 1 hour trap. Walls (all maxed), the Town Hall weapon, hero equipment and supercharges aren't counted. Dates assume 6 builders, the Gold Pass and 3 free Research Potions a week.</div>`;
+    <div class="pctFoot">Every level counts by its full price upgrade time from the Clash of Clans Fandom wiki, so a 14 day lab level counts far more than a 1 hour trap. Walls (all maxed), the Town Hall weapon, hero equipment and supercharges aren't counted. The wiki lists older, longer times, so days left and dates are scaled to about 45% of them to match your own game timers. Full price means no Hammer Jam (50% off). Dates assume 6 builders, ${gpOn()?'the Gold Pass (20% off), ':'no Gold Pass, '}and 3 free Research Potions a week.</div>`;
   const mini=document.getElementById('pctMini');
   mini.innerHTML=`<div class="mr">${ringSvg(now.p,aft.p,target,52,6)}<b>${Math.round(now.p)}%</b></div><div class="tx"><b>TH18 ${pf(now.p)}% maxed</b><span>${pf(aft.p)}% after the Jam plan · ${now.p>=target?target+'% reached':aft.p>=target?target+'% by '+fdate(Math.max(...plan.map(p=>p.idleAt))):target+'% by '+fdate(fc.hit)}</span></div><span class="go">›</span>`;
 }
 const fdate=t=>dShort(t);
 const chk=(ok,t,s)=>`<div class="chkl"><span class="ck ${ok?'y':'n'}">${ok?'✓':''}</span><div>${esc(t)}<small>${esc(s)}</small></div></div>`;
 document.getElementById('pctMini').addEventListener('click',()=>go('progress'));
-document.getElementById('pctCard').addEventListener('change',e=>{ if(e.target.id!=='pctT') return; const v=parseFloat(e.target.value); if(v>50&&v<=100){ SETTINGS.pctTarget=v; store.set(SET_KEY,SETTINGS); renderPct(); } });
+document.getElementById('pctCard').addEventListener('change',e=>{ if(e.target.id==='pctGP'){ SETTINGS.goldPass=e.target.checked; store.set(SET_KEY,SETTINGS); renderPct(); return; } if(e.target.id!=='pctT') return; const v=parseFloat(e.target.value); if(v>50&&v<=100){ SETTINGS.pctTarget=v; store.set(SET_KEY,SETTINGS); renderPct(); } });
 
 /* ===== Tabs ===== */
 const TITLES={today:'Today',plan:'Plan',progress:'Progress',tools:'Tools'};
