@@ -243,6 +243,26 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 .chatf .in{border-radius:999px;padding:11px 16px}
 .chatf .btn{border-radius:999px}
 @media(min-width:720px){.next li{grid-template-columns:90px 1fr auto}}
+
+/* desktop */
+.fsbtn{display:none;align-items:center;gap:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);border-radius:12px;padding:8px 14px;font-weight:600;font-size:13px;cursor:pointer}
+.fsbtn svg{width:18px;height:18px}
+.fsbtn:hover{background:var(--surface3)}
+@media(min-width:900px){ .fsbtn{display:inline-flex} }
+@media(min-width:1100px){
+  .wrap{max-width:1480px;padding:0 32px calc(var(--tabh) + 120px)}
+  .top{margin:0 -32px;padding-left:32px;padding-right:32px}
+  .cols{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px;align-items:start}
+  .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 28px;align-items:start}
+  .lanes{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .stats .v{font-size:28px}
+  .hero .big{font-size:52px}
+  .tabbar .in2{max-width:640px}
+  .sheet{left:auto;right:28px;bottom:calc(var(--tabh) + 24px);width:440px;height:min(76vh,760px);border-radius:24px;border-bottom:1px solid var(--border2);transform:translateY(calc(100% + 120px))}
+  .sheet .grab{display:none}
+  .fab{right:28px}
+}
+@media(min-width:1700px){ .lanes{grid-template-columns:repeat(4,minmax(0,1fr))} }
 </style>
 </head>
 <body>
@@ -251,12 +271,15 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
   <div class="toprow">
     <div class="th">18</div>
     <div style="flex:1;min-width:0"><div class="eyebrow">Hammer Jam Planner</div><h1 id="title">Today</h1></div>
+    <button class="fsbtn" id="fsBtn" type="button" aria-label="Full screen" title="Full screen (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path id="fsIco" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fsTxt">Full screen</span></button>
   </div>
   <div class="sync" id="synced"></div>
 </header>
 
 <!-- TODAY -->
 <section class="view on" data-view="today">
+<div class="cols">
+<div class="colL">
   <div class="card hero">
     <div class="lab">Hammer Jam</div>
     <div class="big" id="jamBig"></div>
@@ -269,10 +292,14 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
     <div class="stat"><div class="v" id="stIdle">0</div><div class="k">Idle now</div></div>
     <div class="stat"><div class="v" id="stGems" style="color:#6fe3a2">0</div><div class="k">Gems</div></div>
   </div>
-  <div class="sh"><h2>Up next</h2><small>tick it once you start it</small></div>
-  <div class="card"><ul class="list next" id="next"></ul><button class="more" id="moreBtn" type="button">Show more</button></div>
   <div class="sh"><h2>Loot for the rest of the Jam</h2><small>not started yet</small></div>
   <div class="card"><div class="tiles" id="loot"></div></div>
+</div>
+<div class="colR">
+  <div class="sh"><h2>Up next</h2><small>tick it once you start it</small></div>
+  <div class="card"><ul class="list next" id="next"></ul><button class="more" id="moreBtn" type="button">Show more</button></div>
+</div>
+</div>
 </section>
 
 <!-- PLAN -->
@@ -287,15 +314,21 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 
 <!-- PROGRESS -->
 <section class="view" data-view="progress">
+<div class="grid2">
+<div class="blk">
   <div class="sh"><h2>Since Nov 1</h2><small>then, now and after the Jam plan</small></div>
   <div class="card"><div class="tiles" id="progtot"></div><div class="tw"><table id="progress"></table></div>
     <div class="note">Small numbers show how many of that building are at the level, like 2/5. <b style="color:var(--red)">Red</b> is already max today. <b style="color:var(--green)">Green</b> will be max once the Jam plan finishes. <b style="color:var(--blue)">Blue</b> is the TH18 max.</div></div>
+</div>
+<div class="blk">
   <div class="sh"><h2>After the Jam</h2><small>everything left to max TH18</small></div>
   <div class="card">
     <div class="pad" style="padding-bottom:6px"><div class="seg" id="afterSeg"><button type="button" aria-selected="true" data-tab="b">Builders</button><button type="button" aria-selected="false" data-tab="l">Lab</button></div></div>
     <div class="tw"><table id="after"></table></div>
     <div class="note" id="afternote"></div>
   </div>
+</div>
+<div class="blk">
   <div class="sh"><h2>Notes</h2></div>
   <div class="card"><ul class="tips">
     <li><b>Hammer of Fighting:</b> Druid 6 and Battle Drill 6 now get done in the Jam, so save it for Sky Wagon 4 after the Jam (173 hours full price, after Sky Wagon 3).</li>
@@ -303,19 +336,29 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
     <li><b>Gems:</b> about 600 for the Goblin Lab run: Battle Drill 6, Log Launcher 6, Golem 15, Clone 9 and Sky Wagon 2, roughly 110 to 125 each. Check each price in game before confirming.</li>
     <li><b>Not tracked:</b> hero equipment, supercharges and crafted defenses.</li>
   </ul></div>
+</div>
+</div>
 </section>
 
 <!-- TOOLS -->
 <section class="view" data-view="tools">
+<div class="grid2">
+<div class="blk">
   <div class="sh"><h2>Gems</h2><small>saved on this device</small></div>
   <div class="card tool" id="gemCard"></div>
 
+</div>
+<div class="blk">
   <div class="sh"><h2>Magic items</h2><small>books, hammers and potions</small></div>
   <div class="card tool" id="itemCard"></div>
 
+</div>
+<div class="blk">
   <div class="sh"><h2>Loot check</h2><small>can you cover the next starts?</small></div>
   <div class="card tool" id="lootCard"></div>
 
+</div>
+<div class="blk">
   <div class="sh"><h2>Calendar reminders</h2></div>
   <div class="card tool"><div class="pad">
     <h3><span class="ico" style="background:rgba(76,157,255,.15)">📅</span>Add starts to your calendar</h3>
@@ -324,6 +367,8 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
     <div class="row" style="margin-top:12px"><button class="btn gold" id="calBtn" type="button">Download calendar file</button><span class="msg" id="calMsg"></span></div>
   </div></div>
 
+</div>
+<div class="blk">
   <div class="sh"><h2>Update from export</h2></div>
   <div class="card tool"><div class="pad">
     <h3><span class="ico" style="background:rgba(52,209,123,.14)">⟳</span>Sync with the game</h3>
@@ -338,6 +383,8 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
     <div class="msg" id="updMsg" role="status" style="margin-top:8px"></div>
   </div></div>
 
+</div>
+<div class="blk">
   <div class="sh"><h2>AI helper</h2><small>optional, uses your own key</small></div>
   <div class="card tool"><div class="pad" id="aiPad"></div>
   <div class="pad" style="border-top:1px solid var(--border)">
@@ -347,6 +394,8 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
     <div class="msg" id="claudeMsg" style="margin-top:8px"></div>
   </div></div>
 
+</div>
+<div class="blk">
   <div class="sh"><h2>Settings</h2></div>
   <div class="card tool"><div class="pad" style="display:grid;gap:14px">
     <div><label class="fl">Sleep window (no starts planned)</label>
@@ -356,6 +405,8 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
     <div class="msg" id="setMsg"></div>
   </div></div>
 
+</div>
+<div class="blk">
   <div class="sh"><h2>App and backup</h2></div>
   <div class="card tool"><div class="pad">
     <h3><span class="ico" style="background:rgba(246,185,65,.15)">📲</span>Install as an app</h3>
@@ -373,6 +424,8 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
   </div>
   <div class="pad" style="border-top:1px solid var(--border)" id="syncPad"></div></div>
 
+</div>
+</div>
   <footer>Private planner · times are Toronto time · not affiliated with Supercell</footer>
 </section>
 </div>
@@ -1473,6 +1526,19 @@ document.getElementById('askClaude').addEventListener('click',()=>{
   document.getElementById('claudeLinkSave').addEventListener('click',()=>{ const v=el.value.trim(), m=document.getElementById('claudeMsg');
     if(v&&!/^https:\/\/claude\.ai\//.test(v)){ m.className='msg bad'; m.textContent='That should be a claude.ai link.'; return; }
     store.set('coc-claude-link',v); m.className='msg ok'; m.textContent=v?'Saved. Ask Claude will open your project.':'Cleared.'; }); })();
+
+/* ===== Full screen on desktop ===== */
+(function(){
+  const b=document.getElementById('fsBtn'), d=document.documentElement;
+  const can=document.fullscreenEnabled||document.webkitFullscreenEnabled; if(!can){ b.remove(); return; }
+  const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
+  const toggle=()=>{ if(isFs()) (document.exitFullscreen||document.webkitExitFullscreen).call(document); else (d.requestFullscreen||d.webkitRequestFullscreen).call(d); };
+  const sync=()=>{ const on=isFs(); document.getElementById('fsTxt').textContent=on?'Exit full screen':'Full screen';
+    document.getElementById('fsIco').setAttribute('d',on?'M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5':'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5'); timeline(); };
+  b.addEventListener('click',toggle);
+  document.addEventListener('fullscreenchange',sync); document.addEventListener('webkitfullscreenchange',sync);
+  document.addEventListener('keydown',e=>{ if((e.key==='f'||e.key==='F')&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!/INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName||'')) toggle(); });
+})();
 
 /* ===== Tabs ===== */
 const TITLES={today:'Today',plan:'Plan',progress:'Progress',tools:'Tools'};
