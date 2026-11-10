@@ -122,6 +122,8 @@ td.r,th.r{text-align:right;white-space:nowrap}
 .lvl{font:16px "Lilita One"}
 .arrow{color:var(--muted);margin:0 4px}
 .max{color:var(--green-d)}
+.maxnow{color:#c62828}
+.maxcol{color:#1f5ea3}
 .sub{display:block;font:800 10px Nunito,sans-serif;color:var(--muted);margin-top:-2px}
 tr.grp td{background:var(--card2);font:15px "Lilita One";color:var(--edge);padding:6px 12px}
 #progress th,#progress td{padding:7px 8px}
@@ -163,7 +165,7 @@ footer{margin-top:28px;color:var(--text2);font-size:12px;text-align:center}
 
 <h2>Progress since Nov 1 <small>then, now and after the Jam plan</small></h2>
 <div class="card"><div class="totals" id="progtot"></div><table id="progress"></table>
-  <div class="note">Small numbers show how many of that building are at the level, like 2/5. Green means maxed for TH18. Anything not listed here hasn't been touched yet and is in After the Jam below.</div></div>
+  <div class="note">Small numbers show how many of that building are at the level, like 2/5. <b style="color:#c62828">Red</b> is already max today. <b style="color:#23722a">Green</b> will be max once the Jam plan finishes. <b style="color:#1f5ea3">Blue</b> is the TH18 max level. Anything not listed here hasn't been touched yet and is in After the Jam below.</div></div>
 
 <h2>Loot for the rest of the Jam <small>upgrades not started yet</small></h2>
 <div class="card"><div class="totals" id="loot"></div></div>
@@ -452,12 +454,15 @@ function timeline(){
 }
 
 function progress(){
-  const cell=(v,max)=>{ const l=Array.isArray(v)?v[0]:v, n=Array.isArray(v)?v[1]:''; let full=l===max;
-    if(n){ const m=/^(\d+)\/(\d+)$/.exec(n); if(m) full=full&&m[1]===m[2]; else full=full&&n==='all'; }
-    return `<td class="r lvl ${full?'max':''}">${l}${n?`<small class="sub">${esc(n)}</small>`:''}</td>`; };
+  const isFull=(v,max)=>{ const l=Array.isArray(v)?v[0]:v, n=Array.isArray(v)?v[1]:''; let full=l===max;
+    if(n){ const m=/^(\d+)\/(\d+)$/.exec(n); if(m) full=full&&m[1]===m[2]; else full=full&&n==='all'; } return full; };
+  // cls: 'maxnow' (red) = already max today, 'max' (green) = will be max after the Jam plan
+  const cell=(v,cls)=>{ const l=Array.isArray(v)?v[0]:v, n=Array.isArray(v)?v[1]:'';
+    return `<td class="r lvl ${cls||''}">${l}${n?`<small class="sub">${esc(n)}</small>`:''}</td>`; };
   let h='<tr><th>Upgrade</th><th class="r">Nov 1</th><th class="r">Now</th><th class="r">After Jam</th><th class="r">Max</th></tr>';
   PROGRESS.forEach(g=>{ h+=`<tr class="grp"><td colspan="5">${esc(g.group)}</td></tr>`;
-    g.rows.forEach(r=>{ h+=`<tr><td><b>${esc(r[0])}</b></td>${cell(r[1],-1)}${cell(r[2],r[4])}${cell(r[3],r[4])}<td class="r muted">${r[4]}</td></tr>`; }); });
+    g.rows.forEach(r=>{ const nowMax=isFull(r[2],r[4]), aftMax=isFull(r[3],r[4]);
+      h+=`<tr><td><b>${esc(r[0])}</b></td>${cell(r[1])}${cell(r[2],nowMax?'maxnow':'')}${cell(r[3],nowMax?'maxnow':aftMax?'max':'')}<td class="r lvl maxcol">${r[4]}</td></tr>`; }); });
   document.getElementById('progress').innerHTML=h;
   const D=DONE_SINCE_NOV1;
   document.getElementById('progtot').innerHTML=
