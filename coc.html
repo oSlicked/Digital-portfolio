@@ -338,7 +338,13 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
   </div></div>
 
   <div class="sh"><h2>AI helper</h2><small>optional, uses your own key</small></div>
-  <div class="card tool"><div class="pad" id="aiPad"></div></div>
+  <div class="card tool"><div class="pad" id="aiPad"></div>
+  <div class="pad" style="border-top:1px solid var(--border)">
+    <h3><span class="ico" style="background:rgba(76,157,255,.15)">✦</span>Ask Claude with your Pro plan</h3>
+    <p class="desc">The Ask Claude button in the chat copies your question and a snapshot of your plan, then opens Claude. Paste it and send. No extra cost. Paste your CoC Website project link here so it opens there.</p>
+    <div class="row" style="margin-top:10px;flex-wrap:nowrap"><input class="in" id="claudeLink" placeholder="https://claude.ai/project/…" autocomplete="off"><button class="btn alt" id="claudeLinkSave" type="button">Save</button></div>
+    <div class="msg" id="claudeMsg" style="margin-top:8px"></div>
+  </div></div>
 
   <div class="sh"><h2>Settings</h2></div>
   <div class="card tool"><div class="pad" style="display:grid;gap:14px">
@@ -379,7 +385,8 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
   <div class="shh"><div class="th" style="width:36px;height:36px;font-size:15px">?</div><div style="flex:1"><b>Planner helper</b><span id="chatSub">Answers from your plan · works offline</span></div><button class="ghost" id="chatClose" type="button">Done</button></div>
   <div class="chatlog" id="chatlog"></div>
   <div class="chips" id="chips"></div>
-  <form class="chatf" id="chatf"><input class="in" id="chatIn" placeholder="Ask about your plan" autocomplete="off"><button class="btn gold" type="submit">Ask</button></form>
+  <form class="chatf" id="chatf" style="padding-bottom:8px"><input class="in" id="chatIn" placeholder="Ask about your plan" autocomplete="off"><button class="btn gold" type="submit">Ask</button></form>
+  <div style="padding:0 16px calc(10px + var(--safe));margin-top:-4px"><button class="btn alt sm" id="askClaude" type="button" style="width:100%">✦ Ask Claude in the app (uses your Pro plan)</button></div>
 </div>
 
 <nav class="tabbar"><div class="in2" role="tablist">
@@ -1436,6 +1443,26 @@ document.getElementById('aiPad').addEventListener('click',async e=>{
     e.target.disabled=false; }
   if(e.target.id==='aiOff'){ if(!confirmTap('aiOff')) return; try{ localStorage.removeItem(AI_KEY); }catch(err){} AIHIST.length=0; renderAI(); }
 });
+
+/* ===== Ask Claude in the app (uses the Pro plan) ===== */
+function claudePrompt(q){
+  let ctx=aiSystem().replace(/^You are the helper inside a private Clash of Clans upgrade planner web page/,'Snapshot from my private Clash of Clans upgrade planner (jordanioannoni.com/coc)')
+    .replace(/Actions:[\s\S]*?Only use lane ids from the data\.\n/,'If I want to add or remove an upgrade, give me one line I can type into the planner chat, like "add Cannon 21 to builder 3, 60h, 9.5M gold" or "remove Witch 8".\n');
+  return `${q?'MY QUESTION: '+q:'Look over my plan and tell me the most useful thing to do next.'}\n\n${ctx}`;
+}
+document.getElementById('askClaude').addEventListener('click',()=>{
+  const i=document.getElementById('chatIn'), q=i.value.trim(), text=claudePrompt(q);
+  const link=(store.get('coc-claude-link','')||'').trim();
+  let ok=true; try{ navigator.clipboard.writeText(text).catch(()=>{}); }catch(e){ ok=false; }
+  const url=link||(text.length<7000?'https://claude.ai/new?q='+encodeURIComponent(text):'https://claude.ai/new');
+  window.open(url,'_blank');
+  if(q){ say(q,true); i.value=''; }
+  say(ok?`Copied ${q?'your question and ':''}your plan. In Claude, long press the message box and tap <b>Paste</b>, then send.${link?'':' Tip: add your CoC Website project link in Tools so it opens there.'}`:'Your browser blocked copying. Open Tools, AI helper and try again.');
+});
+(function(){ const el=document.getElementById('claudeLink'); el.value=store.get('coc-claude-link','')||'';
+  document.getElementById('claudeLinkSave').addEventListener('click',()=>{ const v=el.value.trim(), m=document.getElementById('claudeMsg');
+    if(v&&!/^https:\/\/claude\.ai\//.test(v)){ m.className='msg bad'; m.textContent='That should be a claude.ai link.'; return; }
+    store.set('coc-claude-link',v); m.className='msg ok'; m.textContent=v?'Saved. Ask Claude will open your project.':'Cleared.'; }); })();
 
 /* ===== Tabs ===== */
 const TITLES={today:'Today',plan:'Plan',progress:'Progress',tools:'Tools'};
