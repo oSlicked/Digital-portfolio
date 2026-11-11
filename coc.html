@@ -1420,11 +1420,12 @@ function answer(q){
   const open=allSteps().filter(x=>!marks[mk(x)]).sort((a,b)=>a.start-b.start);
   if(!s) return 'Ask me something about your plan.';
   if(/^(hi|hey|hello|yo|sup)\b/.test(s)) return `Hey. ${open.length?`Next up is <b>${esc(open[0].name)}</b> on ${esc(open[0].lane.name)}, ${open[0].start<=now?'ready now':whenD(open[0].start)}.`:'Nothing is left to start.'} Ask me anything about your plan.`;
-  if(/help|what can you|examples/.test(s)) return `I read your plan and saved data on this phone, no internet needed. Try:<ul><li>What's next?</li><li>When is Builder 3 free?</li><li>When does Grand Warden 83 start?</li><li>How much gold do I need tomorrow?</li><li>Can I afford the gem starts?</li><li>Anything idle?</li><li>What won't be upgraded after Friday 1 AM?</li><li>What's running tomorrow at 9 PM?</li><li>What starts on Thursday?</li><li>When does everything run out?</li><li>Remove Hidden Tesla from builder 3 and add Warden 84</li><li>Swap Mortar #3 for Smasher on builder 4</li><li>Add Air Bomb 13 to builder 2</li><li>Add Dragon Duke 25 (adds every level up to 25)</li><li>What fits in Builder 3's gap?</li><li>What won't be maxed when the Jam ends?</li></ul>`;
+  if(/help|what can you|examples/.test(s)) return `I read your plan and saved data on this phone, no internet needed. Try:<ul><li>What's next?</li><li>When is Builder 3 free?</li><li>When does Grand Warden 83 start?</li><li>How much gold do I need tomorrow?</li><li>Can I afford the gem starts?</li><li>Anything idle?</li><li>What won't be upgraded after Friday 1 AM?</li><li>What's running tomorrow at 9 PM?</li><li>What starts on Thursday?</li><li>When does everything run out?</li><li>Remove Hidden Tesla from builder 3 and add Warden 84</li><li>Swap Mortar #3 for Smasher on builder 4</li><li>Add Air Bomb 13 to builder 2</li><li>Add Dragon Duke 25 (adds every level up to 25)</li><li>Suggest upgrades</li><li>Suggest for builder 3</li><li>What fits in Builder 3's gap?</li><li>What won't be maxed when the Jam ends?</li></ul>`;
   const lane=findLane(s), W=parseWhen(s,now);
   /* change the plan */
   const ctxLane=lane||(/\b(it|that|there|the gap|same)\b/.test(s)?CTX.lane:null);
   if(lane) CTX.lane=lane;
+  if(/\b(suggest|suggestion|recommend|ideas?)\b|what (should|can) i (upgrade|add|start|queue)|what to (upgrade|add|start|queue)|best (upgrades?|next)/.test(s)) return suggestAnswer(ctxLane);
   /* gaps and what won't be maxed */
   if(/\bgap|fill|best value|most value|worth|room|space|squeeze|\bfits?\b|what (can|should) (i|we) (add|put|start)|one more/.test(s)) return gapReport(ctxLane);
   if(!W&&(/(not|won'?t|wont|never).{0,30}(upgrad|max|done)|left to max|still (to|need)|not maxed|unmaxed/.test(s))) return maxedReport()+(ctxLane?gapPick(ctxLane):'');
@@ -1487,10 +1488,11 @@ function closeChat(){ chatEl.classList.remove('on'); bg.classList.remove('on'); 
 document.getElementById('askBtn').addEventListener('click',openChat);
 document.getElementById('chatClose').addEventListener('click',closeChat);
 bg.addEventListener('click',closeChat);
-document.getElementById('chips').innerHTML=["What's next?","Anything idle?","Loot for tomorrow","Gems","What starts tomorrow?","When does everything run out?","Any gaps before the Jam ends?","What won't be maxed?","Jam time left","Help"].map(t=>`<button type="button">${esc(t)}</button>`).join('');
+document.getElementById('chips').innerHTML=["Suggest upgrades","What's next?","Anything idle?","Loot for tomorrow","Gems","What starts tomorrow?","When does everything run out?","Any gaps before the Jam ends?","What won't be maxed?","Jam time left","Help"].map(t=>`<button type="button">${esc(t)}</button>`).join('');
 logEl.addEventListener('click',e=>{
   const g=e.target.closest('[data-goedit]');
   if(g){ closeChat(); go('plan'); editing=g.dataset.goedit; lanes(); setTimeout(()=>{ const c=document.querySelector(`[data-edit="${editing}"]`); if(c) c.closest('.lane').scrollIntoView({behavior:'smooth',block:'start'}); },60); return; }
+  const sg=e.target.closest('[data-sug]'); if(sg){ sg.disabled=true; const [l,id,to]=sg.dataset.sug.split('|'); const st=addCatalog(l,+id,+to); say(`Added <b>${esc(nameOf(+id)+' '+to)}</b> to ${esc(PLAN.find(p=>p.id===l).name)}${st?', starts '+(st.start<=Date.now()?'now':whenD(st.start))+(st.late?' (full price)':''):''}.`); return; }
   if(e.target.closest('[data-plango]')){ e.target.disabled=true; const d=runPending(); say(d.length?'Done:<ul class="cmdlist">'+d.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'Nothing changed. It may already be done.'); return; }
   const aa=e.target.closest('[data-aiact]');
   if(aa){ const [act,lid,name,h,cost,cur]=aa.dataset.aiact.split('|'); const P=PLAN.find(p=>p.id===lid); if(!P) return; aa.disabled=true;
@@ -1888,6 +1890,33 @@ function runPending(){
   acts.filter(a=>a.t==='rm').forEach(a=>{ const L=LANES.find(l=>l.id===a.lane), i=L?L.steps.findIndex(x=>x[0]===a.name):-1; if(i>=0){ editLane(a.lane,items=>items.splice(L.first+i,1)); done.push('Removed '+a.name); } });
   acts.filter(a=>a.t==='add').forEach(a=>{ const st=addCatalog(a.lane,a.id,a.to); done.push(`Added ${a.name}${st?', starts '+(st.start<=Date.now()?'now':whenD(st.start))+(st.late?' (after the Jam, full price)':''):''}`); });
   return done;
+}
+
+/* ===== Suggest upgrades =====
+   In the Jam: the longest upgrade wins, since the Jam price locks in at the start.
+   After the Jam: heroes first, then defenses and guardians, then other buildings, then traps (lab: troops you use first). */
+const SUG_RANK={Heroes:4,Defenses:3,'Other buildings':2,Traps:1,Lab:2,Pets:2};
+function suggestFor(laneId,taken){
+  const p=plan.find(x=>x.L.id===laneId), at=wake(Math.max(p.idleAt,Date.now())), inJam=at<lastJamStart();
+  const list=catalogFor(laneId).filter(x=>!taken.has(x.id+':'+x.to)&&!(x.hero&&(taken.has('hero:'+x.id)||heroBusy(x.id,laneId).length)));
+  const score=x=>inJam?x.e.h:(x.id===28000007?1.5:(SUG_RANK[x.cat]||1))*1000-(x.cat==='Lab'&&UNUSED_LAB.has(nameOf(x.id))?500:0)+x.e.h;
+  return {p,at,inJam,list:list.sort((a,b)=>score(b)-score(a))};
+}
+function suggestAnswer(laneId){
+  const taken=new Set(); const now=Date.now();
+  const lanes=laneId?[laneId]:plan.filter(p=>p.L.id!=='glab'||true).sort((a,b)=>a.idleAt-b.idleAt).map(p=>p.L.id);
+  const rows=[];
+  lanes.forEach(id=>{ const r=suggestFor(id,taken); const n=laneId?3:1; const picks=r.list.slice(0,n); if(!picks.length) return;
+    picks.forEach(x=>{ taken.add(x.id+':'+x.to); if(x.hero) taken.add('hero:'+x.id); });
+    rows.push({r,picks}); });
+  if(!rows.length) return `Nothing left to suggest${laneId?' for <b>'+esc(PLAN.find(p=>p.id===laneId).name)+'</b>':''}. Everything ${laneId?'it':'those lanes'} can do is already maxed or planned.`;
+  const shown=rows;
+  let h=laneId?`Best next upgrades for <b>${esc(shown[0].r.p.L.name)}</b> (free ${shown[0].r.p.idleAt<=now?'now':whenD(shown[0].r.p.idleAt)}${shown[0].r.inJam?', still in the Jam':', full price'}):`:`Here's what I'd queue next on each lane, soonest free first:`;
+  h+='<ul class="cmdlist">'+shown.map(({r,picks})=>picks.map(x=>`<li><b>${esc(x.name)}</b>${laneId?'':' on '+esc(r.p.L.name)} · ${r.inJam?'Jam '+Math.round(x.e.h)+'h, '+money(x.e.c):'full '+Math.round(x.e.h*2)+'h, '+money(x.e.c*2)} ${CUR[x.e.cur]}
+    <span class="muted">· ${r.inJam?'starts '+(r.at<=now?'now':whenD(r.at))+', locks in the Jam price':(x.id===28000007?'raises your %, not in your army':x.hero?'hero, keeps your army strong':x.cat==='Traps'?'cheap filler':x.cat==='Lab'?(UNUSED_LAB.has(nameOf(x.id))?'troop you rarely use':'lab, your bottleneck'):'raises your %')}</span>
+    <div class="cbtns" style="margin-top:4px"><button type="button" class="cbtn" data-sug="${r.p.L.id}|${x.id}|${x.to}">Add to ${esc(r.p.L.name)}</button></div></li>`).join('')).join('')+'</ul>';
+  if(!laneId) h+=`<span class="muted">Ask "suggest for builder 3" to see more options for one lane.</span>`;
+  return h;
 }
 
 /* ===== Tabs ===== */
