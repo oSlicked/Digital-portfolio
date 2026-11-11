@@ -289,6 +289,19 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 .pctmini .tx span{display:block;font-size:12.5px;color:var(--muted)}
 .pctmini .go{color:var(--muted);font-size:20px}
 @media(min-width:1100px){ .cats{grid-template-columns:1fr 1fr;column-gap:28px} }
+.pklist{max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,.2)}
+.pk{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;padding:10px 12px;border:0;border-top:1px solid var(--border);background:transparent;color:var(--text);text-align:left;cursor:pointer;font:inherit}
+.pk:first-child{border-top:0}
+.pk:hover,.pk:active{background:var(--surface2)}
+.pk b{font-weight:600;font-size:14px}
+.pk small{display:block;color:var(--muted);font-size:12px;margin-top:1px}
+.pk .add{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#ffd77a,#f0a51e);color:#241703;font-weight:800}
+.pkgrp{padding:7px 12px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);background:rgba(255,255,255,.03);border-top:1px solid var(--border)}
+.manual{padding:0 16px 12px;font-size:13px;color:var(--muted)}
+.manual summary{cursor:pointer;padding:10px 0}
+.manual .addf{padding:10px 0 0;border:0;background:none}
+.cmdlist{margin:6px 0 0;padding-left:18px}
+.cmdlist li{margin:4px 0}
 /* desktop */
 .fsbtn{display:none;align-items:center;gap:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);border-radius:12px;padding:8px 14px;font-weight:600;font-size:13px;cursor:pointer}
 .fsbtn svg{width:18px;height:18px}
@@ -784,8 +797,8 @@ function rebuild(){
     const curEnd=L.cur?runFrom(L.id,EXPORT,L.left*1000):EXPORT;
     let t=curEnd; const q=[];
     L.steps.forEach((s,i)=>{
-      const ready=t, start=wake(t), end=runFrom(L.id,start,s[1]*PASS*H);
-      q.push({lane:L,i,name:s[0],hrs:s[1],cur:s[2],cost:s[3],flag:s[4]||'',ready,start,end,slept:start>ready,late:start>=JAM_END,boost:boosted(L.id,start,end)});
+      const ready=t, start=wake(t), f=start>=JAM_END?2:1, end=runFrom(L.id,start,s[1]*f*PASS*H);   // after the Jam: full price, double time and cost
+      q.push({lane:L,i,name:s[0],hrs:s[1]*f,cur:s[2],cost:s[3]*f,flag:s[4]||'',ready,start,end,slept:start>ready,late:start>=JAM_END,boost:boosted(L.id,start,end)});
       t=end;
     });
     return {L,curEnd,curBoost:boosted(L.id,EXPORT,curEnd),q,idleAt:t};
@@ -874,13 +887,20 @@ function lanes(){
       qHtml=`<ul class="list q">${p.q.map((s,i)=>`<li><span>${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':''}<span class="s muted" style="display:block;font-size:12px">${Math.round(s.hrs*PASS)}h · <span class="cur"><i class="dot ${s.cur}"></i>${money(s.cost)}</span></span></span>
         <span class="ectl"><button class="ib" type="button" data-act="up" data-l="${L.id}" data-i="${i}" ${i===0?'disabled':''} aria-label="Move up">↑</button><button class="ib" type="button" data-act="down" data-l="${L.id}" data-i="${i}" ${i===p.q.length-1?'disabled':''} aria-label="Move down">↓</button><button class="ib x" type="button" data-act="del" data-l="${L.id}" data-i="${i}" aria-label="Remove">✕</button></span></li>`).join('')}</ul>
         ${p.q.length?'':'<div class="empty">Nothing queued</div>'}
+        <div class="addf picker" data-pick="${L.id}">
+          <div class="row" style="justify-content:space-between"><b style="font-size:14px">Add an upgrade</b><span class="muted" style="font-size:12px">time and cost filled in</span></div>
+          <input class="in" data-pick-search="${L.id}" placeholder="Search, like warden or air mine" autocomplete="off">
+          <div class="pklist" id="pk-${L.id}">${pickRows(L.id,'')}</div>
+        </div>
+        <details class="manual"><summary>Something not listed? Add it by hand</summary>
         <form class="addf" data-add="${L.id}">
           <input class="in" name="n" placeholder="Upgrade name, like Cannon 21" required>
           <div class="g3"><input class="in" name="h" placeholder="Hours" inputmode="decimal" required><input class="in" name="c" placeholder="Cost, 9.5M" required><select class="in" name="r"><option value="g">Gold</option><option value="e">Elixir</option><option value="d">Dark</option></select></div>
           <label class="muted" style="font-size:13px;display:flex;gap:8px;align-items:center"><input type="checkbox" name="gem"> Needs gems (Goblin)</label>
           <div class="muted" style="font-size:12px">Use the time the game shows right now. Remove it here once it's started if it doesn't clear on its own.</div>
-          <div class="row"><button class="btn gold sm" type="submit">Add to queue</button>${edited?`<button class="btn red sm" type="button" data-act="reset" data-l="${L.id}">Reset to my plan</button>`:''}</div>
-        </form>`;
+          <div class="row"><button class="btn gold sm" type="submit">Add to queue</button></div>
+        </form></details>
+        ${edited?`<div class="addf" style="padding-top:0;background:none;border:0"><div class="row"><button class="btn red sm" type="button" data-act="reset" data-l="${L.id}">Reset to my plan</button></div></div>`:''}`;
     } else {
       const rest=p.q.filter(s=>s.start>now);
       qHtml=rest.length?`<ul class="list q">${rest.map(s=>`<li class="${s.late?'after':''}"><span>${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':''}${s.late?'<span class="tag t-late">AFTER JAM</span>':''}</span><span class="t">${whenD(s.start)}</span></li>`).join('')}</ul>`
@@ -1400,7 +1420,7 @@ function answer(q){
   const open=allSteps().filter(x=>!marks[mk(x)]).sort((a,b)=>a.start-b.start);
   if(!s) return 'Ask me something about your plan.';
   if(/^(hi|hey|hello|yo|sup)\b/.test(s)) return `Hey. ${open.length?`Next up is <b>${esc(open[0].name)}</b> on ${esc(open[0].lane.name)}, ${open[0].start<=now?'ready now':whenD(open[0].start)}.`:'Nothing is left to start.'} Ask me anything about your plan.`;
-  if(/help|what can you|examples/.test(s)) return `I read your plan and saved data on this phone, no internet needed. Try:<ul><li>What's next?</li><li>When is Builder 3 free?</li><li>When does Grand Warden 83 start?</li><li>How much gold do I need tomorrow?</li><li>Can I afford the gem starts?</li><li>Anything idle?</li><li>What won't be upgraded after Friday 1 AM?</li><li>What's running tomorrow at 9 PM?</li><li>What starts on Thursday?</li><li>When does everything run out?</li><li>Add Cannon 21 to builder 3, 60h, 9.5M gold</li><li>Remove Witch 8</li><li>What fits in Builder 3's gap?</li><li>What won't be maxed when the Jam ends?</li></ul>`;
+  if(/help|what can you|examples/.test(s)) return `I read your plan and saved data on this phone, no internet needed. Try:<ul><li>What's next?</li><li>When is Builder 3 free?</li><li>When does Grand Warden 83 start?</li><li>How much gold do I need tomorrow?</li><li>Can I afford the gem starts?</li><li>Anything idle?</li><li>What won't be upgraded after Friday 1 AM?</li><li>What's running tomorrow at 9 PM?</li><li>What starts on Thursday?</li><li>When does everything run out?</li><li>Remove Hidden Tesla from builder 3 and add Warden 84</li><li>Swap Mortar #3 for Smasher on builder 4</li><li>Add Air Bomb 13 to builder 2</li><li>Add Dragon Duke 25 (adds every level up to 25)</li><li>What fits in Builder 3's gap?</li><li>What won't be maxed when the Jam ends?</li></ul>`;
   const lane=findLane(s), W=parseWhen(s,now);
   /* change the plan */
   const ctxLane=lane||(/\b(it|that|there|the gap|same)\b/.test(s)?CTX.lane:null);
@@ -1409,7 +1429,7 @@ function answer(q){
   if(/\bgap|fill|best value|most value|worth|room|space|squeeze|\bfits?\b|what (can|should) (i|we) (add|put|start)|one more/.test(s)) return gapReport(ctxLane);
   if(!W&&(/(not|won'?t|wont|never).{0,30}(upgrad|max|done)|left to max|still (to|need)|not maxed|unmaxed/.test(s))) return maxedReport()+(ctxLane?gapPick(ctxLane):'');
   /* change the plan: only when it's asked as a command */
-  if(/^(ok |okay |yes |yeah |so |then |now )?(please |pls )?((can|could|would|will) (you|we|i) )?(please )?(add|remove|delete|take off|take out|move|swap|reorder|change|edit|put|queue up|replace|cancel|skip)\b/.test(s)||/\badd\b.+\d+\s*(h|hours?|d|days?)\b/.test(s)) return editAnswer(s,lane);
+  if(/^(ok |okay |yes |yeah |so |then |now )?(please |pls )?((can|could|would|will) (you|we|i) )?(please )?(add|remove|delete|take off|take out|move|swap|reorder|change|edit|put|queue up|replace|cancel|skip)\b/.test(s)||/\badd\b.+\d+\s*(h|hours?|d|days?)\b/.test(s)){ try{ const pc=planCommand(s); if(pc) return pc; }catch(err){ console.error(err); } return editAnswer(s,lane); }
   /* questions about a time */
   if(/run out|out of work|go idle|goes idle|last upgrade|finish everything|everything done|when .*(idle|empty)/.test(s)&&!W){
     return `When each one runs out of planned work:<ul>${plan.slice().sort((a,b)=>a.idleAt-b.idleAt).map(p=>`<li><b>${esc(p.L.name)}</b>: ${p.idleAt<=now?'already out':whenD(p.idleAt)}</li>`).join('')}</ul>${editBtns(plan.filter(p=>p.idleAt<JAM_END).map(p=>p.L.id))}`; }
@@ -1471,8 +1491,10 @@ document.getElementById('chips').innerHTML=["What's next?","Anything idle?","Loo
 logEl.addEventListener('click',e=>{
   const g=e.target.closest('[data-goedit]');
   if(g){ closeChat(); go('plan'); editing=g.dataset.goedit; lanes(); setTimeout(()=>{ const c=document.querySelector(`[data-edit="${editing}"]`); if(c) c.closest('.lane').scrollIntoView({behavior:'smooth',block:'start'}); },60); return; }
+  if(e.target.closest('[data-plango]')){ e.target.disabled=true; const d=runPending(); say(d.length?'Done:<ul class="cmdlist">'+d.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'Nothing changed. It may already be done.'); return; }
   const aa=e.target.closest('[data-aiact]');
   if(aa){ const [act,lid,name,h,cost,cur]=aa.dataset.aiact.split('|'); const P=PLAN.find(p=>p.id===lid); if(!P) return; aa.disabled=true;
+    if(act==='add'&&!(parseFloat(h)>0)){ const x=findCatalogByText(name,lid); if(x){ const st=addCatalog(lid,x.id,x.upto||x.to); say(`Added <b>${esc(nameOf(x.id)+' '+(x.upto||x.to))}</b> to ${esc(P.name)}${st?', starts '+(st.start<=Date.now()?'now':whenD(st.start)):''}.`+editBtns([lid])); } else say(`I couldn't find ${esc(name)} in what's left to upgrade.`+editBtns([lid])); return; }
     if(act==='add'){ const hrs=parseFloat(h), c=parseAmt(cost); if(!(hrs>0)||!(c>=0)){ say("That add was missing the time or cost. Use Edit in Plan instead."+editBtns([lid])); return; }
       editLane(lid,items=>items.push([name,hrs/PASS,/^[ged]$/.test(cur)?cur:'g',c,lid==='gob'||lid==='glab'?'gem':'',null,null]));
       const st=allSteps().find(x=>x.lane.id===lid&&x.name===name);
@@ -1505,8 +1527,9 @@ function aiSystem(){
 Style: short and phone friendly (usually under 100 words). Plain text; **bold** and lines starting with "- " are allowed. Never use dashes (— or –) as punctuation. Times are Toronto time, written like "Sun, Nov 15, 10:20 PM".
 Player goals: be as ready for TH19 as possible, about 92 to 93% overall at TH18 without being more than 7 to 8% rushed. The lab is the bottleneck. Dark elixir is easy for them to farm. Supercharging is pointless with TH19 coming. Hero equipment doesn't count toward max. They don't use Dragon Duke in their army. Best Jam value: start the longest, most expensive upgrades before the Jam ends; the Jam price locks in at start (about half cost and time).
 Actions: if the user clearly asks you to add or remove an upgrade, put ONE line at the very end in this exact form and the page will show a confirm button:
-[[add|laneId|Upgrade name|hours as the game shows now|cost number|g or e or d]]
+[[add|laneId|Upgrade name and level, like Grand Warden 84]]
 [[remove|laneId|exact queued name]]
+The page fills in time and cost itself, so never ask the user for them.
 Only use lane ids from the data.
 
 PLAN DATA
@@ -1750,6 +1773,122 @@ const fdate=t=>dShort(t);
 const chk=(ok,t,s)=>`<div class="chkl"><span class="ck ${ok?'y':'n'}">${ok?'✓':''}</span><div>${esc(t)}<small>${esc(s)}</small></div></div>`;
 document.getElementById('pctMini').addEventListener('click',()=>go('progress'));
 document.getElementById('pctCard').addEventListener('change',e=>{ if(e.target.id==='pctGP'){ SETTINGS.goldPass=e.target.checked; store.set(SET_KEY,SETTINGS); renderPct(); return; } if(e.target.id!=='pctT') return; const v=parseFloat(e.target.value); if(v>50&&v<=100){ SETTINGS.pctTarget=v; store.set(SET_KEY,SETTINGS); renderPct(); } });
+
+/* ===== Upgrade catalog =====
+   Jam time (in the same game hours as the plan) and Jam cost for each level still left at TH18.
+   Taken from the planner's own numbers, which match the game. Full price after the Jam is double. */
+const CAT_EXTRA=[
+  [1000015,[8],62,10.8e6,'g'],[1000005,[19],66,8.1e6,'e'],[1000003,[19],66,8.1e6,'g'],[1000013,[18],66,9.45e6,'g'],[1000019,[17],68,11.25e6,'g'],
+  [1000023,[11],32.5,5.4e6,'e'],
+  [12000006,[8],62,8.55e6,'g'],[12000002,[12],56.5,7.65e6,'g'],[12000008,[5],38,8.1e6,'g'],[12000001,[13],59.5,7.2e6,'g'],
+  [12000005,[5,6,7,8,9,10,11,12],12.7,1.97e6,'g'],[12000005,[13],48.5,6.75e6,'g'],[12000000,[14],43,6.3e6,'g'],[12000020,[4],68,9e6,'g'],
+  [107000001,[5],60,8e6,'e'],[107000008,[2,3,4,5],[37.6,48.4,59.1,69.9],[5.25e6,6.4e6,7.6e6,8.2e6],'e'],
+  [28000000,[108,109,110],43,187.5e3,'d'],[28000001,[108,109,110],43,187.5e3,'d'],[28000002,[81,82,83,84,85],43,12.5e6,'e'],
+  [28000007,[18,19,20,21,22,23,24,25],[35,36,36,37,37,38,38,39],[225e3,230e3,235e3,240e3,245e3,250e3,255e3,260e3],'d'],
+  [4000012,[12],75.5,170e3,'d'],[4000188,[2,3,4],[54,73,86.5],[9.9e6,13e6,14.5e6],'e'],[4000024,[12],78.5,14e6,'e'],[4000006,[14],75.5,13.5e6,'e'],
+  [4000004,[14],75.5,13e6,'e'],[4000001,[14],73,12.5e6,'e'],[4000000,[13],67.5,12e6,'e'],[4000002,[10],75.5,13e6,'e'],
+  [4000013,[15],78.5,175e3,'d'],[4000109,[2,3,4],[59.5,65,83.5],[110e3,150e3,190e3],'d'],[4000123,[6],83.5,190e3,'d'],
+  [26000016,[9],73,11.7e6,'e'],[26000123,[4],85,190e3,'d'],[73000008,[13,14,15],[39,41.4,43.2],[100e3,111.6e3,126e3],'d'],
+];
+const CATALOG=(()=>{ const c={};
+  PLAN.forEach(P=>P.items.forEach(x=>{ if(x[5]&&x[6]&&!c[x[5]+':'+x[6]]) c[x[5]+':'+x[6]]={h:x[1],c:x[3],cur:x[2]}; }));
+  CAT_EXTRA.forEach(([id,lv,h,cost,cur])=>lv.forEach((l,i)=>{ const k=id+':'+l; if(!c[k]) c[k]={h:Array.isArray(h)?h[i]:h,c:Array.isArray(cost)?cost[i]:cost,cur}; }));
+  return c; })();
+function catEntry(id,to){ const e=CATALOG[id+':'+to]; if(e) return e;
+  const w=LV_H[id]&&LV_H[id][to-1]; return w?{h:Math.round(w*WIKI_TO_GAME/2),c:0,cur:'g',guess:true}:null; }
+const laneTakes=(laneId,k)=>{ const P=PLAN.find(p=>p.id===laneId); if(!P) return false;
+  if(P.kind==='lab'||P.kind==='glab') return ['units','spells','siege_machines'].includes(k);
+  if(P.kind==='pet') return k==='pets';
+  return ['buildings','traps','guardians'].includes(k)||(k==='heroes'&&laneId!=='gob'); };
+/* what can still be added to a lane: the next level of everything not already maxed by the plan */
+function catalogFor(laneId){
+  const m=afterPlanCopies(), out=[];
+  Object.values(m).forEach(o=>{ if(!laneTakes(laneId,o.k)) return; const max=LV_H[o.id].length, below=o.c.filter(l=>l<max); if(!below.length) return;
+    [...new Set(below)].sort((a,b)=>a-b).forEach(lv=>{ const to=lv+1, e=catEntry(o.id,to); if(!e) return;
+      out.push({id:o.id,to,name:nameOf(o.id)+' '+to,left:below.filter(x=>x===lv).length,max,e,cat:o.cat,hero:o.k==='heroes',k:o.k}); }); });
+  return out.sort((a,b)=>b.e.h-a.e.h);
+}
+function heroBusy(id,laneId){ return plan.filter(p=>p.L.id!==laneId&&p.q.some(x=>{ const r=resolveItem(x.name); return r&&r.id===id; })).map(p=>p.L.name); }
+function pickRows(laneId,q){
+  const qs=String(q||'').toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const list=catalogFor(laneId).filter(x=>qs.every(w=>x.name.toLowerCase().includes(w)));
+  if(!list.length) return `<div class="empty" style="border:0">${qs.length?'No match. Try another word, or add it by hand below.':'Everything this lane can do is already maxed or planned.'}</div>`;
+  const groups={}; list.forEach(x=>{ (groups[x.cat]=groups[x.cat]||[]).push(x); });
+  return Object.entries(groups).map(([g,xs])=>`<div class="pkgrp">${esc(g)}</div>`+xs.map(x=>{ const busy=x.hero?heroBusy(x.id,laneId):[];
+    return `<button type="button" class="pk" data-pk="${laneId}|${x.id}|${x.to}"><span><b>${esc(x.name)}</b>${x.left>1?` <span class="muted" style="font-size:12px">· ${x.left} left at this level</span>`:''}
+      <small>Jam ${Math.round(x.e.h)}h · <span class="cur"><i class="dot ${x.e.cur}"></i>${x.e.c?money(x.e.c):'cost ?'}</span> · full price ${Math.round(x.e.h*2)}h${x.e.c?' · '+money(x.e.c*2):''}${x.e.guess?' (estimate)':''}${busy.length?` · <span class="bad">also queued on ${esc(busy.join(', '))}</span>`:''}</small></span><span class="add">+</span></button>`; }).join('')).join('');
+}
+function addCatalog(laneId,id,to){
+  const e=catEntry(id,to); if(!e) return null; const nm=nameOf(id)+' '+to;
+  editLane(laneId,items=>items.push([nm,e.h,e.cur,e.c,laneId==='gob'||laneId==='glab'?'gem':'',id,to]));
+  return allSteps().find(x=>x.lane.id===laneId&&x.name===nm);
+}
+document.getElementById('lanes').addEventListener('input',e=>{ const l=e.target.dataset.pickSearch; if(!l) return; document.getElementById('pk-'+l).innerHTML=pickRows(l,e.target.value); });
+document.getElementById('lanes').addEventListener('click',e=>{ const b=e.target.closest('[data-pk]'); if(!b) return; const [l,id,to]=b.dataset.pk.split('|'); addCatalog(l,+id,+to); });
+
+/* ===== Plan commands from chat: "remove hidden tesla from builder 3 and add warden 84" ===== */
+let PENDING=null;
+const LANE_WORDS=/\b(?:to|on|onto|in|for|from|off)?\s*(?:the\s+)?(?:goblin\s*lab|goblin\s*builder|goblin|builder\s*#?\s*\d|lab(?:oratory)?|pet\s*house)\b/g;
+function findCatalogByText(txt,laneId){
+  const words=toks(String(txt).replace(LANE_WORDS,' ')).filter(w=>!STOP.has(w)&&!/^(level|lvl|lv|please|the)$/.test(w));
+  const nums=words.filter(w=>/^\d+$/.test(w)).map(Number), ws=words.filter(w=>!/^#?\d+$/.test(w));
+  if(!ws.length) return null;
+  const lanes=laneId?[laneId]:PLAN.map(p=>p.id);
+  const hit=(w,nw)=>nw.some(n=>n===w||(w.length>=4&&n.startsWith(w))||(n.length>=4&&w.startsWith(n))||(w.length>=4&&n.length>=4&&(w+'s'===n||n+'s'===w)));
+  const cands=[]; const seen=new Set();
+  lanes.forEach(l=>catalogFor(l).forEach(x=>{ const nw=toks(nameOf(x.id)); const s=ws.filter(w=>hit(w,nw)).length; if(s&&!seen.has(x.id+':'+x.to)){ seen.add(x.id+':'+x.to); cands.push({...x,l,s,all:s===ws.length}); } }));
+  const full=cands.filter(c=>c.all), pool=full.length?full:cands; if(!pool.length) return null;
+  const top=Math.max(...pool.map(c=>c.s)), same=pool.filter(c=>c.s===top);
+  const n=nums[0];
+  let best=n?same.find(c=>c.to===n):null;
+  if(!best){ const lowest=same.reduce((a,c)=>a&&a.id===c.id&&a.to<=c.to?a:(a&&a.id!==c.id?a:c),null); best=lowest; }
+  best={...best}; best.upto=n&&n>best.to&&n<=best.max&&!same.some(c=>c.id===best.id&&c.to>best.to&&c.to<=n)?n:best.to; return best;
+}
+function findQueued(txt,laneId){
+  const words=toks(String(txt).replace(LANE_WORDS,' ')).filter(w=>!STOP.has(w)&&!/^(remove|delete|take|off|out|cancel|skip|level|the|please)$/.test(w));
+  const nums=words.filter(w=>/^#?\d+$/.test(w)).map(w=>w.replace('#','')), ws=words.filter(w=>!/^#?\d+$/.test(w));
+  let best=null,bs=0;
+  plan.forEach(p=>{ if(laneId&&p.L.id!==laneId) return; p.q.forEach(x=>{ if(marks[mk(x)]) return; const nt=toks(x.name); let s=0;
+    ws.forEach(w=>{ if(nt.some(n=>n===w||(w.length>=4&&n.startsWith(w)))) s+=1; }); if(s<ws.length) return; const xn=nt.filter(z=>/^#?\d+$/.test(z)).map(z=>z.replace('#','')); if(nums.length&&xn.length&&!nums.some(n=>xn.includes(n))) return; nums.forEach(n=>{ if(xn.includes(n)) s+=1; }); if(s>bs){ bs=s; best=x; } }); });
+  return bs>=1?best:null;
+}
+function earliestLane(k){ return plan.filter(p=>laneTakes(p.L.id,k)&&p.L.id!=='gob'&&p.L.id!=='glab').sort((a,b)=>a.idleAt-b.idleAt)[0]; }
+function planCommand(s){
+  const text=s.replace(/\b(replace|swap)\s+(.+?)\s+(?:with|for)\s+(.+)/,'remove $2 and add $3');
+  const parts=text.split(/\s*(?:,|;|\band then\b|\bthen\b|\band\b|\balso\b|\bplus\b)\s*(?=(?:please\s+)?(?:remove|delete|take|cancel|skip|add|put|queue)\b)/);
+  const acts=[], notes=[]; let lane=null;
+  for(const raw of parts){
+    const c=raw.trim(); if(!c) continue; const l=findLane(c); if(l) lane=l;
+    if(/\b(remove|delete|take off|take out|cancel|skip)\b/.test(c)){
+      const x=findQueued(c,l||lane);
+      if(x){ acts.push({t:'rm',lane:x.lane.id,name:x.name}); lane=lane||x.lane.id; }
+      else notes.push(`I couldn't find "${esc(c.replace(/^.*?\b(remove|delete|take off|take out|cancel|skip)\b\s*/,'').replace(LANE_WORDS,'').trim())}" in ${lane?esc(PLAN.find(p=>p.id===lane).name)+"'s queue":'your queues'}.`);
+    } else if(/\b(add|put|queue)\b/.test(c)){
+      if(/\d+(\.\d+)?\s*(h|hours?|d|days?)\b/.test(c)&&/\d+(\.\d+)?\s*(m|k)\b/.test(c)) return null;   // typed time and cost: use the manual path
+      const body=c.replace(/^.*?\b(add|put|queue up|queue)\b\s*/,'');
+      const x=findCatalogByText(body,l||lane)||findCatalogByText(body,null);
+      if(!x){ notes.push(`I couldn't find "${esc(body.replace(LANE_WORDS,'').trim())}" in what's left to upgrade. It may be maxed or already planned.`); continue; }
+      let target=l||lane;
+      if(!target&&x.hero){ const own=plan.find(p=>p.q.some(q=>{ const r=resolveItem(q.name); return r&&r.id===x.id; })||(p.L.cur&&p.L.cur.startsWith(nameOf(x.id)))); if(own) target=own.L.id; }
+      if(!target||!laneTakes(target,x.k)){ const e=earliestLane(x.k); target=e?e.L.id:x.l; }
+      for(let to=x.to;to<=x.upto;to++) acts.push({t:'add',lane:target,id:x.id,to,name:nameOf(x.id)+' '+to,e:catEntry(x.id,to)});
+      if(x.hero){ const busy=heroBusy(x.id,target); if(busy.length) notes.push(`Heads up: ${esc(nameOf(x.id))} is also queued on ${esc(busy.join(', '))}. The game only runs one level at a time.`); }
+    }
+  }
+  if(!acts.length&&!notes.length) return null;
+  PENDING=acts;
+  const ln=id=>esc(PLAN.find(p=>p.id===id).name);
+  let h=acts.length?`Here's the change:<ul class="cmdlist">${acts.map(a=>a.t==='rm'?`<li><span class="bad">Remove</span> <b>${esc(a.name)}</b> from ${ln(a.lane)}</li>`:`<li><span class="ok">Add</span> <b>${esc(a.name)}</b> to ${ln(a.lane)} · Jam ${Math.round(a.e.h)}h, ${a.e.c?money(a.e.c)+' '+CUR[a.e.cur]:'cost ?'}${a.e.guess?' (estimate)':''}</li>`).join('')}</ul>`:'';
+  if(notes.length) h+=`<div class="muted" style="margin-top:6px">${notes.join('<br>')}</div>`;
+  if(acts.length) h+=`<div class="cbtns"><button type="button" class="cbtn" data-plango="1">Do it</button><button type="button" class="cbtn" data-goedit="${acts[acts.length-1].lane}" style="background:var(--surface3);color:var(--text)">Edit by hand</button></div>`;
+  return h;
+}
+function runPending(){
+  const acts=PENDING||[]; PENDING=null; const done=[];
+  acts.filter(a=>a.t==='rm').forEach(a=>{ const L=LANES.find(l=>l.id===a.lane), i=L?L.steps.findIndex(x=>x[0]===a.name):-1; if(i>=0){ editLane(a.lane,items=>items.splice(L.first+i,1)); done.push('Removed '+a.name); } });
+  acts.filter(a=>a.t==='add').forEach(a=>{ const st=addCatalog(a.lane,a.id,a.to); done.push(`Added ${a.name}${st?', starts '+(st.start<=Date.now()?'now':whenD(st.start))+(st.late?' (after the Jam, full price)':''):''}`); });
+  return done;
+}
 
 /* ===== Tabs ===== */
 const TITLES={today:'Today',plan:'Plan',progress:'Progress',tools:'Tools'};
