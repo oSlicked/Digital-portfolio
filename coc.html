@@ -619,8 +619,8 @@ const BOOSTS=[];
 const POTION_BUILDERS=['b1','b2','b3','b4','b5','b6'], POTION_LAB=['lab'];
 /* planned potion runs. Potions stack by time: 5 potions = 5 hours */
 const POTION_RUNS=[
-  {x:10,from:Date.parse('2026-11-12T16:00:00-05:00'),to:Date.parse('2026-11-12T21:00:00-05:00'),lanes:POTION_BUILDERS,label:'Builder Potion',n:5},
-  {x:24,from:Date.parse('2026-11-12T16:00:00-05:00'),to:Date.parse('2026-11-12T21:00:00-05:00'),lanes:POTION_LAB,label:'Research Potion',n:5},
+  {x:10,from:Date.parse('2026-11-12T14:01:00-05:00'),to:Date.parse('2026-11-12T20:01:00-05:00'),lanes:POTION_BUILDERS,label:'Builder Potion',n:6},
+  {x:24,from:Date.parse('2026-11-12T14:01:00-05:00'),to:Date.parse('2026-11-12T19:01:00-05:00'),lanes:POTION_LAB,label:'Research Potion',n:5},
 ];
 POTION_RUNS.forEach(b=>BOOSTS.push(b));
 /* a potion still running in the export, unless it is one of the planned runs above */
@@ -761,7 +761,7 @@ const PLAN_PATCHES=[
     {lane:'b5', item:['Hidden Tesla #3',68,'g',11.25e6,'',1000019,17]},
     {lane:'b3', item:['Gold Storage #4',66,'e',8.1e6,'',1000005,19], ifTaken:'Gold Storage #2'},
   ]},
-  /* Nov 12 potion run: 5 Builder and 5 Research Potions, 4:00 PM to 9:00 PM. Fill the Jam priced starts the potions open up. */
+  /* Nov 12 potion run: 5 Builder and 5 Research Potions planned (now 6 Builder from 2:01 PM to 8:01 PM, 5 Research from 2:01 PM to 7:01 PM). Fill the Jam priced starts the potions open up. */
   {key:'2026-11-12-potion-run', items:{'Builder Potion':-5,'Research Potion':-5}, adds:[
     {lane:'lab', after:'Ruin Witch 4', item:['Valkyrie 12',75.5,'d',170e3,'',4000012,12]},
     {lane:'lab', after:'Valkyrie 12', item:['Angry Spell 4',85,'d',190e3,'',26000123,4]},
@@ -771,6 +771,8 @@ const PLAN_PATCHES=[
     {lane:'b1', after:'Hidden Tesla #5', item:['Spring Trap #1',59.5,'g',7.2e6,'',12000001,13]},
     {lane:'b6', after:'Dragon Duke 22', item:['Grand Warden 84',43,'e',12.5e6,'',28000002,84], move:true},
   ]},
+  /* Nov 12, 2:01 PM magic items screenshot, after using all 6 Builder and 5 Research Potions */
+  {key:'2026-11-12-items-screenshot', setItems:{'Builder Potion':0,'Research Potion':0,'Training Potion':10,'Resource Potion':1,'Hero Potion':11,'Power Potion':4,'Rune of Gold':2,'Rune of Elixir':1,'Rune of Dark Elixir':1,'Pet Potion':0}},
 ];
 function applyPatches(){
   /* patches save without bumping the sync time, so a page load never pushes old data over a newer sync */
@@ -790,6 +792,7 @@ function applyPatches(){
       changed=true;
     });
     Object.entries(pt.items||{}).forEach(([k,d])=>{ const v=ITEMS[k]||{n:0,note:''}; v.n=Math.max(0,(v.n||0)+d); ITEMS[k]=v; itemsChanged=true; });
+    Object.entries(pt.setItems||{}).forEach(([k,n])=>{ const v=ITEMS[k]||{n:0,note:''}; v.n=n; ITEMS[k]=v; itemsChanged=true; });
     done.push(pt.key); newKey=true;
   });
   if(changed) raw(EDIT_KEY,EDITS);
@@ -984,7 +987,7 @@ function timeline(){
     return `<div class="tlrow" style="width:${W+LAB}px">${band}<div class="tllab">${esc(L.name)}<small>${p.q.length?'':L.id==='gob'?'gems':''}</small></div>${bars}</div>`;
   }).join('');
   const runs={}; POTION_RUNS.filter(B=>B.to>t0&&B.from<t1).forEach(B=>{ const k=B.from+'|'+B.to; (runs[k]=runs[k]||[]).push(B); });
-  const potionLines=Object.values(runs).map(g=>`<div class="vline pot" style="left:${x(g[0].from)}px"><em style="top:24px">Potions ${when(g[0].from)} to ${when(g[0].to)}: ${g.map(B=>(B.lanes.includes('lab')?'lab ':'builders ')+B.x+'x').join(', ')}</em></div>`).join('');
+  const potionLines=Object.values(runs).map((g,i)=>`<div class="vline pot" style="left:${x(g[0].from)}px"><em style="top:${24+i*18}px">Potions ${when(g[0].from)} to ${when(g[0].to)}: ${g.map(B=>(B.lanes.includes('lab')?'lab ':'builders ')+B.x+'x').join(', ')}</em></div>`).join('');
   const lines=potionLines+`<div class="vline jam" style="left:${x(JAM_END)}px"><em>Jam ends</em></div>`+(now>t0&&now<t1?`<div class="vline now" style="left:${x(now)}px"><em>Now</em></div>`:'');
   const tl=document.getElementById('tl');
   tl.innerHTML=`<div class="tlin" style="width:${W+LAB}px">${head}${rows}${lines}</div>`;
