@@ -619,8 +619,8 @@ const BOOSTS=[];
 const POTION_BUILDERS=['b1','b2','b3','b4','b5','b6'], POTION_LAB=['lab'];
 /* planned potion runs. Potions stack by time: 5 potions = 5 hours */
 const POTION_RUNS=[
-  {x:10,from:Date.parse('2026-11-12T13:00:00-05:00'),to:Date.parse('2026-11-12T18:00:00-05:00'),lanes:POTION_BUILDERS,label:'Builder Potion',n:5},
-  {x:24,from:Date.parse('2026-11-12T13:00:00-05:00'),to:Date.parse('2026-11-12T18:00:00-05:00'),lanes:POTION_LAB,label:'Research Potion',n:5},
+  {x:10,from:Date.parse('2026-11-12T16:00:00-05:00'),to:Date.parse('2026-11-12T21:00:00-05:00'),lanes:POTION_BUILDERS,label:'Builder Potion',n:5},
+  {x:24,from:Date.parse('2026-11-12T16:00:00-05:00'),to:Date.parse('2026-11-12T21:00:00-05:00'),lanes:POTION_LAB,label:'Research Potion',n:5},
 ];
 POTION_RUNS.forEach(b=>BOOSTS.push(b));
 /* a potion still running in the export, unless it is one of the planned runs above */
@@ -761,7 +761,7 @@ const PLAN_PATCHES=[
     {lane:'b5', item:['Hidden Tesla #3',68,'g',11.25e6,'',1000019,17]},
     {lane:'b3', item:['Gold Storage #4',66,'e',8.1e6,'',1000005,19], ifTaken:'Gold Storage #2'},
   ]},
-  /* Nov 12 potion run: 5 Builder and 5 Research Potions, 1:00 PM to 6:00 PM. Fill the Jam priced starts the potions open up. */
+  /* Nov 12 potion run: 5 Builder and 5 Research Potions, 4:00 PM to 9:00 PM. Fill the Jam priced starts the potions open up. */
   {key:'2026-11-12-potion-run', items:{'Builder Potion':-5,'Research Potion':-5}, adds:[
     {lane:'lab', after:'Ruin Witch 4', item:['Valkyrie 12',75.5,'d',170e3,'',4000012,12]},
     {lane:'lab', after:'Valkyrie 12', item:['Angry Spell 4',85,'d',190e3,'',26000123,4]},
