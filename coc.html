@@ -528,7 +528,7 @@ const DONE_AT_BAKED = 91;                           // upgrade levels finished f
 /* item: [name, Jam hours before Gold Pass, currency g/e/d, cost, flag, export ID, level it upgrades to] */
 const PLAN = [
   {id:'gob', name:'Goblin Builder', kind:'gob', items:[
-    ['Giga Bomb 4',68,'g',9e6,'gem',12000020,4],['Seeking Air Mine #2',62,'g',8.55e6,'gem',12000006,8]]},
+    ['Giga Bomb 4',68,'g',9e6,'gem',12000020,4],['Mortar #3',66,'g',9.45e6,'gem',1000013,18]]},
   {id:'b1', name:'Builder 1', kind:'b', items:[
     ['Grand Warden 80',43,'e',12.5e6,'',28000002,80],['Grand Warden 81',43,'e',12.5e6,'',28000002,81],['Grand Warden 82',43,'e',12.5e6,'',28000002,82],
     ['Grand Warden 83',43,'e',12.5e6,'',28000002,83],['Hidden Tesla #5',68,'g',11.25e6,'',1000019,17],['Spring Trap #1',59.5,'g',7.2e6,'',12000001,13]]},
@@ -538,7 +538,7 @@ const PLAN = [
     ['Hidden Tesla #4',68,'g',11.25e6,'',1000019,17],["Builder's Hut #2",62,'g',10.8e6,'',1000015,8],['Elixir Storage #2',66,'g',8.1e6,'',1000003,19],['Elixir Storage #3',66,'g',8.1e6,'',1000003,19]]},
   {id:'b4', name:'Builder 4', kind:'b', items:[
     ['Barbarian King 107',43,'d',187.5e3,'',28000000,107],['Barbarian King 108',43,'d',187.5e3,'',28000000,108],['Barbarian King 109',43,'d',187.5e3,'',28000000,109],
-    ['Barbarian King 110',43,'d',187.5e3,'',28000000,110],['Mortar #3',66,'g',9.45e6,'',1000013,18],['Seeking Air Mine #1',62,'g',8.55e6,'',12000006,8]]},
+    ['Barbarian King 110',43,'d',187.5e3,'',28000000,110],['Seeking Air Mine #1',62,'g',8.55e6,'',12000006,8],['Seeking Air Mine #2',62,'g',8.55e6,'',12000006,8]]},
   {id:'b5', name:'Builder 5', kind:'b', items:[
     ['Archer Queen 104',43,'d',187.5e3,'',28000001,104],['Archer Queen 105',43,'d',187.5e3,'',28000001,105],['Archer Queen 106',43,'d',187.5e3,'',28000001,106],
     ['Archer Queen 107',43,'d',187.5e3,'',28000001,107],['Archer Queen 108',43,'d',187.5e3,'',28000001,108],['Archer Queen 109',43,'d',187.5e3,'',28000001,109],['Archer Queen 110',43,'d',187.5e3,'',28000001,110],
@@ -773,7 +773,8 @@ const PLAN_PATCHES=[
   ]},
   /* Nov 12, 2:01 PM magic items screenshot, after using all 6 Builder and 5 Research Potions */
   {key:'2026-11-12-sky-wagon-3', adds:[{lane:'glab', after:'Sky Wagon 2', item:['Sky Wagon 3',73,'e',13e6,'gem',4000188,3]}], marks:['glab|Sky Wagon 3']},
-  {key:'2026-11-12-goblin-starts', adds:[{lane:'gob', item:['Seeking Air Mine #2',62,'g',8.55e6,'gem',12000006,8]},{lane:'glab', after:'Sky Wagon 3', item:['Miner 12',78.5,'e',14e6,'gem',4000024,12]}], gems:583},
+  {key:'2026-11-12-goblin-starts', adds:[{lane:'glab', after:'Sky Wagon 3', item:['Miner 12',78.5,'e',14e6,'gem',4000024,12]}], gems:583},
+  {key:'2026-11-12-goblin-mortar', removes:[{lane:'gob',name:'Seeking Air Mine #2'}], adds:[{lane:'gob', item:['Mortar #3',66,'g',9.45e6,'gem',1000013,18], move:true},{lane:'b4', after:'Seeking Air Mine #1', item:['Seeking Air Mine #2',62,'g',8.55e6,'',12000006,8]}]},
   {key:'2026-11-12-items-screenshot', setItems:{'Builder Potion':0,'Research Potion':0,'Training Potion':10,'Resource Potion':1,'Hero Potion':11,'Power Potion':4,'Rune of Gold':2,'Rune of Elixir':1,'Rune of Dark Elixir':1,'Pet Potion':0}},
 ];
 function applyPatches(){
@@ -783,6 +784,7 @@ function applyPatches(){
   const allNames=()=>new Set(PLAN.flatMap(P=>laneItems(P).map(x=>fixName(x[0]).toLowerCase())));
   PLAN_PATCHES.forEach(pt=>{
     if(done.includes(pt.key)) return;
+    (pt.removes||[]).forEach(r=>{ const E=EDITS[r.lane]; if(!E) return; const i=E.findIndex(x=>fixName(x[0]).toLowerCase()===r.name.toLowerCase()); if(i>=0){ E.splice(i,1); changed=true; } });
     (pt.adds||[]).forEach(a=>{
       if(!EDITS[a.lane]) return;                       // not edited: the built in plan already has it
       let item=a.item.slice(), nm=item[0].toLowerCase();
