@@ -615,8 +615,8 @@ const baseAtLeast=(id,to)=>(PLAN_BASE[id]||[]).filter(e=>e[0]>=to).reduce((a,e)=
 const isMulti=id=>(id in PLAN_BASE)||(MULTI.some(k=>(BAKED[k]||[]).some(e=>e.data===id)) && countOf(BAKED,id)>1);
 const nameOf=id=>NAMES[id]||('#'+id);
 const BOOSTS=[];
-/* Potions boost the 6 regular builders and the main Laboratory only (not the Goblin Builder, Goblin Lab or Pet House). */
-const POTION_BUILDERS=['b1','b2','b3','b4','b5','b6'], POTION_LAB=['lab'];
+/* Builder Potions boost the 6 builders and the Goblin Builder. Research Potions boost the Laboratory and the Goblin Lab (not the Pet House). */
+const POTION_BUILDERS=['gob','b1','b2','b3','b4','b5','b6'], POTION_LAB=['lab','glab'];
 /* planned potion runs. Potions stack by time: 5 potions = 5 hours */
 const POTION_RUNS=[
   {x:10,from:Date.parse('2026-11-12T14:01:00-05:00'),to:Date.parse('2026-11-12T20:01:00-05:00'),lanes:POTION_BUILDERS,label:'Builder Potion',n:6},
