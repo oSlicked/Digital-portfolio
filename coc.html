@@ -169,6 +169,10 @@ label.fl{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-
 .vline.jam{border-left:2px dashed var(--orange)}
 .vline em{position:absolute;top:5px;left:4px;font-size:10px;font-weight:700;font-style:normal;color:#fff;padding:2px 7px;border-radius:6px;white-space:nowrap}
 .vline.now em{background:var(--blue)}.vline.jam em{background:var(--orange);color:#2a1300}
+.vline.pot{border-left:1px dotted rgba(140,192,255,.7)}.vline.pot em{background:rgba(76,157,255,.9);font-size:9.5px}
+.tboost{position:absolute;top:2px;bottom:2px;border-radius:6px;z-index:0;pointer-events:auto}
+.tboost.bb{background:rgba(76,157,255,.22);box-shadow:inset 0 0 0 1px rgba(76,157,255,.55)}
+.tboost.rb{background:rgba(201,104,234,.22);box-shadow:inset 0 0 0 1px rgba(201,104,234,.6)}
 .note{font-size:12.5px;color:var(--muted);padding:12px 16px;border-top:1px solid var(--border);line-height:1.5}
 
 /* tables */
@@ -367,7 +371,7 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
   <div class="lanes" id="lanes"></div>
   <div class="sh"><h2>Timeline</h2><small>swipe sideways</small></div>
   <div class="card"><div class="tl" id="tl"></div>
-    <div class="note">Striped bars are already running. Anything that starts left of the orange line gets the Jam price, even if it finishes after. No starts are planned while you sleep (<span class="sleepTxt"></span>).</div>
+    <div class="note">Striped bars are already running. Shaded blue (builders) and purple (lab) is the potion boost window. Anything that starts left of the orange line gets the Jam price, even if it finishes after. No starts are planned while you sleep (<span class="sleepTxt"></span>).</div>
   </div>
 </section>
 
@@ -527,24 +531,24 @@ const PLAN = [
     ['Giga Bomb 4',68,'g',9e6,'gem',12000020,4]]},
   {id:'b1', name:'Builder 1', kind:'b', items:[
     ['Grand Warden 80',43,'e',12.5e6,'',28000002,80],['Grand Warden 81',43,'e',12.5e6,'',28000002,81],['Grand Warden 82',43,'e',12.5e6,'',28000002,82],
-    ['Grand Warden 83',43,'e',12.5e6,'',28000002,83],['Hidden Tesla #5',68,'g',11.25e6,'',1000019,17]]},
+    ['Grand Warden 83',43,'e',12.5e6,'',28000002,83],['Hidden Tesla #5',68,'g',11.25e6,'',1000019,17],['Spring Trap #1',59.5,'g',7.2e6,'',12000001,13]]},
   {id:'b2', name:'Builder 2', kind:'b', items:[
-    ['Elixir Storage #4',66,'g',8.1e6,'',1000003,19],['Elixir Storage #1',66,'g',8.1e6,'',1000003,19],['Gold Storage #1',66,'e',8.1e6,'',1000005,19]]},
+    ['Elixir Storage #4',66,'g',8.1e6,'',1000003,19],['Elixir Storage #1',66,'g',8.1e6,'',1000003,19],['Gold Storage #1',66,'e',8.1e6,'',1000005,19],['Giant Bomb #1',56.5,'g',7.65e6,'',12000002,12],['Gold Storage #2',66,'e',8.1e6,'',1000005,19]]},
   {id:'b3', name:'Builder 3', kind:'b', items:[
-    ['Hidden Tesla #4',68,'g',11.25e6,'',1000019,17],['Elixir Storage #2',66,'g',8.1e6,'',1000003,19],["Builder's Hut #2",62,'g',10.8e6,'',1000015,8],['Elixir Storage #3',66,'g',8.1e6,'',1000003,19],['Gold Storage #2',66,'e',8.1e6,'',1000005,19]]},
+    ['Hidden Tesla #4',68,'g',11.25e6,'',1000019,17],["Builder's Hut #2",62,'g',10.8e6,'',1000015,8],['Elixir Storage #2',66,'g',8.1e6,'',1000003,19],['Elixir Storage #3',66,'g',8.1e6,'',1000003,19]]},
   {id:'b4', name:'Builder 4', kind:'b', items:[
     ['Barbarian King 107',43,'d',187.5e3,'',28000000,107],['Barbarian King 108',43,'d',187.5e3,'',28000000,108],['Barbarian King 109',43,'d',187.5e3,'',28000000,109],
-    ['Barbarian King 110',43,'d',187.5e3,'',28000000,110],['Mortar #3',66,'g',9.45e6,'',1000013,18]]},
+    ['Barbarian King 110',43,'d',187.5e3,'',28000000,110],['Mortar #3',66,'g',9.45e6,'',1000013,18],['Seeking Air Mine #1',62,'g',8.55e6,'',12000006,8]]},
   {id:'b5', name:'Builder 5', kind:'b', items:[
     ['Archer Queen 104',43,'d',187.5e3,'',28000001,104],['Archer Queen 105',43,'d',187.5e3,'',28000001,105],['Archer Queen 106',43,'d',187.5e3,'',28000001,106],
     ['Archer Queen 107',43,'d',187.5e3,'',28000001,107],['Archer Queen 108',43,'d',187.5e3,'',28000001,108],['Archer Queen 109',43,'d',187.5e3,'',28000001,109],['Archer Queen 110',43,'d',187.5e3,'',28000001,110],
     ['Hidden Tesla #3',68,'g',11.25e6,'',1000019,17]]},
   {id:'b6', name:'Builder 6', kind:'b', items:[
     ['Dragon Duke 18',35,'d',225e3,'',28000007,18],['Dragon Duke 19',36,'d',230e3,'',28000007,19],['Dragon Duke 20',36,'d',235e3,'',28000007,20],
-    ['Dragon Duke 21',37,'d',240e3,'',28000007,21],['Dragon Duke 22',37,'d',245e3,'',28000007,22]]},
+    ['Dragon Duke 21',37,'d',240e3,'',28000007,21],['Dragon Duke 22',37,'d',245e3,'',28000007,22],['Grand Warden 84',43,'e',12.5e6,'',28000002,84]]},
   {id:'lab', name:'Laboratory', kind:'lab', items:[
     ['Hog Rider 15',78.5,'d',170e3,'',4000011,15],['Witch 8',83.5,'d',177.5e3,'',4000015,8],['Ruin Witch 2',59.5,'d',110e3,'',4000109,2],
-    ['Druid 6',83.5,'d',190e3,'',4000123,6],['Ruin Witch 3',65,'d',150e3,'',4000109,3],['Ruin Witch 4',83.5,'d',190e3,'',4000109,4]]},
+    ['Druid 6',83.5,'d',190e3,'',4000123,6],['Ruin Witch 3',65,'d',150e3,'',4000109,3],['Ruin Witch 4',83.5,'d',190e3,'',4000109,4],['Valkyrie 12',75.5,'d',170e3,'',4000012,12],['Angry Spell 4',85,'d',190e3,'',26000123,4]]},
   {id:'glab', name:'Goblin Lab', kind:'glab', items:[
     ['Battle Drill 6',83.5,'e',14e6,'gem',4000092,6],['Log Launcher 6',81,'e',13.5e6,'gem',4000087,6],['Golem 15',78.5,'d',175e3,'gem',4000013,15],
     ['Clone Spell 9',73,'e',11.7e6,'gem',26000016,9],['Sky Wagon 2',54,'e',9.9e6,'gem',4000188,2]]},
@@ -611,8 +615,18 @@ const baseAtLeast=(id,to)=>(PLAN_BASE[id]||[]).filter(e=>e[0]>=to).reduce((a,e)=
 const isMulti=id=>(id in PLAN_BASE)||(MULTI.some(k=>(BAKED[k]||[]).some(e=>e.data===id)) && countOf(BAKED,id)>1);
 const nameOf=id=>NAMES[id]||('#'+id);
 const BOOSTS=[];
-if((EXP.boosts||{}).builder_boost>0) BOOSTS.push({x:10,from:EXPORT,to:EXPORT+EXP.boosts.builder_boost*1000,lanes:BUILDER_LANES,label:'Builder Potion'});
-if((EXP.boosts||{}).lab_boost>0) BOOSTS.push({x:24,from:EXPORT,to:EXPORT+EXP.boosts.lab_boost*1000,lanes:['lab','glab'],label:'Research Potion'});
+/* Potions boost the 6 regular builders and the main Laboratory only (not the Goblin Builder, Goblin Lab or Pet House). */
+const POTION_BUILDERS=['b1','b2','b3','b4','b5','b6'], POTION_LAB=['lab'];
+/* planned potion runs. Potions stack by time: 5 potions = 5 hours */
+const POTION_RUNS=[
+  {x:10,from:Date.parse('2026-11-12T13:00:00-05:00'),to:Date.parse('2026-11-12T18:00:00-05:00'),lanes:POTION_BUILDERS,label:'Builder Potion',n:5},
+  {x:24,from:Date.parse('2026-11-12T13:00:00-05:00'),to:Date.parse('2026-11-12T18:00:00-05:00'),lanes:POTION_LAB,label:'Research Potion',n:5},
+];
+POTION_RUNS.forEach(b=>BOOSTS.push(b));
+/* a potion still running in the export, unless it is one of the planned runs above */
+const runCovers=(label,t)=>POTION_RUNS.some(b=>b.label===label&&t>=b.from-10*60e3&&t<b.to);
+if((EXP.boosts||{}).builder_boost>0&&!runCovers('Builder Potion',EXPORT)) BOOSTS.push({x:10,from:EXPORT,to:EXPORT+EXP.boosts.builder_boost*1000,lanes:POTION_BUILDERS,label:'Builder Potion'});
+if((EXP.boosts||{}).lab_boost>0&&!runCovers('Research Potion',EXPORT)) BOOSTS.push({x:24,from:EXPORT,to:EXPORT+EXP.boosts.lab_boost*1000,lanes:POTION_LAB,label:'Research Potion'});
 
 /* Progress since the planner started on Nov 1. Row: [name, Nov 1, now, after the Jam plan, max].
    A value is a level, or [level, small note]. */
@@ -620,7 +634,7 @@ const PROGRESS = [
   {group:'Heroes', rows:[
     ['Barbarian King',101,106,110,110],
     ['Archer Queen',100,103,110,110],
-    ['Grand Warden',77,79,83,85],
+    ['Grand Warden',77,79,84,85],
     ['Royal Champion',54,55,55,55],
     ['Minion Prince',95,95,95,95],
     ['Dragon Duke',9,16,22,25],
@@ -648,14 +662,14 @@ const PROGRESS = [
     ['Spell Tower x2',3,[4,'1/2'],[4,'2/2'],4],
     ['Giga Bomb',3,3,4,4],
     ['Elixir Storage x4',18,[19,'0/4'],[19,'4/4'],19],
-    ['Gold Storage x4',18,[19,'0/4'],[19,'1/4'],19],
+    ['Gold Storage x4',18,[19,'0/4'],[19,'2/4'],19],
   ]},
   {group:'Lab', rows:[
     ['Balloon',12,13,13,13],['Baby Dragon',11,12,12,12],['Yeti',7,8,8,8],['Thrower',3,4,4,4],
     ['Electro Titan',4,5,5,5],['Root Rider',3,4,4,4],['Headhunter',3,4,4,4],['Lava Hound',7,8,8,8],
     ['Meteor Golem',2,3,3,3],['Hog Rider',14,14,15,15],['Witch',7,7,8,8],['Ruin Witch',0,1,4,4],['Druid',5,5,6,6],['Battle Drill',5,5,6,6],['Log Launcher',5,5,6,6],['Golem',14,14,15,15],['Sky Wagon',1,1,2,4],['Clone Spell',8,8,9,9],
     ['Rage Spell',6,7,7,7],['Freeze Spell',7,8,8,8],['Earthquake Spell',7,8,8,8],['Ice Block Spell',5,6,6,6],
-    ['Overgrowth Spell',4,5,5,5],['Revive Spell',4,5,5,5],['Recall Spell',6,6,7,7],['Angry Spell',2,2,3,4],
+    ['Overgrowth Spell',4,5,5,5],['Revive Spell',4,5,5,5],['Recall Spell',6,6,7,7],['Angry Spell',2,2,4,4],['Valkyrie',11,11,12,12],
     ['Stone Slammer',5,6,6,6],['Siege Barracks',5,6,6,6],['Battle Blimp',5,6,6,6],
   ]},
 ];
@@ -664,11 +678,10 @@ function levelSum(x){ let t=0; ['heroes','pets','guardians','buildings','traps',
 /* full-price hours after the Jam */
 const AFTER_B = [
   ["Builder's Hut #5",136,'g',21.6e6,'Goblin Builder in the Jam if you reach about 100 gems'],
-  ['Gold Storage #2',135,'e',16.2e6,''],
-  ['Seeking Air Mines 1 to 3',372,'g',51.3e6,'Before TH19'],
-  ['Giant Bombs 1 to 4',452,'g',61.2e6,'Before TH19'],
+  ['Seeking Air Mines 2 and 3',248,'g',34.2e6,'Before TH19'],
+  ['Giant Bombs 2 to 4',339,'g',45.9e6,'Before TH19'],
   ['Skeleton Traps 1 to 4',304,'g',64.8e6,'Before TH19'],
-  ['Spring Traps 1 to 3',357,'g',43.2e6,'Before TH19'],
+  ['Spring Traps 2 and 3',238,'g',28.8e6,'Before TH19'],
   ['Air Bomb #8, levels 5 to 13',300,'g',45e6,'Still level 4, short early levels (estimate)'],
   ['Smasher 5',120,'e',16e6,'Guardian (estimate)'],
   ['Seeking Air Mines 4 to 9',744,'g',102.6e6,''],
@@ -679,7 +692,7 @@ const AFTER_B = [
   ['Gold Storage #3 and #4',270,'e',32.4e6,''],
   ['Dark Elixir Drills x2',130,'e',21.6e6,''],
   ['Logger 2 to 5',430,'e',54.9e6,'Guardian'],
-  ['Grand Warden 84 and 85',172,'e',50e6,''],
+  ['Grand Warden 85',86,'e',25e6,''],
   ['Dragon Duke 23 to 25',255,'d',2.9e6,'Estimate'],
 ];
 const AFTER_L = [
@@ -748,22 +761,40 @@ const PLAN_PATCHES=[
     {lane:'b5', item:['Hidden Tesla #3',68,'g',11.25e6,'',1000019,17]},
     {lane:'b3', item:['Gold Storage #4',66,'e',8.1e6,'',1000005,19], ifTaken:'Gold Storage #2'},
   ]},
+  /* Nov 12 potion run: 5 Builder and 5 Research Potions, 1:00 PM to 6:00 PM. Fill the Jam priced starts the potions open up. */
+  {key:'2026-11-12-potion-run', items:{'Builder Potion':-5,'Research Potion':-5}, adds:[
+    {lane:'lab', after:'Ruin Witch 4', item:['Valkyrie 12',75.5,'d',170e3,'',4000012,12]},
+    {lane:'lab', after:'Valkyrie 12', item:['Angry Spell 4',85,'d',190e3,'',26000123,4]},
+    {lane:'b2', after:'Gold Storage #1', item:['Giant Bomb #1',56.5,'g',7.65e6,'',12000002,12]},
+    {lane:'b2', after:'Giant Bomb #1', item:['Gold Storage #2',66,'e',8.1e6,'',1000005,19], move:true},
+    {lane:'b4', after:'Mortar #3', item:['Seeking Air Mine #1',62,'g',8.55e6,'',12000006,8]},
+    {lane:'b1', after:'Hidden Tesla #5', item:['Spring Trap #1',59.5,'g',7.2e6,'',12000001,13]},
+    {lane:'b6', after:'Dragon Duke 22', item:['Grand Warden 84',43,'e',12.5e6,'',28000002,84], move:true},
+  ]},
 ];
 function applyPatches(){
-  const done=store.get('coc-patches-v1',[])||[]; let changed=false;
+  /* patches save without bumping the sync time, so a page load never pushes old data over a newer sync */
+  const raw=(k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} };
+  const done=store.get('coc-patches-v1',[])||[]; let changed=false, itemsChanged=false, newKey=false;
   const allNames=()=>new Set(PLAN.flatMap(P=>laneItems(P).map(x=>fixName(x[0]).toLowerCase())));
   PLAN_PATCHES.forEach(pt=>{
     if(done.includes(pt.key)) return;
-    pt.adds.forEach(a=>{
+    (pt.adds||[]).forEach(a=>{
       if(!EDITS[a.lane]) return;                       // not edited: the built in plan already has it
-      const names=allNames(); let item=a.item.slice();
-      if(names.has(item[0].toLowerCase())) return;     // already planned somewhere
-      EDITS[a.lane].push(item); changed=true;
+      let item=a.item.slice(), nm=item[0].toLowerCase();
+      if(a.move) Object.keys(EDITS).forEach(l=>{ if(l===a.lane) return; const L=LANES.find(x=>x.id===l), first=L?L.first:0;
+        const i=EDITS[l].findIndex((x,j)=>j>=first&&fixName(x[0]).toLowerCase()===nm); if(i>=0){ EDITS[l].splice(i,1); changed=true; } });
+      if(allNames().has(nm)) return;                   // already planned somewhere
+      const at=a.after?EDITS[a.lane].findIndex(x=>fixName(x[0]).toLowerCase()===a.after.toLowerCase()):-1;
+      if(at>=0) EDITS[a.lane].splice(at+1,0,item); else EDITS[a.lane].push(item);
+      changed=true;
     });
-    done.push(pt.key);
+    Object.entries(pt.items||{}).forEach(([k,d])=>{ const v=ITEMS[k]||{n:0,note:''}; v.n=Math.max(0,(v.n||0)+d); ITEMS[k]=v; itemsChanged=true; });
+    done.push(pt.key); newKey=true;
   });
-  if(changed) store.set(EDIT_KEY,EDITS);
-  store.set('coc-patches-v1',done);
+  if(changed) raw(EDIT_KEY,EDITS);
+  if(itemsChanged) raw(ITEM_KEY,ITEMS);
+  if(newKey) raw('coc-patches-v1',done);
 }
 let LANES=[], EXTRA=[], plan=[];
 function rebuild(){
@@ -817,7 +848,7 @@ function header(){
   document.getElementById('jamBig').innerHTML=left>0?`${d}<span>d</span>${h}<span>h</span>${m}<span>m</span>${String(s).padStart(2,'0')}<span>s</span>`:'Over';
   document.getElementById('jamSub').textContent=left>0?'Ends '+fmtDay.format(JAM_END)+' at '+when(JAM_END):'The Hammer Jam has ended. Full prices now.';
   document.getElementById('boosts').innerHTML=BOOSTS.filter(b=>b.to>now).map(b=>
-    `<span class="pill"><i style="background:${b.x===10?'var(--blue)':'var(--elix)'}"></i>${esc(b.label)} ${b.x}x · until ${when(b.to)}</span>`).join('');
+    `<span class="pill"><i style="background:${b.x===10?'var(--blue)':'var(--elix)'}"></i>${b.n?b.n+' ':''}${esc(b.label)}${b.n>1?'s':''} ${b.x}x · ${b.from>now?whenD(b.from)+' to '+when(b.to):'until '+when(b.to)}</span>`).join('');
 }
 function stats(){
   const now=Date.now();
@@ -949,9 +980,12 @@ function timeline(){
     const L=p.L;
     let bars=!L.cur?'':`<div class="tbar curb" style="left:${x(EXPORT)}px;width:${Math.max(4,x(p.curEnd)-x(EXPORT))}px" title="${esc(L.cur)}">${esc(L.cur)}</div>`;
     p.q.forEach(s=>{ bars+=`<div class="tbar ${s.cur}" style="left:${x(s.start)}px;width:${Math.max(4,x(s.end)-x(s.start)-2)}px" title="${esc(s.name)}: ${whenD(s.start)} to ${whenD(s.end)}">${esc(s.name)}</div>`; });
-    return `<div class="tlrow" style="width:${W+LAB}px"><div class="tllab">${esc(L.name)}<small>${p.q.length?'':L.id==='gob'?'gems':''}</small></div>${bars}</div>`;
+    const band=boostsFor(L.id).filter(B=>B.to>t0&&B.from<t1).map(B=>`<div class="tboost ${B.x===10?'bb':'rb'}" style="left:${x(B.from)}px;width:${Math.max(3,x(B.to)-x(B.from))}px" title="${esc(B.label)} ${B.x}x: ${whenD(B.from)} to ${whenD(B.to)}"></div>`).join('');
+    return `<div class="tlrow" style="width:${W+LAB}px">${band}<div class="tllab">${esc(L.name)}<small>${p.q.length?'':L.id==='gob'?'gems':''}</small></div>${bars}</div>`;
   }).join('');
-  const lines=`<div class="vline jam" style="left:${x(JAM_END)}px"><em>Jam ends</em></div>`+(now>t0&&now<t1?`<div class="vline now" style="left:${x(now)}px"><em>Now</em></div>`:'');
+  const runs={}; POTION_RUNS.filter(B=>B.to>t0&&B.from<t1).forEach(B=>{ const k=B.from+'|'+B.to; (runs[k]=runs[k]||[]).push(B); });
+  const potionLines=Object.values(runs).map(g=>`<div class="vline pot" style="left:${x(g[0].from)}px"><em style="top:24px">Potions ${when(g[0].from)} to ${when(g[0].to)}: ${g.map(B=>(B.lanes.includes('lab')?'lab ':'builders ')+B.x+'x').join(', ')}</em></div>`).join('');
+  const lines=potionLines+`<div class="vline jam" style="left:${x(JAM_END)}px"><em>Jam ends</em></div>`+(now>t0&&now<t1?`<div class="vline now" style="left:${x(now)}px"><em>Now</em></div>`:'');
   const tl=document.getElementById('tl');
   tl.innerHTML=`<div class="tlin" style="width:${W+LAB}px">${head}${rows}${lines}</div>`;
   if(!tl.dataset.scrolled&&tl.offsetParent){ tl.scrollLeft=Math.max(0,x(now)-LAB-40); tl.dataset.scrolled=1; }
@@ -1526,7 +1560,7 @@ function aiUse(){ try{ const u=JSON.parse(localStorage.getItem(AI_USE)||'null');
 function aiSystem(){
   const now=Date.now(), f=t=>whenD(t), cn={g:'gold',e:'elixir',d:'DE'};
   let s=`You are the helper inside a private Clash of Clans upgrade planner web page (Town Hall 18, preparing for TH19). Answer from the PLAN DATA below plus general Clash of Clans knowledge. If the data doesn't cover something, say so briefly instead of guessing numbers.
-Style: short and phone friendly (usually under 100 words). Plain text; **bold** and lines starting with "- " are allowed. Never use dashes (— or –) as punctuation. Times are Toronto time, written like "Sun, Nov 15, 10:20 PM".
+Style: short and phone friendly (usually under 100 words). Plain text; **bold** and lines starting with "- " are allowed. Never use em dashes or en dashes as punctuation. Times are Toronto time, written like "Sun, Nov 15, 10:20 PM".
 Player goals: be as ready for TH19 as possible, about 92 to 93% overall at TH18 without being more than 7 to 8% rushed. The lab is the bottleneck. Dark elixir is easy for them to farm. Supercharging is pointless with TH19 coming. Hero equipment doesn't count toward max. They don't use Dragon Duke in their army. Best Jam value: start the longest, most expensive upgrades before the Jam ends; the Jam price locks in at start (about half cost and time).
 Actions: if the user clearly asks you to add or remove an upgrade, put ONE line at the very end in this exact form and the page will show a confirm button:
 [[add|laneId|Upgrade name and level, like Grand Warden 84]]
@@ -1933,7 +1967,7 @@ document.querySelector('.tabbar').addEventListener('click',e=>{ const b=e.target
 /* ===== Run ===== */
 function renderLive(){ header(); upNext(); stats(); loot(); if(!document.activeElement||!document.getElementById('lanes').contains(document.activeElement)) lanes(); timeline(); }
 function renderAll(){ renderLive(); progress(); after(); renderGems(); renderItems(); renderLoot(); try{ renderPct(); }catch(e){ console.error(e); } }
-try{ applyPatches(); }catch(e){}
+try{ rebuild(); applyPatches(); }catch(e){ console.error(e); }
 rebuild(); renderAll(); renderSync(); renderAI(); if(syncCfg()) syncPull().catch(syncErr);
 try{ const t=sessionStorage.getItem('coc-tab'); if(t&&TITLES[t]) go(t); }catch(e){}
 setInterval(()=>{ header(); const now=Date.now(); document.querySelectorAll('.cd').forEach(n=>n.textContent=dur(+n.dataset.to-now)); },1000);
