@@ -528,7 +528,7 @@ const DONE_AT_BAKED = 91;                           // upgrade levels finished f
 /* item: [name, Jam hours before Gold Pass, currency g/e/d, cost, flag, export ID, level it upgrades to] */
 const PLAN = [
   {id:'gob', name:'Goblin Builder', kind:'gob', items:[
-    ['Giga Bomb 4',68,'g',9e6,'gem',12000020,4]]},
+    ['Giga Bomb 4',68,'g',9e6,'gem',12000020,4],['Seeking Air Mine #2',62,'g',8.55e6,'gem',12000006,8]]},
   {id:'b1', name:'Builder 1', kind:'b', items:[
     ['Grand Warden 80',43,'e',12.5e6,'',28000002,80],['Grand Warden 81',43,'e',12.5e6,'',28000002,81],['Grand Warden 82',43,'e',12.5e6,'',28000002,82],
     ['Grand Warden 83',43,'e',12.5e6,'',28000002,83],['Hidden Tesla #5',68,'g',11.25e6,'',1000019,17],['Spring Trap #1',59.5,'g',7.2e6,'',12000001,13]]},
@@ -551,7 +551,7 @@ const PLAN = [
     ['Druid 6',83.5,'d',190e3,'',4000123,6],['Ruin Witch 3',65,'d',150e3,'',4000109,3],['Ruin Witch 4',83.5,'d',190e3,'',4000109,4],['Valkyrie 12',75.5,'d',170e3,'',4000012,12],['Angry Spell 4',85,'d',190e3,'',26000123,4]]},
   {id:'glab', name:'Goblin Lab', kind:'glab', items:[
     ['Battle Drill 6',83.5,'e',14e6,'gem',4000092,6],['Log Launcher 6',81,'e',13.5e6,'gem',4000087,6],['Golem 15',78.5,'d',175e3,'gem',4000013,15],
-    ['Clone Spell 9',73,'e',11.7e6,'gem',26000016,9],['Sky Wagon 2',54,'e',9.9e6,'gem',4000188,2],['Sky Wagon 3',73,'e',13e6,'gem',4000188,3]]},
+    ['Clone Spell 9',73,'e',11.7e6,'gem',26000016,9],['Sky Wagon 2',54,'e',9.9e6,'gem',4000188,2],['Sky Wagon 3',73,'e',13e6,'gem',4000188,3],['Miner 12',78.5,'e',14e6,'gem',4000024,12]]},
   {id:'pet', name:'Pet House', kind:'pet', items:[
     ['Diggy 13',39,'d',100e3,'',73000008,13],['Diggy 14',41.4,'d',111.6e3,'',73000008,14],['Diggy 15',43.2,'d',126e3,'',73000008,15]]},
 ];
@@ -678,7 +678,7 @@ function levelSum(x){ let t=0; ['heroes','pets','guardians','buildings','traps',
 /* full-price hours after the Jam */
 const AFTER_B = [
   ["Builder's Hut #5",136,'g',21.6e6,'Goblin Builder in the Jam if you reach about 100 gems'],
-  ['Seeking Air Mines 2 and 3',248,'g',34.2e6,'Before TH19'],
+  ['Seeking Air Mine #3',124,'g',17.1e6,'Before TH19'],
   ['Giant Bombs 2 to 4',339,'g',45.9e6,'Before TH19'],
   ['Skeleton Traps 1 to 4',304,'g',64.8e6,'Before TH19'],
   ['Spring Traps 2 and 3',238,'g',28.8e6,'Before TH19'],
@@ -773,6 +773,7 @@ const PLAN_PATCHES=[
   ]},
   /* Nov 12, 2:01 PM magic items screenshot, after using all 6 Builder and 5 Research Potions */
   {key:'2026-11-12-sky-wagon-3', adds:[{lane:'glab', after:'Sky Wagon 2', item:['Sky Wagon 3',73,'e',13e6,'gem',4000188,3]}], marks:['glab|Sky Wagon 3']},
+  {key:'2026-11-12-goblin-starts', adds:[{lane:'gob', item:['Seeking Air Mine #2',62,'g',8.55e6,'gem',12000006,8]},{lane:'glab', after:'Sky Wagon 3', item:['Miner 12',78.5,'e',14e6,'gem',4000024,12]}], gems:583},
   {key:'2026-11-12-items-screenshot', setItems:{'Builder Potion':0,'Research Potion':0,'Training Potion':10,'Resource Potion':1,'Hero Potion':11,'Power Potion':4,'Rune of Gold':2,'Rune of Elixir':1,'Rune of Dark Elixir':1,'Pet Potion':0}},
 ];
 function applyPatches(){
@@ -793,6 +794,7 @@ function applyPatches(){
       changed=true;
     });
     Object.entries(pt.items||{}).forEach(([k,d])=>{ const v=ITEMS[k]||{n:0,note:''}; v.n=Math.max(0,(v.n||0)+d); ITEMS[k]=v; itemsChanged=true; });
+    if(pt.gems!=null){ GEMS.gems=pt.gems; raw(GEM_KEY,GEMS); }
     (pt.marks||[]).forEach(k=>{ marks[k]=1; raw(KEY,marks); });
     Object.entries(pt.setItems||{}).forEach(([k,n])=>{ const v=ITEMS[k]||{n:0,note:''}; v.n=n; ITEMS[k]=v; itemsChanged=true; });
     done.push(pt.key); newKey=true;
