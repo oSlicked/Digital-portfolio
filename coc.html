@@ -551,7 +551,7 @@ const PLAN = [
     ['Druid 6',83.5,'d',190e3,'',4000123,6],['Ruin Witch 3',65,'d',150e3,'',4000109,3],['Ruin Witch 4',83.5,'d',190e3,'',4000109,4],['Valkyrie 12',75.5,'d',170e3,'',4000012,12],['Angry Spell 4',85,'d',190e3,'',26000123,4]]},
   {id:'glab', name:'Goblin Lab', kind:'glab', items:[
     ['Battle Drill 6',83.5,'e',14e6,'gem',4000092,6],['Log Launcher 6',81,'e',13.5e6,'gem',4000087,6],['Golem 15',78.5,'d',175e3,'gem',4000013,15],
-    ['Clone Spell 9',73,'e',11.7e6,'gem',26000016,9],['Sky Wagon 2',54,'e',9.9e6,'gem',4000188,2]]},
+    ['Clone Spell 9',73,'e',11.7e6,'gem',26000016,9],['Sky Wagon 2',54,'e',9.9e6,'gem',4000188,2],['Sky Wagon 3',73,'e',13e6,'gem',4000188,3]]},
   {id:'pet', name:'Pet House', kind:'pet', items:[
     ['Diggy 13',39,'d',100e3,'',73000008,13],['Diggy 14',41.4,'d',111.6e3,'',73000008,14],['Diggy 15',43.2,'d',126e3,'',73000008,15]]},
 ];
@@ -667,7 +667,7 @@ const PROGRESS = [
   {group:'Lab', rows:[
     ['Balloon',12,13,13,13],['Baby Dragon',11,12,12,12],['Yeti',7,8,8,8],['Thrower',3,4,4,4],
     ['Electro Titan',4,5,5,5],['Root Rider',3,4,4,4],['Headhunter',3,4,4,4],['Lava Hound',7,8,8,8],
-    ['Meteor Golem',2,3,3,3],['Hog Rider',14,14,15,15],['Witch',7,7,8,8],['Ruin Witch',0,1,4,4],['Druid',5,5,6,6],['Battle Drill',5,5,6,6],['Log Launcher',5,5,6,6],['Golem',14,14,15,15],['Sky Wagon',1,1,2,4],['Clone Spell',8,8,9,9],
+    ['Meteor Golem',2,3,3,3],['Hog Rider',14,14,15,15],['Witch',7,7,8,8],['Ruin Witch',0,1,4,4],['Druid',5,5,6,6],['Battle Drill',5,5,6,6],['Log Launcher',5,5,6,6],['Golem',14,14,15,15],['Sky Wagon',1,1,3,4],['Clone Spell',8,8,9,9],
     ['Rage Spell',6,7,7,7],['Freeze Spell',7,8,8,8],['Earthquake Spell',7,8,8,8],['Ice Block Spell',5,6,6,6],
     ['Overgrowth Spell',4,5,5,5],['Revive Spell',4,5,5,5],['Recall Spell',6,6,7,7],['Angry Spell',2,2,4,4],['Valkyrie',11,11,12,12],
     ['Stone Slammer',5,6,6,6],['Siege Barracks',5,6,6,6],['Battle Blimp',5,6,6,6],
@@ -772,6 +772,7 @@ const PLAN_PATCHES=[
     {lane:'b6', after:'Dragon Duke 22', item:['Grand Warden 84',43,'e',12.5e6,'',28000002,84], move:true},
   ]},
   /* Nov 12, 2:01 PM magic items screenshot, after using all 6 Builder and 5 Research Potions */
+  {key:'2026-11-12-sky-wagon-3', adds:[{lane:'glab', after:'Sky Wagon 2', item:['Sky Wagon 3',73,'e',13e6,'gem',4000188,3]}], marks:['glab|Sky Wagon 3']},
   {key:'2026-11-12-items-screenshot', setItems:{'Builder Potion':0,'Research Potion':0,'Training Potion':10,'Resource Potion':1,'Hero Potion':11,'Power Potion':4,'Rune of Gold':2,'Rune of Elixir':1,'Rune of Dark Elixir':1,'Pet Potion':0}},
 ];
 function applyPatches(){
@@ -792,6 +793,7 @@ function applyPatches(){
       changed=true;
     });
     Object.entries(pt.items||{}).forEach(([k,d])=>{ const v=ITEMS[k]||{n:0,note:''}; v.n=Math.max(0,(v.n||0)+d); ITEMS[k]=v; itemsChanged=true; });
+    (pt.marks||[]).forEach(k=>{ marks[k]=1; raw(KEY,marks); });
     Object.entries(pt.setItems||{}).forEach(([k,n])=>{ const v=ITEMS[k]||{n:0,note:''}; v.n=n; ITEMS[k]=v; itemsChanged=true; });
     done.push(pt.key); newKey=true;
   });
@@ -799,6 +801,8 @@ function applyPatches(){
   if(itemsChanged) raw(ITEM_KEY,ITEMS);
   if(newKey) raw('coc-patches-v1',done);
 }
+/* starts you told me about that the last export doesn't show yet */
+const STARTED_AT={'glab|Sky Wagon 3':Date.parse('2026-11-12T15:02:00-05:00')};
 let LANES=[], EXTRA=[], plan=[];
 function rebuild(){
   const JOBS=[];
@@ -828,10 +832,11 @@ function rebuild(){
     if(L){ L.cur=nm; L.left=j.left; L.unplanned=true; } else EXTRA.push(nm);
   });
   plan=LANES.map(L=>{
-    const curEnd=L.cur?runFrom(L.id,EXPORT,L.left*1000):EXPORT;
+    let curEnd=L.cur?runFrom(L.id,EXPORT,L.left*1000):EXPORT;
+    const ov0=L.steps[0]&&STARTED_AT[L.id+'|'+L.steps[0][0]]; if(ov0&&ov0<curEnd) curEnd=Math.max(EXPORT,ov0);   // finished early (gems, book or a newer start)
     let t=curEnd; const q=[];
     L.steps.forEach((s,i)=>{
-      const ready=t, start=wake(t), f=start>=JAM_END?2:1, end=runFrom(L.id,start,s[1]*f*PASS*H);   // after the Jam: full price, double time and cost
+      const ov=STARTED_AT[L.id+'|'+s[0]], ready=ov?Math.min(t,ov):t, start=ov||wake(t), f=start>=JAM_END?2:1, end=runFrom(L.id,start,s[1]*f*PASS*H);   // after the Jam: full price, double time and cost
       q.push({lane:L,i,name:s[0],hrs:s[1]*f,cur:s[2],cost:s[3]*f,flag:s[4]||'',ready,start,end,slept:start>ready,late:start>=JAM_END,boost:boosted(L.id,start,end)});
       t=end;
     });
