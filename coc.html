@@ -802,6 +802,8 @@ function applyPatches(){
 }
 /* starts you told me about that the last export doesn't show yet */
 const STARTED_AT={};
+/* lanes left empty on purpose once their current job ends (no gem starts planned) */
+const PARKED=['gob','glab'];
 let LANES=[], EXTRA=[], plan=[];
 function rebuild(){
   const JOBS=[];
@@ -863,7 +865,7 @@ function stats(){
   document.getElementById('stIdle').textContent=idleLanes().length;
   document.getElementById('stGems').textContent=GEMS.gems.toLocaleString();
 }
-function idleLanes(){ const now=Date.now(); return plan.filter(p=>{ const q=p.q.filter(s=>!s.late);
+function idleLanes(){ const now=Date.now(); return plan.filter(p=>!PARKED.includes(p.L.id)).filter(p=>{ const q=p.q.filter(s=>!s.late);
   const running=(p.L.cur&&p.curEnd>now)||q.some(s=>marks[mk(s)]&&s.end>now); return !running; }); }
 
 let showAll=false;
@@ -916,7 +918,7 @@ function lanes(){
     const idle=now>=b||!name, pct=idle?100:Math.max(2,Math.min(100,(now-a)/(b-a)*100));
     const gemLane=L.id==='glab'||L.id==='gob';
     const nowHtml=idle
-      ? `<b>Idle</b> <span class="muted">${gemLane?'· needs gems':'· since '+whenD(b)}</span>`
+      ? (PARKED.includes(L.id)&&!p.q.length?`<b>Parked</b> <span class="muted">· left empty on purpose</span>`:`<b>Idle</b> <span class="muted">${gemLane?'· needs gems':'· since '+whenD(b)}</span>`)
       : `<b>${esc(name)}</b>${(isCur?p.curBoost:boosted(L.id,a,b))?'<span class="tag t-boost">BOOSTED</span>':''}
          <div class="cdl"><span class="cd" data-to="${b}">${dur(b-now)}</span> left · done ${whenD(b)}</div><div class="bar2"><i style="width:${pct}%"></i></div>`;
     const ed=editing===L.id, edited=!!EDITS[L.id];
@@ -1365,7 +1367,7 @@ function whatAt(p,T){
   const nx=p.q.find(x=>x.start>T); return nx?{wait:nx}:null;
 }
 function idleReport(T,W){
-  const now=Date.now(), idle=plan.filter(p=>p.idleAt<=T).sort((a,b)=>a.idleAt-b.idleAt), busy=plan.filter(p=>p.idleAt>T);
+  const now=Date.now(), idle=plan.filter(p=>p.idleAt<=T&&!PARKED.includes(p.L.id)).sort((a,b)=>a.idleAt-b.idleAt), busy=plan.filter(p=>p.idleAt>T);
   let h=`By <b>${W.dayOnly?'the end of '+W.label:W.label}</b>:`;
   h+=idle.length?`<br>These will have <b>nothing left to upgrade</b>:<ul>${idle.map(p=>`<li><b>${esc(p.L.name)}</b>, out of work ${p.idleAt<=now?'already':'from '+whenD(p.idleAt)}${p.L.id==='gob'||p.L.id==='glab'?' (gem lane)':''}</li>`).join('')}</ul>`:'<br>Every builder and lab still has work planned.';
   if(busy.length) h+=`Still working then:<ul>${busy.map(p=>{ const w=whatAt(p,T); return `<li><b>${esc(p.L.name)}</b>: ${w&&w.name?esc(w.name)+' until '+whenD(w.end):w&&w.wait?'waiting to start '+esc(w.wait.name):'busy'}, last one done ${whenD(p.idleAt)}</li>`; }).join('')}</ul>`;
@@ -1423,7 +1425,7 @@ function candidates(laneId,at){
 }
 function gapReport(laneId){
   const now=Date.now(), last=lastJamStart();
-  const lanesWithGap=plan.filter(p=>wake(Math.max(p.idleAt,now))<last);
+  const lanesWithGap=plan.filter(p=>!PARKED.includes(p.L.id)&&wake(Math.max(p.idleAt,now))<last);
   if(!laneId){
     if(!lanesWithGap.length) return `No gaps: every builder and lab is busy until after your last chance to start something in the Jam (${whenD(last)}).`;
     return `These have room for one more Jam priced start:<ul>${lanesWithGap.map(p=>`<li><b>${esc(p.L.name)}</b>: free ${p.idleAt<=now?'now':whenD(p.idleAt)}</li>`).join('')}</ul>Ask me something like <i>what fits in builder 3's gap?</i>`;
