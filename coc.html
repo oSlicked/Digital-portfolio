@@ -528,7 +528,7 @@ const DONE_AT_BAKED = 118;                           // upgrade levels finished 
 /* item: [name, Jam hours before Gold Pass, currency g/e/d, cost, flag, export ID, level it upgrades to] */
 const PLAN = [
   {id:'gob', name:'Goblin Builder', kind:'gob', items:[
-    ['Mortar #3',66,'g',9.45e6,'gem',1000013,18]]},
+    ['Mortar #3',66,'g',9.45e6,'gem',1000013,18],['Smasher 5',60,'e',8e6,'gem',107000001,5]]},
   {id:'b1', name:'Builder 1', kind:'b', items:[
     ['Grand Warden 85',43,'e',12.5e6,'',28000002,85],['Hidden Tesla #5',68,'g',11.25e6,'',1000019,17]]},
   {id:'b2', name:'Builder 2', kind:'b', items:[
@@ -544,7 +544,7 @@ const PLAN = [
   {id:'lab', name:'Laboratory', kind:'lab', items:[
     ['Valkyrie 12',75.5,'d',170e3,'',4000012,12],['Angry Spell 4',85,'d',190e3,'',26000123,4]]},
   {id:'glab', name:'Goblin Lab', kind:'glab', items:[
-    ['Miner 12',78.5,'e',14e6,'gem',4000024,12]]},
+    ['Miner 12',78.5,'e',14e6,'gem',4000024,12],['Wizard 14',75.5,'e',13.5e6,'gem',4000006,14]]},
   {id:'pet', name:'Pet House', kind:'pet', items:[
     ['Diggy 15',43.2,'d',126e3,'',73000008,15]]},
 ];
@@ -636,7 +636,7 @@ const PROGRESS = [
     ['Greedy Raven',2,10,10,10],
     ['Diggy',10,12,15,15],
     ['Longshot',4,5,5,5],
-    ['Smasher',3,4,4,5],
+    ['Smasher',3,4,5,5],
     ['Logger',1,1,1,5],
   ]},
   {group:'Buildings', rows:[
@@ -670,7 +670,6 @@ function levelSum(x){ let t=0; ['heroes','pets','guardians','buildings','traps',
   if(!e||e.data===1000010||e.data===1000097) return; t+=(e.lvl||0)*(e.cnt||1); })); return t; }
 /* full-price hours after the Jam */
 const AFTER_B = [
-  ["Builder's Hut #5",136,'g',21.6e6,'Goblin Builder in the Jam if you reach about 100 gems'],
   ['Seeking Air Mine #3',124,'g',17.1e6,'Before TH19'],
   ['Giant Bombs 2 to 4',339,'g',45.9e6,'Before TH19'],
   ['Skeleton Traps 1 to 4',304,'g',64.8e6,'Before TH19'],
@@ -689,7 +688,6 @@ const AFTER_B = [
 ];
 const AFTER_L = [
   ['Valkyrie 12',151,'d',340e3,''],
-  ['Sky Wagon 3',146,'e',26e6,''],
   ['Sky Wagon 4',173,'e',29e6,'Max. Use the Hammer of Fighting here'],
   ['Miner 12',157,'e',28e6,''],
   ['Wizard 14',151,'e',27e6,''],
@@ -803,7 +801,7 @@ function applyPatches(){
 /* starts you told me about that the last export doesn't show yet */
 const STARTED_AT={};
 /* lanes left empty on purpose once their current job ends (no gem starts planned) */
-const PARKED=['gob','glab'];
+const PARKED=[];
 let LANES=[], EXTRA=[], plan=[];
 function rebuild(){
   const JOBS=[];
