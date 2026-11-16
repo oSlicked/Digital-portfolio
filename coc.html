@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#0a0c10">
+<meta name="theme-color" content="#0d0b0a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,9 +18,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0a0c10; --surface:rgba(255,255,255,.045); --surface2:rgba(255,255,255,.075); --surface3:rgba(255,255,255,.11);
-  --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.15);
-  --text:#f3f5f9; --muted:#8e97a8; --dim:#5f6779;
+  --bg:#0d0b0a; --surface:rgba(255,236,222,.045); --surface2:rgba(255,236,222,.075); --surface3:rgba(255,236,222,.11);
+  --border:rgba(255,226,206,.085); --border2:rgba(255,200,170,.17);
+  --text:#f5f1ed; --muted:#a2988f; --dim:#6c625b;
+  --forge:#ff6b1f; --forge2:#ffb04a; --ember:#e23a2c; --steel:#9aa5b1; --steel2:#3a4048;
   --gold:#f6b941; --elix:#d074f2; --de:#9d8eff; --green:#34d17b; --blue:#4c9dff; --red:#ff6159; --orange:#ff9f2e;
   --r:20px; --tabh:64px; --safe:env(safe-area-inset-bottom,0px);
 }
@@ -28,9 +29,11 @@
 html,body{margin:0}
 body{
   background:
-    radial-gradient(1000px 520px at 0% -8%,#1a2438 0%,transparent 62%),
-    radial-gradient(800px 480px at 105% 2%,#2b1c3f 0%,transparent 58%),
-    var(--bg);
+    radial-gradient(900px 480px at 0% -10%,rgba(226,58,44,.30) 0%,transparent 62%),
+    radial-gradient(760px 460px at 106% 0%,rgba(255,122,32,.22) 0%,transparent 58%),
+    radial-gradient(900px 600px at 50% 120%,rgba(255,107,31,.10) 0%,transparent 60%),
+    repeating-linear-gradient(135deg,rgba(255,255,255,.012) 0 2px,transparent 2px 9px),
+    linear-gradient(180deg,#141011 0%,#0d0b0a 40%,#0b0a0a 100%);
   background-attachment:fixed;
   color:var(--text);font:400 15px/1.45 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;font-feature-settings:"tnum" 1,"cv11" 1;
@@ -40,10 +43,12 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* header */
 .top{position:sticky;top:0;z-index:30;margin:0 -18px;padding:calc(env(safe-area-inset-top,0px) + 12px) 18px 12px;
-  background:rgba(10,12,16,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
+  background:rgba(16,12,11,.74);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border)}
 .toprow{display:flex;align-items:center;gap:12px}
-.th{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:17px;color:#1a1204;
-  background:linear-gradient(145deg,#ffd77a,#e9a21b);box-shadow:0 6px 18px rgba(246,185,65,.25),inset 0 1px 0 rgba(255,255,255,.5)}
+.th{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:17px;color:var(--forge2);
+  background:linear-gradient(150deg,#4a5059 0%,#23272c 48%,#14161a 100%);border:1px solid rgba(255,140,60,.55);
+  box-shadow:0 0 0 1px rgba(0,0,0,.4),0 6px 22px rgba(255,107,31,.35),inset 0 1px 0 rgba(255,255,255,.22);text-shadow:0 0 10px rgba(255,107,31,.7)}
+.top{border-image:linear-gradient(90deg,transparent,rgba(255,107,31,.55),rgba(226,58,44,.4),transparent) 1}
 .eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .top h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
 .sync{margin-top:6px;font-size:12px;color:var(--muted)}
@@ -55,7 +60,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .sh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:26px 2px 10px}
 .sh h2{margin:0;font-size:19px;font-weight:700;letter-spacing:-.01em}
 .sh small{font-size:12px;color:var(--muted);font-weight:500}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;
+.card{background:linear-gradient(180deg,rgba(255,236,222,.055),rgba(255,236,222,.03));border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .card+.card{margin-top:12px}
 .pad{padding:16px}
@@ -64,13 +69,14 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* hero */
 .hero{padding:20px 18px 18px;position:relative;margin-top:16px;
-  background:linear-gradient(160deg,rgba(246,185,65,.16),rgba(246,185,65,.02) 45%,rgba(255,255,255,.03));border-color:rgba(246,185,65,.22)}
-.hero .lab{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+  background:linear-gradient(160deg,rgba(255,107,31,.22),rgba(226,58,44,.06) 45%,rgba(154,165,177,.05));border-color:rgba(255,120,50,.32);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 10px 40px rgba(226,58,44,.12)}
+.hero .lab{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--forge2)}
 .hero .big{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:6px 0 2px}
 .hero .big span{font-size:20px;color:var(--muted);font-weight:600;margin:0 6px 0 2px}
 .hero .sub{font-size:13px;color:var(--muted)}
 .track{height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:14px}
-.track i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#ffd77a,#f0a01a)}
+.track i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#ffb04a,#ff6b1f)}
 .pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--surface2);border:1px solid var(--border)}
 .pill i{width:7px;height:7px;border-radius:50%}
@@ -85,7 +91,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .t-sleep{background:rgba(157,142,255,.15);color:#bcb2ff}
 .t-gem{background:rgba(52,209,123,.14);color:#6fe3a2}
 .t-late{background:rgba(255,97,89,.14);color:#ff9b95}
-.t-edit{background:rgba(246,185,65,.15);color:#ffd27a}
+.t-edit{background:rgba(255,122,40,.15);color:#ffbf80}
 .cur{display:inline-flex;align-items:center;gap:5px;font-weight:600;white-space:nowrap}
 .dot{width:9px;height:9px;border-radius:50%;flex:none;display:inline-block}
 .dot.g{background:var(--gold)}.dot.e{background:var(--elix)}.dot.d{background:var(--de)}
@@ -106,7 +112,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .chk{appearance:none;-webkit-appearance:none;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border2);background:transparent;display:grid;place-items:center;cursor:pointer;flex:none;transition:.15s}
 .chk:checked{background:var(--green);border-color:var(--green)}
 .chk:checked::after{content:"";width:6px;height:12px;border:solid #06240f;border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
-.more{display:block;width:100%;padding:13px;border:0;border-top:1px solid var(--border);background:transparent;font-weight:600;font-size:13px;color:var(--blue);cursor:pointer}
+.more{display:block;width:100%;padding:13px;border:0;border-top:1px solid var(--border);background:transparent;font-weight:600;font-size:13px;color:var(--forge2);cursor:pointer}
 
 /* lanes */
 .lanes{display:grid;grid-template-columns:1fr;gap:12px}
@@ -133,17 +139,17 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* inputs and buttons */
 .in,select.in{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--border2);background:rgba(0,0,0,.25);outline:none;font-size:15px;min-width:0}
-.in:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(76,157,255,.2)}
+.in:focus{border-color:var(--forge);box-shadow:0 0 0 3px rgba(255,107,31,.2)}
 textarea.in{min-height:96px;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace}
 label.fl{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:5px}
-.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:700;font-size:14px;cursor:pointer;background:var(--text);color:#0a0c10;white-space:nowrap}
-.btn.gold{background:linear-gradient(180deg,#ffd77a,#f0a51e);color:#241703}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:700;font-size:14px;cursor:pointer;background:var(--text);color:#0d0b0a;white-space:nowrap}
+.btn.gold{background:linear-gradient(180deg,#ffb04a,#ff6b1f);color:#2a0d02}
 .btn.alt{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
 .btn.red{background:rgba(255,97,89,.14);color:#ff8f88;border:1px solid rgba(255,97,89,.25)}
 .btn.sm{padding:7px 12px;font-size:13px;border-radius:10px}
 .btn:active,.ib:active{transform:scale(.97)}
 .ghost{background:transparent;border:1px solid var(--border2);color:var(--text);border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer}
-.ghost.on{background:var(--gold);border-color:var(--gold);color:#241703}
+.ghost.on{background:var(--gold);border-color:var(--gold);color:#2a0d02}
 .msg{font-size:13px;font-weight:600}
 .msg.ok{color:var(--green)}.msg.bad{color:var(--red)}
 .seg{display:flex;background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:12px;padding:3px;gap:3px}
@@ -154,7 +160,7 @@ label.fl{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-
 .tl{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tlin{position:relative}
 .tlrow{position:relative;height:42px;border-top:1px solid var(--border)}
-.tllab{position:sticky;left:0;z-index:3;width:96px;height:100%;background:#12151c;border-right:1px solid var(--border);padding:4px 10px;font-size:12px;font-weight:600;display:flex;flex-direction:column;justify-content:center;line-height:1.15}
+.tllab{position:sticky;left:0;z-index:3;width:96px;height:100%;background:#171312;border-right:1px solid var(--border);padding:4px 10px;font-size:12px;font-weight:600;display:flex;flex-direction:column;justify-content:center;line-height:1.15}
 .tllab small{font-weight:500;color:var(--muted);font-size:10px}
 .tbar{position:absolute;top:8px;height:26px;border-radius:8px;color:#fff;font-size:11.5px;font-weight:600;line-height:26px;padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tbar.g{background:linear-gradient(180deg,#f7c454,#d9961a);color:#2a1a02}
@@ -165,10 +171,10 @@ label.fl{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-
 .tick{position:absolute;top:0;bottom:0;border-left:1px solid var(--border)}
 .tick span{position:absolute;top:7px;left:6px;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
 .vline{position:absolute;top:0;bottom:0;z-index:2;pointer-events:none}
-.vline.now{border-left:2px solid var(--blue)}
+.vline.now{border-left:2px solid var(--forge)}
 .vline.jam{border-left:2px dashed var(--orange)}
 .vline em{position:absolute;top:5px;left:4px;font-size:10px;font-weight:700;font-style:normal;color:#fff;padding:2px 7px;border-radius:6px;white-space:nowrap}
-.vline.now em{background:var(--blue)}.vline.jam em{background:var(--orange);color:#2a1300}
+.vline.now em{background:var(--forge)}.vline.jam em{background:var(--orange);color:#2a1300}
 .vline.pot{border-left:1px dotted rgba(140,192,255,.7)}.vline.pot em{background:rgba(76,157,255,.9);font-size:9.5px}
 .tboost{position:absolute;top:2px;bottom:2px;border-radius:6px;z-index:0;pointer-events:auto}
 .tboost.bb{background:rgba(76,157,255,.22);box-shadow:inset 0 0 0 1px rgba(76,157,255,.55)}
@@ -205,27 +211,27 @@ tr.grp td{background:rgba(255,255,255,.03);font-size:11px;font-weight:700;text-t
 .ctr b{min-width:22px;text-align:center;font-size:16px}
 .inote{width:100%;border:0;background:transparent;color:var(--muted);font-size:12px;padding:2px 0;outline:none}
 .inote:focus{color:var(--text)}
-ul.tips{margin:0;padding:14px 16px 14px 34px;font-size:14px;color:#cfd5df}
+ul.tips{margin:0;padding:14px 16px 14px 34px;font-size:14px;color:#d9d0c9}
 ul.tips li{margin:6px 0}
 ul.tips b{color:var(--text)}
 footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 
 /* tab bar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;
-  padding:6px 8px calc(6px + var(--safe));background:rgba(12,14,19,.78);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border-top:1px solid var(--border)}
+  padding:6px 8px calc(6px + var(--safe));background:rgba(16,12,11,.82);backdrop-filter:saturate(180%) blur(22px);-webkit-backdrop-filter:saturate(180%) blur(22px);border-top:1px solid var(--border)}
 .tabbar .in2{display:flex;width:100%;max-width:520px}
 .tabbar button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--dim);font-size:10.5px;font-weight:600;cursor:pointer}
 .tabbar button svg{width:24px;height:24px}
-.tabbar button[aria-selected=true]{color:var(--gold)}
+.tabbar button[aria-selected=true]{color:var(--forge2)}
 
 /* helper */
 .fab{position:fixed;right:18px;bottom:calc(var(--tabh) + var(--safe) + 16px);z-index:41;width:56px;height:56px;border-radius:50%;border:0;cursor:pointer;
-  background:linear-gradient(145deg,#ffd77a,#e9a21b);color:#241703;display:grid;place-items:center;box-shadow:0 10px 28px rgba(0,0,0,.45),0 4px 14px rgba(246,185,65,.3)}
+  background:linear-gradient(145deg,#ffb04a,#e23a2c);color:#2a0d02;display:grid;place-items:center;box-shadow:0 10px 28px rgba(0,0,0,.45),0 4px 14px rgba(255,122,40,.3)}
 .fab svg{width:26px;height:26px}
 .sheetbg{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s}
 .sheetbg.on{opacity:1;pointer-events:auto}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;max-width:640px;margin:0 auto;height:min(82vh,720px);display:flex;flex-direction:column;
-  background:#12151c;border:1px solid var(--border2);border-bottom:0;border-radius:24px 24px 0 0;transform:translateY(105%);transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+  background:#171312;border:1px solid var(--border2);border-bottom:0;border-radius:24px 24px 0 0;transform:translateY(105%);transition:transform .32s cubic-bezier(.2,.8,.2,1)}
 .sheet.on{transform:none}
 .sheet .grab{width:40px;height:5px;border-radius:3px;background:var(--border2);margin:8px auto 0}
 .sheet .shh{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border)}
@@ -233,12 +239,12 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 .sheet .shh span{font-size:12px;color:var(--muted)}
 .chatlog{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
 .bub{max-width:86%;padding:10px 14px;border-radius:18px;font-size:14.5px;line-height:1.45}
-.bub.me{align-self:flex-end;background:var(--blue);color:#fff;border-bottom-right-radius:6px}
+.bub.me{align-self:flex-end;background:linear-gradient(180deg,#ff7a2c,#e23a2c);color:#fff;border-bottom-right-radius:6px}
 .bub.bot{align-self:flex-start;background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:6px}
 .bub.bot ul{margin:6px 0 0;padding-left:18px}
 .bub.bot li{margin:3px 0}
 .cbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.cbtn{border:0;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#ffd77a,#f0a51e);color:#241703}
+.cbtn{border:0;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#ffb04a,#ff6b1f);color:#2a0d02}
 .cbtn:disabled{opacity:.4}
 .chips{display:flex;gap:6px;overflow-x:auto;padding:10px 16px 0;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
@@ -270,8 +276,8 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 .catr .ctop span em{font-style:normal;color:var(--text);font-weight:700}
 .pbar{position:relative;height:9px;border-radius:5px;background:rgba(255,255,255,.07);overflow:hidden;margin-top:6px}
 .pbar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
-.pbar i.plan{background:rgba(246,185,65,.35)}
-.pbar i.now{background:linear-gradient(90deg,#ffd77a,#f0a01a)}
+.pbar i.plan{background:rgba(255,122,40,.35)}
+.pbar i.now{background:linear-gradient(90deg,#ffb04a,#ff6b1f)}
 .pbar u{position:absolute;top:-2px;bottom:-2px;width:2px;background:#fff;opacity:.85;border-radius:1px}
 .pctTiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}
 @media(min-width:720px){.pctTiles{grid-template-columns:repeat(4,1fr)}}
@@ -299,7 +305,7 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 .pk:hover,.pk:active{background:var(--surface2)}
 .pk b{font-weight:600;font-size:14px}
 .pk small{display:block;color:var(--muted);font-size:12px;margin-top:1px}
-.pk .add{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#ffd77a,#f0a51e);color:#241703;font-weight:800}
+.pk .add{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#ffb04a,#ff6b1f);color:#2a0d02;font-weight:800}
 .pkgrp{padding:7px 12px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);background:rgba(255,255,255,.03);border-top:1px solid var(--border)}
 .manual{padding:0 16px 12px;font-size:13px;color:var(--muted)}
 .manual summary{cursor:pointer;padding:10px 0}
@@ -331,8 +337,8 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 <div class="wrap">
 <header class="top">
   <div class="toprow">
-    <div class="th">18</div>
-    <div style="flex:1;min-width:0"><div class="eyebrow">Hammer Jam Planner</div><h1 id="title">Today</h1></div>
+    <div class="th">19</div>
+    <div style="flex:1;min-width:0"><div class="eyebrow">TH19 Planner · Clash of Titans</div><h1 id="title">Today</h1></div>
     <button class="fsbtn" id="fsBtn" type="button" aria-label="Full screen" title="Full screen (F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path id="fsIco" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fsTxt">Full screen</span></button>
   </div>
   <div class="sync" id="synced"></div>
@@ -343,10 +349,11 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 <div class="cols">
 <div class="colL">
   <div class="card hero">
-    <div class="lab">Hammer Jam</div>
+    <div class="lab" id="jamLab">Next start</div>
     <div class="big" id="jamBig"></div>
     <div class="sub" id="jamSub"></div>
     <div class="track"><i id="jamfill"></i></div>
+    <div class="sub" id="jamLab17" style="margin-top:8px"></div>
     <div class="pills" id="boosts"></div>
   </div>
   <button class="card pctmini" id="pctMini" type="button" aria-label="Open TH18 progress"></button>
@@ -355,7 +362,7 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
     <div class="stat"><div class="v" id="stIdle">0</div><div class="k">Idle now</div></div>
     <div class="stat"><div class="v" id="stGems" style="color:#6fe3a2">0</div><div class="k">Gems</div></div>
   </div>
-  <div class="sh"><h2>Loot for the rest of the Jam</h2><small>not started yet</small></div>
+  <div class="sh"><h2>Loot for the queue</h2><small>not started yet</small></div>
   <div class="card"><div class="tiles" id="loot"></div></div>
 </div>
 <div class="colR">
@@ -371,22 +378,22 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
   <div class="lanes" id="lanes"></div>
   <div class="sh"><h2>Timeline</h2><small>swipe sideways</small></div>
   <div class="card"><div class="tl" id="tl"></div>
-    <div class="note">Striped bars are already running. Shaded blue (builders) and purple (lab) is the potion boost window. Anything that starts left of the orange line gets the Jam price, even if it finishes after. No starts are planned while you sleep (<span class="sleepTxt"></span>).</div>
+    <div class="note">Striped bars are already running. Shaded blue (builders) and purple (lab) is the potion boost window. Bars marked TIME TBC use estimates until the game shows the real time; a fresh export fixes anything already running. No starts are planned while you sleep (<span class="sleepTxt"></span>).</div>
   </div>
 </section>
 
 <!-- PROGRESS -->
 <section class="view" data-view="progress">
-  <div class="sh"><h2>TH18 progress</h2><small>weighted by upgrade time</small></div>
+  <div class="sh"><h2>TH18 progress (final)</h2><small>where TH18 ended up</small></div>
   <div class="card pct" id="pctCard"></div>
 <div class="grid2">
 <div class="blk">
-  <div class="sh"><h2>Since Nov 1</h2><small>then, now and after the Jam plan</small></div>
+  <div class="sh"><h2>Since Nov 1</h2><small>TH18 levels</small></div>
   <div class="card"><div class="tiles" id="progtot"></div><div class="tw"><table id="progress"></table></div>
     <div class="note">Small numbers show how many of that building are at the level, like 2/5. <b style="color:var(--red)">Red</b> is already max today. <b style="color:var(--green)">Green</b> will be max once the Jam plan finishes. <b style="color:var(--blue)">Blue</b> is the TH18 max.</div></div>
 </div>
 <div class="blk">
-  <div class="sh"><h2>After the Jam</h2><small>everything left to max TH18</small></div>
+  <div class="sh"><h2>TH19 to do</h2><small>not in a lane yet</small></div>
   <div class="card">
     <div class="pad" style="padding-bottom:6px"><div class="seg" id="afterSeg"><button type="button" aria-selected="true" data-tab="b">Builders</button><button type="button" aria-selected="false" data-tab="l">Lab</button></div></div>
     <div class="tw"><table id="after"></table></div>
@@ -396,9 +403,13 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 <div class="blk">
   <div class="sh"><h2>Notes</h2></div>
   <div class="card"><ul class="tips">
-    <li><b>Hammer of Fighting:</b> Sky Wagon 4 now gets done in the Jam, so save it for a full price TH19 research.</li>
-    <li><b>Hammer of Building (Gold Pass):</b> saved for TH19.</li>
-    <li><b>Gems:</b> about 600 for the Goblin Lab run: Battle Drill 6, Log Launcher 6, Golem 15, Clone 9 and Sky Wagon 2, roughly 110 to 125 each. Check each price in game before confirming.</li>
+    <li><b>Book of Building:</b> Laboratory 17 the moment Sky Wagon 4 finishes (about Nov 21). The lab sits empty otherwise until Nov 26, and the lab is your bottleneck.</li>
+    <li><b>Hammer of Fighting and Book of Fighting:</b> Dragon 14, then Electro Dragon 10, the two longest researches for your army.</li>
+    <li><b>Book of Spells:</b> the TH19 Heroic Spell level or Lightning 14, whichever the game shows as longer.</li>
+    <li><b>Book of Heroes:</b> a Royal Champion level once Hero Hall 13 is done.</li>
+    <li><b>Runes:</b> Elixir for Hero Hall 13 and lab research, Dark Elixir for the two Spiky Towers (500K each), Gold for the Firecracker merges and X-Bows.</li>
+    <li><b>Over the cap:</b> 11 Hero Potions and 10 Training Potions expire in about 4 days. Burn the Hero Potions on war and league attacks this week.</li>
+    <li><b>Guardians:</b> start Smasher upgrades right after a war ends. The Guardian can't defend while it upgrades.</li>
     <li><b>Not tracked:</b> hero equipment, supercharges and crafted defenses.</li>
   </ul></div>
 </div>
@@ -474,7 +485,7 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 <div class="blk">
   <div class="sh"><h2>App and backup</h2></div>
   <div class="card tool"><div class="pad">
-    <h3><span class="ico" style="background:rgba(246,185,65,.15)">📲</span>Install as an app</h3>
+    <h3><span class="ico" style="background:rgba(255,122,40,.15)">📲</span>Install as an app</h3>
     <p class="desc" id="installTxt">On iPhone: open this page in Safari, tap Share, then Add to Home Screen. It opens full screen and works without signal.</p>
     <div class="row" style="margin-top:10px"><button class="btn gold" id="installBtn" type="button" hidden>Install</button></div>
   </div>
@@ -524,28 +535,61 @@ const JAM_END = Date.parse('2026-11-16T02:45:00-05:00');
 const PASS = 0.85/0.9;                              // Gold Pass builder/lab time bonus on top of the listed hours
 const H = 3600e3;
 const BUILDER_LANES = ['gob','b1','b2','b3','b4','b5','b6'];
-const DONE_AT_BAKED = 140;                           // upgrade levels finished from Nov 1 up to the built-in export
-/* item: [name, Jam hours before Gold Pass, currency g/e/d, cost, flag, export ID, level it upgrades to] */
+const DONE_AT_BAKED = 146;                           // upgrade levels finished from Nov 1 up to the built-in export
+/* item: [name, plan hours, currency g/e/d, plan cost, flag, export ID, level it upgrades to]
+   Plan hours and cost are half price numbers (the page doubles them after the Jam), so TH19 items go through T19():
+   give it the game's base time in days and the full cost. 'tbc' = estimate until the game or the wiki confirms it. */
+const T19=(name,days,cur,cost,flag,id,to)=>[name,days*24*0.8/(2*PASS),cur,cost/2,flag||'',id||null,to||null];   // Gold Pass 20% off
 const PLAN = [
-  {id:'gob', name:'Goblin Builder', kind:'gob', items:[
-    ['Smasher 5',70,'e',12.6e6,'gem',107000001,5]]},
+  {id:'gob', name:'Goblin Builder', kind:'gob', items:[]},
   {id:'b1', name:'Builder 1', kind:'b', items:[
-    ['Hidden Tesla #5',68,'g',11.25e6,'',1000019,17],
-    ['Town Hall 19',null,'g',null,'tbc',1000001,19]]},
+    ['Laboratory 17',0,'e',0,'',1000007,17],
+    T19('Smasher 6',10,'e',26e6,'tbc',107000001,6),
+    T19('Spell Factory 10',12,'e',21e6,'tbc',1000020,10)]},
   {id:'b2', name:'Builder 2', kind:'b', items:[
-    ['Gold Storage #4',66,'e',8.1e6,'',1000005,19],['Dark Elixir Drill #1',32.5,'e',5.4e6,'',1000023,11]]},
+    ['Skeleton Trap #2',0,'g',0,'',12000008,5],
+    T19('Spiky Tower #2',15,'d',500e3,''),
+    T19('Grand Warden 86',7,'e',17e6,'tbc',28000002,86),
+    T19('Grand Warden 87',7,'e',17.5e6,'tbc',28000002,87)]},
   {id:'b3', name:'Builder 3', kind:'b', items:[
-    ['Skeleton Trap #1',38,'g',8.1e6,'',12000008,5]]},
+    ['Skeleton Trap #1',0,'g',0,'',12000008,5],
+    T19('Hero Hall 13',14,'e',27e6,'tbc',1000071,13),
+    T19('Royal Champion 56',7,'d',350e3,'tbc',28000004,56),
+    T19('Royal Champion 57',7,'d',355e3,'tbc',28000004,57),
+    T19('Royal Champion 58',7,'d',360e3,'tbc',28000004,58)]},
   {id:'b4', name:'Builder 4', kind:'b', items:[
-    ['Skeleton Trap #2',38,'g',8.1e6,'',12000008,5]]},
+    ['Seeking Air Mine #1',0,'g',0,'',12000006,8],
+    T19('Firecracker Tower #2 (merge)',10,'g',20e6,'tbc'),
+    T19('X-Bow 14 #1',14,'g',22e6,'tbc',1000021,14),
+    T19('X-Bow 14 #2',14,'g',22e6,'tbc',1000021,14)]},
   {id:'b5', name:'Builder 5', kind:'b', items:[
-    ['Seeking Air Mine #1',62,'g',8.55e6,'',12000006,8]]},
+    ['Seeking Air Mine #2',0,'g',0,'',12000006,8],
+    T19('Firecracker Tower #1 (merge)',10,'g',20e6,'tbc'),
+    T19('Barbarian King 111',7,'d',330e3,'tbc',28000000,111),
+    T19('Barbarian King 112',7,'d',335e3,'tbc',28000000,112)]},
   {id:'b6', name:'Builder 6', kind:'b', items:[
-    ['Seeking Air Mine #2',62,'g',8.55e6,'',12000006,8],['Dark Elixir Drill #2',32.5,'e',5.4e6,'',1000023,11]]},
+    ['Squad Barracks 1',0,'e',0,'',1000106,1],
+    T19('Spiky Tower #1',15,'d',500e3,''),
+    T19('Archer Queen 111',7,'d',330e3,'tbc',28000001,111),
+    T19('Archer Queen 112',7,'d',335e3,'tbc',28000001,112)]},
   {id:'lab', name:'Laboratory', kind:'lab', items:[
-    ['Sky Wagon 4',86.5,'e',14.5e6,'',4000188,4]]},
+    ['Sky Wagon 4',0,'e',0,'',4000188,4],
+    T19('Dragon 14',14,'e',20e6,'tbc',4000008,14),
+    T19('Electro Dragon 10',14,'e',20e6,'tbc',4000059,10),
+    T19('Heroic Spell (TH19 level)',10,'e',18e6,'tbc'),
+    T19('Balloon 14',13,'e',19e6,'tbc',4000005,14),
+    T19('Baby Dragon 13',13,'e',19e6,'tbc',4000023,13)]},
   {id:'glab', name:'Goblin Lab', kind:'glab', items:[]},
-  {id:'pet', name:'Pet House', kind:'pet', items:[]},
+  {id:'pet', name:'Pet House', kind:'pet', items:[
+    ['Angry Jelly 11',0,'d',0,'',73000011,11],
+    T19('Angry Jelly 12',8,'d',300e3,'tbc',73000011,12),
+    T19('Angry Jelly 13',8,'d',310e3,'tbc',73000011,13)]},
+];
+/* TH19 gates: research waits for Laboratory 17, TH19 hero levels wait for Hero Hall 13 */
+const TH18_HERO_MAX={28000000:110,28000001:110,28000002:85,28000004:55,28000006:95,28000007:25};
+const GATES=[
+  {need:[1000007,17], label:'Lab 17', applies:(L,s)=>L.kind==='lab'||L.kind==='glab'},
+  {need:[1000071,13], label:'Hero Hall 13', applies:(L,s)=>s[5] in TH18_HERO_MAX && s[6]>TH18_HERO_MAX[s[5]]},
 ];
 const NAMES = {
   1000000:'Army Camp',1000001:'Town Hall',1000002:'Elixir Collector',1000003:'Elixir Storage',1000004:'Gold Mine',1000005:'Gold Storage',
@@ -560,7 +604,7 @@ const NAMES = {
   28000000:'Barbarian King',28000001:'Archer Queen',28000002:'Grand Warden',28000004:'Royal Champion',28000006:'Minion Prince',28000007:'Dragon Duke',
   73000000:'L.A.S.S.I',73000001:'Electro Owl',73000002:'Mighty Yak',73000003:'Unicorn',73000004:'Phoenix',73000007:'Poison Lizard',
   73000008:'Diggy',73000009:'Frosty',73000010:'Spirit Fox',73000011:'Angry Jelly',73000016:'Sneezy',73000017:'Greedy Raven',
-  107000000:'Longshot',107000001:'Smasher',107000008:'Logger',
+  107000000:'Longshot',107000001:'Smasher',107000008:'Logger',1000105:'Guardian Shrine',1000106:'Squad Barracks',
   4000000:'Barbarian',4000001:'Archer',4000002:'Goblin',4000003:'Giant',4000004:'Wall Breaker',4000005:'Balloon',4000006:'Wizard',
   4000007:'Healer',4000008:'Dragon',4000009:'P.E.K.K.A',4000010:'Minion',4000011:'Hog Rider',4000012:'Valkyrie',4000013:'Golem',
   4000015:'Witch',4000017:'Lava Hound',4000022:'Bowler',4000023:'Baby Dragon',4000024:'Miner',4000053:'Yeti',4000058:'Ice Golem',
@@ -573,8 +617,8 @@ const NAMES = {
   26000028:'Bat Spell',26000035:'Invisibility Spell',26000053:'Recall Spell',26000070:'Overgrowth Spell',26000098:'Revive Spell',
   26000109:'Ice Block Spell',26000120:'Totem Spell',26000123:'Angry Spell'
 };
-/* The export this version of the page was built from (Nov 15, 10:03 PM). A newer pasted export replaces it. */
-const BAKED = {"tag":"#88RJQPR0P","timestamp":1794798196,"helpers":[{"data":93000000,"lvl":5},{"data":93000001,"lvl":1},{"data":93000002,"lvl":1},{"data":93000003,"lvl":1}],"guardians":[{"data":107000000,"lvl":5},{"data":107000001,"lvl":4,"timer":92172,"extra":true,"helper_timer":0,"helper_recurrent":false},{"data":107000008,"lvl":1}],"buildings":[{"data":1000013,"lvl":18,"gear_up":1},{"data":1000005,"lvl":18,"timer":47609},{"data":1000019,"lvl":16,"timer":47507},{"data":1000097,"types":[{"data":103000011,"modules":[{"data":102000033,"lvl":1},{"data":102000034,"lvl":1},{"data":102000035,"lvl":1}]},{"data":103000012,"modules":[{"data":102000036,"lvl":1},{"data":102000037,"lvl":1},{"data":102000038,"lvl":1}]},{"data":103000013,"modules":[{"data":102000039,"lvl":1},{"data":102000040,"lvl":1},{"data":102000041,"lvl":1}]}]},{"data":1000000,"lvl":14,"cnt":4},{"data":1000001,"lvl":18,"cnt":1},{"data":1000002,"lvl":17,"cnt":6},{"data":1000002,"lvl":17,"cnt":1,"supercharge":1},{"data":1000003,"lvl":19,"cnt":4},{"data":1000004,"lvl":17,"cnt":5},{"data":1000004,"lvl":17,"cnt":1,"supercharge":1},{"data":1000004,"lvl":17,"cnt":1,"supercharge":2},{"data":1000005,"lvl":19,"cnt":3},{"data":1000006,"lvl":19,"cnt":1},{"data":1000007,"lvl":16,"cnt":1},{"data":1000009,"lvl":21,"cnt":2},{"data":1000010,"lvl":19,"cnt":325},{"data":1000011,"lvl":17,"cnt":2},{"data":1000012,"lvl":16,"cnt":4},{"data":1000013,"lvl":18,"cnt":3},{"data":1000014,"lvl":14,"cnt":1},{"data":1000015,"lvl":8,"cnt":5},{"data":1000019,"lvl":17,"cnt":4},{"data":1000020,"lvl":9,"cnt":1},{"data":1000021,"lvl":13,"cnt":4},{"data":1000023,"lvl":10,"cnt":2},{"data":1000023,"lvl":11,"cnt":1},{"data":1000024,"lvl":13,"cnt":1},{"data":1000026,"lvl":13,"cnt":1},{"data":1000027,"lvl":12,"cnt":3},{"data":1000028,"lvl":7,"cnt":2},{"data":1000029,"lvl":8,"cnt":1},{"data":1000032,"lvl":13,"cnt":2},{"data":1000059,"lvl":9,"cnt":1},{"data":1000064,"lvl":1,"cnt":1},{"data":1000067,"lvl":7,"cnt":2},{"data":1000068,"lvl":12,"cnt":1},{"data":1000070,"lvl":10,"cnt":1},{"data":1000071,"lvl":12,"cnt":1},{"data":1000072,"lvl":4,"cnt":2},{"data":1000077,"lvl":5,"cnt":1},{"data":1000079,"lvl":3,"cnt":1},{"data":1000084,"lvl":4,"cnt":3},{"data":1000085,"lvl":4,"cnt":3},{"data":1000086,"lvl":2,"cnt":1},{"data":1000089,"lvl":3,"cnt":2},{"data":1000093,"lvl":1,"cnt":1},{"data":1000102,"lvl":2,"cnt":2}],"traps":[{"data":12000006,"lvl":7,"timer":363995},{"data":12000008,"lvl":4,"timer":212989},{"data":12000008,"lvl":4,"timer":160870},{"data":12000006,"lvl":7,"timer":315665},{"data":12000000,"lvl":13,"cnt":8},{"data":12000001,"lvl":12,"cnt":9},{"data":12000002,"lvl":11,"cnt":8},{"data":12000005,"lvl":4,"cnt":1},{"data":12000005,"lvl":12,"cnt":7},{"data":12000006,"lvl":7,"cnt":7},{"data":12000008,"lvl":4,"cnt":2},{"data":12000016,"lvl":3,"cnt":1},{"data":12000020,"lvl":4,"cnt":1}],"decos":[{"data":18000000,"cnt":1},{"data":18000001,"cnt":4},{"data":18000003,"cnt":1},{"data":18000005,"cnt":4},{"data":18000006,"cnt":4},{"data":18000007,"cnt":1},{"data":18000008,"cnt":1},{"data":18000009,"cnt":1},{"data":18000010,"cnt":1},{"data":18000033,"cnt":1},{"data":18000037,"cnt":1},{"data":18000060,"cnt":1},{"data":18000063,"cnt":1},{"data":18000064,"cnt":1},{"data":18000065,"cnt":1},{"data":18000067,"cnt":1},{"data":18000069,"cnt":1},{"data":18000070,"cnt":1},{"data":18000071,"cnt":1},{"data":18000072,"cnt":1},{"data":18000090,"cnt":1},{"data":18000103,"cnt":1},{"data":18000126,"cnt":1},{"data":18000127,"cnt":1},{"data":18000130,"cnt":1},{"data":18000135,"cnt":1},{"data":18000136,"cnt":1},{"data":18000137,"cnt":1},{"data":18000138,"cnt":1},{"data":18000140,"cnt":1},{"data":18000141,"cnt":1},{"data":18000155,"cnt":1},{"data":18000157,"cnt":1},{"data":18000162,"cnt":1},{"data":18000165,"cnt":1},{"data":18000166,"cnt":1},{"data":18000171,"cnt":1},{"data":18000172,"cnt":1},{"data":18000178,"cnt":1},{"data":18000184,"cnt":1},{"data":18000185,"cnt":1},{"data":18000190,"cnt":1},{"data":18000192,"cnt":1},{"data":18000193,"cnt":1},{"data":18000196,"cnt":1},{"data":18000199,"cnt":1}],"obstacles":[{"data":8000009,"cnt":13},{"data":8000023,"cnt":2},{"data":8000088,"cnt":1},{"data":8000089,"cnt":3},{"data":8000090,"cnt":2},{"data":8000108,"cnt":1},{"data":8000116,"cnt":1},{"data":8000117,"cnt":2},{"data":8000127,"cnt":3},{"data":8000128,"cnt":1},{"data":8000129,"cnt":2},{"data":8000131,"cnt":2},{"data":8000133,"cnt":1},{"data":8000135,"cnt":1},{"data":8000136,"cnt":1},{"data":8000137,"cnt":1},{"data":8000138,"cnt":2},{"data":8000139,"cnt":1}],"units":[{"data":4000000,"lvl":13},{"data":4000001,"lvl":14},{"data":4000002,"lvl":10},{"data":4000003,"lvl":14},{"data":4000004,"lvl":14},{"data":4000005,"lvl":13},{"data":4000006,"lvl":14},{"data":4000007,"lvl":11},{"data":4000008,"lvl":13},{"data":4000009,"lvl":13},{"data":4000010,"lvl":14},{"data":4000011,"lvl":15},{"data":4000012,"lvl":12},{"data":4000013,"lvl":15},{"data":4000015,"lvl":8},{"data":4000017,"lvl":8},{"data":4000022,"lvl":10},{"data":4000023,"lvl":12},{"data":4000024,"lvl":12},{"data":4000053,"lvl":8},{"data":4000058,"lvl":9},{"data":4000059,"lvl":9},{"data":4000065,"lvl":6},{"data":4000082,"lvl":4},{"data":4000095,"lvl":5},{"data":4000097,"lvl":4},{"data":4000109,"lvl":4},{"data":4000110,"lvl":4},{"data":4000123,"lvl":6},{"data":4000132,"lvl":4},{"data":4000150,"lvl":4},{"data":4000177,"lvl":3}],"siege_machines":[{"data":4000051,"lvl":6},{"data":4000052,"lvl":6},{"data":4000062,"lvl":6},{"data":4000075,"lvl":6},{"data":4000087,"lvl":6},{"data":4000091,"lvl":5},{"data":4000092,"lvl":6},{"data":4000135,"lvl":4},{"data":4000188,"lvl":3,"timer":518805}],"heroes":[{"data":28000000,"lvl":110},{"data":28000001,"lvl":110},{"data":28000002,"lvl":85},{"data":28000004,"lvl":55},{"data":28000006,"lvl":95},{"data":28000007,"lvl":25}],"spells":[{"data":26000000,"lvl":13},{"data":26000001,"lvl":12},{"data":26000002,"lvl":7},{"data":26000003,"lvl":5},{"data":26000005,"lvl":8},{"data":26000009,"lvl":12},{"data":26000010,"lvl":8},{"data":26000011,"lvl":7},{"data":26000016,"lvl":9},{"data":26000017,"lvl":8},{"data":26000028,"lvl":8},{"data":26000035,"lvl":4},{"data":26000053,"lvl":7},{"data":26000070,"lvl":5},{"data":26000098,"lvl":5},{"data":26000109,"lvl":6},{"data":26000120,"lvl":4},{"data":26000123,"lvl":4}],"pets":[{"data":73000000,"lvl":15},{"data":73000001,"lvl":15},{"data":73000002,"lvl":15},{"data":73000003,"lvl":15},{"data":73000004,"lvl":10},{"data":73000007,"lvl":15},{"data":73000008,"lvl":15},{"data":73000009,"lvl":15},{"data":73000010,"lvl":10},{"data":73000011,"lvl":10},{"data":73000016,"lvl":10},{"data":73000017,"lvl":10}],"equipment":[{"data":90000000,"lvl":14},{"data":90000001,"lvl":18},{"data":90000002,"lvl":14},{"data":90000003,"lvl":14},{"data":90000004,"lvl":18},{"data":90000005,"lvl":18},{"data":90000006,"lvl":18},{"data":90000007,"lvl":14},{"data":90000008,"lvl":18},{"data":90000009,"lvl":18},{"data":90000010,"lvl":20},{"data":90000011,"lvl":18},{"data":90000012,"lvl":18},{"data":90000013,"lvl":27},{"data":90000014,"lvl":27},{"data":90000015,"lvl":23},{"data":90000016,"lvl":1},{"data":90000017,"lvl":18},{"data":90000019,"lvl":27},{"data":90000020,"lvl":18},{"data":90000022,"lvl":23},{"data":90000024,"lvl":18},{"data":90000032,"lvl":8},{"data":90000034,"lvl":18},{"data":90000035,"lvl":27},{"data":90000039,"lvl":20},{"data":90000040,"lvl":27},{"data":90000041,"lvl":17},{"data":90000042,"lvl":18},{"data":90000043,"lvl":18},{"data":90000044,"lvl":11},{"data":90000047,"lvl":8},{"data":90000048,"lvl":11},{"data":90000049,"lvl":26},{"data":90000050,"lvl":20},{"data":90000051,"lvl":1},{"data":90000052,"lvl":18},{"data":90000053,"lvl":19},{"data":90000056,"lvl":14},{"data":90000057,"lvl":1},{"data":90000059,"lvl":1},{"data":90000060,"lvl":1},{"data":90000061,"lvl":1}],"house_parts":[82000000,82000001,82000002,82000003,82000004,82000006,82000008,82000009,82000010,82000011,82000013,82000014,82000015,82000016,82000017,82000020,82000022,82000025,82000031,82000032,82000045,82000046,82000048,82000049,82000052,82000053,82000055,82000058,82000059,82000060,82000061,82000062,82000063,82000064,82000066,82000067,82000081,82000082,82000084,82000087,82000088,82000089,82000090,82000092,82000094],"skins":[52000020,52000004,52000012,52000015,52000025,52000063,52000055,52000056,52000065,52000039,52000051,52000067,52000041,52000097,52000090,52000092,52000122,52000105,52000126,52000120,52000136,52000128,52000141,52000174,52000060,52000131,52000150,52000194,52000210,52000022,52000176,52000198,52000253,52000215,52000181,52000238,52000023,52000183,52000258,52000099,52000220,52000206,52000005,52000264,52000226,52000248,52000292,52000320,52000270,52000331,52000304,52000337,52000349],"sceneries":[60000015,60000034,60000017,60000014,60000035,60000059,60000064,60000066,60000072,60000073,60000069,60000078],"buildings2":[{"data":1000078,"lvl":7,"timer":15005},{"data":1000033,"lvl":4,"cnt":65},{"data":1000033,"lvl":5,"cnt":108},{"data":1000033,"lvl":9,"cnt":2},{"data":1000033,"lvl":10,"cnt":5},{"data":1000034,"lvl":10,"cnt":1},{"data":1000035,"lvl":10,"cnt":3},{"data":1000036,"lvl":10,"cnt":2},{"data":1000037,"lvl":10,"cnt":3},{"data":1000038,"lvl":10,"cnt":2},{"data":1000039,"lvl":10,"cnt":1},{"data":1000040,"lvl":12,"cnt":1},{"data":1000041,"lvl":10,"cnt":3},{"data":1000042,"lvl":1,"cnt":6},{"data":1000043,"lvl":10,"cnt":3},{"data":1000044,"lvl":10,"cnt":3},{"data":1000045,"lvl":10,"cnt":1},{"data":1000046,"lvl":10,"cnt":1},{"data":1000048,"lvl":10,"cnt":3},{"data":1000049,"lvl":1,"cnt":2},{"data":1000050,"lvl":8,"cnt":3},{"data":1000050,"lvl":10,"cnt":2},{"data":1000051,"lvl":8,"cnt":1},{"data":1000052,"lvl":10,"cnt":1},{"data":1000053,"lvl":1,"cnt":1},{"data":1000054,"lvl":10,"cnt":1},{"data":1000055,"lvl":10,"cnt":2},{"data":1000056,"lvl":10,"cnt":1},{"data":1000057,"lvl":10,"cnt":1},{"data":1000058,"lvl":10,"cnt":1},{"data":1000063,"lvl":10,"cnt":1},{"data":1000065,"lvl":5,"cnt":1},{"data":1000080,"lvl":1,"cnt":1},{"data":1000081,"lvl":5,"cnt":1},{"data":1000082,"lvl":6,"cnt":1}],"traps2":[{"data":12000010,"lvl":5,"cnt":6},{"data":12000011,"lvl":10,"cnt":5},{"data":12000013,"lvl":10,"cnt":6},{"data":12000014,"lvl":10,"cnt":4}],"decos2":[{"data":18000038,"cnt":4},{"data":18000042,"cnt":25},{"data":18000045,"cnt":2}],"obstacles2":[{"data":8000041,"cnt":1}],"units2":[{"data":4000031,"lvl":20},{"data":4000032,"lvl":20},{"data":4000033,"lvl":17},{"data":4000034,"lvl":20},{"data":4000035,"lvl":20},{"data":4000036,"lvl":20},{"data":4000037,"lvl":20},{"data":4000038,"lvl":17,"timer":17821},{"data":4000041,"lvl":20},{"data":4000042,"lvl":20},{"data":4000070,"lvl":20},{"data":4000106,"lvl":20}],"heroes2":[{"data":28000003,"lvl":35},{"data":28000005,"lvl":34}],"skins2":[52000153],"sceneries2":[],"boosts":{"clocktower_cooldown":66411}};
+/* The export this version of the page was built from (Nov 16, 3:45 PM, first TH19 export). A newer pasted export replaces it. */
+const BAKED = {"tag":"#88RJQPR0P","timestamp":1794861905,"helpers":[{"data":93000000,"lvl":5,"helper_cooldown":25510},{"data":93000001,"lvl":1,"helper_cooldown":25510},{"data":93000002,"lvl":1},{"data":93000003,"lvl":1,"helper_cooldown":25510}],"guardians":[{"data":107000000,"lvl":5},{"data":107000001,"lvl":5},{"data":107000008,"lvl":1}],"buildings":[{"data":1000007,"lvl":16,"timer":960747},{"data":1000013,"lvl":18,"gear_up":1},{"data":1000097,"types":[{"data":103000011,"modules":[{"data":102000033,"lvl":1},{"data":102000034,"lvl":1},{"data":102000035,"lvl":1}]},{"data":103000012,"modules":[{"data":102000036,"lvl":1},{"data":102000037,"lvl":1},{"data":102000038,"lvl":1}]},{"data":103000013,"modules":[{"data":102000039,"lvl":1},{"data":102000040,"lvl":1},{"data":102000041,"lvl":1}]}]},{"data":1000106,"lvl":0,"timer":55694},{"data":1000000,"lvl":14,"cnt":4},{"data":1000001,"lvl":19,"cnt":1},{"data":1000002,"lvl":17,"cnt":7},{"data":1000003,"lvl":19,"cnt":4},{"data":1000004,"lvl":17,"cnt":7},{"data":1000005,"lvl":19,"cnt":4},{"data":1000006,"lvl":19,"cnt":1},{"data":1000009,"lvl":21,"cnt":2},{"data":1000010,"lvl":19,"cnt":322},{"data":1000010,"lvl":20,"cnt":3},{"data":1000011,"lvl":17,"cnt":2},{"data":1000012,"lvl":16,"cnt":4},{"data":1000013,"lvl":18,"cnt":3},{"data":1000014,"lvl":15,"cnt":1},{"data":1000015,"lvl":8,"cnt":5},{"data":1000019,"lvl":17,"cnt":5},{"data":1000020,"lvl":9,"cnt":1},{"data":1000021,"lvl":13,"cnt":4},{"data":1000023,"lvl":10,"cnt":2},{"data":1000023,"lvl":11,"cnt":1},{"data":1000024,"lvl":13,"cnt":1},{"data":1000026,"lvl":13,"cnt":1},{"data":1000027,"lvl":12,"cnt":3},{"data":1000028,"lvl":7,"cnt":2},{"data":1000029,"lvl":8,"cnt":1},{"data":1000032,"lvl":13,"cnt":2},{"data":1000059,"lvl":9,"cnt":1},{"data":1000064,"lvl":1,"cnt":1},{"data":1000067,"lvl":7,"cnt":2},{"data":1000068,"lvl":12,"cnt":1},{"data":1000070,"lvl":10,"cnt":1},{"data":1000071,"lvl":12,"cnt":1},{"data":1000072,"lvl":4,"cnt":2},{"data":1000077,"lvl":5,"cnt":1},{"data":1000079,"lvl":3,"cnt":1},{"data":1000084,"lvl":4,"cnt":3},{"data":1000085,"lvl":4,"cnt":3},{"data":1000086,"lvl":2,"cnt":1},{"data":1000089,"lvl":3,"cnt":2},{"data":1000093,"lvl":1,"cnt":1},{"data":1000102,"lvl":2,"cnt":2},{"data":1000105,"lvl":1,"cnt":1}],"traps":[{"data":12000006,"lvl":7,"timer":235184},{"data":12000008,"lvl":4,"timer":84178},{"data":12000008,"lvl":4,"timer":32059},{"data":12000006,"lvl":7,"timer":186854},{"data":12000000,"lvl":13,"cnt":8},{"data":12000001,"lvl":12,"cnt":9},{"data":12000002,"lvl":11,"cnt":8},{"data":12000005,"lvl":4,"cnt":1},{"data":12000005,"lvl":12,"cnt":7},{"data":12000006,"lvl":7,"cnt":7},{"data":12000008,"lvl":4,"cnt":2},{"data":12000016,"lvl":3,"cnt":1},{"data":12000020,"lvl":4,"cnt":1}],"decos":[{"data":18000000,"cnt":1},{"data":18000001,"cnt":4},{"data":18000003,"cnt":1},{"data":18000005,"cnt":4},{"data":18000006,"cnt":4},{"data":18000007,"cnt":1},{"data":18000008,"cnt":1},{"data":18000009,"cnt":1},{"data":18000010,"cnt":1},{"data":18000033,"cnt":1},{"data":18000037,"cnt":1},{"data":18000060,"cnt":1},{"data":18000063,"cnt":1},{"data":18000064,"cnt":1},{"data":18000065,"cnt":1},{"data":18000067,"cnt":1},{"data":18000069,"cnt":1},{"data":18000070,"cnt":1},{"data":18000071,"cnt":1},{"data":18000072,"cnt":1},{"data":18000090,"cnt":1},{"data":18000103,"cnt":1},{"data":18000126,"cnt":1},{"data":18000127,"cnt":1},{"data":18000130,"cnt":1},{"data":18000135,"cnt":1},{"data":18000136,"cnt":1},{"data":18000137,"cnt":1},{"data":18000138,"cnt":1},{"data":18000140,"cnt":1},{"data":18000141,"cnt":1},{"data":18000155,"cnt":1},{"data":18000157,"cnt":1},{"data":18000162,"cnt":1},{"data":18000165,"cnt":1},{"data":18000166,"cnt":1},{"data":18000171,"cnt":1},{"data":18000172,"cnt":1},{"data":18000178,"cnt":1},{"data":18000184,"cnt":1},{"data":18000185,"cnt":1},{"data":18000190,"cnt":1},{"data":18000192,"cnt":1},{"data":18000193,"cnt":1},{"data":18000196,"cnt":1},{"data":18000199,"cnt":1}],"obstacles":[{"data":8000088,"cnt":1},{"data":8000089,"cnt":3},{"data":8000090,"cnt":2},{"data":8000108,"cnt":1},{"data":8000116,"cnt":1},{"data":8000117,"cnt":2},{"data":8000127,"cnt":3},{"data":8000128,"cnt":1},{"data":8000129,"cnt":2},{"data":8000131,"cnt":2},{"data":8000133,"cnt":1},{"data":8000135,"cnt":1},{"data":8000136,"cnt":1},{"data":8000137,"cnt":1},{"data":8000138,"cnt":2},{"data":8000139,"cnt":1}],"units":[{"data":4000000,"lvl":13},{"data":4000001,"lvl":14},{"data":4000002,"lvl":10},{"data":4000003,"lvl":14},{"data":4000004,"lvl":14},{"data":4000005,"lvl":13},{"data":4000006,"lvl":14},{"data":4000007,"lvl":11},{"data":4000008,"lvl":13},{"data":4000009,"lvl":13},{"data":4000010,"lvl":14},{"data":4000011,"lvl":15},{"data":4000012,"lvl":12},{"data":4000013,"lvl":15},{"data":4000015,"lvl":8},{"data":4000017,"lvl":8},{"data":4000022,"lvl":10},{"data":4000023,"lvl":12},{"data":4000024,"lvl":12},{"data":4000053,"lvl":8},{"data":4000058,"lvl":9},{"data":4000059,"lvl":9},{"data":4000065,"lvl":6},{"data":4000082,"lvl":4},{"data":4000095,"lvl":5},{"data":4000097,"lvl":4},{"data":4000109,"lvl":4},{"data":4000110,"lvl":4},{"data":4000123,"lvl":6},{"data":4000132,"lvl":4},{"data":4000150,"lvl":4},{"data":4000177,"lvl":3}],"siege_machines":[{"data":4000051,"lvl":6},{"data":4000052,"lvl":6},{"data":4000062,"lvl":6},{"data":4000075,"lvl":6},{"data":4000087,"lvl":6},{"data":4000091,"lvl":5},{"data":4000092,"lvl":6},{"data":4000135,"lvl":4},{"data":4000188,"lvl":3,"timer":451497,"helper_recurrent":true}],"heroes":[{"data":28000000,"lvl":110},{"data":28000001,"lvl":110},{"data":28000002,"lvl":85},{"data":28000004,"lvl":55},{"data":28000006,"lvl":95},{"data":28000007,"lvl":25}],"spells":[{"data":26000000,"lvl":13},{"data":26000001,"lvl":12},{"data":26000002,"lvl":7},{"data":26000003,"lvl":5},{"data":26000005,"lvl":8},{"data":26000009,"lvl":12},{"data":26000010,"lvl":8},{"data":26000011,"lvl":7},{"data":26000016,"lvl":9},{"data":26000017,"lvl":8},{"data":26000028,"lvl":8},{"data":26000035,"lvl":4},{"data":26000053,"lvl":7},{"data":26000070,"lvl":5},{"data":26000098,"lvl":5},{"data":26000109,"lvl":6},{"data":26000120,"lvl":4},{"data":26000123,"lvl":4}],"pets":[{"data":73000000,"lvl":15},{"data":73000001,"lvl":15},{"data":73000002,"lvl":15},{"data":73000003,"lvl":15},{"data":73000004,"lvl":10},{"data":73000007,"lvl":15},{"data":73000008,"lvl":15},{"data":73000009,"lvl":15},{"data":73000010,"lvl":10},{"data":73000011,"lvl":10,"timer":497245},{"data":73000016,"lvl":10},{"data":73000017,"lvl":10}],"equipment":[{"data":90000000,"lvl":14},{"data":90000001,"lvl":18},{"data":90000002,"lvl":14},{"data":90000003,"lvl":14},{"data":90000004,"lvl":18},{"data":90000005,"lvl":18},{"data":90000006,"lvl":18},{"data":90000007,"lvl":14},{"data":90000008,"lvl":18},{"data":90000009,"lvl":18},{"data":90000010,"lvl":20},{"data":90000011,"lvl":18},{"data":90000012,"lvl":18},{"data":90000013,"lvl":27},{"data":90000014,"lvl":27},{"data":90000015,"lvl":23},{"data":90000016,"lvl":1},{"data":90000017,"lvl":18},{"data":90000019,"lvl":27},{"data":90000020,"lvl":18},{"data":90000022,"lvl":23},{"data":90000024,"lvl":18},{"data":90000032,"lvl":8},{"data":90000034,"lvl":18},{"data":90000035,"lvl":27},{"data":90000039,"lvl":20},{"data":90000040,"lvl":27},{"data":90000041,"lvl":17},{"data":90000042,"lvl":18},{"data":90000043,"lvl":18},{"data":90000044,"lvl":11},{"data":90000047,"lvl":8},{"data":90000048,"lvl":11},{"data":90000049,"lvl":26},{"data":90000050,"lvl":20},{"data":90000051,"lvl":1},{"data":90000052,"lvl":18},{"data":90000053,"lvl":21},{"data":90000056,"lvl":14},{"data":90000057,"lvl":1},{"data":90000059,"lvl":1},{"data":90000060,"lvl":1},{"data":90000061,"lvl":1},{"data":90000062,"lvl":1},{"data":90000063,"lvl":1}],"house_parts":[82000000,82000001,82000002,82000003,82000004,82000006,82000008,82000009,82000010,82000011,82000013,82000014,82000015,82000016,82000017,82000020,82000022,82000025,82000031,82000032,82000045,82000046,82000048,82000049,82000052,82000053,82000055,82000058,82000059,82000060,82000061,82000062,82000063,82000064,82000066,82000067,82000081,82000082,82000084,82000087,82000088,82000089,82000090,82000092,82000094],"skins":[52000020,52000004,52000012,52000015,52000025,52000063,52000055,52000056,52000065,52000039,52000051,52000067,52000041,52000097,52000090,52000092,52000122,52000105,52000126,52000120,52000136,52000128,52000141,52000174,52000060,52000131,52000150,52000194,52000210,52000022,52000176,52000198,52000253,52000215,52000181,52000238,52000023,52000183,52000258,52000099,52000220,52000206,52000005,52000264,52000226,52000248,52000292,52000320,52000270,52000331,52000304,52000337,52000349],"building_variants":[119000002],"sceneries":[60000015,60000034,60000017,60000014,60000035,60000059,60000064,60000066,60000072,60000073,60000069,60000078],"buildings2":[{"data":1000033,"lvl":4,"cnt":65},{"data":1000033,"lvl":5,"cnt":108},{"data":1000033,"lvl":9,"cnt":2},{"data":1000033,"lvl":10,"cnt":5},{"data":1000034,"lvl":10,"cnt":1},{"data":1000035,"lvl":10,"cnt":3},{"data":1000036,"lvl":10,"cnt":2},{"data":1000037,"lvl":10,"cnt":3},{"data":1000038,"lvl":10,"cnt":2},{"data":1000039,"lvl":10,"cnt":1},{"data":1000040,"lvl":12,"cnt":1},{"data":1000041,"lvl":10,"cnt":3},{"data":1000042,"lvl":1,"cnt":6},{"data":1000043,"lvl":10,"cnt":3},{"data":1000044,"lvl":10,"cnt":3},{"data":1000045,"lvl":10,"cnt":1},{"data":1000046,"lvl":10,"cnt":1},{"data":1000048,"lvl":10,"cnt":3},{"data":1000049,"lvl":1,"cnt":2},{"data":1000050,"lvl":8,"cnt":3},{"data":1000050,"lvl":10,"cnt":2},{"data":1000051,"lvl":8,"cnt":1},{"data":1000052,"lvl":10,"cnt":1},{"data":1000053,"lvl":1,"cnt":1},{"data":1000054,"lvl":10,"cnt":1},{"data":1000055,"lvl":10,"cnt":2},{"data":1000056,"lvl":10,"cnt":1},{"data":1000057,"lvl":10,"cnt":1},{"data":1000058,"lvl":10,"cnt":1},{"data":1000063,"lvl":10,"cnt":1},{"data":1000065,"lvl":5,"cnt":1},{"data":1000078,"lvl":8,"cnt":1},{"data":1000080,"lvl":1,"cnt":1},{"data":1000081,"lvl":5,"cnt":1},{"data":1000082,"lvl":6,"cnt":1}],"traps2":[{"data":12000010,"lvl":5,"cnt":6},{"data":12000011,"lvl":10,"cnt":5},{"data":12000013,"lvl":10,"cnt":6},{"data":12000014,"lvl":10,"cnt":4}],"decos2":[{"data":18000038,"cnt":4},{"data":18000042,"cnt":25},{"data":18000045,"cnt":2}],"obstacles2":[{"data":8000041,"cnt":1}],"units2":[{"data":4000031,"lvl":20},{"data":4000032,"lvl":20},{"data":4000033,"lvl":17},{"data":4000034,"lvl":20},{"data":4000035,"lvl":20},{"data":4000036,"lvl":20},{"data":4000037,"lvl":20},{"data":4000038,"lvl":18},{"data":4000041,"lvl":20},{"data":4000042,"lvl":20},{"data":4000070,"lvl":20},{"data":4000106,"lvl":20}],"heroes2":[{"data":28000003,"lvl":35},{"data":28000005,"lvl":34}],"skins2":[52000153],"building_variants2":[],"sceneries2":[],"emotes":[126000000,126000001,126000002,126000003,126000004],"boosts":{"builder_boost":14383,"clocktower_cooldown":2898}};
 
 /* ===== Saved on this device ===== */
 const store={
@@ -613,6 +657,7 @@ const POTION_BUILDERS=['gob','b1','b2','b3','b4','b5','b6'], POTION_LAB=['lab','
 const POTION_RUNS=[
   {x:10,from:1794510139000,to:1794531739000,lanes:POTION_BUILDERS,label:'Builder Potion',n:6},
   {x:24,from:1794510134000,to:1794528134000,lanes:POTION_LAB,label:'Research Potion',n:5},
+  {x:10,from:1794861888000,to:1794876288000,lanes:POTION_BUILDERS,label:'Builder Potion',n:4},
 ];
 POTION_RUNS.forEach(b=>BOOSTS.push(b));
 /* a potion still running in the export, unless it is one of the planned runs above */
@@ -669,25 +714,37 @@ function levelSum(x){ let t=0; ['heroes','pets','guardians','buildings','traps',
   if(!e||e.data===1000010||e.data===1000097) return; t+=(e.lvl||0)*(e.cnt||1); })); return t; }
 /* full-price hours after the Jam */
 /* TH19 order once Town Hall 19 finishes (levels from the TH19 sneak peeks; times and costs TBC) */
+/* TH19 work not in a lane yet, top first. Times and costs TBC unless shown (Spiky Tower from the Fandom wiki, base time). */
 const AFTER_B = [
-  ['Laboratory 17',null,'e',null,'First. The lab is your bottleneck at TH19'],
-  ['Hero Hall 13',null,'g',null,'Opens 5 more levels for every hero'],
-  ['Storages: Gold 20, Elixir 20, Dark Elixir 14',null,'g',null,'Room for the bigger TH19 costs'],
-  ['Clan Castle 15',null,'g',null,''],
-  ['Spell Factory 10',null,'e',null,''],
-  ["Builder's Huts to 9",null,'g',null,''],
-  ['New TH19 defenses',null,'g',null,'Whatever the update adds, first ones as soon as they unlock'],
-  ['X-Bow 14, Hidden Tesla 18, Air Defense 17',null,'g',null,''],
+  ['Spiky Tower level 2 (x2)',372,'d',510e3,'Each. Dark Elixir'],
+  ['Royal Champion 59 and 60',null,'d',null,'Your RC walk hero, keep one builder on her'],
+  ['Archer Queen and Barbarian King to 115',null,'d',null,''],
+  ['Grand Warden to 90',null,'e',null,''],
+  ['Minion Prince to 100',null,'d',null,''],
+  ['Firecracker Tower level 2 (x2)',null,'g',null,''],
+  ['X-Bow 14 (#3 and #4)',null,'g',null,''],
+  ['Air Defense #5 (new) and Air Defense 17 (x5)',null,'g',null,'The new one starts at level 1'],
+  ['Hidden Tesla 18 (x5)',null,'g',null,''],
   ['Multi-Archer Tower 5, Ricochet Cannon 5, Multi-Gear Tower 4',null,'g',null,''],
-  ['Smasher 6 to 10',null,'e',null,'Guardian'],
+  ["Builder's Huts to 9 (x5)",null,'g',null,''],
+  ['Smasher 7 to 10',null,'e',null,'Guardian, right after a war'],
+  ['Squad Barracks to 12',null,'e',null,'Squad levels only exist at TH19'],
+  ['Storages: Gold 20, Elixir 20, Dark Elixir 14',null,'g',null,'Only if a cost won\'t fit'],
   ['Gold Mines 18, Elixir Collectors 18, Dark Elixir Drills 12',null,'g',null,'Low priority'],
-  ['Walls to 20 (150 pieces)',null,'g',null,'Spare Gold and Elixir'],
-  ['TH19 trap levels (Skeleton 6, Spring 14, Air Bomb 14)',null,'g',null,'Filler'],
-  ['TH18 trap levels left (all)',4662,'g',644.4e6,'Filler. Giant Bombs and Spring Traps may get cheaper at TH19'],
-  ['Logger 2 to 5',430,'e',54.9e6,'Guardian, last'],
+  ['Walls to 20 (147 left)',null,'g',null,'Wall Rings and spare loot'],
+  ['Traps: 10th Spring Trap, Spring 14, Air Bomb 14, Skeleton 6',null,'g',null,'Filler'],
+  ['Dragon Duke to 30',null,'d',null,'Last. Not in your army'],
+  ['Logger 2 to 5',null,'e',null,'Guardian, last'],
 ];
 const AFTER_L = [
-];   /* lab is maxed for TH18 once Goblin 10, Wall Breaker 14 and Sky Wagon 4 finish */
+  ['Baby Dragon squad and Dragon squad levels',null,'e',null,'Squads level up at TH19'],
+  ['Spells: Lightning 14, Haste 8, Healing 13, Poison 13, Bat 9, Totem 5',null,'e',null,''],
+  ['Dragon Rider 7, Flame Flinger 6',null,'e',null,''],
+  ['Hog Rider 16, Golem 16, Minion 15, Valkyrie 13, Lava Hound 9',null,'d',null,''],
+  ['Witch 9, Bowler 11, Headhunter 5, Druid 7, Ruin Witch 5',null,'d',null,''],
+  ['Barbarian 14, Archer 15, Giant 15, Goblin 11, Wall Breaker 15, Wizard 15',null,'e',null,'Archers 15 or Wizards 15 unlock those Town Hall troops'],
+  ['Healer 12, P.E.K.K.A 14, Miner 13, Yeti 9, Electro Titan 6, Root Rider 5, Thrower 5, Meteor Golem 4',null,'e',null,'Last'],
+];
 
 /* ===== Time ===== */
 const TZ='America/Toronto';
@@ -764,6 +821,8 @@ const PLAN_PATCHES=[
   {key:'2026-11-14-export-2256-reset-lanes', resetEdits:true},
   {key:'2026-11-15-export-2203-after-plan', resetEdits:true},
   {key:'2026-11-16-th19-plan', resetEdits:true},
+  {key:'2026-11-16-th19-schedule', resetEdits:true},
+  {key:'2026-11-16-items-screenshot', setItems:{'Builder Potion':0,'Research Potion':0,'Training Potion':10,'Resource Potion':3,'Hero Potion':11,'Power Potion':4,'Pet Potion':2,'Rune of Gold':2,'Rune of Elixir':1,'Rune of Dark Elixir':1,'Wall Ring':3,'Book of Building':1,'Book of Fighting':1,'Book of Spells':1,'Book of Heroes':1,'Hammer of Fighting':1}},
   {key:'2026-11-12-items-screenshot', setItems:{'Builder Potion':0,'Research Potion':0,'Training Potion':10,'Resource Potion':1,'Hero Potion':11,'Power Potion':4,'Rune of Gold':2,'Rune of Elixir':1,'Rune of Dark Elixir':1,'Pet Potion':0}},
 ];
 function applyPatches(){
@@ -798,7 +857,7 @@ function applyPatches(){
 /* starts you told me about that the last export doesn't show yet */
 const STARTED_AT={};
 /* lanes left empty on purpose once their current job ends (no gem starts planned) */
-const PARKED=['glab','pet'];   /* lab maxes after Sky Wagon 4 and every pet is maxed */
+const PARKED=['glab','gob'];   /* no gem starts planned at TH19 yet */
 let LANES=[], EXTRA=[], plan=[];
 function rebuild(){
   const JOBS=[];
@@ -808,36 +867,40 @@ function rebuild(){
   const credit=(id,to)=>{ const k=id+':'+to; if(!(k in credits)) credits[k]=countAtLeast(EXP,id,to)-baseAtLeast(id,to); return k; };
   LANES=PLAN.map(P=>{
     const items=laneItems(P);
-    let cur='',left=0,idx=0;
+    let cur='',left=0,idx=0,curId=null,curTo=null;
     for(;idx<items.length;idx++){
       const it=items[idx]; let id=it[5], to=it[6];
       if(!id){ const r=resolveItem(it[0]); if(r){ id=r.id; to=r.to; } }
       if(!id) break;
-      if(!to){ const job=JOBS.find(j=>!j.claimed&&j.id===id&&j.kind===P.kind); if(job){ job.claimed=true; cur=it[0]; left=job.left; idx++; } break; }
+      if(!to){ const job=JOBS.find(j=>!j.claimed&&j.id===id&&j.kind===P.kind); if(job){ job.claimed=true; cur=it[0]; left=job.left; curId=job.id; curTo=job.to; idx++; } break; }
       const job=JOBS.find(j=>!j.claimed&&j.id===id&&j.to===to&&j.kind===P.kind);
-      if(job){ job.claimed=true; cur=it[0]; left=job.left; idx++; break; }
+      if(job){ job.claimed=true; cur=it[0]; left=job.left; curId=job.id; curTo=job.to; idx++; break; }
       if(isMulti(id)){ const k=credit(id,to); if(credits[k]>0){ credits[k]--; continue; } break; }
       if(lvlOf(EXP,id)>=to) continue;
       break;
     }
-    return {id:P.id,name:P.name,kind:P.kind,cur,left,first:idx,steps:items.slice(idx).map(x=>x.slice(0,5))};
+    return {id:P.id,name:P.name,kind:P.kind,cur,left,curId,curTo,first:idx,steps:items.slice(idx).map(x=>x.slice())};
   });
   EXTRA=[];
   JOBS.filter(j=>!j.claimed).forEach(j=>{
     const L=LANES.find(l=>l.kind===j.kind&&!l.cur), nm=nameOf(j.id)+' '+j.to;
-    if(L){ L.cur=nm; L.left=j.left; L.unplanned=true; } else EXTRA.push(nm);
+    if(L){ L.cur=nm; L.left=j.left; L.curId=j.id; L.curTo=j.to; L.unplanned=true; } else EXTRA.push(nm);
   });
-  plan=LANES.map(L=>{
+  const build=gates=>LANES.map(L=>{
     let curEnd=L.cur?runFrom(L.id,EXPORT,L.left*1000):EXPORT;
     const ov0=L.steps[0]&&STARTED_AT[L.id+'|'+L.steps[0][0]]; if(ov0&&ov0<curEnd) curEnd=Math.max(EXPORT,ov0);   // finished early (gems, book or a newer start)
     let t=curEnd; const q=[];
     L.steps.forEach((s,i)=>{
-      const ov=STARTED_AT[L.id+'|'+s[0]], ready=ov?Math.min(t,ov):t, start=ov||wake(t), f=start>=JAM_END?2:1, end=runFrom(L.id,start,(s[1]||0)*f*PASS*H);   // after the Jam: full price, double time and cost
-      q.push({lane:L,i,name:s[0],hrs:s[1]==null?null:s[1]*f,cur:s[2],cost:s[3]==null?null:s[3]*f,flag:s[4]||'',ready,start,end,slept:start>ready,late:start>=JAM_END,boost:boosted(L.id,start,end)});
+      const G=GATES.find(g=>g.applies(L,s)&&gates[g.label]), gt=G?gates[G.label]:0;
+      const ov=STARTED_AT[L.id+'|'+s[0]], ready=ov?Math.min(t,ov):Math.max(t,gt), start=ov||wake(ready), f=start>=JAM_END?2:1, end=runFrom(L.id,start,(s[1]||0)*f*PASS*H);   // after the Jam: full price, double the half price numbers
+      q.push({lane:L,i,name:s[0],hrs:s[1]==null?null:s[1]*f,cur:s[2],cost:s[3]==null?null:s[3]*f,flag:s[4]||'',id:s[5],to:s[6],ready,start,end,slept:start>ready,waits:gt>t?G.label:'',late:false,boost:boosted(L.id,start,end)});
       t=end;
     });
     return {L,curEnd,curBoost:boosted(L.id,EXPORT,curEnd),q,idleAt:t};
   });
+  const gateEnds=pl=>{ const g={}; GATES.forEach(G=>{ const [id,to]=G.need; if(lvlOf(EXP,id)>=to) return;
+    for(const p of pl){ if(p.L.curId===id&&p.L.curTo===to){ g[G.label]=p.curEnd; return; } const x=p.q.find(s=>s.id===id&&s.to===to); if(x){ g[G.label]=x.end; return; } } }); return g; };
+  plan=build({}); for(let k=0;k<3;k++) plan=build(gateEnds(plan));
 }
 const mk=s=>s.lane.id+'|'+s.name;
 const allSteps=()=>plan.flatMap(p=>p.q);
@@ -846,11 +909,20 @@ const allSteps=()=>plan.flatMap(p=>p.q);
 function header(){
   const now=Date.now();
   document.getElementById('synced').textContent=(PASTED?'Your pasted export from ':'Synced to your export from ')+whenD(EXPORT)+(EXTRA.length?' · also running: '+EXTRA.join(', '):'')+(syncCfg()?' · synced across devices':'');
-  const start=Date.parse('2026-11-02T02:45:00-05:00'), left=Math.max(0,JAM_END-now);
-  document.getElementById('jamfill').style.width=Math.min(100,Math.max(0,left/(JAM_END-start)*100))+'%';
-  const d=Math.floor(left/864e5), h=Math.floor(left%864e5/H), m=Math.floor(left%H/6e4), s=Math.floor(left%6e4/1e3);
-  document.getElementById('jamBig').innerHTML=left>0?`${d}<span>d</span>${h}<span>h</span>${m}<span>m</span>${String(s).padStart(2,'0')}<span>s</span>`:'Over';
-  document.getElementById('jamSub').textContent=left>0?'Ends '+fmtDay.format(JAM_END)+' at '+when(JAM_END):'The Hammer Jam has ended. Full prices now.';
+  const steps=allSteps().filter(x=>!marks[mk(x)]).sort((a,b)=>a.start-b.start), rdy=steps.filter(x=>x.start<=now), nx=steps.find(x=>x.start>now);
+  const big=document.getElementById('jamBig'), sub=document.getElementById('jamSub');
+  if(rdy.length){ document.getElementById('jamLab').textContent='Ready to start'; big.innerHTML=`${rdy.length}<span>${rdy.length===1?'upgrade':'upgrades'}</span>`;
+    sub.textContent=rdy.slice(0,3).map(x=>x.name+' ('+x.lane.name+')').join(', '); }
+  else if(nx){ const left=nx.start-now, d=Math.floor(left/864e5), h=Math.floor(left%864e5/H), m=Math.floor(left%H/6e4), s2=Math.floor(left%6e4/1e3);
+    document.getElementById('jamLab').textContent='Next start';
+    big.innerHTML=(d?`${d}<span>d</span>`:'')+`${h}<span>h</span>${m}<span>m</span>${String(s2).padStart(2,'0')}<span>s</span>`;
+    sub.textContent=nx.name+' on '+nx.lane.name+', '+whenD(nx.start); }
+  else { document.getElementById('jamLab').textContent='Next start'; big.textContent='Nothing queued'; sub.textContent='Add the next upgrade from the Plan tab.'; }
+  const lp=plan.find(p=>p.L.curId===1000007&&p.L.curTo===17), l17=document.getElementById('jamLab17'), fill=document.getElementById('jamfill');
+  if(lp&&lp.curEnd>now){ fill.parentNode.style.display='';
+    fill.style.width=Math.min(100,Math.max(2,(1-(lp.curEnd-now)/Math.max(1,lp.curEnd-Date.parse('2026-11-16T15:00:00-05:00')))*100))+'%';
+    l17.textContent='Laboratory 17 done '+whenD(lp.curEnd)+' · TH19 research starts then'; }
+  else { fill.parentNode.style.display='none'; l17.textContent=lvlOf(EXP,1000007)>=17?'Laboratory 17 is done. Keep the lab busy.':''; }
   document.getElementById('boosts').innerHTML=BOOSTS.filter(b=>b.to>now).map(b=>
     `<span class="pill"><i style="background:${b.x===10?'var(--blue)':'var(--elix)'}"></i>${b.n?b.n+' ':''}${esc(b.label)}${b.n>1?'s':''} ${b.x}x · ${b.from>now?whenD(b.from)+' to '+when(b.to):'until '+when(b.to)}</span>`).join('');
 }
@@ -875,7 +947,7 @@ function upNext(){
     const ready=s.start<=now, dk=ready?'Ready now':dayKey(s.start);
     if(dk!==lastDay){ html+=`<li class="daysep">${ready?'Ready now':fmtDay.format(s.start)}</li>`; lastDay=dk; }
     const prev=s.i===0?(s.lane.cur||'free now'):s.lane.steps[s.i-1][0];
-    const tags=(s.boost?'<span class="tag t-boost">BOOSTED</span>':'')+(s.slept?'<span class="tag t-sleep">AFTER SLEEP</span>':'')+(s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':'');
+    const tags=(s.boost?'<span class="tag t-boost">BOOSTED</span>':'')+(s.slept?'<span class="tag t-sleep">AFTER SLEEP</span>':'')+(s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':'')+(s.flag==='tbc'?'<span class="tag t-late">TIME TBC</span>':'')+(s.waits?`<span class="tag t-edit">AFTER ${esc(s.waits.toUpperCase())}</span>`:'');
     html+=`<li class="${ready?'ready':''}"><div class="when">${ready?'Now':when(s.start)}<small>${esc(s.lane.name)}</small></div>
       <div class="what"><b>${esc(s.name)}${tags}</b><span>after ${esc(prev)} · <span class="cur"><i class="dot ${s.cur}"></i>${money(s.cost)}</span></span></div>
       <input type="checkbox" class="chk" aria-label="Started ${esc(s.name)}" data-k="${esc(mk(s))}"></li>`;
@@ -883,7 +955,7 @@ function upNext(){
   if(doneRecent.length){ html+='<li class="daysep">Started</li>';
     doneRecent.forEach(s=>{ html+=`<li class="done"><div class="when">${when(s.start)}<small>${esc(s.lane.name)}</small></div><div class="what"><b>${esc(s.name)}</b><span>done ${whenD(s.end)}</span></div>
       <input type="checkbox" class="chk" aria-label="Started ${esc(s.name)}" data-k="${esc(mk(s))}" checked></li>`; }); }
-  if(!shown.length&&!doneRecent.length) html='<li style="display:block"><b>Nothing left to start in the Jam.</b></li>';
+  if(!shown.length&&!doneRecent.length) html='<li style="display:block"><b>Nothing queued.</b> Add the next upgrade from the Plan tab.</li>';
   document.getElementById('next').innerHTML=html;
   const btn=document.getElementById('moreBtn');
   btn.style.display=list.length>8?'block':'none';
@@ -939,7 +1011,7 @@ function lanes(){
     } else {
       const rest=p.q.filter(s=>s.start>now);
       qHtml=rest.length?`<ul class="list q">${rest.map(s=>`<li class="${s.late?'after':''}"><span>${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':''}${s.flag==='tbc'?'<span class="tag t-late">TIME TBC</span>':''}</span><span class="t">${whenD(s.start)}</span></li>`).join('')}</ul>`
-        :`<div class="empty">${gemLane?'Needs gems for the next start':'Nothing else queued in the Jam'}</div>`;
+        :`<div class="empty">${gemLane?'Needs gems for the next start':'Nothing else queued'}</div>`;
     }
     const cnt=p.q.filter(s=>s.start>now).length;
     return `<div class="card lane"><div class="lh"><div><div class="lname">${esc(L.name)}${edited?'<span class="tag t-edit">EDITED</span>':''}</div><div class="lsub">${cnt?cnt+' queued':'last one running'}</div></div>
@@ -973,11 +1045,11 @@ document.getElementById('lanes').addEventListener('submit',e=>{
 function timeline(){
   const now=Date.now();
   const t0=localMidnight(Math.min(now,EXPORT))-0;
-  const lastEnd=Math.max(JAM_END,...plan.map(p=>p.idleAt));
+  const lastEnd=Math.max(Date.now(),...plan.map(p=>p.idleAt));
   const t1=Math.min(localMidnight(lastEnd)+2*864e5,t0+14*864e5);
   const pxh=6, LAB=96, W=(t1-t0)/H*pxh;
   const x=t=>LAB+Math.max(0,(Math.min(t,t1)-t0)/H*pxh);
-  let head=`<div class="tlhead" style="width:${W+LAB}px"><div class="tllab" style="height:30px;border:0;background:#12151c"></div>`;
+  let head=`<div class="tlhead" style="width:${W+LAB}px"><div class="tllab" style="height:30px;border:0;background:#171312"></div>`;
   for(let t=t0;t<t1;t+=864e5) head+=`<div class="tick" style="left:${x(t)}px"><span>${fmtD.format(t)}</span></div>`;
   head+='</div>';
   const rows=plan.map(p=>{
@@ -989,7 +1061,7 @@ function timeline(){
   }).join('');
   const runs={}; POTION_RUNS.filter(B=>B.to>t0&&B.from<t1).forEach(B=>{ const k=B.from+'|'+B.to; (runs[k]=runs[k]||[]).push(B); });
   const potionLines=Object.values(runs).map((g,i)=>`<div class="vline pot" style="left:${x(g[0].from)}px"><em style="top:${24+i*18}px">Potions ${when(g[0].from)} to ${when(g[0].to)}: ${g.map(B=>(B.lanes.includes('lab')?'lab ':'builders ')+B.x+'x').join(', ')}</em></div>`).join('');
-  const lines=potionLines+`<div class="vline jam" style="left:${x(JAM_END)}px"><em>Jam ends</em></div>`+(now>t0&&now<t1?`<div class="vline now" style="left:${x(now)}px"><em>Now</em></div>`:'');
+  const lines=potionLines+(now>t0&&now<t1?`<div class="vline now" style="left:${x(now)}px"><em>Now</em></div>`:'');
   const tl=document.getElementById('tl');
   tl.innerHTML=`<div class="tlin" style="width:${W+LAB}px">${head}${rows}${lines}</div>`;
   if(!tl.dataset.scrolled&&tl.offsetParent){ tl.scrollLeft=Math.max(0,x(now)-LAB-40); tl.dataset.scrolled=1; }
@@ -1034,8 +1106,8 @@ function after(){
   document.getElementById('after').innerHTML='<tr><th>Upgrade</th><th class="r">Time</th><th class="r">Cost</th></tr>'+
     rows.map(r=>`<tr><td>${esc(r[0])}${r[4]?`<span class="sub" style="font-size:12px">${esc(r[4])}</span>`:''}</td><td class="r">${r[1]==null?'TBC':(r[1]/24).toFixed(1)+'d'}</td><td class="r">${r[3]==null?'TBC':`<span class="cur"><i class="dot ${r[2]}"></i>${money(r[3])}</span>`}</td></tr>`).join('');
   document.getElementById('afternote').innerHTML=tab==='b'
-    ? `TH19 order, top first, once Town Hall 19 finishes. Times and costs fill in when the update is live. The TH18 traps at the bottom are filler for any builder that would sit idle.`
-    : rows.length?`About <b>${Math.round(days)} lab days</b> at full price. This is your bottleneck, so save Research Potions and books for it.`:`Nothing left. The lab is maxed for TH18 once the planned research finishes, so save Research Potions and books for TH19.`;
+    ? `What's left at TH19 after the lanes, top first. Times show TBC until the game confirms them. Leftover TH18 traps aren't listed; they're filler only.`
+    : `TH19 research after what's queued in the Laboratory lane, top first. Your 3 free Research Potions a week go here.`;
 }
 document.getElementById('afterSeg').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return; tab=b.dataset.tab;
@@ -1097,8 +1169,8 @@ const ITEM_GROUPS=[
   ['Other',['Wall Ring','Rune of Gold','Rune of Elixir','Rune of Dark Elixir']],
 ];
 let ITEMS=Object.assign({
-  'Hammer of Fighting':{n:1,note:'Save for TH19 research'},
-  'Hammer of Building':{n:1,note:'Saved for TH19'},
+  'Hammer of Fighting':{n:1,note:'Dragon 14 once Lab 17 is done'},
+  'Book of Building':{n:1,note:'Laboratory 17 when Sky Wagon 4 finishes'},
   'Research Potion':{n:0,note:'3 free every week. Save for the lab'},
 }, store.get(ITEM_KEY,{}));
 let showAllItems=false;
@@ -1143,7 +1215,7 @@ function renderLoot(){
     return `<div class="lrow"><div><div class="cur"><i class="dot ${c}"></i>${CUR[c]}</div><div class="s">Need ${money(need[c])}${first[c]?` · runs out at ${esc(first[c].name)}, ${whenD(first[c].start)}`:''}</div></div>
       <div style="font-weight:700;font-size:13px" class="${ok===null?'muted':ok?'ok':'bad'}">${ok===null?'Enter amount':ok?'Covered':'Short '+money(need[c]-h)}</div></div>`; }).join('');
   document.getElementById('lootCard').innerHTML=`<div class="pad">
-    <h3><span class="ico" style="background:rgba(246,185,65,.15)">🪙</span>What's in your storages?</h3>
+    <h3><span class="ico" style="background:rgba(255,122,40,.15)">🪙</span>What's in your storages?</h3>
     <p class="desc">Type amounts like 18.5M or 250K.</p>
     <div class="g3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px">
       <div><label class="fl">Gold</label><input class="in" data-lt="g" value="${esc(LOOT.g)}" inputmode="decimal"></div>
@@ -1526,7 +1598,7 @@ function closeChat(){ chatEl.classList.remove('on'); bg.classList.remove('on'); 
 document.getElementById('askBtn').addEventListener('click',openChat);
 document.getElementById('chatClose').addEventListener('click',closeChat);
 bg.addEventListener('click',closeChat);
-document.getElementById('chips').innerHTML=["Suggest upgrades","What's next?","Anything idle?","Loot for tomorrow","Gems","What starts tomorrow?","When does everything run out?","Any gaps before the Jam ends?","What won't be maxed?","Jam time left","Help"].map(t=>`<button type="button">${esc(t)}</button>`).join('');
+document.getElementById('chips').innerHTML=["Suggest upgrades","What's next?","Anything idle?","Loot for tomorrow","Gems","What starts tomorrow?","When does everything run out?","What won't be maxed?","Jam time left","Help"].map(t=>`<button type="button">${esc(t)}</button>`).join('');
 logEl.addEventListener('click',e=>{
   const g=e.target.closest('[data-goedit]');
   if(g){ closeChat(); go('plan'); editing=g.dataset.goedit; lanes(); setTimeout(()=>{ const c=document.querySelector(`[data-edit="${editing}"]`); if(c) c.closest('.lane').scrollIntoView({behavior:'smooth',block:'start'}); },60); return; }
@@ -1563,9 +1635,9 @@ function aiCfg(){ try{ return JSON.parse(localStorage.getItem(AI_KEY)||'null'); 
 function aiUse(){ try{ const u=JSON.parse(localStorage.getItem(AI_USE)||'null'); const m=new Date().toISOString().slice(0,7); return u&&u.m===m?u:{m,i:0,o:0,n:0}; }catch(e){ return {m:'',i:0,o:0,n:0}; } }
 function aiSystem(){
   const now=Date.now(), f=t=>whenD(t), cn={g:'gold',e:'elixir',d:'DE'};
-  let s=`You are the helper inside a private Clash of Clans upgrade planner web page (Town Hall 18, preparing for TH19). Answer from the PLAN DATA below plus general Clash of Clans knowledge. If the data doesn't cover something, say so briefly instead of guessing numbers.
+  let s=`You are the helper inside a private Clash of Clans upgrade planner web page (Town Hall 19, just upgraded). Answer from the PLAN DATA below plus general Clash of Clans knowledge. If the data doesn't cover something, say so briefly instead of guessing numbers.
 Style: short and phone friendly (usually under 100 words). Plain text; **bold** and lines starting with "- " are allowed. Never use em dashes or en dashes as punctuation. Times are Toronto time, written like "Sun, Nov 15, 10:20 PM".
-Player goals: be as ready for TH19 as possible, about 92 to 93% overall at TH18 without being more than 7 to 8% rushed. The lab is the bottleneck. Dark elixir is easy for them to farm. Supercharging is pointless with TH19 coming. Hero equipment doesn't count toward max. They don't use Dragon Duke in their army. Best Jam value: start the longest, most expensive upgrades before the Jam ends; the Jam price locks in at start (about half cost and time).
+Player goals: progress TH19 efficiently. Order: Laboratory 17 and Hero Hall 13 first, then Spiky Towers (Dark Elixir) and Firecracker merges, then heroes on several builders (Royal Champion first, their main attack is an RC walk plus dragons), then defenses. The lab is the bottleneck. Dark elixir is easy for them to farm. Hero equipment doesn't count toward max. They don't use Dragon Duke in their army. Items flagged TBC use estimated times. The Hammer Jam is over, so everything is full price (Gold Pass 20% off time).
 Actions: if the user clearly asks you to add or remove an upgrade, put ONE line at the very end in this exact form and the page will show a confirm button:
 [[add|laneId|Upgrade name and level, like Grand Warden 84]]
 [[remove|laneId|exact queued name]]
@@ -1573,21 +1645,21 @@ The page fills in time and cost itself, so never ask the user for them.
 Only use lane ids from the data.
 
 PLAN DATA
-Now: ${f(now)}. Hammer Jam ends ${f(JAM_END)}. Player sleeps ${sleepText()} (no starts then). Last game export ${f(EXPORT)}.`;
+Now: ${f(now)}. Player sleeps ${sleepText()} (no starts then). Last game export ${f(EXPORT)}.`;
   BOOSTS.filter(b=>b.to>now).forEach(b=>{ s+=`\n${b.label} ${b.x}x until ${f(b.to)}.`; });
   s+='\nLANES (id: name, planned queue in order):';
   plan.forEach(p=>{ s+=`\n${p.L.id}: ${p.L.name}`+(p.L.cur&&p.curEnd>now?`, running ${p.L.cur} until ${f(p.curEnd)}`:'')+`, out of planned work ${f(p.idleAt)}`;
-    p.q.forEach(x=>{ s+=`\n  ${x.name} | start ${x.start<=now?'ready now':f(x.start)} | done ${f(x.end)} | ${money(x.cost)} ${cn[x.cur]}${x.flag==='gem'?' | needs gems':''}${marks[mk(x)]?' | started':''}${x.late?' | after Jam':''}`; }); });
+    p.q.forEach(x=>{ s+=`\n  ${x.name} | start ${x.start<=now?'ready now':f(x.start)} | done ${f(x.end)} | ${money(x.cost)} ${cn[x.cur]}${x.flag==='gem'?' | needs gems':''}${marks[mk(x)]?' | started':''}${x.flag==='tbc'?' | time estimated':''}${x.waits?' | waits for '+x.waits:''}`; }); });
   const gp=gemPlan(); s+=`\nGEMS: has ${GEMS.gems}. Planned gem spends: ${gp.map(g=>g.name+' '+g.cost).join(', ')||'none'}.`;
   const own=Object.entries(ITEMS).filter(([k,v])=>v.n>0||v.note).map(([k,v])=>`${k} x${v.n}${v.note?' ('+v.note+')':''}`); if(own.length) s+=`\nMAGIC ITEMS: ${own.join('; ')}.`;
   if(LOOT.g||LOOT.e||LOOT.d) s+=`\nSTORAGES: gold ${LOOT.g||'?'}, elixir ${LOOT.e||'?'}, DE ${LOOT.d||'?'}.`;
   s+='\nLEVELS (Nov 1, now, after Jam plan, TH18 max):';
   PROGRESS.forEach(g=>g.rows.forEach(r=>{ const v=x=>Array.isArray(x)?x[0]+(x[1]?'('+x[1]+')':''):x; const now2=liveNow(r);
     if(String(v(r[3]))!==String(r[4])||g.group!=='Lab') s+=`\n${r[0]}: ${v(r[1])}, ${v(now2)}, ${v(r[3])}, ${r[4]}`; }));
-  s+='\nLEFT AFTER THE JAM, builders (full price hours, cost):'; afterB().forEach(r=>{ s+=`\n${r[0]}: ${r[1]==null?'time and cost TBC':r[1]+'h, '+money(r[3])+' '+cn[r[2]]}${r[4]?', '+r[4]:''}`; });
-  s+='\nLEFT AFTER THE JAM, lab:'; afterL().forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
+  s+='\nTH19 LEFT AFTER THE LANES, builders (base hours, cost):'; afterB().forEach(r=>{ s+=`\n${r[0]}: ${r[1]==null?'time and cost TBC':r[1]+'h, '+money(r[3])+' '+cn[r[2]]}${r[4]?', '+r[4]:''}`; });
+  s+='\nTH19 LEFT AFTER THE LANES, lab:'; afterL().forEach(r=>{ s+=`\n${r[0]}${r[4]?', '+r[4]:''}`; });
   try{ s+='\n'+pctText(); }catch(e){}
-  s+='\nNOTES: Hammer of Fighting saved for TH19 research. Hammer of Building saved for TH19. Goblin Builder and Goblin Lab starts cost gems (about '+SETTINGS.gemPrice+' each). Not tracked: hero equipment, supercharges, crafted defenses.';
+  s+='\nNOTES: Book of Building for Laboratory 17 once Sky Wagon 4 finishes. Hammer of Fighting and Book of Fighting for Dragon 14 and Electro Dragon 10. Book of Heroes for a Royal Champion level. Goblin Builder and Goblin Lab starts cost gems (about '+SETTINGS.gemPrice+' each). Not tracked: hero equipment, supercharges, crafted defenses.';
   return s;
 }
 function aiRender(text){
@@ -1630,14 +1702,14 @@ function renderAI(){
   const c=aiCfg(), el=document.getElementById('aiPad'), sub=document.getElementById('chatSub');
   sub.textContent=c?'AI on · Claude Haiku · quick buttons stay free':'Answers from your plan · works offline';
   if(c){ const u=aiUse();
-    el.innerHTML=`<h3><span class="ico" style="background:rgba(246,185,65,.15)">✦</span>AI helper is on</h3>
+    el.innerHTML=`<h3><span class="ico" style="background:rgba(255,122,40,.15)">✦</span>AI helper is on</h3>
       <p class="desc">Typed questions go to Claude Haiku with your plan attached. The quick buttons in the chat still use the free built in answers. If you're offline, it falls back to the built in helper.</p>
       <div class="tiles" style="padding:12px 0 0;grid-template-columns:repeat(3,1fr)"><div class="tile"><div class="k">This month</div><div class="v">${u.n}</div><div class="k">questions</div></div>
         <div class="tile"><div class="k">Tokens</div><div class="v">${((u.i+u.o)/1000).toFixed(1)}K</div><div class="k">in and out</div></div>
         <div class="tile"><div class="k">About</div><div class="v">$${aiCost(u).toFixed(aiCost(u)<0.1?3:2)}</div><div class="k">USD spent</div></div></div>
       <div class="row" style="margin-top:12px"><button class="btn red sm" id="aiOff" type="button">Turn off and forget key</button></div>
       <div class="msg" id="aiMsg" style="margin-top:8px"></div>`; return; }
-  el.innerHTML=`<h3><span class="ico" style="background:rgba(246,185,65,.15)">✦</span>Use real AI in the chat</h3>
+  el.innerHTML=`<h3><span class="ico" style="background:rgba(255,122,40,.15)">✦</span>Use real AI in the chat</h3>
     <p class="desc">Lets the helper understand any question, using Claude Haiku, the cheapest Claude model. Each question costs a fraction of a cent, paid from your own Anthropic account. This is separate from your Claude subscription.</p>
     <ol class="desc" style="padding-left:18px;margin:10px 0 0;line-height:1.6">
       <li>Go to <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener" style="color:var(--blue)">console.anthropic.com</a>, sign in, and add a small amount of credit under Billing (a few dollars lasts a long time).</li>
@@ -1760,10 +1832,10 @@ function ringSvg(now,after,target,size,stroke){
   const r=(size-stroke)/2, C=2*Math.PI*r, arc=p=>`${C*p/100} ${C}`;
   const tA=target/100*2*Math.PI, tx=size/2+r*Math.cos(tA), ty=size/2+r*Math.sin(tA);
   return `<svg viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="${stroke}"/>
-    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(246,185,65,.35)" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${arc(after)}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,122,40,.35)" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${arc(after)}"/>
     <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="url(#pg${size})" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${arc(now)}"/>
     ${target?`<circle cx="${tx}" cy="${ty}" r="${stroke/2.6}" fill="#fff"/>`:''}
-    <defs><linearGradient id="pg${size}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd77a"/><stop offset="1" stop-color="#f0a01a"/></linearGradient></defs></svg>`;
+    <defs><linearGradient id="pg${size}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb04a"/><stop offset="1" stop-color="#ff6b1f"/></linearGradient></defs></svg>`;
 }
 const pf=p=>(Math.floor(p*10)/10).toFixed(1);
 const dShort=t=>new Intl.DateTimeFormat('en-US',{timeZone:TZ,month:'short',day:'numeric'}).format(t);
@@ -1789,7 +1861,7 @@ function renderPct(){
       <div class="ring">${ringSvg(now.p,aft.p,target,170,14)}<div class="c"><div><b>${pf(now.p)}%</b><span>maxed for TH18</span></div></div></div>
       <div class="pctHead"><div class="big">After the Jam plan: <b>${pf(aft.p)}%</b></div>
         <p>${targetLine}. Fully maxed around <b style="color:var(--text)">${fdate(fc.full)}</b>.</p>
-        <div class="legend"><span><i style="background:linear-gradient(90deg,#ffd77a,#f0a01a)"></i>Done now</span><span><i style="background:rgba(246,185,65,.35)"></i>After the Jam plan</span><span><i style="background:#fff;border-radius:50%"></i>Target</span></div>
+        <div class="legend"><span><i style="background:linear-gradient(90deg,#ffb04a,#ff6b1f)"></i>Done now</span><span><i style="background:rgba(255,122,40,.35)"></i>After the Jam plan</span><span><i style="background:#fff;border-radius:50%"></i>Target</span></div>
         <div class="pctTarget">Target <input class="in" id="pctT" value="${target}" inputmode="decimal"> % <label style="display:flex;align-items:center;gap:6px;margin-left:12px;cursor:pointer"><input type="checkbox" id="pctGP" ${gpOn()?'checked':''}> Gold Pass</label></div></div>
     </div>
     <div class="cats">${cats}</div>
@@ -1807,7 +1879,7 @@ function renderPct(){
     </div>
     <div class="pctFoot">Every level counts by its full price upgrade time from the Clash of Clans Fandom wiki, so a 14 day lab level counts far more than a 1 hour trap. Walls (all maxed), the Town Hall weapon, hero equipment and supercharges aren't counted. The wiki lists older, longer times, so days left and dates are scaled to about 45% of them to match your own game timers. Full price means no Hammer Jam (50% off). Dates assume 6 builders, ${gpOn()?'the Gold Pass (20% off), ':'no Gold Pass, '}and 3 free Research Potions a week.</div>`;
   const mini=document.getElementById('pctMini');
-  mini.innerHTML=`<div class="mr">${ringSvg(now.p,aft.p,target,52,6)}<b>${Math.round(now.p)}%</b></div><div class="tx"><b>TH18 ${pf(now.p)}% maxed</b><span>${pf(aft.p)}% after the Jam plan · ${now.p>=target?target+'% reached':aft.p>=target?target+'% by '+fdate(Math.max(...plan.map(p=>p.idleAt))):target+'% by '+fdate(fc.hit)}</span></div><span class="go">›</span>`;
+  mini.innerHTML=`<div class="mr">${ringSvg(now.p,aft.p,target,52,6)}<b>${Math.round(now.p)}%</b></div><div class="tx"><b>TH18 ${pf(now.p)}% maxed</b><span>${pf(aft.p)}% when TH18 work finishes · ${now.p>=target?target+'% reached':aft.p>=target?target+'% by '+fdate(Math.max(...plan.map(p=>p.idleAt))):target+'% by '+fdate(fc.hit)}</span></div><span class="go">›</span>`;
 }
 const fdate=t=>dShort(t);
 const chk=(ok,t,s)=>`<div class="chkl"><span class="ck ${ok?'y':'n'}">${ok?'✓':''}</span><div>${esc(t)}<small>${esc(s)}</small></div></div>`;
