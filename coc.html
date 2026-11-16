@@ -531,15 +531,15 @@ const PLAN = [
     ['Smasher 5',70,'e',12.6e6,'gem',107000001,5]]},
   {id:'b1', name:'Builder 1', kind:'b', items:[
     ['Hidden Tesla #5',68,'g',11.25e6,'',1000019,17],
-    ['Air Bomb #8 level 5',6,'g',0.5e6,'',12000005,5],['Air Bomb #8 level 6',9,'g',0.75e6,'',12000005,6],['Air Bomb #8 level 7',12,'g',1e6,'',12000005,7],['Air Bomb #8 level 8',15,'g',1.5e6,'',12000005,8],['Air Bomb #8 level 9',18,'g',2e6,'',12000005,9],['Air Bomb #8 level 10',21,'g',3e6,'',12000005,10],['Air Bomb #8 level 11',21,'g',4e6,'',12000005,11],['Air Bomb #8 level 12',24,'g',4.75e6,'',12000005,12],['Air Bomb #8 level 13',24,'g',5e6,'',12000005,13]]},
+    ['Town Hall 19',null,'g',null,'tbc',1000001,19]]},
   {id:'b2', name:'Builder 2', kind:'b', items:[
-    ['Gold Storage #4',66,'e',8.1e6,'',1000005,19],['Skeleton Trap #3',38,'g',8.1e6,'',12000008,5],['Dark Elixir Drill #1',32.5,'e',5.4e6,'',1000023,11]]},
+    ['Gold Storage #4',66,'e',8.1e6,'',1000005,19],['Dark Elixir Drill #1',32.5,'e',5.4e6,'',1000023,11]]},
   {id:'b3', name:'Builder 3', kind:'b', items:[
-    ['Skeleton Trap #1',38,'g',8.1e6,'',12000008,5],['Seeking Air Mine #3',62,'g',8.55e6,'',12000006,8]]},
+    ['Skeleton Trap #1',38,'g',8.1e6,'',12000008,5]]},
   {id:'b4', name:'Builder 4', kind:'b', items:[
-    ['Skeleton Trap #2',38,'g',8.1e6,'',12000008,5],['Skeleton Trap #4',38,'g',8.1e6,'',12000008,5],['Seeking Air Mine #5',62,'g',8.55e6,'',12000006,8]]},
+    ['Skeleton Trap #2',38,'g',8.1e6,'',12000008,5]]},
   {id:'b5', name:'Builder 5', kind:'b', items:[
-    ['Seeking Air Mine #1',62,'g',8.55e6,'',12000006,8],['Seeking Air Mine #4',62,'g',8.55e6,'',12000006,8]]},
+    ['Seeking Air Mine #1',62,'g',8.55e6,'',12000006,8]]},
   {id:'b6', name:'Builder 6', kind:'b', items:[
     ['Seeking Air Mine #2',62,'g',8.55e6,'',12000006,8],['Dark Elixir Drill #2',32.5,'e',5.4e6,'',1000023,11]]},
   {id:'lab', name:'Laboratory', kind:'lab', items:[
@@ -668,13 +668,23 @@ const PROGRESS = [
 function levelSum(x){ let t=0; ['heroes','pets','guardians','buildings','traps','units','spells','siege_machines'].forEach(k=>(x[k]||[]).forEach(e=>{
   if(!e||e.data===1000010||e.data===1000097) return; t+=(e.lvl||0)*(e.cnt||1); })); return t; }
 /* full-price hours after the Jam */
+/* TH19 order once Town Hall 19 finishes (levels from the TH19 sneak peeks; times and costs TBC) */
 const AFTER_B = [
-  ['Seeking Air Mines 6 to 9',496,'g',68.4e6,'Before TH19'],
-  ['Giant Bombs 1 to 8',904,'g',122.4e6,'Cut about 50% in TH19, so no loss waiting'],
-  ['Spring Traps 1 to 9',1071,'g',129.6e6,'Cut about 50% in TH19, so no loss waiting'],
-  ['Air Bombs 1 to 7',679,'g',94.5e6,''],
-  ['Bombs 1 to 8',688,'g',100.8e6,''],
-  ['Logger 2 to 5',430,'e',54.9e6,'Guardian. Guardians move off the Town Hall at TH19, so last'],
+  ['Laboratory 17',null,'e',null,'First. The lab is your bottleneck at TH19'],
+  ['Hero Hall 13',null,'g',null,'Opens 5 more levels for every hero'],
+  ['Storages: Gold 20, Elixir 20, Dark Elixir 14',null,'g',null,'Room for the bigger TH19 costs'],
+  ['Clan Castle 15',null,'g',null,''],
+  ['Spell Factory 10',null,'e',null,''],
+  ["Builder's Huts to 9",null,'g',null,''],
+  ['New TH19 defenses',null,'g',null,'Whatever the update adds, first ones as soon as they unlock'],
+  ['X-Bow 14, Hidden Tesla 18, Air Defense 17',null,'g',null,''],
+  ['Multi-Archer Tower 5, Ricochet Cannon 5, Multi-Gear Tower 4',null,'g',null,''],
+  ['Smasher 6 to 10',null,'e',null,'Guardian'],
+  ['Gold Mines 18, Elixir Collectors 18, Dark Elixir Drills 12',null,'g',null,'Low priority'],
+  ['Walls to 20 (150 pieces)',null,'g',null,'Spare Gold and Elixir'],
+  ['TH19 trap levels (Skeleton 6, Spring 14, Air Bomb 14)',null,'g',null,'Filler'],
+  ['TH18 trap levels left (all)',4662,'g',644.4e6,'Filler. Giant Bombs and Spring Traps may get cheaper at TH19'],
+  ['Logger 2 to 5',430,'e',54.9e6,'Guardian, last'],
 ];
 const AFTER_L = [
 ];   /* lab is maxed for TH18 once Goblin 10, Wall Breaker 14 and Sky Wagon 4 finish */
@@ -753,6 +763,7 @@ const PLAN_PATCHES=[
   {key:'2026-11-14-export-1234-reset-lanes', resetEdits:true},
   {key:'2026-11-14-export-2256-reset-lanes', resetEdits:true},
   {key:'2026-11-15-export-2203-after-plan', resetEdits:true},
+  {key:'2026-11-16-th19-plan', resetEdits:true},
   {key:'2026-11-12-items-screenshot', setItems:{'Builder Potion':0,'Research Potion':0,'Training Potion':10,'Resource Potion':1,'Hero Potion':11,'Power Potion':4,'Rune of Gold':2,'Rune of Elixir':1,'Rune of Dark Elixir':1,'Pet Potion':0}},
 ];
 function applyPatches(){
@@ -821,8 +832,8 @@ function rebuild(){
     const ov0=L.steps[0]&&STARTED_AT[L.id+'|'+L.steps[0][0]]; if(ov0&&ov0<curEnd) curEnd=Math.max(EXPORT,ov0);   // finished early (gems, book or a newer start)
     let t=curEnd; const q=[];
     L.steps.forEach((s,i)=>{
-      const ov=STARTED_AT[L.id+'|'+s[0]], ready=ov?Math.min(t,ov):t, start=ov||wake(t), f=start>=JAM_END?2:1, end=runFrom(L.id,start,s[1]*f*PASS*H);   // after the Jam: full price, double time and cost
-      q.push({lane:L,i,name:s[0],hrs:s[1]*f,cur:s[2],cost:s[3]*f,flag:s[4]||'',ready,start,end,slept:start>ready,late:start>=JAM_END,boost:boosted(L.id,start,end)});
+      const ov=STARTED_AT[L.id+'|'+s[0]], ready=ov?Math.min(t,ov):t, start=ov||wake(t), f=start>=JAM_END?2:1, end=runFrom(L.id,start,(s[1]||0)*f*PASS*H);   // after the Jam: full price, double time and cost
+      q.push({lane:L,i,name:s[0],hrs:s[1]==null?null:s[1]*f,cur:s[2],cost:s[3]==null?null:s[3]*f,flag:s[4]||'',ready,start,end,slept:start>ready,late:start>=JAM_END,boost:boosted(L.id,start,end)});
       t=end;
     });
     return {L,curEnd,curBoost:boosted(L.id,EXPORT,curEnd),q,idleAt:t};
@@ -908,7 +919,7 @@ function lanes(){
     const ed=editing===L.id, edited=!!EDITS[L.id];
     let qHtml;
     if(ed){
-      qHtml=`<ul class="list q">${p.q.map((s,i)=>`<li><span>${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':''}<span class="s muted" style="display:block;font-size:12px">${Math.round(s.hrs*PASS)}h · <span class="cur"><i class="dot ${s.cur}"></i>${money(s.cost)}</span></span></span>
+      qHtml=`<ul class="list q">${p.q.map((s,i)=>`<li><span>${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':''}${s.flag==='tbc'?'<span class="tag t-late">TIME TBC</span>':''}<span class="s muted" style="display:block;font-size:12px">${s.hrs==null?'Time and cost once the update is live':Math.round(s.hrs*PASS)+'h · <span class="cur"><i class="dot '+s.cur+'"></i>'+money(s.cost)+'</span>'}</span></span>
         <span class="ectl"><button class="ib" type="button" data-act="up" data-l="${L.id}" data-i="${i}" ${i===0?'disabled':''} aria-label="Move up">↑</button><button class="ib" type="button" data-act="down" data-l="${L.id}" data-i="${i}" ${i===p.q.length-1?'disabled':''} aria-label="Move down">↓</button><button class="ib x" type="button" data-act="del" data-l="${L.id}" data-i="${i}" aria-label="Remove">✕</button></span></li>`).join('')}</ul>
         ${p.q.length?'':'<div class="empty">Nothing queued</div>'}
         <div class="addf picker" data-pick="${L.id}">
@@ -927,7 +938,7 @@ function lanes(){
         ${edited?`<div class="addf" style="padding-top:0;background:none;border:0"><div class="row"><button class="btn red sm" type="button" data-act="reset" data-l="${L.id}">Reset to my plan</button></div></div>`:''}`;
     } else {
       const rest=p.q.filter(s=>s.start>now);
-      qHtml=rest.length?`<ul class="list q">${rest.map(s=>`<li class="${s.late?'after':''}"><span>${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':''}${s.late?'<span class="tag t-late">AFTER JAM</span>':''}</span><span class="t">${whenD(s.start)}</span></li>`).join('')}</ul>`
+      qHtml=rest.length?`<ul class="list q">${rest.map(s=>`<li class="${s.late?'after':''}"><span>${esc(s.name)}${s.flag==='gem'?'<span class="tag t-gem">GEMS</span>':''}${s.flag==='tbc'?'<span class="tag t-late">TIME TBC</span>':''}</span><span class="t">${whenD(s.start)}</span></li>`).join('')}</ul>`
         :`<div class="empty">${gemLane?'Needs gems for the next start':'Nothing else queued in the Jam'}</div>`;
     }
     const cnt=p.q.filter(s=>s.start>now).length;
@@ -1019,11 +1030,11 @@ function afterL(){ const s=plannedSet(); return AFTER_L.filter(r=>!rowPlanned(r[
 let tab='b';
 function after(){
   const rows=tab==='b'?afterB():afterL();
-  const days=rows.reduce((a,r)=>a+r[1],0)/24;
+  const days=rows.reduce((a,r)=>a+(r[1]||0),0)/24;
   document.getElementById('after').innerHTML='<tr><th>Upgrade</th><th class="r">Time</th><th class="r">Cost</th></tr>'+
-    rows.map(r=>`<tr><td>${esc(r[0])}${r[4]?`<span class="sub" style="font-size:12px">${esc(r[4])}</span>`:''}</td><td class="r">${(r[1]/24).toFixed(1)}d</td><td class="r"><span class="cur"><i class="dot ${r[2]}"></i>${money(r[3])}</span></td></tr>`).join('');
+    rows.map(r=>`<tr><td>${esc(r[0])}${r[4]?`<span class="sub" style="font-size:12px">${esc(r[4])}</span>`:''}</td><td class="r">${r[1]==null?'TBC':(r[1]/24).toFixed(1)+'d'}</td><td class="r">${r[3]==null?'TBC':`<span class="cur"><i class="dot ${r[2]}"></i>${money(r[3])}</span>`}</td></tr>`).join('');
   document.getElementById('afternote').innerHTML=tab==='b'
-    ? `About <b>${Math.round(days)} builder days</b> at full price, split across 6 builders: about ${Math.round(days/6)} days. Traps are cheap, so clear them whenever a builder is free.`
+    ? `TH19 order, top first, once Town Hall 19 finishes. Times and costs fill in when the update is live. The TH18 traps at the bottom are filler for any builder that would sit idle.`
     : rows.length?`About <b>${Math.round(days)} lab days</b> at full price. This is your bottleneck, so save Research Potions and books for it.`:`Nothing left. The lab is maxed for TH18 once the planned research finishes, so save Research Potions and books for TH19.`;
 }
 document.getElementById('afterSeg').addEventListener('click',e=>{
@@ -1501,7 +1512,7 @@ function answer(q){
     return `You're <b>${pf(n.p)}%</b> maxed for TH18 now and <b>${pf(a.p)}%</b> once the Jam plan finishes. Your target is ${tg}%. Weakest area: <b>Traps</b> at ${pf(n.cats.Traps.d/n.cats.Traps.t*100)}%. Open the Progress tab for the full breakdown.`; }
   if(/progress|how far|levels|since/.test(s)){ const levels=DONE_AT_BAKED+levelSum(EXP)-levelSum(BAKED);
     return `Since Nov 1 you've finished <b>${levels} upgrade levels</b> and maxed all 325 walls. ${open.length} more starts are planned.`; }
-  if(/after|left to max|max|th19|remaining/.test(s)){ const bd=afterB().reduce((a,r)=>a+r[1],0)/24, ld=afterL().reduce((a,r)=>a+r[1],0)/24;
+  if(/after|left to max|max|th19|remaining/.test(s)){ const bd=afterB().reduce((a,r)=>a+(r[1]||0),0)/24, ld=afterL().reduce((a,r)=>a+r[1],0)/24;
     return `After the Jam: about <b>${Math.round(bd)} builder days</b> (about ${Math.round(bd/6)} days across 6 builders) and <b>${Math.round(ld)} lab days</b>. The lab is your bottleneck.`; }
   if(/next|now|start|what should|do/.test(s)){ const nx=open.filter(x=>!x.late).slice(0,4);
     return nx.length?`Here's what's next:<ul>${nx.map(li).join('')}</ul>`:'Nothing left to start in the Jam.'; }
@@ -1573,7 +1584,7 @@ Now: ${f(now)}. Hammer Jam ends ${f(JAM_END)}. Player sleeps ${sleepText()} (no 
   s+='\nLEVELS (Nov 1, now, after Jam plan, TH18 max):';
   PROGRESS.forEach(g=>g.rows.forEach(r=>{ const v=x=>Array.isArray(x)?x[0]+(x[1]?'('+x[1]+')':''):x; const now2=liveNow(r);
     if(String(v(r[3]))!==String(r[4])||g.group!=='Lab') s+=`\n${r[0]}: ${v(r[1])}, ${v(now2)}, ${v(r[3])}, ${r[4]}`; }));
-  s+='\nLEFT AFTER THE JAM, builders (full price hours, cost):'; afterB().forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
+  s+='\nLEFT AFTER THE JAM, builders (full price hours, cost):'; afterB().forEach(r=>{ s+=`\n${r[0]}: ${r[1]==null?'time and cost TBC':r[1]+'h, '+money(r[3])+' '+cn[r[2]]}${r[4]?', '+r[4]:''}`; });
   s+='\nLEFT AFTER THE JAM, lab:'; afterL().forEach(r=>{ s+=`\n${r[0]}: ${r[1]}h, ${money(r[3])} ${cn[r[2]]}${r[4]?', '+r[4]:''}`; });
   try{ s+='\n'+pctText(); }catch(e){}
   s+='\nNOTES: Hammer of Fighting saved for TH19 research. Hammer of Building saved for TH19. Goblin Builder and Goblin Lab starts cost gems (about '+SETTINGS.gemPrice+' each). Not tracked: hero equipment, supercharges, crafted defenses.';
