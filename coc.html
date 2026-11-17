@@ -401,6 +401,14 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
     <div class="note">Small numbers show how many of that building are at the level, like 2/5. <b style="color:var(--red)">Red</b> is already max today. <b style="color:var(--green)">Green</b> will be max once the Jam plan finishes. <b style="color:var(--blue)">Blue</b> is the TH18 max.</div></div>
 </div>
 <div class="blk">
+  <div class="sh"><h2>Time to max TH19</h2><small>as of Nov 17, 17% off time</small></div>
+  <div class="card"><ul class="tips">
+    <li><b>Builders:</b> about 1,384 builder days left, so roughly <b>7.5 months</b> on 6 builders. Done around <b>early July 2027</b>. Without the leftover traps it is about 5 months.</li>
+    <li><b>Lab, troops, spells and sieges:</b> about 479 lab days after Lab 17. With your 3 free Research Potions a week that is around <b>end of October 2027</b>; with no potions, March 2028.</li>
+    <li><b>Squads to level 3:</b> another 267 lab days on top. All in, about <b>May 2028</b> with weekly potions.</li>
+    <li><b>Bottleneck:</b> the lab, by about 4 months. Builders can afford walls and traps; keep the lab busy every hour.</li>
+    <li>Not counted: Builder's Apprentice, Lab Assistant, Goblin Builder or Lab, events and extra potions. Air Defense #5 catch up, the 10th Spring Trap and Angry Jelly levels are estimates.</li>
+  </ul></div>
   <div class="sh"><h2>TH19 to do</h2><small>not in a lane yet</small></div>
   <div class="card">
     <div class="pad" style="padding-bottom:6px"><div class="seg" id="afterSeg"><button type="button" aria-selected="true" data-tab="b">Builders</button><button type="button" aria-selected="false" data-tab="l">Lab</button></div></div>
@@ -549,45 +557,45 @@ const DONE_AT_BAKED = 156;                           // upgrade levels finished 
 /* item: [name, plan hours, currency g/e/d, plan cost, flag, export ID, level it upgrades to]
    Plan hours and cost are half price numbers (the page doubles them after the Jam), so TH19 items go through T19():
    give it the game's base time in days and the full cost. 'tbc' = estimate until the game or the wiki confirms it. */
-const GP=0.8;   // Gold Pass: 20% off time and cost
+const GP=0.83;   // planning assumption: 17% off time and cost (Gold Pass)
 const T19=(name,days,cur,cost,flag,id,to)=>[name,days*24*GP/(2*PASS),cur,cost*GP/2,flag||'',id||null,to||null];
 const PLAN = [
   {id:'gob', name:'Goblin Builder', kind:'gob', items:[]},
   {id:'b1', name:'Builder 1', kind:'b', items:[
     ['Laboratory 17',0,'e',0,'',1000007,17],
     T19('Spell Factory 10',10.5,'e',18.5e6,'',1000020,10),
-    T19('Smasher 6',13,'e',26e6,'tbc',107000001,6),
-    T19('Smasher 7',13,'e',26e6,'tbc',107000001,7)]},
+    T19('Smasher 6',11,'g',22e6,'',107000001,6),
+    T19('Smasher 7',12,'g',24e6,'',107000001,7)]},
   {id:'b2', name:'Builder 2', kind:'b', items:[
     ['Firecracker Tower #1 (merge)',0,'g',0,'',1000108,1],
-    T19('Grand Warden 86',7,'e',17e6,'tbc',28000002,86),
-    T19('Grand Warden 87',7,'e',17.5e6,'tbc',28000002,87)]},
+    T19('Grand Warden 86',8,'e',29e6,'',28000002,86),
+    T19('Grand Warden 87',8,'e',29.6e6,'',28000002,87)]},
   {id:'b3', name:'Builder 3', kind:'b', items:[
     ['Hero Hall 13',0,'e',0,'',1000071,13],
-    T19('Royal Champion 56',7,'d',350e3,'tbc',28000004,56),
-    T19('Royal Champion 57',7,'d',355e3,'tbc',28000004,57),
-    T19('Royal Champion 58',7,'d',360e3,'tbc',28000004,58)]},
+    T19('Royal Champion 56',8,'d',440e3,'',28000004,56),
+    T19('Royal Champion 57',8,'d',450e3,'',28000004,57),
+    T19('Royal Champion 58',8,'d',460e3,'',28000004,58)]},
   {id:'b4', name:'Builder 4', kind:'b', items:[
     ['Multi-Gear Tower 4',0,'g',0,'',1000079,4],
     T19('X-Bow 14 #1',14,'g',28e6,'',1000021,14),
     T19('X-Bow 14 #2',14,'g',28e6,'',1000021,14)]},
   {id:'b5', name:'Builder 5', kind:'b', items:[
     ['Firecracker Tower #2 (merge)',0,'g',0,'',1000108,1],
-    T19('Barbarian King 111',7,'d',330e3,'tbc',28000000,111),
-    T19('Barbarian King 112',7,'d',335e3,'tbc',28000000,112)]},
+    T19('Barbarian King 111',8,'d',460e3,'',28000000,111),
+    T19('Barbarian King 112',8,'d',470e3,'',28000000,112)]},
   {id:'b6', name:'Builder 6', kind:'b', items:[
     ['Spiky Tower #2',0,'d',0,'',1000107,1],
-    T19('Archer Queen 111',7,'d',330e3,'tbc',28000001,111),
-    T19('Archer Queen 112',7,'d',335e3,'tbc',28000001,112)]},
+    T19('Archer Queen 111',8,'d',460e3,'',28000001,111),
+    T19('Archer Queen 112',8,'d',470e3,'',28000001,112)]},
   {id:'lab', name:'Laboratory', kind:'lab', items:[
     ['Sky Wagon 4',0,'e',0,'',4000188,4],
-    T19('Dragon 14',14,'e',20e6,'tbc',4000008,14),
+    T19('Dragon 14',15.5,'e',30e6,'',4000008,14),
     T19('Heroic Spell 2',13,'e',21e6,''),
-    T19('Electro Dragon 10',14,'e',20e6,'tbc',4000059,10),
+    T19('Electro Dragon 10',15.5,'e',31e6,'',4000059,10),
     T19('Heroic Spell 3',14,'e',25.5e6,''),
     T19('Heroic Spell 4',15.5,'e',32e6,''),
-    T19('Balloon 14',13,'e',19e6,'tbc',4000005,14),
-    T19('Baby Dragon 13',13,'e',19e6,'tbc',4000023,13)]},
+    T19('Balloon 14',14.5,'e',28e6,'',4000005,14),
+    T19('Baby Dragon 13',14.5,'e',28e6,'',4000023,13)]},
   {id:'glab', name:'Goblin Lab', kind:'glab', items:[]},
   {id:'pet', name:'Pet House', kind:'pet', items:[
     ['Angry Jelly 11',0,'d',0,'',73000011,11],
@@ -725,46 +733,49 @@ function levelSum(x){ let t=0; ['heroes','pets','guardians','buildings','traps',
   if(!e||e.data===1000010||e.data===1000097) return; t+=(e.lvl||0)*(e.cnt||1); })); return t; }
 /* full-price hours after the Jam */
 /* TH19 order once Town Hall 19 finishes (levels from the TH19 sneak peeks; times and costs TBC) */
-/* TH19 work not in a lane yet, top first. Costs and times from ClashRecord (checked against game data Nov 17),
-   with the Gold Pass 20% already taken off. Hero levels are still estimates. Rows with several copies are totals. */
+/* TH19 work not in a lane yet, top first. Costs and times: ClashRecord and Jordan's TH18/TH19 compendium (Nov 17),
+   with the 17% Gold Pass assumption already taken off. Rows with several copies or levels are totals. */
 const A=(name,days,cur,cost,note,n)=>[name,days*24*GP*(n||1),cur,cost*GP*(n||1),note||''];
 const AFTER_B = [
-  A('Spiky Tower level 2 (x2)',15.5,'d',510e3,'Each 12d 10h, 408K DE',2),
-  ['Royal Champion 59 and 60',null,'d',null,'Your RC walk hero, keep one builder on her'],
-  ['Archer Queen and Barbarian King to 115',null,'d',null,''],
-  ['Grand Warden to 90',null,'e',null,''],
-  ['Minion Prince to 100',null,'d',null,''],
-  A('Firecracker Tower level 2 (x2)',15,'g',32e6,'Each 12d, 25.6M',2),
-  A('X-Bow 14 (#3 and #4)',14,'g',28e6,'Each 11d 5h, 22.4M',2),
-  A('Air Defense 17 (x4)',14,'g',28.5e6,'Each 11d 5h, 22.8M',4),
-  ['Air Defense #5 catch up to 17',null,'g',null,'Level 2 now, short early levels'],
-  A('Hidden Tesla 18 (x5)',14,'g',27.5e6,'Each 11d 5h, 22M',5),
-  A('Multi-Archer Tower 5 (x3)',14.5,'g',29e6,'Each 11d 14h, 23.2M',3),
-  A('Ricochet Cannon 5 (x3)',14,'g',28e6,'Each 11d 5h, 22.4M',3),
-  A("Builder's Huts 9 (x5)",14,'g',26e6,'Each 11d 5h, 20.8M',5),
-  A('Smasher 8 to 10',39,'e',78e6,'Guardian, right after a war. About 10d 10h each'),
-  ['Squad Barracks to 12',null,'e',null,'Squad levels only exist at TH19'],
-  A('Elixir Storage 20 (x4)',11,'g',18e6,'Each 8d 19h, 14.4M. Only if a cost won\'t fit',4),
-  A('Gold Storage 20 (x4)',11,'e',18e6,'Each 8d 19h, 14.4M. Only if a cost won\'t fit',4),
-  A('Dark Elixir Storage 14',13,'e',24e6,'10d 10h, 19.2M'),
-  A('Gold Mines 18 (x7)',3,'e',8.5e6,'Each 2d 10h, 6.8M Elixir',7),
-  A('Elixir Collectors 18 (x7)',3,'g',8.5e6,'Each 2d 10h, 6.8M Gold',7),
-  A('Dark Elixir Drills 12 (x3)',6.5,'e',12.5e6,'Each 5d 5h, 10M',3),
-  A('Walls to 20 (147 left)',0,'g',10e6,'8M each with the Gold Pass, instant. Wall Rings help',147),
-  A('Spring Traps 14 (x10, 10th placed)',8,'g',17e6,'Each 6d 10h, 13.6M',10),
-  A('Air Bombs 14 (each)',8.5,'g',17.5e6,'Each 6d 19h, 14M'),
-  A('Skeleton Traps 6 (x4)',9,'g',18e6,'Each 7d 5h, 14.4M',4),
-  ['Dragon Duke to 30',null,'d',null,'Last. Not in your army'],
-  ['Logger 2 to 5',null,'e',null,'Guardian, last'],
+  A('Spiky Tower level 2 (x2)',15.5,'d',510e3,'Each 12d 21h',2),
+  A('Royal Champion 59 and 60',16,'d',950e3,'8d each base. Your RC walk hero'),
+  A('Archer Queen 113 to 115',24,'d',1.47e6,''),
+  A('Barbarian King 113 to 115',24,'d',1.47e6,''),
+  A('Grand Warden 88 to 90',24,'e',92.1e6,''),
+  A('Minion Prince 96 to 100',40,'d',2.15e6,''),
+  A('Firecracker Tower level 2 (x2)',15,'g',32e6,'Each 12d 11h',2),
+  A('X-Bow 14 (x4)',14,'g',28e6,'Each 11d 15h',4),
+  A('Air Defense 17 (x4)',14,'g',28.5e6,'Each 11d 15h',4),
+  ['Air Defense #5 catch up to 17',75*24*GP,'g',null,'Level 2 now. Time is an estimate'],
+  A('Hidden Tesla 18 (x5)',14,'g',27.5e6,'Each 11d 15h',5),
+  A('Multi-Archer Tower 5 (x3)',14.5,'g',29e6,'Each 12d 1h',3),
+  A('Ricochet Cannon 5 (x3)',14,'g',28e6,'Each 11d 15h',3),
+  A("Builder's Huts 9 (x5)",14,'g',26e6,'Each 11d 15h',5),
+  A('Smasher 8 to 10',42,'g',84e6,'Guardian, right after a war'),
+  A('Squad Barracks 2 to 12',96.5,'e',151.8e6,'Built at level 1, every level to go'),
+  A('Elixir Storage 20 (x4)',11,'g',18e6,'Each 9d 3h. Only if a cost won\'t fit',4),
+  A('Gold Storage 20 (x4)',11,'e',18e6,'Each 9d 3h. Only if a cost won\'t fit',4),
+  A('Dark Elixir Storage 14',13,'e',24e6,''),
+  A('Gold Mines 18 (x7)',3,'e',8.5e6,'Each 2d 12h',7),
+  A('Elixir Collectors 18 (x7)',3,'g',8.5e6,'Each 2d 12h',7),
+  A('Dark Elixir Drills to 12 (x3)',29.5,'e',57.5e6,'Two still need 11 first'),
+  A('Walls to 20 (147 left)',0,'g',10e6,'Instant. Wall Rings help',147),
+  A('Spring Traps to 14 (x10)',156,'g',279e6,'Nine need 13 first, the 10th starts at 1 (estimate)'),
+  A('Air Bombs to 14 (x8)',152,'g',245e6,'Seven need 13 first, one starts at 4 (estimate)'),
+  A('Skeleton Traps to 6 (x4)',50,'g',98e6,'Two still need 5 first'),
+  A('TH18 traps: Giant Bombs, Seeking Air Mines, Bombs',179.5,'g',304e6,'Leftover TH18 levels, filler'),
+  A('Dragon Duke 26 to 30',40,'d',2.35e6,'Last. Not in your army'),
+  ['Logger 2 to 5',null,'g',null,'Guardian, last'],
 ];
 const AFTER_L = [
-  ['Baby Dragon squad and Dragon squad levels',null,'e',null,'Squads level up at TH19'],
-  ['Spells: Lightning 14, Haste 8, Healing 13, Poison 13, Bat 9, Totem 5',null,'e',null,''],
-  ['Dragon Rider 7, Flame Flinger 6',null,'e',null,''],
-  ['Hog Rider 16, Golem 16, Minion 15, Valkyrie 13, Lava Hound 9',null,'d',null,''],
-  ['Witch 9, Bowler 11, Headhunter 5, Druid 7, Ruin Witch 5',null,'d',null,''],
-  ['Barbarian 14, Archer 15, Giant 15, Goblin 11, Wall Breaker 15, Wizard 15',null,'e',null,'Archers 15 or Wizards 15 unlock those Town Hall troops'],
-  ['Healer 12, P.E.K.K.A 14, Miner 13, Yeti 9, Electro Titan 6, Root Rider 5, Thrower 5, Meteor Golem 4',null,'e',null,'Last'],
+  A('Spells: Lightning 14, Healing 13',28.5,'e',55e6,''),
+  A('Dark spells: Poison 13, Haste 8, Bat 9',44,'d',1.325e6,'Totem 5 not listed yet'),
+  A('Dragon Rider 7 and Flame Flinger 6',30.5,'e',59.5e6,''),
+  A('Hog 16, Golem 16, Minion 15, Valkyrie 13, Lava Hound 9',74.5,'d',2.25e6,''),
+  A('Witch 9, Bowler 11, Headhunter 5, Druid 7, Ruin Witch 5',78.5,'d',2.415e6,''),
+  A('Barbarian 14, Archer 15, Giant 15, Goblin 11, Wall Breaker 15, Wizard 15',80,'e',150.5e6,'Archers 15 or Wizards 15 unlock those Town Hall modes'),
+  A('Healer 12, P.E.K.K.A 14, Miner 13, Yeti 9, Electro Titan 6, Root Rider 5, Thrower 5, Meteor Golem 4',124,'e',243.5e6,''),
+  A('Squads to level 3 (all 12)',321.5,'e',526.5e6,'Plus 2.65M DE. Dragon and Baby Dragon squads first'),
 ];
 
 /* ===== Time ===== */
