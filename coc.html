@@ -2059,14 +2059,15 @@ const ltDay=t=>new Date(t*1000).toLocaleDateString('en-CA',{timeZone:'America/To
 function ltRender(){
   const tiles=document.getElementById('ltTiles'), note=document.getElementById('ltNote'), bars=document.getElementById('ltBars');
   const pts=(LT&&LT.points)||[];
-  if(pts.length<2){ tiles.innerHTML=''; bars.innerHTML='';
+  if(pts.length<2){ tiles.innerHTML=''; bars.innerHTML=''; if(pts.length&&pts[0].g>=2e9){ note.innerHTML='Tracking started '+whenD(pts[0].t*1000)+'. Your Gold Grab and Elixir Escapade counters are maxed at 2 billion, so only Dark Elixir can be tracked. It shows after your next attack.'; return; }
     note.innerHTML=pts.length?'Tracking started '+whenD(pts[0].t*1000)+'. Totals show after your next attack.':'Waiting for the first snapshot. Add the COC_API_TOKEN secret on GitHub and it starts within 10 minutes.'; return; }
   const today=ltDay(Date.now()/1000), byDay={};
   for(let i=1;i<pts.length;i++){ const a=pts[i-1], b=pts[i], k=ltDay(b.t), d=byDay[k]||(byDay[k]={g:0,e:0,d:0});
     ['g','e','d'].forEach(c=>{ d[c]+=Math.max(0,(b[c]||0)-(a[c]||0)); }); }
   const cut=ltRange==='today'?today:ltRange==='all'?'0':ltDay(Date.now()/1000-(+ltRange-1)*86400);
   const sum={g:0,e:0,d:0}; Object.entries(byDay).forEach(([k,d])=>{ if(k>=cut) ['g','e','d'].forEach(c=>sum[c]+=d[c]); });
-  tiles.innerHTML=['g','e','d'].map(c=>`<div class="tile"><div class="k"><i class="dot ${c}"></i> ${CUR[c]}</div><div class="v">${money(sum[c])}</div></div>`).join('');
+  const capped=c=>(pts[pts.length-1][c]||0)>=2e9;
+  tiles.innerHTML=['g','e','d'].map(c=>`<div class="tile"><div class="k"><i class="dot ${c}"></i> ${CUR[c]}</div><div class="v">${capped(c)?'n/a':money(sum[c])}</div>${capped(c)?'<div class="k">counter maxed at 2B</div>':''}</div>`).join('');
   const days=[]; for(let i=6;i>=0;i--) days.push(ltDay(Date.now()/1000-i*86400));
   const mx={}; ['g','e','d'].forEach(c=>mx[c]=Math.max(1,...days.map(k=>(byDay[k]||{})[c]||0)));
   bars.innerHTML=days.map(k=>{ const d=byDay[k]||{g:0,e:0,d:0};
