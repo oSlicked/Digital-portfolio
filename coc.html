@@ -411,7 +411,7 @@ footer{margin-top:30px;color:var(--dim);font-size:12px;text-align:center}
 <div class="blk">
   <div class="sh"><h2>Notes</h2></div>
   <div class="card"><ul class="tips">
-    <li><b>Book of Building:</b> Laboratory 17 the moment Sky Wagon 4 finishes (about Nov 21). The lab sits empty otherwise until Nov 26, and the lab is your bottleneck.</li>
+    <li><b>Research Potions (4):</b> hold them for Dragon 14 once Lab 17 is done on Nov 26. Boosting Sky Wagon 4 now only leaves the lab empty longer.</li>
     <li><b>Hammer of Fighting and Book of Fighting:</b> Dragon 14, then Electro Dragon 10, the two longest researches for your army.</li>
     <li><b>Book of Spells:</b> the TH19 Heroic Spell level or Lightning 14, whichever the game shows as longer.</li>
     <li><b>Book of Heroes:</b> a Royal Champion level once Hero Hall 13 is done.</li>
@@ -667,6 +667,7 @@ const POTION_RUNS=[
   {x:10,from:1794510139000,to:1794531739000,lanes:POTION_BUILDERS,label:'Builder Potion',n:6},
   {x:24,from:1794510134000,to:1794528134000,lanes:POTION_LAB,label:'Research Potion',n:5},
   {x:10,from:1794861888000,to:1794876288000,lanes:POTION_BUILDERS,label:'Builder Potion',n:4},
+  {x:10,from:Date.parse('2026-11-16T22:05:00-05:00'),to:Date.parse('2026-11-16T23:05:00-05:00'),lanes:POTION_BUILDERS,label:'Builder Potion',n:1},
 ];
 POTION_RUNS.forEach(b=>BOOSTS.push(b));
 /* a potion still running in the export, unless it is one of the planned runs above */
@@ -841,6 +842,7 @@ const PLAN_PATCHES=[
   {key:'2026-11-14-export-2256-reset-lanes', resetEdits:true},
   {key:'2026-11-15-export-2203-after-plan', resetEdits:true},
   {key:'2026-11-16-th19-plan', resetEdits:true},
+  {key:'2026-11-16-items-2207', setItems:{'Builder Potion':0,'Research Potion':4,'Training Potion':10,'Resource Potion':3,'Hero Potion':11,'Power Potion':4,'Pet Potion':2,'Rune of Gold':1,'Rune of Elixir':1,'Rune of Dark Elixir':0,'Wall Ring':3,'Book of Building':0,'Book of Fighting':1,'Book of Spells':1,'Book of Heroes':1,'Hammer of Fighting':1}},
   {key:'2026-11-16-th19-schedule-3', resetEdits:true},
   {key:'2026-11-16-th19-schedule-2', resetEdits:true},
   {key:'2026-11-16-th19-schedule', resetEdits:true},
@@ -1192,7 +1194,7 @@ const ITEM_GROUPS=[
 ];
 let ITEMS=Object.assign({
   'Hammer of Fighting':{n:1,note:'Dragon 14 once Lab 17 is done'},
-  'Book of Building':{n:1,note:'Laboratory 17 when Sky Wagon 4 finishes'},
+  'Book of Building':{n:0,note:'Used'},
   'Research Potion':{n:0,note:'3 free every week. Save for the lab'},
 }, store.get(ITEM_KEY,{}));
 let showAllItems=false;
