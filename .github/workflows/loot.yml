@@ -1,0 +1,25 @@
+name: Loot tracker
+on:
+  schedule:
+    - cron: '*/10 * * * *'   # every 10 minutes (GitHub may run it a few minutes late)
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: loot, cancel-in-progress: false }
+jobs:
+  snap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read lifetime loot from the Clash of Clans API
+        env:
+          COC_TOKEN: ${{ secrets.COC_API_TOKEN }}
+        run: python3 scripts/loot_snapshot.py
+      - name: Save if anything changed
+        run: |
+          if git diff --quiet data/loot.json; then echo "No new loot"; exit 0; fi
+          git config user.name "loot-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/loot.json
+          git commit -m "Loot snapshot"
+          git pull --rebase -q && git push
