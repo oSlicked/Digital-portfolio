@@ -224,6 +224,8 @@ nav.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg)}
     <div class="row"><button class="btn solid" id="expGo">Load export</button><button class="btn" id="expReset">Use built in</button></div>
     <div class="msg" id="expMsg"></div>
   </div>
+  <h2>Sync between devices</h2>
+  <div class="card tool" id="syncPad"></div>
   <h2>Ask Claude</h2>
   <div class="card tool">
     <p>Copies a summary of your plan and opens Claude. Paste it in with your question.</p>
@@ -397,7 +399,7 @@ const RES_PER_WEEK=3, POTION_GAIN_H=23;   /* free Research Potions a week, extra
 
 /* ================= HELPERS ================= */
 const $=id=>document.getElementById(id);
-const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} touch();}};
 const CUR={g:'Gold',e:'Elixir',d:'Dark Elixir'};
 const money=n=>n==null?'TBC':n>=1e9?(n/1e9).toFixed(2).replace(/\.?0+$/,'')+'B':n>=1e6?(n/1e6).toFixed(n>=1e8?0:1).replace(/\.0$/,'')+'M':n>=1e3?Math.round(n/1e3)+'K':String(Math.round(n));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -411,7 +413,7 @@ const nameOf=id=>NAMES[id]||('#'+id);
 
 /* ================= EXPORT ================= */
 let EXP=BAKED;
-const saved=store.get('coc19-exp',null);
+const saved=store.get('coc-v2-exp',null);
 if(saved&&saved.timestamp>BAKED.timestamp) EXP=saved;
 const EXPORT=EXP.timestamp*1000;
 function copies(id){ const out=[]; ['buildings','traps','heroes','guardians','units','spells','siege_machines','pets'].forEach(k=>(EXP[k]||[]).forEach(e=>{ if(e&&e.data===id) out.push(e); })); return out; }
@@ -423,7 +425,7 @@ Object.entries(KIND).forEach(([k,kind])=>(EXP[k]||[]).forEach(e=>{ if(e&&e.timer
 /* potions: export boost plus ones tapped since */
 const runs=POTION_RUNS.slice();
 if(EXP.boosts&&EXP.boosts.builder_boost) runs.push({x:10,from:EXPORT,to:EXPORT+EXP.boosts.builder_boost*1000,kinds:['b']});
-store.get('coc19-pots',[]).filter(p=>p.from>EXPORT-H).forEach(p=>runs.push(p));
+store.get('coc-v2-pots',[]).filter(p=>p.from>EXPORT-H).forEach(p=>runs.push(p));
 function rate(kind,t){ let x=1; runs.forEach(r=>{ if(r.kinds.includes(kind)&&t>=r.from&&t<r.to) x=Math.max(x,r.x); }); return x; }
 /* real end time when `work` ms of work starts at t0, with boosts */
 function runFrom(kind,t0,work){
@@ -440,7 +442,7 @@ let PLAN=[];
 function build(gates){
   JOBS.forEach(j=>j.claimed=false);
   const used={};   /* id|to -> copies already accounted */
-  const started=store.get('coc19-started',{});
+  const started=store.get('coc-v2-started',{});
   return LANES.map(L=>{
     let cur=null, idx=0;
     for(let i=0;i<L.q.length;i++){
@@ -581,7 +583,7 @@ function renderMax(){
 
 /* ================= RENDER: MORE ================= */
 function renderItems(){
-  const own=store.get('coc19-items',{});
+  const own=store.get('coc-v2-items',{});
   $('items').innerHTML=ITEMS.map(([n,c,note])=>{ const q=own[n]!=null?own[n]:c;
     return `<div class="it"><div class="q${q?'':' z'}">${q}</div><div><b>${esc(n)}</b><small>${esc(note)}</small></div><div class="st"><button data-item="${esc(n)}" data-d="1">+</button><button data-item="${esc(n)}" data-d="-1">−</button></div></div>`; }).join('');
 }
@@ -603,7 +605,7 @@ function summary(){
   const now=Date.now(), f=t=>new Date(t).toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
   let s=`Snapshot from my Clash of Clans TH19 planner (jordanioannoni.com/coc). Now: ${f(now)}. Export from ${f(EXPORT)}. I sleep 1 AM to 8 AM, no starts then. Gold Pass assumption: 17% off time and cost. My main attack is a Royal Champion walk plus dragons; I don't use Dragon Duke. Dark Elixir is easy for me to farm.\n\nLANES:`;
   PLAN.forEach(p=>{ s+=`\n${p.L.name}: ${p.cur?p.cur.it[0]+' done '+f(p.curEnd):'free'}`; p.steps.slice(0,4).forEach(x=>{ s+=`\n  then ${x.name} starts ${f(x.start)} (${money(x.cost*GP)} ${CUR[x.cur]})${x.waits?' after '+x.waits:''}`; }); });
-  const own=store.get('coc19-items',{}); s+='\n\nMAGIC ITEMS: '+ITEMS.map(([n,c])=>`${n} ${own[n]!=null?own[n]:c}`).join(', ');
+  const own=store.get('coc-v2-items',{}); s+='\n\nMAGIC ITEMS: '+ITEMS.map(([n,c])=>`${n} ${own[n]!=null?own[n]:c}`).join(', ');
   s+='\n\nBACKLOG (builders): '+BACKLOG_B.map(r=>r[0]).join('; ');
   s+='\nBACKLOG (lab): '+BACKLOG_L.map(r=>r[0]).join('; ');
   return s+'\n\nMY QUESTION: ';
@@ -614,32 +616,88 @@ document.addEventListener('click',e=>{
   const go=e.target.closest('[data-go]');
   if(go){ document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected',b===go)); document.querySelectorAll('section.tab').forEach(s=>s.classList.toggle('on',s.id==='t-'+go.dataset.go)); window.scrollTo(0,0); return; }
   const st=e.target.closest('[data-start]');
-  if(st){ const m=store.get('coc19-started',{}); m[st.dataset.start]=Date.now(); store.set('coc19-started',m); toast('Marked as started'); renderAll(); return; }
+  if(st){ const m=store.get('coc-v2-started',{}); m[st.dataset.start]=Date.now(); store.set('coc-v2-started',m); toast('Marked as started'); renderAll(); return; }
   const it=e.target.closest('[data-item]');
-  if(it){ const own=store.get('coc19-items',{}), n=it.dataset.item, base=(ITEMS.find(x=>x[0]===n)||[])[1]||0; own[n]=Math.max(0,(own[n]!=null?own[n]:base)+(+it.dataset.d)); store.set('coc19-items',own); renderItems(); return; }
+  if(it){ const own=store.get('coc-v2-items',{}), n=it.dataset.item, base=(ITEMS.find(x=>x[0]===n)||[])[1]||0; own[n]=Math.max(0,(own[n]!=null?own[n]:base)+(+it.dataset.d)); store.set('coc-v2-items',own); renderItems(); return; }
   const pot=e.target.closest('[data-pot]');
-  if(pot){ let p=store.get('coc19-pots',[]); const t=Date.now();
+  if(pot){ let p=store.get('coc-v2-pots',[]); const t=Date.now();
     if(pot.dataset.pot==='clear'){ p=[]; $('potMsg').textContent='Cleared.'; }
     else if(pot.dataset.pot==='b'){ const last=p.filter(x=>x.kinds[0]==='b').reduce((a,x)=>Math.max(a,x.to),t); p.push({x:10,from:last,to:last+H,kinds:['b']}); $('potMsg').textContent='Builder Potion running until '+when(last+H)+'.'; }
     else { const last=p.filter(x=>x.kinds[0]==='lab').reduce((a,x)=>Math.max(a,x.to),t); p.push({x:24,from:last,to:last+H,kinds:['lab']}); $('potMsg').textContent='Research Potion running until '+when(last+H)+'.'; }
-    $('potMsg').className='msg ok'; store.set('coc19-pots',p); location.reload(); }
+    $('potMsg').className='msg ok'; store.set('coc-v2-pots',p); reloadSoon(); }
 });
 $('expGo').addEventListener('click',()=>{
   const m=$('expMsg');
   try{ const j=JSON.parse($('expIn').value.trim()); if(!j.timestamp||!j.buildings) throw 0;
     if(j.timestamp*1000<EXPORT){ m.className='msg bad'; m.textContent='That export is older than the one in use.'; return; }
-    store.set('coc19-exp',j); store.set('coc19-started',{}); store.set('coc19-pots',[]); m.className='msg ok'; m.textContent='Loaded. Updating…'; setTimeout(()=>location.reload(),400);
+    store.set('coc-v2-exp',j); store.set('coc-v2-started',{}); store.set('coc-v2-pots',[]); m.className='msg ok'; m.textContent='Loaded. Updating…'; reloadSoon();
   }catch(err){ m.className='msg bad'; m.textContent="That doesn't look like a Clash export."; }
 });
-$('expReset').addEventListener('click',()=>{ try{ localStorage.removeItem('coc19-exp'); }catch(e){} location.reload(); });
+$('expReset').addEventListener('click',()=>{ try{ localStorage.removeItem('coc-v2-exp'); }catch(e){} touch(); reloadSoon(); });
+function reloadSoon(){ const go=()=>location.reload(); if(syncCfg()) syncPush().catch(()=>{}).finally(go); else setTimeout(go,300); }
 $('askBtn').addEventListener('click',async()=>{
   const t=summary(); try{ await navigator.clipboard.writeText(t); $('askMsg').className='msg ok'; $('askMsg').textContent='Copied. Paste it into Claude and add your question.'; }catch(e){ $('askMsg').className='msg bad'; $('askMsg').textContent='Copy failed. Long press to copy is not available here.'; }
   window.open('https://claude.ai/new','_blank');
 });
 
+
+/* ================= SYNC (private GitHub gist, same token and gist as before) ================= */
+var SYNC_KEY='coc-sync', SYNC_FILE='coc-planner-sync-v2.json', syncTimer=null, syncBusy=false;
+function syncCfg(){ try{ return JSON.parse(localStorage.getItem(SYNC_KEY)||'null'); }catch(e){ return null; } }
+function setCfg(c){ try{ if(c) localStorage.setItem(SYNC_KEY,JSON.stringify(c)); else localStorage.removeItem(SYNC_KEY); }catch(e){} }
+function localTs(){ try{ return +(localStorage.getItem('coc-v2-sync-ts')||0); }catch(e){ return 0; } }
+function touch(){ try{ localStorage.setItem('coc-v2-sync-ts',String(Date.now())); }catch(e){} schedulePush(); }
+function snapshot(){ const d={}; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith('coc-v2-')&&k!=='coc-v2-sync-ts') d[k]=localStorage.getItem(k); } return d; }
+async function gh(path,opt){ opt=opt||{}; const c=syncCfg(), tok=opt.token||(c&&c.token);
+  const r=await fetch('https://api.github.com'+path,{method:opt.method||'GET',body:opt.body,keepalive:!!opt.keepalive,cache:'no-store',
+    headers:Object.assign({'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'},opt.body?{'Content-Type':'application/json'}:{})});
+  if(!r.ok){ const e=new Error('GitHub said '+r.status); e.status=r.status; throw e; } return r.json(); }
+function syncMsg(t,bad){ const m=$('syncMsg'); if(m){ m.className='msg '+(bad?'bad':'ok'); m.textContent=t; } }
+function syncErr(e){ syncMsg(e&&e.status===401?'Your token stopped working. Disconnect and connect with a new one.':'Couldn\'t reach GitHub. It will try again later.',true); }
+function schedulePush(){ if(typeof syncCfg!=='function'||!syncCfg()) return; clearTimeout(syncTimer); syncTimer=setTimeout(()=>{ syncTimer=null; syncPush().catch(syncErr); },2000); }
+async function syncPush(keepalive){ const c=syncCfg(); if(!c) return; clearTimeout(syncTimer); syncTimer=null;
+  const body={saved:localTs()||Date.now(),data:snapshot()};
+  await gh('/gists/'+c.id,{method:'PATCH',keepalive,body:JSON.stringify({files:{[SYNC_FILE]:{content:JSON.stringify(body)}}})});
+  c.last=Date.now(); setCfg(c); syncMsg('Saved. Your other devices pick it up when they open.'); renderSync(true); }
+async function syncPull(force){ const c=syncCfg(); if(!c||syncBusy||syncTimer) return false; syncBusy=true;
+  try{
+    const g=await gh('/gists/'+c.id), f=g.files&&g.files[SYNC_FILE];
+    c.last=Date.now(); setCfg(c);
+    if(!f){ await syncPush(); return false; }
+    const txt=f.truncated?await (await fetch(f.raw_url,{cache:'no-store'})).text():f.content, o=JSON.parse(txt);
+    if(o&&o.data&&(force||o.saved>localTs())){
+      for(let i=localStorage.length-1;i>=0;i--){ const k=localStorage.key(i); if(k&&k.startsWith('coc-v2-')&&k!=='coc-v2-sync-ts'&&!(k in o.data)) localStorage.removeItem(k); }
+      Object.entries(o.data).forEach(([k,v])=>{ if(k.startsWith('coc-v2-')) localStorage.setItem(k,v); });
+      localStorage.setItem('coc-v2-sync-ts',String(o.saved)); location.reload(); return true; }
+    if(localTs()>(o.saved||0)) schedulePush(); else syncMsg('Up to date.');
+    renderSync(true); return false;
+  } finally { syncBusy=false; } }
+async function syncConnect(token){
+  token=token.trim(); if(!token) throw new Error('Paste your token first.');
+  const me=await gh('/user',{token}), list=await gh('/gists?per_page=100',{token});
+  const found=list.find(x=>x.files&&(x.files[SYNC_FILE]||x.files['coc-planner-sync.json']));
+  if(found){ setCfg({token,id:found.id,user:me.login,last:0}); renderSync(); await syncPull(true); return; }
+  const g=await gh('/gists',{token,method:'POST',body:JSON.stringify({description:'CoC Planner sync (private, used by jordanioannoni.com/coc)',public:false,files:{[SYNC_FILE]:{content:JSON.stringify({saved:localTs()||Date.now(),data:snapshot()})}}})});
+  setCfg({token,id:g.id,user:me.login,last:Date.now()}); renderSync(); syncMsg('Connected. Do the same on your other device with the same token.');
+}
+const ago=t=>{ if(!t) return 'not yet'; const s=(Date.now()-t)/1e3; return s<60?'just now':s<3600?Math.floor(s/60)+' min ago':Math.floor(s/3600)+'h ago'; };
+function renderSync(keepMsg){
+  const c=syncCfg(), el=$('syncPad'), m=keepMsg&&$('syncMsg')?$('syncMsg').outerHTML:'<div class="msg" id="syncMsg"></div>';
+  if(c){ el.innerHTML=`<p><b style="color:var(--go)">On.</b> Connected to @${esc(c.user)} on GitHub. Last synced ${ago(c.last)}. Items, potions, started marks and pasted exports stay the same on your phone and Mac.</p>
+    <div class="row"><button class="btn" id="syncNow">Sync now</button><button class="btn" id="syncOff">Disconnect this device</button></div>${m}`; return; }
+  el.innerHTML=`<p>Keeps items, potions, started marks and pasted exports the same on every device, through a private gist on your GitHub. <a href="https://github.com/settings/tokens/new?scopes=gist&description=CoC%20Planner%20sync" target="_blank" rel="noopener" style="color:var(--go)">Make a token</a> with only <b>gist</b> ticked and no expiration, then paste it here on each device.</p>
+    <div class="row" style="flex-wrap:nowrap"><input id="syncTok" type="password" placeholder="ghp_…" autocomplete="off" style="flex:1;min-width:0;background:var(--bg);color:var(--ink);border:1px solid var(--line2);border-radius:10px;padding:10px;font:400 13px var(--mono)"><button class="btn solid" id="syncGo">Connect</button></div>${m}`;
+}
+$('syncPad').addEventListener('click',async e=>{
+  if(e.target.id==='syncGo'){ e.target.disabled=true; syncMsg('Connecting…'); try{ await syncConnect($('syncTok').value); }catch(err){ syncMsg(err.status===401?'That token didn\'t work. Copy it again.':err.message||'Couldn\'t connect.',true); } e.target.disabled=false; }
+  if(e.target.id==='syncNow'){ syncMsg('Syncing…'); try{ if(syncTimer) await syncPush(); await syncPull(); }catch(err){ syncErr(err); } }
+  if(e.target.id==='syncOff'){ setCfg(null); renderSync(); }
+});
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') syncPull().catch(()=>{}); else if(syncTimer) syncPush(true).catch(()=>{}); });
+
 /* ================= GO ================= */
 function renderAll(){ schedule(); renderNow(); renderPlan(); renderMax(); }
-renderAll(); renderItems(); loadLoot();
+renderAll(); renderItems(); loadLoot(); renderSync(); syncPull().catch(()=>{});
 setInterval(renderNow,30e3); setInterval(()=>{ if(document.visibilityState==='visible') loadLoot(); },5*60e3);
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') renderAll(); });
 if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('/coc-sw.js',{scope:'/'}).catch(()=>{});
