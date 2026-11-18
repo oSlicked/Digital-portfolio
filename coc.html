@@ -288,30 +288,40 @@ const LANES=[
     ['Smasher 7',12,'g',24e6,107000001,7]]},
   {id:'b2',name:'Builder 2',kind:'b',q:[
     ['Firecracker Tower #1',14.5,'g',31e6,1000108,1],
-    ['Grand Warden 86',8,'e',29e6,28000002,86],
-    ['Grand Warden 87',8,'e',29.6e6,28000002,87],
-    ['Grand Warden 88',8,'e',30.2e6,28000002,88]]},
-  {id:'b3',name:'Builder 3',kind:'b',q:[
+    ['Spiky Tower #1 level 2',15.5,'d',510e3,1000107,2],
+    ['Air Defense 17 #1',14,'g',28.5e6,1000012,17]]},
+  {id:'b3',name:'Builder 3 · hero',kind:'b',q:[
     ['Hero Hall 13',15.5,'e',30.5e6,1000071,13],
     ['Royal Champion 56',8,'d',440e3,28000004,56],
     ['Royal Champion 57',8,'d',450e3,28000004,57],
     ['Royal Champion 58',8,'d',460e3,28000004,58],
     ['Royal Champion 59',8,'d',470e3,28000004,59],
-    ['Royal Champion 60',8,'d',480e3,28000004,60]]},
+    ['Royal Champion 60',8,'d',480e3,28000004,60],
+    ['Archer Queen 111',8,'d',460e3,28000001,111],
+    ['Archer Queen 112',8,'d',470e3,28000001,112],
+    ['Archer Queen 113',8,'d',480e3,28000001,113],
+    ['Archer Queen 114',8,'d',490e3,28000001,114],
+    ['Archer Queen 115',8,'d',500e3,28000001,115],]},
   {id:'b4',name:'Builder 4',kind:'b',q:[
     ['Multi-Gear Tower 4',14.5,'g',30e6,1000079,4],
     ['X-Bow 14 #1',14,'g',28e6,1000021,14],
     ['X-Bow 14 #2',14,'g',28e6,1000021,14]]},
   {id:'b5',name:'Builder 5',kind:'b',q:[
     ['Firecracker Tower #2',14.5,'g',31e6,1000108,1],
+    ['Firecracker Tower #1 level 2',15,'g',32e6,1000108,2],
+    ['Hidden Tesla 18 #1',14,'g',27.5e6,1000019,18]]},
+  {id:'b6',name:'Builder 6 · hero',kind:'b',q:[
+    ['Spiky Tower #2',15,'d',500e3,1000107,1],
+    ['Minion Prince 96',8,'d',410e3,28000006,96],
+    ['Minion Prince 97',8,'d',420e3,28000006,97],
+    ['Minion Prince 98',8,'d',430e3,28000006,98],
+    ['Minion Prince 99',8,'d',440e3,28000006,99],
+    ['Minion Prince 100',8,'d',450e3,28000006,100],
     ['Barbarian King 111',8,'d',460e3,28000000,111],
     ['Barbarian King 112',8,'d',470e3,28000000,112],
-    ['Barbarian King 113',8,'d',480e3,28000000,113]]},
-  {id:'b6',name:'Builder 6',kind:'b',q:[
-    ['Spiky Tower #2',15,'d',500e3,1000107,1],
-    ['Archer Queen 111',8,'d',460e3,28000001,111],
-    ['Archer Queen 112',8,'d',470e3,28000001,112],
-    ['Archer Queen 113',8,'d',480e3,28000001,113]]},
+    ['Barbarian King 113',8,'d',480e3,28000000,113],
+    ['Barbarian King 114',8,'d',490e3,28000000,114],
+    ['Barbarian King 115',8,'d',500e3,28000000,115],]},
   {id:'lab',name:'Laboratory',kind:'lab',q:[
     ['Sky Wagon 4',13,'e',23e6,4000188,4],
     ['Dragon 14',15.5,'e',30e6,4000008,14],
@@ -338,16 +348,13 @@ const GATES=[
 ];
 /* Not in a lane yet. [name, base days total, currency, base cost total, note] */
 const BACKLOG_B=[
-  ['Spiky Tower level 2 (x2)',31,'d',1.02e6,'15d 12h each'],
-  ['Firecracker Tower level 2 (x2)',30,'g',64e6,'15d each'],
-  ['Barbarian King 114 and 115',16,'d',0.99e6,''],
-  ['Archer Queen 114 and 115',16,'d',0.99e6,''],
-  ['Grand Warden 89 and 90',16,'e',62.3e6,''],
-  ['Minion Prince 96 to 100',40,'d',2.15e6,''],
+  ['Grand Warden 86 to 90',40,'e',151e6,'Third hero, after RC and Minion Prince'],
+  ['Spiky Tower #2 level 2',15.5,'d',510e3,''],
+  ['Firecracker Tower #2 level 2',15,'g',32e6,''],
+  ['Air Defense 17 (x3 more)',42,'g',85.5e6,'14d each'],
+  ['Hidden Tesla 18 (x4 more)',56,'g',110e6,'14d each'],
   ['X-Bow 14 (#3 and #4)',28,'g',56e6,'14d each'],
-  ['Air Defense 17 (x4)',56,'g',114e6,'14d each'],
   ['Air Defense #5 to 17',75,'g',null,'Level 2 now. Estimate'],
-  ['Hidden Tesla 18 (x5)',70,'g',137.5e6,'14d each'],
   ['Multi-Archer Tower 5 (x3)',43.5,'g',87e6,'14d 12h each'],
   ['Ricochet Cannon 5 (x3)',42,'g',84e6,'14d each'],
   ["Builder's Hut 9 (x5)",70,'g',130e6,'14d each'],
@@ -603,7 +610,7 @@ async function loadLoot(){ try{ const r=await fetch('/data/loot.json?'+Date.now(
 /* ================= CLAUDE ================= */
 function summary(){
   const now=Date.now(), f=t=>new Date(t).toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
-  let s=`Snapshot from my Clash of Clans TH19 planner (jordanioannoni.com/coc). Now: ${f(now)}. Export from ${f(EXPORT)}. I sleep 1 AM to 8 AM, no starts then. Gold Pass assumption: 17% off time and cost. My main attack is a Royal Champion walk plus dragons; I don't use Dragon Duke. Dark Elixir is easy for me to farm.\n\nLANES:`;
+  let s=`Snapshot from my Clash of Clans TH19 planner (jordanioannoni.com/coc). Now: ${f(now)}. Export from ${f(EXPORT)}. I sleep 1 AM to 8 AM, no starts then. Gold Pass assumption: 17% off time and cost. My main attack is a Royal Champion walk plus dragons; I don't use Dragon Duke. I only keep 1 or 2 heroes upgrading at once so I can still farm: Royal Champion and Minion Prince first. Dark Elixir is easy for me to farm.\n\nLANES:`;
   PLAN.forEach(p=>{ s+=`\n${p.L.name}: ${p.cur?p.cur.it[0]+' done '+f(p.curEnd):'free'}`; p.steps.slice(0,4).forEach(x=>{ s+=`\n  then ${x.name} starts ${f(x.start)} (${money(x.cost*GP)} ${CUR[x.cur]})${x.waits?' after '+x.waits:''}`; }); });
   const own=store.get('coc-v2-items',{}); s+='\n\nMAGIC ITEMS: '+ITEMS.map(([n,c])=>`${n} ${own[n]!=null?own[n]:c}`).join(', ');
   s+='\n\nBACKLOG (builders): '+BACKLOG_B.map(r=>r[0]).join('; ');
