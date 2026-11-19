@@ -73,7 +73,7 @@ for tag in TAGS:
     if log:  # field check in the run log (no secrets in here)
         print('fields:', sorted(log[0].keys()))
         print('battle types:', sorted({str(b.get('battleType')) for b in log}))
-        for b in [x for x in log if x.get('attack')][:3]:
+        for b in [x for x in log if x.get('attack')][-2:]:
             print('raw loot:', b.get('battleTimestamp'), b.get('lootedResources'), 'extra:', b.get('extraLootedResources'), 'avail:', b.get('availableLoot'))
         print('resource names:', sorted({r.get('name') for b in log for r in (b.get('lootedResources') or []) if isinstance(r, dict)}))
     status[tag] = {'ok': True, 'size': len(log)}
