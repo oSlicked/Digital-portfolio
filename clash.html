@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0e1013">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Loot">
+<title>Loot tracker</title>
+<link rel="apple-touch-icon" href="/coc-icon-180.png">
+<link rel="icon" type="image/png" href="/coc-icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1013; --ink:#eceae4; --mute:#8d9099; --dim:#555a64; --line:#23262d; --line2:#30343c; --card:#14171b; --card2:#1a1d22;
+  --go:#c8f04a; --go-ink:#11140a; --warn:#ff8a3d;
+  --g:#f2c443; --e:#d67bff; --d:#9aa7bd;
+  --display:'Bricolage Grotesque',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 var(--display);-webkit-font-smoothing:antialiased;padding-bottom:calc(84px + var(--safe-b));
+  background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.035) 1px,transparent 0);background-size:22px 22px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+
+header.top{padding:calc(env(safe-area-inset-top,0px) + 18px) 0 6px}
+.brand{display:flex;align-items:center;gap:12px}
+.badge{width:46px;height:46px;border:2px solid var(--ink);border-radius:10px;display:grid;place-items:center}
+.badge svg{width:24px;height:24px}
+.brand h1{font:800 22px/1.05 var(--display);letter-spacing:-.03em}
+.brand small{display:block;font:500 12px/1.3 var(--mono);color:var(--mute);margin-top:3px}
+.chip{margin-left:auto;font:600 11px/1 var(--mono);padding:7px 9px;border:1px solid var(--line2);border-radius:99px;color:var(--mute);white-space:nowrap;text-decoration:none}
+.chip.live{border-color:var(--go);color:var(--go)}
+.chip.old{border-color:var(--warn);color:var(--warn)}
+
+h2{font:800 13px/1 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--mute);margin:26px 0 10px;display:flex;align-items:baseline;gap:8px}
+h2 span{font-weight:400;letter-spacing:.02em;text-transform:none;color:var(--dim)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px}
+
+.hero{padding:18px 18px 16px;margin-top:10px}
+.hero .k{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.hero .big{font:800 54px/.95 var(--display);letter-spacing:-.05em;margin:10px 0 8px;font-variant-numeric:tabular-nums}
+.hero .big i{font-style:normal;font-size:.42em;color:var(--mute);margin-left:.12em;letter-spacing:0}
+.hero .sub{color:var(--mute);font:400 12px/1.5 var(--mono)}
+.hero .sub b{color:var(--ink);font-weight:600}
+.hero.session{background:var(--go);color:var(--go-ink);border-color:var(--go)}
+.hero.session .k,.hero.session .sub,.hero.session .big i,.hero.session .sub b{color:rgba(17,20,10,.7)}
+.hero .acts{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn{font:700 13px/1 var(--display);padding:11px 14px;border-radius:10px;border:1px solid var(--line2);background:var(--card2)}
+.btn.solid{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.hero.session .btn{background:var(--go-ink);color:var(--go);border-color:var(--go-ink)}
+.btn:active{transform:scale(.97)}
+
+.trio{display:grid;grid-template-columns:repeat(3,1fr)}
+.trio>div{padding:14px;border-left:1px solid var(--line)}
+.trio>div:first-child{border-left:0}
+.trio .k{font:600 11px/1 var(--mono);color:var(--mute);letter-spacing:.06em}
+.trio .v{font:800 26px/1 var(--display);letter-spacing:-.03em;margin-top:9px;font-variant-numeric:tabular-nums}
+.trio .s{font:400 11px/1.3 var(--mono);color:var(--dim);margin-top:5px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:1px;margin-right:5px}
+.dot.g{background:var(--g)}.dot.e{background:var(--e)}.dot.d{background:var(--d)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mx{padding:16px}
+.mx .k{font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.mx .v{font:800 28px/1 var(--display);letter-spacing:-.04em;margin:12px 0 6px;font-variant-numeric:tabular-nums}
+.mx .s{font:400 12px/1.45 var(--mono);color:var(--mute)}
+
+table.days{width:100%;border-collapse:collapse;font:400 12px/1.3 var(--mono)}
+table.days th{font-weight:600;color:var(--dim);text-align:right;padding:12px 14px 8px;font-size:11px;letter-spacing:.06em}
+table.days th:first-child,table.days td:first-child{text-align:left}
+table.days td{padding:10px 14px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.days td:first-child{font:600 13px/1.2 var(--display);color:var(--ink)}
+table.days tr.zero td{color:var(--dim)}
+table.days .barc{padding:0 14px 10px;border-top:0}
+.bar{height:3px;border-radius:2px;background:var(--line);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+
+.atk{display:grid;grid-template-columns:44px 1fr auto;gap:0 12px;padding:13px 14px;border-top:1px solid var(--line);align-items:center}
+.atk:first-child{border-top:0}
+.atk .th{font:800 13px/1 var(--mono);width:44px;height:44px;border-radius:9px;border:1px solid var(--line2);display:grid;place-items:center;color:var(--mute);text-align:center}
+.atk .th small{display:block;font-size:9px;font-weight:400;color:var(--dim);margin-bottom:2px}
+.atk .who{font:700 15px/1.2 var(--display);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.atk .meta{font:400 12px/1.35 var(--mono);color:var(--mute);margin-top:4px}
+.atk .stars{color:var(--g);letter-spacing:1px}
+.atk .stars s{color:var(--line2);text-decoration:none}
+.atk .r{text-align:right;font:600 12px/1.55 var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.atk .r .gx{color:var(--g)}.atk .r .ex{color:var(--e)}.atk .r .dx{color:var(--d)}
+.tag{font:700 10px/1 var(--mono);border:1px solid var(--line2);border-radius:4px;padding:2px 4px;margin-left:6px;vertical-align:2px;color:var(--mute)}
+.tag.bonus{color:var(--go);border-color:var(--go)}
+.tag.best{color:var(--g);border-color:var(--g)}
+.more{display:block;width:100%;padding:13px;border-top:1px solid var(--line);font:600 12px/1 var(--mono);color:var(--mute)}
+.empty{padding:22px 16px;color:var(--mute);font:400 13px/1.5 var(--mono);text-align:center}
+.note{font:400 12px/1.55 var(--mono);color:var(--dim);padding:12px 14px}
+.note.warn{color:var(--warn)}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(14,16,19,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:8px 8px calc(8px + var(--safe-b))}
+nav.tabs .in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+nav.tabs button{padding:10px 0 8px;border-radius:10px;font:700 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+nav.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+nav.tabs button.on-session[aria-selected=false]{color:var(--go)}
+@media (min-width:640px){ .hero .big{font-size:68px} }
+@media (max-width:380px){ .trio .v{font-size:22px} .hero .big{font-size:46px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="brand">
+    <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path d="m13 19 6-6"/><path d="m16 16 4 4"/><path d="m19 21 2-2"/><path d="M9.5 6.5 21 18v3h-3"/></svg></div>
+    <div><h1>Loot tracker</h1><small id="tag">#88RJQPR0P</small></div>
+    <a class="chip" id="saved" href="/coc">planner</a>
+  </div>
+</header>
+
+<div class="card hero" id="hero"></div>
+<div class="card" style="margin-top:10px"><div class="trio" id="trio"></div></div>
+
+<h2>Per attack</h2>
+<div class="grid" id="per"></div>
+
+<h2>Last 7 days <span>gold + elixir, dark</span></h2>
+<div class="card"><table class="days" id="days"></table></div>
+
+<h2 id="listH">Attacks</h2>
+<div class="card" id="list"></div>
+
+<div class="card" style="margin-top:22px"><div class="note" id="status">Loading…</div></div>
+</div>
+
+<nav class="tabs"><div class="in">
+  <button data-p="session" aria-selected="false">Session</button>
+  <button data-p="today" aria-selected="true">Today</button>
+  <button data-p="week" aria-selected="false">7 days</button>
+  <button data-p="all" aria-selected="false">All</button>
+</div></nav>
+
+<script>
+const $=id=>document.getElementById(id);
+const SKEY='clash-loot-session';
+let D=null, P=localStorage.getItem('clash-loot-period')||'today', SHOW=20;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function fmt(n){ n=n||0; const a=Math.abs(n);
+  if(a>=1e9) return (n/1e9).toFixed(a>=1e10?1:2).replace(/\.?0+$/,'')+'B';
+  if(a>=1e6) return (n/1e6).toFixed(a>=1e8?0:a>=1e7?1:2).replace(/\.?0+$/,'')+'M';
+  if(a>=1e4) return Math.round(n/1e3)+'K';
+  return Math.round(n).toLocaleString('en-CA'); }
+function split(s){ const m=String(s).match(/^([\d.,]+)(\D*)$/); return m?[m[1],m[2]]:[s,'']; }
+const G=a=>a.g+a.bg, E=a=>a.e+a.be, Dk=a=>a.d+a.bd, GE=a=>G(a)+E(a);
+function ago(t){ const s=Date.now()/1000-t; if(s<90) return 'just now'; if(s<3600) return Math.round(s/60)+' min ago';
+  if(s<86400) return Math.round(s/3600)+' h ago'; return Math.round(s/86400)+' d ago'; }
+const clock=t=>new Date(t*1000).toLocaleTimeString('en-CA',{hour:'numeric',minute:'2-digit'});
+const dayName=t=>new Date(t*1000).toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
+function midnight(d=new Date()){ const m=new Date(d); m.setHours(0,0,0,0); return m.getTime()/1000; }
+function session(){ try{ return JSON.parse(localStorage.getItem(SKEY)); }catch(e){ return null; } }
+
+function range(){
+  const now=Date.now()/1000;
+  if(P==='session'){ const s=session(); return s?{from:s.start,label:'This session',sub:'since '+clock(s.start)}:{from:now,label:'Session',none:true}; }
+  if(P==='today') return {from:midnight(),label:'Today'};
+  if(P==='week') return {from:midnight()-6*86400,label:'Last 7 days'};
+  const first=D.attacks.length?D.attacks[D.attacks.length-1].t:now;
+  return {from:0,label:'All time',sub:'since '+dayName(first)};
+}
+
+function render(){
+  document.querySelectorAll('nav.tabs button').forEach(b=>{ b.setAttribute('aria-selected',b.dataset.p===P); b.classList.toggle('on-session',b.dataset.p==='session'&&!!session()); });
+  if(!D) return;
+  const R=range(), A=D.attacks.filter(a=>a.t>=R.from), n=A.length;
+  const sum=f=>A.reduce((s,a)=>s+f(a),0);
+  const g=sum(G), e=sum(E), d=sum(Dk), bonus=sum(a=>a.bg+a.be);
+  const sess=P==='session';
+
+  // hero
+  const h=$('hero'); h.className='card hero'+(sess&&!R.none?' session':'');
+  if(sess&&R.none){
+    h.innerHTML=`<div class="k">Session</div><div class="big">Ready</div>
+      <div class="sub">Tap start before you farm. Every attack after that counts toward this run, with loot per hour.</div>
+      <div class="acts"><button class="btn solid" id="sStart">Start session</button></div>`;
+  }else{
+    const [num,unit]=split(fmt(g+e));
+    let rate='';
+    if(sess){ const end=Math.max(n?A[0].t+((A[0].dur||0)):0,Date.now()/1000), hrs=(end-R.from)/3600;
+      rate=hrs>=1/6&&n?` · <b>${fmt((g+e)/hrs)}</b> per hour, <b>${fmt(d/hrs)}</b> dark per hour`:' · per hour shows after 10 min'; }
+    h.innerHTML=`<div class="k">${esc(R.label)} · gold + elixir</div>
+      <div class="big">${num}<i>${unit}</i></div>
+      <div class="sub"><b>${n}</b> attack${n===1?'':'s'} · <b>${fmt(d)}</b> dark${bonus?` · <b>${fmt(bonus)}</b> of it bonus`:''}${R.sub?' · '+esc(R.sub):''}${rate}</div>
+      ${sess?'<div class="acts"><button class="btn" id="sEnd">End session</button><button class="btn" id="sNew">Restart</button></div>':''}`;
+  }
+
+  $('trio').innerHTML=[['g','Gold',g,sum(a=>a.bg)],['e','Elixir',e,sum(a=>a.be)],['d','Dark',d,sum(a=>a.bd)]]
+    .map(([c,l,v,b])=>`<div><div class="k"><span class="dot ${c}"></span>${l}</div><div class="v">${fmt(v)}</div><div class="s">${b?fmt(b)+' bonus':n?fmt(v/n)+' avg':'&nbsp;'}</div></div>`).join('');
+
+  // per attack
+  const best=A.reduce((b,a)=>!b||GE(a)>GE(b)?a:b,null);
+  const avgS=n?sum(a=>a.s)/n:0, avgP=n?sum(a=>a.p)/n:0, three=A.filter(a=>a.s===3).length;
+  $('per').innerHTML=[
+    ['Avg loot',n?fmt((g+e)/n):'0',n?fmt(d/n)+' dark':'no attacks yet'],
+    ['Best raid',best?fmt(GE(best)):'0',best?esc(best.o||'?')+' · '+dayName(best.t):'&nbsp;'],
+    ['Avg stars',n?avgS.toFixed(1):'0',n?Math.round(avgP)+'% avg damage':'&nbsp;'],
+    ['3 stars',n?Math.round(three/n*100)+'%':'0',`${three} of ${n}`]
+  ].map(([k,v,s])=>`<div class="card mx"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join('');
+
+  // last 7 days (always the same 7 days, not the tab)
+  const rows=[], m0=midnight(); let top=1;
+  for(let i=0;i<7;i++){ const from=m0-i*86400, to=from+86400, X=D.attacks.filter(a=>a.t>=from&&a.t<to);
+    const r={from,n:X.length,ge:X.reduce((s,a)=>s+GE(a),0),g:X.reduce((s,a)=>s+G(a),0),d:X.reduce((s,a)=>s+Dk(a),0)}; rows.push(r); top=Math.max(top,r.ge); }
+  $('days').innerHTML='<tr><th>Day</th><th>Attacks</th><th>Gold + elixir</th><th>Dark</th></tr>'+rows.map((r,i)=>
+    `<tr class="${r.n?'':'zero'}"><td>${i===0?'Today':i===1?'Yesterday':dayName(r.from)}</td><td>${r.n}</td><td>${fmt(r.ge)}</td><td>${fmt(r.d)}</td></tr>`+
+    (r.n?`<tr><td colspan="4" class="barc"><div class="bar"><i style="width:${r.g/top*100}%;background:var(--g)"></i><i style="width:${(r.ge-r.g)/top*100}%;background:var(--e)"></i></div></td></tr>`:'')).join('');
+
+  // attack list
+  $('listH').innerHTML=`Attacks <span>${esc(R.label.toLowerCase())}, newest first</span>`;
+  if(!n){ $('list').innerHTML=`<div class="empty">${sess&&R.none?'Start a session to track a farming run.':'No attacks in this range yet. New attacks show up after the next save.'}</div>`; }
+  else{
+    $('list').innerHTML=A.slice(0,SHOW).map(a=>{
+      const st='★'.repeat(a.s)+'<s>'+'★'.repeat(3-a.s)+'</s>';
+      const kind=a.type==='ranked'?'<span class="tag">ranked</span>':a.type==='legend'?'<span class="tag">legend</span>':'';
+      const b=a.bg||a.be||a.bd?'<span class="tag bonus">bonus</span>':'', top=best&&a.k===best.k&&n>2?'<span class="tag best">best</span>':'';
+      return `<div class="atk"><div class="th"><div><small>TH</small>${a.th||'?'}</div></div>
+        <div style="min-width:0"><div class="who">${esc(a.o||'Unknown')}</div>
+        <div class="meta"><span class="stars">${st}</span> ${a.p}% · ${P==='today'||P==='session'?clock(a.t):dayName(a.t)+' '+clock(a.t)}${kind}${b}${top}</div></div>
+        <div class="r"><span class="gx">${fmt(G(a))}</span><br><span class="ex">${fmt(E(a))}</span><br><span class="dx">${fmt(Dk(a))}</span></div></div>`;}).join('')
+      +(n>SHOW?`<button class="more" id="more">Show ${Math.min(20,n-SHOW)} more of ${n-SHOW}</button>`:'');
+  }
+
+  // status
+  const sv=D.saved, st=D.status&&D.status[D.tags[0]], gap=(D.gaps||[]).filter(x=>x.to>=R.from).slice(-1)[0];
+  const c=$('saved'); const fresh=sv&&Date.now()/1000-sv<1800;
+  let msg=`Last new attack saved ${sv?ago(sv):'never'}. ${D.attacks.length} attacks stored since ${D.attacks.length?dayName(D.attacks[D.attacks.length-1].t):'today'}.`;
+  if(st&&!st.ok) msg=`The battle log could not be read on the last check${st.code?' (error '+st.code+')':''}, so loot is paused. ${msg}`;
+  msg+=' Totals include bonus loot. Defenses are not counted.';
+  $('status').className='note'+(st&&!st.ok?' warn':'');
+  $('status').innerHTML=esc(msg)+(gap?`<br><span style="color:var(--warn)">Some attacks between ${esc(dayName(gap.from)+' '+clock(gap.from))} and ${esc(dayName(gap.to)+' '+clock(gap.to))} may be missing: the game only keeps your last 36 or so battles.</span>`:'');
+  c.className='chip'+(fresh?' live':'');
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.p){ P=b.dataset.p; SHOW=20; localStorage.setItem('clash-loot-period',P); window.scrollTo(0,0); }
+  else if(b.id==='sStart'||b.id==='sNew'){ localStorage.setItem(SKEY,JSON.stringify({start:Math.floor(Date.now()/1000)})); }
+  else if(b.id==='sEnd'){ localStorage.removeItem(SKEY); }
+  else if(b.id==='more'){ SHOW+=20; }
+  render();
+});
+
+async function load(){
+  try{ const r=await fetch('/data/attacks.json?'+Date.now(),{cache:'no-store'}); if(r.ok){ D=await r.json(); D.tags=D.tags||['#88RJQPR0P']; $('tag').textContent=D.tags.join(' + '); } }
+  catch(e){ if(!D) $('status').textContent='Could not load the loot file. Check your connection and refresh.'; }
+  render();
+}
+load(); setInterval(load,60000);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) load(); });
+</script>
+</body>
+</html>
