@@ -1,8 +1,8 @@
 name: Loot tracker
 on:
   schedule:
-    - cron: '*/10 * * * *'   # every 10 minutes (GitHub may run it a few minutes late)
-  workflow_dispatch:
+    - cron: '*/10 * * * *'   # asks for every 10 minutes; GitHub often runs it much later
+  workflow_dispatch:          # lets an outside timer (or the Actions tab) start a run
 permissions:
   contents: write
 concurrency: { group: loot, cancel-in-progress: false }
@@ -15,11 +15,16 @@ jobs:
         env:
           COC_TOKEN: ${{ secrets.COC_API_TOKEN }}
         run: python3 scripts/loot_snapshot.py
+      - name: Save new attacks from the battle log
+        continue-on-error: true
+        env:
+          COC_TOKEN: ${{ secrets.COC_API_TOKEN }}
+        run: python3 scripts/battlelog.py
       - name: Save if anything changed
         run: |
-          if git diff --quiet data/loot.json; then echo "No new loot"; exit 0; fi
+          for f in data/loot.json data/attacks.json; do [ -f "$f" ] && git add "$f"; done
+          if git diff --cached --quiet; then echo "No new loot"; exit 0; fi
           git config user.name "loot-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/loot.json
           git commit -m "Loot snapshot"
           git pull --rebase -q && git push
