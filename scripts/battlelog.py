@@ -41,7 +41,7 @@ def res(v):
     items = v.items() if isinstance(v, dict) else ((x.get('name', ''), x.get('amount', 0)) for x in (v or []))
     for name, amt in items:
         n = str(name).lower().replace(' ', '').replace('_', '')
-        k = 'd' if 'dark' in n else 'e' if 'elixir' in n else 'g' if 'gold' in n else None
+        k = {'gold': 'g', 'elixir': 'e', 'darkelixir': 'd'}.get(n)  # skips SourElixir and others
         if k: out[k] += int(amt or 0)
     return out
 
@@ -73,6 +73,8 @@ for tag in TAGS:
     if log:  # field check in the run log (no secrets in here)
         print('fields:', sorted(log[0].keys()))
         print('battle types:', sorted({str(b.get('battleType')) for b in log}))
+        for b in [x for x in log if x.get('attack')][:3]:
+            print('raw loot:', b.get('battleTimestamp'), b.get('lootedResources'), 'extra:', b.get('extraLootedResources'), 'avail:', b.get('availableLoot'))
         print('resource names:', sorted({r.get('name') for b in log for r in (b.get('lootedResources') or []) if isinstance(r, dict)}))
     status[tag] = {'ok': True, 'size': len(log)}
 
