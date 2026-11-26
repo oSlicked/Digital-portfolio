@@ -22,7 +22,7 @@ jobs:
         run: python3 scripts/battlelog.py
       - name: Save if anything changed
         run: |
-          for f in data/loot.json data/attacks.json; do [ -f "$f" ] && git add "$f"; done
+          for f in data/*.json; do [ -f "$f" ] && git add "$f"; done
           if git diff --cached --quiet; then echo "No new loot"; exit 0; fi
           git config user.name "loot-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
